@@ -1,0 +1,116 @@
+{% assign top_counter = 0 %}
+{% assign counter = 0 %}
+{% capture year_month_nums_str %}
+{% for post in site.posts %}
+    {% assign cur_year_month = post.date | date: "%Y-%m" %}
+    {% assign pre_year_month = post.previous.date | date: "%Y-%m" %}
+    {% if post.top %}
+        {% assign top_counter = top_counter | plus: 1 %}
+    {% endif %}
+    {% assign counter = counter | plus: 1 %}
+    {% if cur_year_month != pre_year_month %}
+        {{ counter }}{% assign counter = 0 %}
+    {% endif %}
+{% endfor %}
+{% endcapture %}
+{% assign year_month_nums_array = year_month_nums_str | split: " " %}
+{% assign index = 0 %}
+
+{% if top_counter > 0 %}
+<div class="archives-wrap">
+<h2 class="year-month header-fonts">置顶文章 - 共{{ top_counter }}篇</h2>
+<ul class="post-list top">
+{% for post in site.posts %}
+    {% if post.top %}
+        <li>
+            {% if post.difficulty == "easy" %}
+                {% assign difficulty_level = "leetcode-difficulty-easy-color" %}
+            {% elsif post.difficulty == "medium" %}
+                {% assign difficulty_level = "leetcode-difficulty-medium-color" %}
+            {% elsif post.difficulty == "hard" %}
+                {% assign difficulty_level = "leetcode-difficulty-hard-color" %}
+            {% else %}
+                {% assign difficulty_level = "" %}
+            {% endif %}
+
+            {% if post.categories contains "未掌握" %}
+                <a class="leetcode-level-s-font-color" href="{{ post.url | relative_url }}">{{ post.title | append: " " }}</a>
+            {% elsif post.categories contains "需加强" %}
+                <a class="leetcode-level-a-font-color" href="{{ post.url | relative_url }}">{{ post.title | append: " " }}</a>
+            {% elsif post.categories contains "需复习" %}
+                <a class="leetcode-level-b-font-color" href="{{ post.url | relative_url }}">{{ post.title | append: " " }}</a>
+            {% elsif post.categories contains "已掌握" %}
+                <a class="leetcode-level-c-font-color" href="{{ post.url | relative_url }}">{{ post.title | append: " " }}</a>
+            {% else %}
+                <a href="{{ post.url | relative_url }}">{{ post.title | append: " " }}</a>
+            {% endif %}
+            {% if difficulty_level != "" %}
+                <i class="fa-solid fa-splotch {{ difficulty_level }}"></i>
+            {% endif %}
+
+            {% include helpers/common_variable %}
+
+            {% if post.last_updated %}
+                <span data-tippy-content="{{ site.data.i18n[site.lang].last_updated }}: {{ post.last_updated | date: "%F" }} {{ post.last_updated | date: "%T" }}" class="date">{{ post.date | date: "%F" }}</span>
+            {% else %}
+                <span class="date">{{ post.date | date: "%F" }}</span>
+            {% endif %}
+        </li>
+    {% endif %}
+{% endfor %}
+</ul>
+</div>
+{% endif %}
+
+{% for post in posts_collate %}
+{% assign this_year_month = post.date | date: "%Y-%m" %}
+{% if cur_year_month != "" and this_year_month != cur_year_month %}
+{% assign year_month_nums = year_month_nums_array[index] | plus: 0 %}
+{% if year_month_nums > 0 %}
+{% unless forloop.first %}</ul></div>{% endunless %}
+<div class="archives-wrap">
+<h2 class="year-month header-fonts">{{ this_year_month }} - 共{{ year_month_nums }}篇</h2>
+<ul class="post-list">
+{% endif %}
+{% assign index = index | plus: 1 %}
+{% endif %}
+    <li>
+        {% if post.difficulty == "easy" %}
+            {% assign difficulty_level = "leetcode-difficulty-easy-color" %}
+        {% elsif post.difficulty == "medium" %}
+            {% assign difficulty_level = "leetcode-difficulty-medium-color" %}
+        {% elsif post.difficulty == "hard" %}
+            {% assign difficulty_level = "leetcode-difficulty-hard-color" %}
+        {% else %}
+            {% assign difficulty_level = "" %}
+        {% endif %}
+
+        {% if post.categories contains "未掌握" %}
+            <a class="leetcode-level-s-font-color" href="{{ post.url | relative_url }}">{{ post.title | append: " " }}</a>
+        {% elsif post.categories contains "需加强" %}
+            <a class="leetcode-level-a-font-color" href="{{ post.url | relative_url }}">{{ post.title | append: " " }}</a>
+        {% elsif post.categories contains "需复习" %}
+            <a class="leetcode-level-b-font-color" href="{{ post.url | relative_url }}">{{ post.title | append: " " }}</a>
+        {% elsif post.categories contains "已掌握" %}
+            <a class="leetcode-level-c-font-color" href="{{ post.url | relative_url }}">{{ post.title | append: " " }}</a>
+        {% else %}
+			<a href="{{ post.url | relative_url }}">{{ post.title | append: " " }}</a>
+        {% endif %}
+        {% if difficulty_level != "" %}
+            <i class="fa-solid fa-splotch {{ difficulty_level }}"></i>
+        {% endif %}
+
+        {% include helpers/common_variable %}
+
+        {% if post.last_updated %}
+            <span data-tippy-content="{{ site.data.i18n[site.lang].last_updated }}: {{ post.last_updated | date: "%F" }} {{ post.last_updated | date: "%T" }}" class="date">{{ post.date | date: "%F" }}</span>
+        {% else %}
+            <span class="date">{{ post.date | date: "%F" }}</span>
+        {% endif %}
+    </li>
+{% if year_month_nums > 0 %}
+{% if forloop.last %}</ul></div>{% endif %}
+{% endif %}
+{% assign cur_year_month = this_year_month %}
+{% endfor %}
+{% assign posts_collate = nil %}

@@ -1,0 +1,26 @@
+{% include helpers/common_variable %}
+{% assign custom_categories = "" %}
+{% assign other_categories = "" %}
+
+{% for category in site.categories %}
+    {% if custom_categories_order contains category[0] %}
+        {% assign custom_categories = custom_categories | append: category[0] | append: "," %}
+    {% else %}
+        {% assign other_categories = other_categories | append: category[0] | append: "," %}
+    {% endif %}
+{% endfor %}
+
+{% assign other_categories = other_categories | split: "," | compact | sort_natural %}
+{% assign custom_categories = custom_categories | split: "," | compact %}
+
+{% assign sorted_custom_categories = "" | split: "," %}
+{% for order in custom_categories_order %}
+    {% for category in custom_categories %}
+        {% if category == order %}
+            {% assign sorted_custom_categories = sorted_custom_categories | push: category %}
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+{% assign sorted_categories = other_categories | concat: sorted_custom_categories %}
+{% assign categories_list = sorted_categories %}

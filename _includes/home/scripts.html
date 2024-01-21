@@ -1,0 +1,59 @@
+{% if site.cdn.jsdelivr.enabled %}
+<script src="{{ site.cdn.jsdelivr.gh-pages }}/assets/libs/fullPage.js/fullpage.min.js"></script>
+<script src="{{ site.cdn.jsdelivr.gh-pages }}/assets/libs/javascripts/canvas-bg.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed.js/lib/typed.min.js"></script>
+{% else %}
+<script src="{{ site.baseurl }}/assets/libs/fullPage.js/fullpage.min.js"></script>
+<script src="{{ site.baseurl }}/assets/libs/javascripts/canvas-bg.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/{{ site.cdn.typed-js.version }}/typed.min.js"></script>
+{% endif %}
+<script>
+    function fullPageScroll() {
+        $("#full-page").fullpage({
+            fixedElements: ".site-notice",
+            resize: false,
+            scrollingSpeed: 500,
+            afterLoad: function (origin) {
+                if (origin.index === 1) {
+                    $("#section0 .headings").removeClass("hidden").addClass("animate__fadeInDown");
+                    $("#section0 .btn-continue").removeClass("hidden").addClass("animate__bounce");
+                }
+                if (origin.index === 0) {
+                    $("#section1 h1, #section1 .social-links").removeClass("hidden").addClass("animate__fadeInUp");
+                }
+            },
+            onLeave: function (origin, destination, direction) {
+                if (origin.index === 0 && direction === "down") {
+                    $("#section0 .headings, #section0 .btn-continue").addClass("hidden").removeClass("animate__bounce animate__fadeInDown animate__wobble");
+                }
+                if (origin.index === 1 && direction === "up") {
+                    $("#section1 h1, #section1 .social-links").addClass("hidden").removeClass("animate__fadeInUp");
+                }
+            }
+        });
+    }
+
+    function typed() {
+        new Typed("#typed", {
+            strings: ["{{ site.motto }}"],
+            typeSpeed: 120,
+            backSpeed: 0,
+            loop: true
+        });
+    }
+
+    function keyup() {
+        document.addEventListener("keyup", function (event) {
+            let key = event.key;
+            if ("Enter" === key) {
+                fullpage_api.moveSectionDown();
+            }
+        });
+    }
+
+    $(function () {
+        fullPageScroll();
+        keyup();
+        typed();
+    });
+</script>

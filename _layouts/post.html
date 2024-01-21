@@ -1,0 +1,103 @@
+---
+layout: blog
+---
+<article class="unit-article layout-post">
+    <div class="unit-inner unit-article-inner">
+        <div class="content">
+            <header>
+                <div class="unit-head">
+                    <div class="unit-inner">
+                        <h1 class="entry-title">{{ page.title }}</h1>
+                    </div>
+                </div>
+            </header>
+            <div class="meta">
+                <section class="date-publish">
+                    <button>
+                        <i class="fas fa-calendar-alt article-icon"></i>{{ site.data.i18n[site.lang].published }}:
+                        <time class="date-pub {% if page.last_updated == null %}updated{% endif %}"
+                              data-tippy-content="{{ page.date | date: '%F' }} {{ page.date | date: '%T' }}" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: '%F' }}
+                        </time>
+                        by
+                        <a class="author" href="{{ site.baseurl }}/" rel="author">
+                            {% if page.author == null %}{{ site.author.name }}{% else %}{{ page.author }}{% endif %}
+                        </a>
+                    </button>
+                    {% if page.last_updated %}
+                    <button><i class="fas fa-calendar-alt article-icon"></i>{{ site.data.i18n[site.lang].last_updated }}:
+                        <time class="date-updated updated" data-tippy-content="{{ page.last_updated | date: '%F' }} {{ page.last_updated | date: '%T' }}" datetime="{{ page.last_updated | date_to_xmlschema }}">{{ page.last_updated | date: '%F' }}
+                        </time>
+                    </button>
+                    {% endif %}
+                </section>
+                {% if page.categories.size > 0 %}
+                <ul class="list-category list-linear">
+                    <li class="list-head"><i class="fas fa-inbox article-icon"></i>{{ site.data.i18n[site.lang].categories }}:</li>
+                    {% assign categories_list = page.categories | sort %}
+                    {% include helpers/categories_list %}
+                </ul>
+                {% endif %}
+                {% if page.tags.size > 0 %}
+                <ul class="list-tag list-linear">
+                    <li class="list-head"><i class="fas fa-tag article-icon"></i>{{ site.data.i18n[site.lang].tags }}:</li>
+                    {% assign tags_list = page.tags | sort %}
+                    {% include helpers/common_variable %}
+                    {% include helpers/tags_list %}
+                </ul>
+                {% endif %}
+            </div>
+            {% include helpers/path_prefix %}
+            {% if site.cdn.lazyload.enabled %}
+            {% assign img_src = 'class="lazyload" onerror="imgError(this);" src=' | append: path_prefix | append: "/assets/images/theme/loading.svg" | append: " " | append: 'data-original="' | append: path_prefix | append: "/assets/post-list/images" %}
+            {% else %}
+            {% assign img_src = 'onerror="imgError(this);" src="' | append: path_prefix | append: "/assets/post-list/images" %}
+            {% endif %}
+            {{ content | replace: 'src="../assets/post-list/images', img_src }}
+            <footer class="unit-foot">
+                <div class="unit-inner">
+                    <p>
+                        <a class="go-top" data-tippy-content="{{ site.data.i18n[site.lang].back_to_top }}"><i class="fas fa-arrow-up"></i></a>
+                    </p>
+                    <nav class="pagination">{% if page.previous %}
+                        <div class="prev">
+                            <span class="line line-top"></span>
+                            <span class="line line-right"></span>
+                            <span class="line line-bottom"></span>
+                            <span class="line line-left"></span>
+                            <a class="internal" data-tippy-content="{{ page.previous.title }}" href="{{ page.previous.url | relative_url }}" rel="prev">🔥 上一篇</a>
+                        </div>
+                        {% endif %}{% if page.next %}
+                        <div class="next">
+                            <span class="line line-top"></span>
+                            <span class="line line-right"></span>
+                            <span class="line line-bottom"></span>
+                            <span class="line line-left"></span>
+                            <a class="internal" data-tippy-content="{{ page.next.title }}" href="{{ page.next.url | relative_url }}" rel="next">下一篇 🔥</a>
+                        </div>
+                        {% endif %}
+                    </nav>
+                </div>
+            </footer>
+            <div class="post-copyright">
+                <div class="post-copyright-author"><span class="post-copyright-meta">本文作者: </span>
+                    <a href="{{ site.baseurl }}/" rel="author">
+                        {% if page.author == null %}{{ site.author.name }}{% else %}{{ page.author }}{% endif %}
+                    </a>
+                </div>
+                <div class="post-copyright-type"><span class="post-copyright-meta">本文链接: </span>
+                    <a href="{{ page.url | relative_url | prepend: site.url | url_decode }}">{{ page.url | relative_url | prepend: site.url | url_decode }}</a>
+                </div>
+                {% if site.data.i18n[site.lang].cc_license and site.data.i18n[site.lang].cc_license_content %}
+                <div class="post-copyright-notice"><span class="post-copyright-meta">版权声明: </span>
+                    本博客所有文章除特别声明外，均采用
+                    <a href="{{ site.data.i18n[site.lang].cc_license }}" rel="license" target="_blank"> {{ site.data.i18n[site.lang].cc_license_content }} </a>
+                    许可协议，转载请注明出处！
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</article>
+<script>
+    typedEntryTitle();
+</script>

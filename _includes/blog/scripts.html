@@ -1,0 +1,195 @@
+{% if site.cdn.jsdelivr.enabled %}
+<!--图片懒加载插件-->
+{% if site.cdn.lazyload.enabled %}
+<script src="https://cdn.jsdelivr.net/npm/jquery-lazyload/jquery.lazyload.min.js"></script>
+{% endif %}
+<!--其他插件-->
+<script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search/dest/simple-jekyll-search.min.js"></script>
+<script src="{{ site.cdn.jsdelivr.gh-pages }}/assets/libs/javascripts/canvas-bg.js"></script>
+{% else %}
+<!--图片懒加载插件-->
+{% if site.cdn.lazyload.enabled %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/{{ site.cdn.lazyload.version }}/jquery.lazyload.min.js"></script>
+{% endif %}
+<!--其他插件-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simple-jekyll-search/{{ site.cdn.simple-jekyll-search.version }}/simple-jekyll-search.min.js"></script>
+<script src="{{ site.baseurl }}/assets/libs/javascripts/canvas-bg.js"></script>
+{% endif %}
+<script>
+    let pathPrefix = "{{ site.baseurl }}";
+    if ("{{ site.cdn.jsdelivr.enabled }}" === "true") {
+        pathPrefix = "{{ site.cdn.jsdelivr.gh-pages }}";
+    }
+
+    function overrideCheckbox() {
+        $(`input[type="checkbox"]`).each(function () {
+            if (this.checked) {
+                $(this).after(`<i class="fa-regular fa-square-check checkbox-icon checkbox-checked fa-lg"></i>`);
+            } else {
+                $(this).after(`<i class="fa-regular fa-square checkbox-icon fa-lg"></i>`);
+            }
+        });
+    }
+
+    function headerToggle() {
+        let header = $("h1, h2, h3");
+        header.filter(":not(.entry-title)").prepend(`<i class="title-icon fa-solid fa-caret-down" style="display: none;"></i>`);
+        header.filter(":not(.entry-title)").mouseenter(function () {
+            let titleIconChildren = $(this).find(".title-icon");
+            if (titleIconChildren.is(".title-icon.fa-caret-down")) {
+                titleIconChildren.attr("style", "display: inline-block;");
+            }
+        }).mouseleave(function () {
+            let titleIconChildren = $(this).find(".title-icon");
+            if (titleIconChildren.is(".title-icon.fa-caret-down")) {
+                titleIconChildren.attr("style", "display: none;");
+            }
+        });
+        $(".title-icon").on("click", function () {
+            let click = $(this).data("clicks");
+            if (click) {
+                $(this).parent().nextUntil(this.parentNode.tagName).slideDown();
+                $(this).removeClass("fa-caret-right").addClass("fa-caret-down");
+                $(this).parent().nextUntil(this.parentNode.tagName).find(".title-icon").removeClass("fa-caret-right").addClass("fa-caret-down").attr("style", "display: none;");
+                $(this).parent().nextUntil(this.parentNode.tagName).find(".title-icon").data("clicks", !click);
+            } else {
+                $(this).parent().nextUntil(this.parentNode.tagName).slideUp();
+                $(this).removeClass("fa-caret-down").addClass("fa-caret-right");
+            }
+            $(this).data("clicks", !click);
+        });
+    }
+
+    function lazyload() {
+        if ("{{ site.cdn.lazyload.enabled }}" !== "true") {
+            return;
+        }
+        $("img.lazyload").show().lazyload({
+            event: "scroll",
+            effect: "fadeIn"
+        });
+        $(window).bind("load", function () {
+            setTimeout(function () {
+                $("img.lazyload").trigger("scroll");
+            }, 1000);
+        });
+    }
+
+    function imgBoxFactory(imageUrl, imageName) {
+        return `<div class="img-box"><img src=${imageUrl} alt=${imageName}></div>`;
+    }
+
+    function goTop() {
+        let offset = 50, duration = 500, width = 960;
+        $(window).scroll(function () {
+            if ($(window).width() > width) {
+                if ($(this).scrollTop() > offset) {
+                    $("footer").css("top", "20px");
+                    $("footer .back-to-top").fadeIn(duration);
+                } else {
+                    $("footer").css("top", "auto");
+                    $("footer .back-to-top").fadeOut(duration);
+                }
+            }
+        });
+        $(window).resize(function () {
+            if ($(window).width() < width) {
+                $("footer").css("top", "auto");
+                $("footer .back-to-top").fadeOut(duration);
+            }
+            if ($(window).width() >= width && $(this).scrollTop() > offset) {
+                $("footer").css("top", "20px");
+                $("footer .back-to-top").fadeIn(duration);
+            }
+        });
+        $("footer .back-to-top, .go-top").on("click", function (event) {
+            event.preventDefault();
+            $("html, body").animate({
+                scrollTop: 0
+            }, duration);
+            return false;
+        });
+    }
+
+    function displayDetail() {
+        let showHidden = $(".show-hidden");
+        showHidden.each(function () {
+            if ($(this).parent().next()) {
+                $(this).parent().next().addClass("hidden");
+            }
+        });
+        showHidden.on("click", function () {
+            $(this).parent().next().slideToggle();
+        });
+    }
+
+    function closeOverlay() {
+        $(".nav-wrapper, .search-wrapper").removeAttr("style");
+        $(".nav-form, .search-form").removeClass("active");
+        $(".search-form").find("input").val("");
+        $("body").removeClass("nav-overlay search-overlay");
+    }
+
+    function searchMethod() {
+        $(".nav-global .btn-search").on("click", function () {
+            $(".search-wrapper").css({display: "block"});
+            let searchForm = $(".search-form");
+            searchForm.addClass("active");
+            searchForm.find("input").focus();
+            $("body").addClass("search-overlay");
+        });
+
+        $(".nav-global .btn-menu").on("click", function () {
+            $(".nav-wrapper").css({display: "block"});
+            $(".nav-form").addClass("active");
+            $(".nav-form #search-input").prop("disabled", true);
+            $("body").addClass("nav-overlay");
+        });
+
+        $(".nav-wrapper .btn-close, .search-wrapper .btn-close").on("click", function () {
+            closeOverlay();
+        });
+
+        new SimpleJekyllSearch({
+            searchInput: document.getElementById("search-input"),
+            resultsContainer: document.getElementById("results-container"),
+            json: "{{ site.baseurl }}{{ site.paths.blog }}search.json",
+            searchResultTemplate: `<li><a href="{url}">{title}<time class="entry-date">{date}</time></a></li>`,
+            noResultsText: "<p>{{ site.data.i18n[site.lang].search_not_found }}</p>",
+            limit: 15,
+            fuzzy: true
+        });
+    }
+
+    function pad(n) {
+        return (n < 10) ? ("0" + n) : n;
+    }
+
+    function siteTime() {
+        window.setTimeout("siteTime()", 1000);
+        let seconds = 1000;
+        let minutes = seconds * 60;
+        let hours = minutes * 60;
+        let days = hours * 24;
+        let years = days * 365;
+        let today = new Date();
+        let startDate = new Date("2017/12/26");
+        let diff = today - startDate;
+        let diffYears = Math.floor(diff / years);
+        let diffDays = Math.floor((diff / days) - diffYears * 365);
+        let diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+        let diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
+        let diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
+        document.getElementById("sitetime").innerHTML = "本博客已稳定运行 " + diffYears + " 年 " + diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + pad(diffSeconds) + " 秒";
+    }
+
+    $(function () {
+        lazyload();
+        goTop();
+        overrideCheckbox();
+        headerToggle();
+        displayDetail();
+        searchMethod();
+        siteTime();
+    });
+</script>

@@ -1,0 +1,78 @@
+name: generate-article-action
+
+on:
+  push:
+    branches:
+      - gh-pages-closed
+
+jobs:
+  generate-article:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v3
+
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+
+      - name: generate article
+        run: |
+          cd tools/
+          pip install -r requirements.txt
+          python generate-article.py ${{ secrets.LEETCODE_PASSWORD }}
+
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: lint md
+        run: |
+          npm i --save @lint-md/core --silent
+          npm i -g @lint-md/cli --silent
+          sh lint-md.sh
+
+      - name: cleanup unused image
+        run: |
+          cd tools/
+          pip install -r requirements.txt
+          python cleanup-unused-image.py
+
+      - name: commit files
+        run: |
+          cd tools/
+          sh git-config.sh
+          if [ -n "$(git status --porcelain)" ]; then
+            git up && git add -A &&
+              git commit -am "no message"
+          else
+            echo "no changes"
+          fi
+
+      - name: push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          force: true
+
+  cleanup-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v3
+
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+
+      - name: cleanup workflow
+        run: |
+          cd tools/
+          pip install -r requirements.txt
+          python cleanup-workflow.py ${{ secrets.PROJECT_ACCESS_TOKEN }}

@@ -1,0 +1,39 @@
+{% include helpers/common_variable %}
+{% assign other_tags = "" %}
+{% assign custom_important_tags = "" %}
+{% assign custom_company_tags = "" %}
+
+{% for tag in site.tags %}
+    {% if custom_important_tags_order contains tag[0] %}
+        {% assign custom_important_tags = custom_important_tags | append: tag[0] | append: "," %}
+    {% elsif custom_company_tags_order contains tag[0] %}
+        {% assign custom_company_tags = custom_company_tags | append: tag[0] | append: "," %}
+    {% else %}
+        {% assign other_tags = other_tags | append: tag[0] | append: "," %}
+    {% endif %}
+{% endfor %}
+
+{% assign other_tags = other_tags | split: "," | compact | sort_natural %}
+{% assign custom_important_tags = custom_important_tags | split: "," | compact %}
+{% assign custom_company_tags = custom_company_tags | split: "," | compact %}
+
+{% assign sorted_custom_important_tags = "" | split: "," %}
+{% for order in custom_important_tags_order %}
+    {% for tag in custom_important_tags %}
+        {% if tag == order %}
+            {% assign sorted_custom_important_tags = sorted_custom_important_tags | push: tag %}
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+{% assign sorted_custom_company_tags = "" | split: "," %}
+{% for order in custom_company_tags_order %}
+    {% for tag in custom_company_tags %}
+        {% if tag == order %}
+            {% assign sorted_custom_company_tags = sorted_custom_company_tags | push: tag %}
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+{% assign sorted_tags = other_tags | concat: sorted_custom_important_tags | concat: sorted_custom_company_tags %}
+{% assign tags_list = sorted_tags %}
