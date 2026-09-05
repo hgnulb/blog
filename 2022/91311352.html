@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 988. 从叶结点开始的最小字符串 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,二叉树,回溯,字符串,微软,树,深度优先搜索" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 988. 从叶结点开始的最小字符串" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/91311352" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/91311352" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-05-13T23:20:07+08:00" />
+<meta property="article:modified_time" content="2022-05-13T23:20:07+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 988. 从叶结点开始的最小字符串" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-05-13T23:20:07+08:00","datePublished":"2022-05-13T23:20:07+08:00","description":"题目描述","headline":"LeetCode 988. 从叶结点开始的最小字符串","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/91311352"},"url":"https://hgnulb.github.io/blog/2022/91311352"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dfs-回溯--叶子处倒序生成字符串">解法：DFS 回溯 + 叶子处倒序生成字符串</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 988. 从叶结点开始的最小字符串">LeetCode 988. 从叶结点开始的最小字符串</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-05-13 23:20:07"
+                    datetime="2022-05-13T23:20:07+08:00"
+            >
+                2022-05-13
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3179 字 · 英文 64 词 · 代码 64 行"
+            aria-label="预计阅读时间约 10 分钟，正文 3179 字 · 英文 64 词 · 代码 64 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 10 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2805463697/" title="树">
+        树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3241866243/" title="二叉树">
+        二叉树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9755043388/" title="回溯">
+        回溯
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dfs-回溯--叶子处倒序生成字符串">解法：DFS 回溯 + 叶子处倒序生成字符串</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/smallest-string-starting-from-leaf/">988. 从叶结点开始的最小字符串</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>一棵二叉树，每个节点的值在 <code class="language-plaintext highlighter-rouge">0..25</code> 之间，分别代表字母 <code class="language-plaintext highlighter-rouge">a</code> 到 <code class="language-plaintext highlighter-rouge">z</code>。对每个叶子节点，把「从该叶子沿父指针走到根」经过的字母连起来得到一个字符串；求所有这些字符串中字典序最小的那一个。</p>
+
+  <p>最关键的一处是<strong>方向</strong>：题目要的是<strong>叶到根</strong>的字符串，而 DFS 天然产生的是<strong>根到叶</strong>的路径。这意味着必须在某个环节做反转，不能直接拿根到叶的串去比较——两者的字典序结论完全不同。举个例子，路径 <code class="language-plaintext highlighter-rouge">a → b</code> 与 <code class="language-plaintext highlighter-rouge">b</code>，根到叶的串是 <code class="language-plaintext highlighter-rouge">ab</code> 与 <code class="language-plaintext highlighter-rouge">b</code>，<code class="language-plaintext highlighter-rouge">ab</code> 更小；但叶到根的串是 <code class="language-plaintext highlighter-rouge">ba</code> 与 <code class="language-plaintext highlighter-rouge">b</code>，此时 <code class="language-plaintext highlighter-rouge">b</code> 更小。方向搞反会得到相反的答案。</p>
+
+  <p>第二处是字典序的<strong>前缀规则</strong>：当一个串是另一个串的前缀时，短的更小。这条规则在本题里会真实触发——叶子深度不同的两条路径可能一个是另一个的前缀。好消息是各语言内置的字符串比较（Java 的 <code class="language-plaintext highlighter-rouge">compareTo</code>、Go 的 <code class="language-plaintext highlighter-rouge">&lt;</code>）已经正确实现了这一规则，直接用即可，不必手写逐字符比较。</p>
+
+  <p>第三处是「叶子」的定义：左右孩子<strong>都</strong>为空才算叶子。只有一个孩子的节点不是叶子，不能在它那里结算答案——这是本题最高频的边界错误，因为单孩子节点在很多树题里会被当成「路径尽头」。</p>
+
+  <p>约束里节点数不超过 8500，节点值在 <code class="language-plaintext highlighter-rouge">0..25</code>。规模不大，允许每到一个叶子就构造一次字符串并比较，即使最坏情况下总代价是 $O(n^2)$ 级别也能通过；这说明本题考的是路径回溯与方向处理，而不是极致效率。</p>
+
+  <p>边界方面：树至少有一个节点，不必考虑空树（但代码里保留空判断更稳）；答案初值用空串配合「空则直接接受」的判断，可以避免为「第一个叶子」写特判。</p>
+</blockquote>
+
+<h2 id="解法dfs-回溯--叶子处倒序生成字符串">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95dfs-%E5%9B%9E%E6%BA%AF--%E5%8F%B6%E5%AD%90%E5%A4%84%E5%80%92%E5%BA%8F%E7%94%9F%E6%88%90%E5%AD%97%E7%AC%A6%E4%B8%B2" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：DFS 回溯 + 叶子处倒序生成字符串</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最朴素的想法是先把所有根到叶路径全部收集进一个列表，再逐条反转、排序取最小。这能出正确答案，但要额外存下所有路径，空间浪费；而且排序是多余的——只求最小值，边走边比即可。</p>
+
+  <p>瓶颈其实不在算法而在<strong>路径的维护方式</strong>。如果每进入一个节点就新建一个字符串做拼接，那么每层都会复制一次整条路径，代价是 $O(深度)$ 的复制，总开销会被显著放大。正确的做法是用一个<strong>可变缓冲区</strong>配合回溯：进入节点时在末尾追加字符，离开节点时把这个字符删掉。缓冲区在整个 DFS 过程中只有一份，任何时刻它的内容恰好是「根到当前节点」的路径。</p>
+
+  <p>这就是维持的<strong>不变量</strong>：<code class="language-plaintext highlighter-rouge">dfs(node)</code> 执行期间，缓冲区的内容始终等于从根到 <code class="language-plaintext highlighter-rouge">node</code> 的字母序列；函数返回时缓冲区必须恢复成进入前的样子。追加与删除严格配对，这个不变量才能在整棵树上成立。</p>
+
+  <p>关于方向，有两种处理办法。一种是每次在缓冲区<strong>头部</strong>插入字符，这样缓冲区直接就是「当前节点到根」的顺序，到叶子时可以直接取用；但头插会导致后面所有字符整体后移，每次 $O(深度)$，性能反而更差。另一种是本文采用的做法：缓冲区按正常顺序（根到叶）追加，只在<strong>到达叶子时</strong>才倒序生成一次字符串。因为只有叶子才需要完整的串，而内部节点根本不需要，所以把反转推迟到叶子是更省的选择。</p>
+
+  <p>比较与更新则很直接：维护一个 <code class="language-plaintext highlighter-rouge">best</code>，每得到一个叶子串就与它比较，更小则替换。初值取空串并约定「<code class="language-plaintext highlighter-rouge">best</code> 为空时无条件接受」，这样第一个叶子自然被收下，不需要额外的「是否首次」标志。</p>
+
+  <p>最后要强调结算的位置：<strong>只在叶子处结算</strong>。内部节点即使字符更小也不能参与比较，因为它不构成一条完整的「叶到根」路径。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>准备答案变量与路径缓冲区</strong>：<code class="language-plaintext highlighter-rouge">best</code> 初始化为空串，缓冲区初始为空。为什么 <code class="language-plaintext highlighter-rouge">best</code> 用空串而不是某个「无穷大」的哨兵串：空串配合显式的空判断更直观，也避免了构造哨兵时猜测最大长度。</li>
+    <li>
+<strong>递归基</strong>：<code class="language-plaintext highlighter-rouge">node == null</code> 直接返回。为什么需要它：内部节点可能只有一个孩子，另一侧递归会传入空指针；有了这条基，调用方就不必在每次递归前判空。</li>
+    <li>
+<strong>进入节点：追加字符</strong>。<code class="language-plaintext highlighter-rouge">char c = 'a' + node.val</code>，追加到缓冲区末尾。为什么是 <code class="language-plaintext highlighter-rouge">'a' + val</code>：题目约定 0 对应 <code class="language-plaintext highlighter-rouge">a</code>、25 对应 <code class="language-plaintext highlighter-rouge">z</code>，这是直接的线性映射。</li>
+    <li>
+<strong>判断是否叶子</strong>：<code class="language-plaintext highlighter-rouge">node.left == null &amp;&amp; node.right == null</code>。为什么必须两个都判：只有一个孩子的节点还不是路径终点，在它那里结算会得到一条不完整的路径，比如把 <code class="language-plaintext highlighter-rouge">b</code>（内部）当叶子会引入本不存在的候选串。</li>
+    <li>
+<strong>叶子处结算</strong>：把缓冲区<strong>倒序</strong>读出生成字符串，与 <code class="language-plaintext highlighter-rouge">best</code> 比较并按需更新。为什么在这里才反转：只有叶子需要完整的串，内部节点反转纯属浪费；而且倒序读取只需一次线性扫描，不影响缓冲区本身。</li>
+    <li>
+<strong>非叶子则继续递归左右孩子</strong>：顺序无所谓，因为最终取的是全局最小值，遍历次序不影响结果。</li>
+    <li>
+<strong>离开节点：删除末尾字符</strong>（回溯）。为什么必须删：缓冲区是全局共享的，如果不还原，兄弟子树会看到本子树遗留的字符，路径全乱。这一步与追加严格配对，是回溯的本质。</li>
+    <li>
+<strong>返回 <code class="language-plaintext highlighter-rouge">best</code></strong>。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">root = [0,1,2,3,4,3,4]</code> 走一遍，即根 <code class="language-plaintext highlighter-rouge">a</code>(0)，左 <code class="language-plaintext highlighter-rouge">b</code>(1)、右 <code class="language-plaintext highlighter-rouge">c</code>(2)，四个叶子依次是 <code class="language-plaintext highlighter-rouge">d</code>(3)、<code class="language-plaintext highlighter-rouge">e</code>(4)、<code class="language-plaintext highlighter-rouge">d</code>(3)、<code class="language-plaintext highlighter-rouge">e</code>(4)。<br>
+进入根：缓冲区 <code class="language-plaintext highlighter-rouge">a</code>。不是叶子，递归左孩子。<br>
+进入节点 <code class="language-plaintext highlighter-rouge">b</code>：缓冲区 <code class="language-plaintext highlighter-rouge">ab</code>。不是叶子，递归它的左孩子。<br>
+进入叶子 <code class="language-plaintext highlighter-rouge">d</code>：缓冲区 <code class="language-plaintext highlighter-rouge">abd</code>，是叶子，倒序生成 <code class="language-plaintext highlighter-rouge">dba</code>；<code class="language-plaintext highlighter-rouge">best</code> 为空，直接接受，<code class="language-plaintext highlighter-rouge">best = "dba"</code>。回溯删除 <code class="language-plaintext highlighter-rouge">d</code>，缓冲区回到 <code class="language-plaintext highlighter-rouge">ab</code>。<br>
+进入叶子 <code class="language-plaintext highlighter-rouge">e</code>：缓冲区 <code class="language-plaintext highlighter-rouge">abe</code>，倒序得 <code class="language-plaintext highlighter-rouge">eba</code>；与 <code class="language-plaintext highlighter-rouge">dba</code> 比较，<code class="language-plaintext highlighter-rouge">e &gt; d</code>，不更新。回溯删除 <code class="language-plaintext highlighter-rouge">e</code>，缓冲区回到 <code class="language-plaintext highlighter-rouge">ab</code>。<br>
+从 <code class="language-plaintext highlighter-rouge">b</code> 返回：删除 <code class="language-plaintext highlighter-rouge">b</code>，缓冲区回到 <code class="language-plaintext highlighter-rouge">a</code>。<br>
+进入节点 <code class="language-plaintext highlighter-rouge">c</code>：缓冲区 <code class="language-plaintext highlighter-rouge">ac</code>。两个叶子分别得到 <code class="language-plaintext highlighter-rouge">dca</code> 与 <code class="language-plaintext highlighter-rouge">eca</code>，都大于 <code class="language-plaintext highlighter-rouge">dba</code>（第二个字符 <code class="language-plaintext highlighter-rouge">c</code> 大于 <code class="language-plaintext highlighter-rouge">b</code>），不更新。回溯后缓冲区回到 <code class="language-plaintext highlighter-rouge">a</code>。<br>
+从根返回：删除 <code class="language-plaintext highlighter-rouge">a</code>，缓冲区清空。返回 <code class="language-plaintext highlighter-rouge">"dba"</code>，与预期一致。</p>
+
+  <p>再看能体现前缀规则的用例 <code class="language-plaintext highlighter-rouge">root = [25,1,3,1,3,0,2]</code>：根是 <code class="language-plaintext highlighter-rouge">z</code>(25)，左子树的叶子路径倒序后以 <code class="language-plaintext highlighter-rouge">b</code>、<code class="language-plaintext highlighter-rouge">b</code> 开头，右子树两个叶子分别得到 <code class="language-plaintext highlighter-rouge">adz</code> 与 <code class="language-plaintext highlighter-rouge">caz</code>（<code class="language-plaintext highlighter-rouge">a</code> 对应 0、<code class="language-plaintext highlighter-rouge">c</code> 对应 2）。最小的是 <code class="language-plaintext highlighter-rouge">adz</code>。若把方向写反，比较的将是 <code class="language-plaintext highlighter-rouge">zba</code>、<code class="language-plaintext highlighter-rouge">zdb</code>、<code class="language-plaintext highlighter-rouge">zaa</code>、<code class="language-plaintext highlighter-rouge">zbc</code> 之类的根到叶串，答案会变成完全不同的串。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">best</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">smallestFromLeaf</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">,</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">());</span>
+        <span class="k">return</span> <span class="n">best</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">dfs</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">node</span><span class="o">,</span> <span class="nc">StringBuilder</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="n">path</span><span class="o">.</span><span class="na">append</span><span class="o">((</span><span class="kt">char</span><span class="o">)</span> <span class="o">(</span><span class="sc">'a'</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="na">val</span><span class="o">));</span>
+
+        <span class="c1">// 左右都为空才是叶子，只有叶子才构成完整的「叶到根」路径。</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="na">right</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">reverseToString</span><span class="o">(</span><span class="n">path</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">best</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">||</span> <span class="n">s</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">best</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">best</span> <span class="o">=</span> <span class="n">s</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">dfs</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">path</span><span class="o">);</span>
+            <span class="n">dfs</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">path</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 回溯：与上面的 append 严格配对，还原缓冲区。</span>
+        <span class="n">path</span><span class="o">.</span><span class="na">deleteCharAt</span><span class="o">(</span><span class="n">path</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="nf">reverseToString</span><span class="o">(</span><span class="nc">StringBuilder</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">char</span><span class="o">[]</span> <span class="n">chars</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">chars</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">String</span><span class="o">(</span><span class="n">chars</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">smallestFromLeaf</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="n">best</span> <span class="o">:=</span> <span class="s">""</span>
+
+    <span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">,</span> <span class="n">path</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">,</span> <span class="n">path</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="kt">byte</span><span class="p">(</span><span class="sc">'a'</span><span class="o">+</span><span class="n">node</span><span class="o">.</span><span class="n">Val</span><span class="p">))</span>
+
+        <span class="c">// 左右都为空才是叶子，只有叶子才构成完整的「叶到根」路径。</span>
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">Left</span> <span class="o">==</span> <span class="no">nil</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="n">Right</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="n">reversed</span> <span class="o">:=</span> <span class="n">reverseBytes</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">:=</span> <span class="kt">string</span><span class="p">(</span><span class="n">reversed</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">best</span> <span class="o">==</span> <span class="s">""</span> <span class="o">||</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="n">best</span> <span class="p">{</span>
+                <span class="n">best</span> <span class="o">=</span> <span class="n">s</span>
+            <span class="p">}</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+
+        <span class="n">dfs</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Left</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Right</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">{})</span>
+    <span class="k">return</span> <span class="n">best</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">reverseBytes</span><span class="p">(</span><span class="n">b</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">[]</span><span class="kt">byte</span> <span class="p">{</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="o">-</span><span class="n">i</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">out</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：最坏 $O(n^2)$。凭什么：DFS 本身访问每个节点一次是 $O(n)$；但每到一个叶子都要花 $O(深度)$ 生成字符串并做一次 $O(深度)$ 的字典序比较。叶子数量与树高的乘积在退化成「一条长链挂满叶子」时可达 $O(n^2)$，平衡树下约为 $O(n \log n)$。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。凭什么：递归栈深度等于树高，最坏为 $O(n)$；路径缓冲区长度同样不超过树高；<code class="language-plaintext highlighter-rouge">best</code> 与每次生成的临时串长度也不超过树高。这些都是同阶的，不叠加出更高的量级。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>题目要求的字符串方向与 DFS 天然产生的方向相反时，先把这件事说清楚再动手；把反转推迟到叶子处只做一次，比每层头插要省得多。</li>
+    <li>路径类回溯的骨架永远是「进入时追加、离开时删除」，两步严格配对。判断代码对不对，就看函数返回时缓冲区是否恢复原状。</li>
+    <li>叶子的判定必须是「左右孩子都为空」。只有一个孩子的节点是内部节点，在那里结算会引入伪路径——这是树上路径题最常见的错误。</li>
+    <li>字典序的前缀规则（短串更小）由语言内置比较正确实现，直接用 <code class="language-plaintext highlighter-rouge">compareTo</code> 或 <code class="language-plaintext highlighter-rouge">&lt;</code> 即可，手写逐字符比较反而容易漏掉长度不等的分支。</li>
+    <li>求最值时用「空值 + 无条件接受」代替「是否首次」的布尔标志，可以少一个变量也少一处分支。</li>
+    <li>面试视角：开口先点出「叶到根 vs 根到叶」这个方向陷阱，再说明只在叶子结算、内部节点不参与比较，最后提一句「短串是长串前缀时更小，内置比较已覆盖」。这三点讲全，基本就通过了；若被追问优化，可以说可以在下降过程中做剪枝——但由于比较的是反转后的串，前缀剪枝并不直接成立，这一点反而是加分的诚实回答。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：直接拿根到叶的串比较，不做反转 → 用例 <code class="language-plaintext highlighter-rouge">[0,1,2,3,4,3,4]</code> 中比较的是 <code class="language-plaintext highlighter-rouge">abd</code>、<code class="language-plaintext highlighter-rouge">abe</code>、<code class="language-plaintext highlighter-rouge">acd</code>、<code class="language-plaintext highlighter-rouge">ace</code>，返回 <code class="language-plaintext highlighter-rouge">abd</code>，而正确答案是 <code class="language-plaintext highlighter-rouge">dba</code>。</li>
+    <li>
+<strong>错误写法</strong>：把只有一个孩子的节点当叶子（判断写成 <code class="language-plaintext highlighter-rouge">node.left == null || node.right == null</code>） → 用例 <code class="language-plaintext highlighter-rouge">[2,2,1,null,1,0,null,0]</code> 中内部节点被结算，产生本不存在的候选串，答案从 <code class="language-plaintext highlighter-rouge">abc</code> 变成更小的伪串。</li>
+    <li>
+<strong>错误写法</strong>：忘记回溯删除末尾字符 → 用例 <code class="language-plaintext highlighter-rouge">[0,1,2,3,4,3,4]</code> 中右子树会带着左子树遗留的字符，缓冲区变成 <code class="language-plaintext highlighter-rouge">abdec...</code>，生成的串完全错乱。</li>
+    <li>
+<strong>错误写法</strong>：回溯的删除写在 <code class="language-plaintext highlighter-rouge">return</code> 之后或只写在某个分支里 → 用例中叶子分支提前返回时缓冲区没还原，兄弟节点看到脏路径。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">best</code> 初值设为 <code class="language-plaintext highlighter-rouge">"z"</code> 之类的单字符哨兵 → 用例中任何以 <code class="language-plaintext highlighter-rouge">z</code> 之后字符开头的合法串都比不过它，但更致命的是长度更长且以 <code class="language-plaintext highlighter-rouge">z</code> 开头的串（如 <code class="language-plaintext highlighter-rouge">zba</code>）会被误判为更大，答案漏解。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">best</code> 初值为空串却写成 <code class="language-plaintext highlighter-rouge">s.compareTo(best) &lt; 0</code> 而不带空判断 → 空串比任何非空串都小，第一个叶子永远无法被接受，最终返回空串。</li>
+    <li>
+<strong>错误写法</strong>：字符映射写成 <code class="language-plaintext highlighter-rouge">'a' + node.val - 1</code> 或直接用 <code class="language-plaintext highlighter-rouge">(char) node.val</code> → 用例中 0 被映射成 <code class="language-plaintext highlighter-rouge">`</code> 或不可见字符，比较结果毫无意义。</li>
+    <li>
+<strong>错误写法</strong>：每层新建字符串做 <code class="language-plaintext highlighter-rouge">path + c</code> 拼接并当成「更简单的写法」 → 用例节点数 8500 且树退化成链时，每层复制整条路径，总代价升到 $O(n^2)$ 的字符复制，且丢掉了回溯这一考点。</li>
+    <li>
+<strong>错误写法</strong>：在缓冲区头部插入字符以省去反转 → 用例中每次插入都要移动整条路径，深度大时明显更慢；虽然结果正确，但面试中会被追问为什么不推迟到叶子再反转。</li>
+    <li>
+<strong>错误写法</strong>：把所有叶子串收集到列表里再排序取第一个 → 用例中答案正确，但额外占用 $O(叶子数 \times 深度)$ 空间，且排序是多余的，求最小值只需边走边比。</li>
+    <li>
+<strong>错误写法</strong>：递归前不判空，直接访问 <code class="language-plaintext highlighter-rouge">node.left.val</code> → 用例 <code class="language-plaintext highlighter-rouge">[2,2,1,null,1,...]</code> 中缺失的孩子导致空指针异常（Go 里 nil 解引用 panic）。</li>
+    <li>
+<strong>错误写法</strong>：在内部节点也做一次比较更新 → 用例 <code class="language-plaintext highlighter-rouge">[0,1,2,3,4,3,4]</code> 中根节点自己的串 <code class="language-plaintext highlighter-rouge">a</code> 会成为候选并胜出，返回 <code class="language-plaintext highlighter-rouge">a</code>，而它并不对应任何叶子路径。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/binary-tree-paths/">257. 二叉树的所有路径</a></td>
+      <td>简单</td>
+      <td>同样的回溯骨架，但要输出全部路径而非取最值，方向也无需反转</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/sum-root-to-leaf-numbers/">129. 求根节点到叶节点数字之和</a></td>
+      <td>中等</td>
+      <td>路径信息可以边下降边累积成数字，无需缓冲区，也就无需回溯</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/path-sum-ii/">113. 路径总和 II</a></td>
+      <td>中等</td>
+      <td>回溯加剪枝，结算条件是路径和达标，考的是列表的增删配对</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/path-sum/">112. 路径总和</a></td>
+      <td>简单</td>
+      <td>只需布尔判定，靠递减目标值传参即可，是路径类里最轻的一档</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/sum-of-root-to-leaf-binary-numbers/">1022. 从根到叶的二进制数之和</a></td>
+      <td>简单</td>
+      <td>用位移在下降时维护数值，展示了「参数传状态」替代「缓冲区回溯」的写法</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/path-sum-iii/">437. 路径总和 III</a></td>
+      <td>中等</td>
+      <td>路径起点不必是根，需要前缀和加哈希表，回溯的对象从字符变成计数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/binary-tree-maximum-path-sum/">124. 二叉树中的最大路径和</a></td>
+      <td>困难</td>
+      <td>路径可跨越节点左右两侧，靠返回值与全局变量分工，而不是显式路径缓冲</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/60589154" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1523. 在区间范围内统计奇数数目</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/81195471" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1110. 删点成林</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/91311352">https://hgnulb.github.io/blog/2022/91311352</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

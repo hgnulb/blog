@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1195. 多线程 Fizz Buzz | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,多线程,字节跳动,美团,阿里巴巴" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1195. 多线程 Fizz Buzz" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2025/21474916" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2025/21474916" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-05-19T00:00:00+08:00" />
+<meta property="article:modified_time" content="2025-05-19T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1195. 多线程 Fizz Buzz" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2025-05-19T00:00:00+08:00","datePublished":"2025-05-19T00:00:00+08:00","description":"题目描述","headline":"LeetCode 1195. 多线程 Fizz Buzz","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2025/21474916"},"url":"https://hgnulb.github.io/blog/2025/21474916"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法四个信号量协调执行权">解法：四个信号量协调执行权</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1195. 多线程 Fizz Buzz">LeetCode 1195. 多线程 Fizz Buzz</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2025-05-19 00:00:00"
+                    datetime="2025-05-19T00:00:00+08:00"
+            >
+                2025-05-19
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3169 字 · 英文 23 词 · 代码 119 行"
+            aria-label="预计阅读时间约 12 分钟，正文 3169 字 · 英文 23 词 · 代码 119 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 12 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8699249851/" title="阿里巴巴">
+        阿里巴巴
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0416977247/" title="美团">
+        美团
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4625220551/" title="多线程">
+        多线程
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法四个信号量协调执行权">解法：四个信号量协调执行权</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/fizz-buzz-multithreaded/">1195. 交替打印字符串</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>一个 <code class="language-plaintext highlighter-rouge">FizzBuzz</code> 对象的四个方法 <code class="language-plaintext highlighter-rouge">fizz</code>、<code class="language-plaintext highlighter-rouge">buzz</code>、<code class="language-plaintext highlighter-rouge">fizzbuzz</code>、<code class="language-plaintext highlighter-rouge">number</code> 会被四个不同的线程各调用一次，四个线程并发运行。要求把所有打印动作拼起来后，整体输出必须和单线程从 <code class="language-plaintext highlighter-rouge">1</code> 数到 <code class="language-plaintext highlighter-rouge">n</code> 依次做 FizzBuzz 判断的结果<strong>逐项完全一致</strong>：被 <code class="language-plaintext highlighter-rouge">15</code> 整除打印 <code class="language-plaintext highlighter-rouge">fizzbuzz</code>，只被 <code class="language-plaintext highlighter-rouge">3</code> 整除打印 <code class="language-plaintext highlighter-rouge">fizz</code>，只被 <code class="language-plaintext highlighter-rouge">5</code> 整除打印 <code class="language-plaintext highlighter-rouge">buzz</code>，其余打印数字本身。</p>
+
+  <p>注意四个方法只被调用一次，所以「循环到 <code class="language-plaintext highlighter-rouge">n</code>」这件事必须写在每个方法内部，而不是由外部框架反复调用。这意味着每个线程都要自己知道「我这一趟总共该打印几次」，而且这个次数必须和它真正该负责的数字个数<strong>分毫不差</strong>：多循环一轮就会永久卡在等待上导致整个程序挂死，少循环一轮就会漏输出。</p>
+
+  <p>约束里 <code class="language-plaintext highlighter-rouge">n</code> 最大只有 <code class="language-plaintext highlighter-rouge">50</code>，这个数字小到任何算法层面的优化都毫无意义，等于明说本题的全部考点在并发正确性上：怎样让四个互相不知道对方进度的线程，产出一个严格有序的序列。评测机会反复跑很多次来捕捉偶发的竞态，所以「大部分时候能过」等于错。</p>
+
+  <p>还有一条隐含要求：不允许忙等空转。让线程反复抢锁看一眼再放开，虽然能出正确结果，但会把 CPU 打满，面试里这属于会被追问到底的写法。</p>
+
+  <p>边界上有两处容易被忽略：<code class="language-plaintext highlighter-rouge">n &lt; 3</code> 时 <code class="language-plaintext highlighter-rouge">fizz</code> 线程一次都不打印，<code class="language-plaintext highlighter-rouge">n &lt; 15</code> 时 <code class="language-plaintext highlighter-rouge">fizzbuzz</code> 线程一次都不打印，这些线程必须能正常走完循环并退出，而不是停在等待里；另外 <code class="language-plaintext highlighter-rouge">n = 1</code> 时只有 <code class="language-plaintext highlighter-rouge">number</code> 线程输出一个 <code class="language-plaintext highlighter-rouge">1</code>，其余三个线程必须立刻结束。</p>
+</blockquote>
+
+<h2 id="解法四个信号量协调执行权">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9B%E4%B8%AA%E4%BF%A1%E5%8F%B7%E9%87%8F%E5%8D%8F%E8%B0%83%E6%89%A7%E8%A1%8C%E6%9D%83" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：四个信号量协调执行权</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最朴素的想法是搞一个共享计数器 <code class="language-plaintext highlighter-rouge">i</code> 和一把锁，四个线程各自 <code class="language-plaintext highlighter-rouge">while (i &lt;= n)</code>，加锁后看当前的 <code class="language-plaintext highlighter-rouge">i</code> 是不是归自己管，是就打印并 <code class="language-plaintext highlighter-rouge">i++</code>，不是就解锁重来。这样确实能保证顺序，但瓶颈很明显：不该自己打印的三个线程会疯狂地加锁、判断、解锁，纯粹在烧 CPU，而且谁先抢到锁完全靠操作系统调度，压力大时抖动很厉害。</p>
+
+  <p>跳出来看会发现一件事：<strong>任何时刻，整个系统里只有唯一一个「待打印的数字」，而这个数字该由谁打印，是它自己的数值唯一决定的</strong>。既然接下来该谁动手是完全确定的、没有任何竞争可言，那就不该让线程去「抢」，而应该由上一个动作的执行者<strong>点名</strong>把执行权交给下一个人。这就把「四个线程竞争一把锁」改造成了「一枚令牌在四个线程之间定向传递」。</p>
+
+  <p>谁来点名？只有 <code class="language-plaintext highlighter-rouge">number</code> 线程天然知道当前数字是几（它是唯一从 <code class="language-plaintext highlighter-rouge">1</code> 数到 <code class="language-plaintext highlighter-rouge">n</code> 的线程），所以让它当调度中心：拿到令牌后先判断当前数字属于哪一类，属于自己就直接打印然后把令牌留给自己进入下一个数字，属于别人就把令牌递给那个线程；打印线程干完活后把令牌<strong>原样交还给 <code class="language-plaintext highlighter-rouge">number</code></strong>，让它推进到下一个数字。令牌用四个信号量表示，<code class="language-plaintext highlighter-rouge">numberSem</code> 初值为 <code class="language-plaintext highlighter-rouge">1</code>（<code class="language-plaintext highlighter-rouge">number</code> 先手），其余三个初值为 <code class="language-plaintext highlighter-rouge">0</code>。</p>
+
+  <p>这套结构的循环不变量是：<strong>任意时刻，四个信号量的许可总数恒等于 <code class="language-plaintext highlighter-rouge">1</code>；持有那唯一一个许可的线程，就是当前数字 <code class="language-plaintext highlighter-rouge">i</code> 的合法打印者</strong>。<code class="language-plaintext highlighter-rouge">number</code> 每轮做的是「消耗掉一个许可、再释放出一个许可」，打印线程做的也是「消耗一个、释放一个」，所以总数守恒；而许可的去向永远指向正确的那个线程，输出顺序自然就对了。也正因为总量恒为 <code class="language-plaintext highlighter-rouge">1</code>，任何两次打印之间都不可能发生重叠。</p>
+
+  <p>剩下的问题是三个打印线程各自该循环多少次。它们不能靠 <code class="language-plaintext highlighter-rouge">number</code> 通知，只能自己算：<code class="language-plaintext highlighter-rouge">fizzbuzz</code> 负责 <code class="language-plaintext highlighter-rouge">15, 30, 45, ...</code>，直接 <code class="language-plaintext highlighter-rouge">i += 15</code> 循环即可；<code class="language-plaintext highlighter-rouge">fizz</code> 负责能被 <code class="language-plaintext highlighter-rouge">3</code> 整除<strong>但不能被 <code class="language-plaintext highlighter-rouge">5</code> 整除</strong>的数，所以在 <code class="language-plaintext highlighter-rouge">i += 3</code> 的循环里要把 <code class="language-plaintext highlighter-rouge">i % 5 == 0</code> 的那些跳过；<code class="language-plaintext highlighter-rouge">buzz</code> 同理跳过 <code class="language-plaintext highlighter-rouge">i % 3 == 0</code>。这个跳过不是可有可无的优化，而是正确性要件：<code class="language-plaintext highlighter-rouge">number</code> 遇到 <code class="language-plaintext highlighter-rouge">15</code> 只会释放 <code class="language-plaintext highlighter-rouge">fizzbuzzSem</code>，如果 <code class="language-plaintext highlighter-rouge">fizz</code> 也为 <code class="language-plaintext highlighter-rouge">15</code> 准备了一次 <code class="language-plaintext highlighter-rouge">acquire</code>，它就会永远等下去。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>建立四个信号量并定好初值</strong>：<code class="language-plaintext highlighter-rouge">numberSem</code> 初值 <code class="language-plaintext highlighter-rouge">1</code>，<code class="language-plaintext highlighter-rouge">fizzSem</code>、<code class="language-plaintext highlighter-rouge">buzzSem</code>、<code class="language-plaintext highlighter-rouge">fizzbuzzSem</code> 初值 <code class="language-plaintext highlighter-rouge">0</code>。为什么必须这样：这就是「令牌总量为 <code class="language-plaintext highlighter-rouge">1</code> 且初始在 <code class="language-plaintext highlighter-rouge">number</code> 手里」的直接编码。哪怕给某个打印线程多放一个初始许可，它就会在第 <code class="language-plaintext highlighter-rouge">1</code> 个数字还没打印时抢跑，输出顺序立刻乱掉。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">number</code> 线程从 <code class="language-plaintext highlighter-rouge">1</code> 遍历到 <code class="language-plaintext highlighter-rouge">n</code>，每轮开头先 <code class="language-plaintext highlighter-rouge">numberSem.acquire()</code></strong>。为什么放在循环体第一行：<code class="language-plaintext highlighter-rouge">acquire</code> 是这一轮的入场券，只有拿到它才说明上一个数字已经打印完毕，否则 <code class="language-plaintext highlighter-rouge">number</code> 可能在别人还没打印时就推进到下一个数字。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">number</code> 按 <code class="language-plaintext highlighter-rouge">15 → 3 → 5 → 其他</code> 的顺序做判断</strong>。为什么顺序不能变：<code class="language-plaintext highlighter-rouge">15</code> 的倍数同时满足 <code class="language-plaintext highlighter-rouge">i % 3 == 0</code> 和 <code class="language-plaintext highlighter-rouge">i % 5 == 0</code>，<code class="language-plaintext highlighter-rouge">if-else</code> 链是自上而下短路匹配的，把 <code class="language-plaintext highlighter-rouge">15</code> 放在后面会让 <code class="language-plaintext highlighter-rouge">15</code> 被 <code class="language-plaintext highlighter-rouge">3</code> 那一支抢先接走，打印成 <code class="language-plaintext highlighter-rouge">fizz</code>。</li>
+    <li>
+<strong>命中 <code class="language-plaintext highlighter-rouge">15</code>/<code class="language-plaintext highlighter-rouge">3</code>/<code class="language-plaintext highlighter-rouge">5</code> 时只做 <code class="language-plaintext highlighter-rouge">release</code>，不打印</strong>。为什么不自己打印：打印动作必须由题目指定的那个线程完成，<code class="language-plaintext highlighter-rouge">number</code> 只拿到了 <code class="language-plaintext highlighter-rouge">printNumber</code> 这一个回调，物理上也打印不了 <code class="language-plaintext highlighter-rouge">fizz</code>。释放完这一轮就结束了，<code class="language-plaintext highlighter-rouge">number</code> 会在下一轮开头的 <code class="language-plaintext highlighter-rouge">acquire</code> 上阻塞，直到打印线程把令牌还回来。</li>
+    <li>
+<strong>其余情况由 <code class="language-plaintext highlighter-rouge">number</code> 自己 <code class="language-plaintext highlighter-rouge">printNumber.accept(i)</code> 后再 <code class="language-plaintext highlighter-rouge">numberSem.release()</code></strong>。为什么要自己释放：普通数字没有第二个线程会替它归还令牌，如果这里忘了 <code class="language-plaintext highlighter-rouge">release</code>，下一轮的 <code class="language-plaintext highlighter-rouge">acquire</code> 就会永久阻塞，程序在第一个非 <code class="language-plaintext highlighter-rouge">3</code>/<code class="language-plaintext highlighter-rouge">5</code> 倍数上直接挂死。</li>
+    <li>**三个打印线程各自按自己的步长循环，循环体统一是「<code class="language-plaintext highlighter-rouge">acquire</code> 自己的信号量 → 执行打印回调 → <code class="language-plaintext highlighter-rouge">release</code> numberSem<code class="language-plaintext highlighter-rouge">」**。为什么必须归还给 </code>numberSem<code class="language-plaintext highlighter-rouge">而不是自己：令牌交回调度中心，才能让</code>number<code class="language-plaintext highlighter-rouge"> 推进到下一个数字；还给自己等于把令牌扣下，</code>number` 再也醒不过来。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">fizz</code> 和 <code class="language-plaintext highlighter-rouge">buzz</code> 的循环里跳过 <code class="language-plaintext highlighter-rouge">15</code> 的倍数</strong>。为什么：这些数字的令牌会发给 <code class="language-plaintext highlighter-rouge">fizzbuzz</code>，如果 <code class="language-plaintext highlighter-rouge">fizz</code> 也在这里等，它等到的会是后面某个本该属于自己的数字的令牌，从此每个线程的进度都错位一格，最终必然有线程等不到而死锁。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">n = 15</code> 走一遍（用「令牌位置」来跟踪）：</p>
+
+  <ul>
+    <li>起点：令牌在 <code class="language-plaintext highlighter-rouge">numberSem</code>。<code class="language-plaintext highlighter-rouge">number</code> 拿到令牌，<code class="language-plaintext highlighter-rouge">i = 1</code>，不被 <code class="language-plaintext highlighter-rouge">3</code>/<code class="language-plaintext highlighter-rouge">5</code> 整除，自己打印 <code class="language-plaintext highlighter-rouge">1</code>，再把令牌放回 <code class="language-plaintext highlighter-rouge">numberSem</code>。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">i = 2</code> 同上，打印 <code class="language-plaintext highlighter-rouge">2</code>，令牌回到 <code class="language-plaintext highlighter-rouge">numberSem</code>。此时另外三个线程都还阻塞在自己的 <code class="language-plaintext highlighter-rouge">acquire</code> 上，没有任何机会插队。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">i = 3</code>：<code class="language-plaintext highlighter-rouge">number</code> 拿到令牌，命中 <code class="language-plaintext highlighter-rouge">i % 3 == 0</code>，把令牌放进 <code class="language-plaintext highlighter-rouge">fizzSem</code> 后本轮结束，随即在下一轮开头的 <code class="language-plaintext highlighter-rouge">acquire</code> 上阻塞。<code class="language-plaintext highlighter-rouge">fizz</code> 线程被唤醒，打印 <code class="language-plaintext highlighter-rouge">fizz</code>，把令牌还给 <code class="language-plaintext highlighter-rouge">numberSem</code>。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">i = 4</code>：<code class="language-plaintext highlighter-rouge">number</code> 被唤醒，自己打印 <code class="language-plaintext highlighter-rouge">4</code>，令牌回到 <code class="language-plaintext highlighter-rouge">numberSem</code>。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">i = 5</code>：命中 <code class="language-plaintext highlighter-rouge">i % 5 == 0</code>，令牌进 <code class="language-plaintext highlighter-rouge">buzzSem</code>；<code class="language-plaintext highlighter-rouge">buzz</code> 打印 <code class="language-plaintext highlighter-rouge">buzz</code> 后把令牌还回来。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">i = 6 .. 14</code>：重复上述模式，<code class="language-plaintext highlighter-rouge">6</code>、<code class="language-plaintext highlighter-rouge">9</code>、<code class="language-plaintext highlighter-rouge">12</code> 走 <code class="language-plaintext highlighter-rouge">fizz</code>，<code class="language-plaintext highlighter-rouge">10</code> 走 <code class="language-plaintext highlighter-rouge">buzz</code>，<code class="language-plaintext highlighter-rouge">7</code>、<code class="language-plaintext highlighter-rouge">8</code>、<code class="language-plaintext highlighter-rouge">11</code>、<code class="language-plaintext highlighter-rouge">13</code>、<code class="language-plaintext highlighter-rouge">14</code> 由 <code class="language-plaintext highlighter-rouge">number</code> 自己打印。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">i = 15</code>：<code class="language-plaintext highlighter-rouge">number</code> 先撞上 <code class="language-plaintext highlighter-rouge">i % 15 == 0</code> 这一支，令牌进 <code class="language-plaintext highlighter-rouge">fizzbuzzSem</code>；<code class="language-plaintext highlighter-rouge">fizzbuzz</code> 打印 <code class="language-plaintext highlighter-rouge">fizzbuzz</code>，令牌还给 <code class="language-plaintext highlighter-rouge">numberSem</code>。</li>
+    <li>收尾：<code class="language-plaintext highlighter-rouge">number</code> 的 <code class="language-plaintext highlighter-rouge">i</code> 变成 <code class="language-plaintext highlighter-rouge">16</code> 超过 <code class="language-plaintext highlighter-rouge">n</code>，循环结束，此时 <code class="language-plaintext highlighter-rouge">numberSem</code> 里还剩最后一个许可但已无人索取，属于正常残留。<code class="language-plaintext highlighter-rouge">fizz</code> 的循环走完 <code class="language-plaintext highlighter-rouge">3, 6, 9, 12</code>（<code class="language-plaintext highlighter-rouge">15</code> 被 <code class="language-plaintext highlighter-rouge">i % 5 == 0</code> 跳过）后退出，<code class="language-plaintext highlighter-rouge">buzz</code> 走完 <code class="language-plaintext highlighter-rouge">5, 10</code>（<code class="language-plaintext highlighter-rouge">15</code> 被跳过）后退出，<code class="language-plaintext highlighter-rouge">fizzbuzz</code> 走完 <code class="language-plaintext highlighter-rouge">15</code> 后退出。四个线程全部正常返回。</li>
+  </ul>
+
+  <p>最终输出为 <code class="language-plaintext highlighter-rouge">1 2 fizz 4 buzz fizz 7 8 fizz buzz 11 fizz 13 14 fizzbuzz</code>，与单线程结果一致。反过来看，若 <code class="language-plaintext highlighter-rouge">fizz</code> 没有跳过 <code class="language-plaintext highlighter-rouge">15</code>：它在打印完 <code class="language-plaintext highlighter-rouge">12</code> 后会再做一次 <code class="language-plaintext highlighter-rouge">fizzSem.acquire()</code>，而 <code class="language-plaintext highlighter-rouge">number</code> 在 <code class="language-plaintext highlighter-rouge">i = 15</code> 时释放的是 <code class="language-plaintext highlighter-rouge">fizzbuzzSem</code>，之后循环就结束了，再没有人会释放 <code class="language-plaintext highlighter-rouge">fizzSem</code>，<code class="language-plaintext highlighter-rouge">fizz</code> 线程永远挂在那里不返回。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">FizzBuzz</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">n</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Semaphore</span> <span class="n">numberSem</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Semaphore</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Semaphore</span> <span class="n">fizzSem</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Semaphore</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Semaphore</span> <span class="n">buzzSem</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Semaphore</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Semaphore</span> <span class="n">fizzbuzzSem</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Semaphore</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+
+    <span class="kd">public</span> <span class="nf">FizzBuzz</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">n</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">fizz</span><span class="o">(</span><span class="nc">Runnable</span> <span class="n">printFizz</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">3</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 15 的倍数归 fizzbuzz 线程，这里不跳过就会多等一次许可而死锁。</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">fizzSem</span><span class="o">.</span><span class="na">acquire</span><span class="o">();</span>
+            <span class="n">printFizz</span><span class="o">.</span><span class="na">run</span><span class="o">();</span>
+            <span class="n">numberSem</span><span class="o">.</span><span class="na">release</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">buzz</span><span class="o">(</span><span class="nc">Runnable</span> <span class="n">printBuzz</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">buzzSem</span><span class="o">.</span><span class="na">acquire</span><span class="o">();</span>
+            <span class="n">printBuzz</span><span class="o">.</span><span class="na">run</span><span class="o">();</span>
+            <span class="n">numberSem</span><span class="o">.</span><span class="na">release</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">fizzbuzz</span><span class="o">(</span><span class="nc">Runnable</span> <span class="n">printFizzBuzz</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">15</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">15</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">fizzbuzzSem</span><span class="o">.</span><span class="na">acquire</span><span class="o">();</span>
+            <span class="n">printFizzBuzz</span><span class="o">.</span><span class="na">run</span><span class="o">();</span>
+            <span class="n">numberSem</span><span class="o">.</span><span class="na">release</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">number</span><span class="o">(</span><span class="nc">IntConsumer</span> <span class="n">printNumber</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">numberSem</span><span class="o">.</span><span class="na">acquire</span><span class="o">();</span>
+            <span class="c1">// 15 必须排在 3 和 5 前面，否则会被 fizz 分支抢先接走。</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">15</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">fizzbuzzSem</span><span class="o">.</span><span class="na">release</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">fizzSem</span><span class="o">.</span><span class="na">release</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">buzzSem</span><span class="o">.</span><span class="na">release</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c1">// 普通数字没有别的线程替它归还许可，必须自己释放。</span>
+                <span class="n">printNumber</span><span class="o">.</span><span class="na">accept</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                <span class="n">numberSem</span><span class="o">.</span><span class="na">release</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">FizzBuzz</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">n</span>           <span class="kt">int</span>
+    <span class="n">numberSem</span>   <span class="k">chan</span> <span class="k">struct</span><span class="p">{}</span>
+    <span class="n">fizzSem</span>     <span class="k">chan</span> <span class="k">struct</span><span class="p">{}</span>
+    <span class="n">buzzSem</span>     <span class="k">chan</span> <span class="k">struct</span><span class="p">{}</span>
+    <span class="n">fizzbuzzSem</span> <span class="k">chan</span> <span class="k">struct</span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">)</span> <span class="n">FizzBuzz</span> <span class="p">{</span>
+    <span class="n">fb</span> <span class="o">:=</span> <span class="n">FizzBuzz</span><span class="p">{</span>
+        <span class="n">n</span><span class="o">:</span>           <span class="n">n</span><span class="p">,</span>
+        <span class="n">numberSem</span><span class="o">:</span>   <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="k">struct</span><span class="p">{},</span> <span class="m">1</span><span class="p">),</span>
+        <span class="n">fizzSem</span><span class="o">:</span>     <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="k">struct</span><span class="p">{},</span> <span class="m">1</span><span class="p">),</span>
+        <span class="n">buzzSem</span><span class="o">:</span>     <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="k">struct</span><span class="p">{},</span> <span class="m">1</span><span class="p">),</span>
+        <span class="n">fizzbuzzSem</span><span class="o">:</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="k">struct</span><span class="p">{},</span> <span class="m">1</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="c">// 容量为 1 的 channel 就是二元信号量，预先塞一个令牌让 Number 先手。</span>
+    <span class="n">fb</span><span class="o">.</span><span class="n">numberSem</span> <span class="o">&lt;-</span> <span class="k">struct</span><span class="p">{}{}</span>
+    <span class="k">return</span> <span class="n">fb</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">fb</span> <span class="o">*</span><span class="n">FizzBuzz</span><span class="p">)</span> <span class="n">Fizz</span><span class="p">(</span><span class="n">printFizz</span> <span class="k">func</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">3</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">fb</span><span class="o">.</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="m">3</span> <span class="p">{</span>
+        <span class="c">// 15 的倍数归 Fizzbuzz 协程，这里不跳过就会多收一次令牌而死锁。</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">%</span><span class="m">5</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="k">continue</span>
+        <span class="p">}</span>
+        <span class="o">&lt;-</span><span class="n">fb</span><span class="o">.</span><span class="n">fizzSem</span>
+        <span class="n">printFizz</span><span class="p">()</span>
+        <span class="n">fb</span><span class="o">.</span><span class="n">numberSem</span> <span class="o">&lt;-</span> <span class="k">struct</span><span class="p">{}{}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">fb</span> <span class="o">*</span><span class="n">FizzBuzz</span><span class="p">)</span> <span class="n">Buzz</span><span class="p">(</span><span class="n">printBuzz</span> <span class="k">func</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">5</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">fb</span><span class="o">.</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="m">5</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">%</span><span class="m">3</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="k">continue</span>
+        <span class="p">}</span>
+        <span class="o">&lt;-</span><span class="n">fb</span><span class="o">.</span><span class="n">buzzSem</span>
+        <span class="n">printBuzz</span><span class="p">()</span>
+        <span class="n">fb</span><span class="o">.</span><span class="n">numberSem</span> <span class="o">&lt;-</span> <span class="k">struct</span><span class="p">{}{}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">fb</span> <span class="o">*</span><span class="n">FizzBuzz</span><span class="p">)</span> <span class="n">Fizzbuzz</span><span class="p">(</span><span class="n">printFizzBuzz</span> <span class="k">func</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">15</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">fb</span><span class="o">.</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="m">15</span> <span class="p">{</span>
+        <span class="o">&lt;-</span><span class="n">fb</span><span class="o">.</span><span class="n">fizzbuzzSem</span>
+        <span class="n">printFizzBuzz</span><span class="p">()</span>
+        <span class="n">fb</span><span class="o">.</span><span class="n">numberSem</span> <span class="o">&lt;-</span> <span class="k">struct</span><span class="p">{}{}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">fb</span> <span class="o">*</span><span class="n">FizzBuzz</span><span class="p">)</span> <span class="n">Number</span><span class="p">(</span><span class="n">printNumber</span> <span class="k">func</span><span class="p">(</span><span class="kt">int</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">fb</span><span class="o">.</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="o">&lt;-</span><span class="n">fb</span><span class="o">.</span><span class="n">numberSem</span>
+        <span class="c">// 15 必须排在 3 和 5 前面，否则会被 fizz 分支抢先接走。</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">%</span><span class="m">15</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="n">fb</span><span class="o">.</span><span class="n">fizzbuzzSem</span> <span class="o">&lt;-</span> <span class="k">struct</span><span class="p">{}{}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">i</span><span class="o">%</span><span class="m">3</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="n">fb</span><span class="o">.</span><span class="n">fizzSem</span> <span class="o">&lt;-</span> <span class="k">struct</span><span class="p">{}{}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">i</span><span class="o">%</span><span class="m">5</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="n">fb</span><span class="o">.</span><span class="n">buzzSem</span> <span class="o">&lt;-</span> <span class="k">struct</span><span class="p">{}{}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c">// 普通数字没有别的协程替它归还令牌，必须自己放回。</span>
+            <span class="n">printNumber</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">fb</span><span class="o">.</span><span class="n">numberSem</span> <span class="o">&lt;-</span> <span class="k">struct</span><span class="p">{}{}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。凭什么：<code class="language-plaintext highlighter-rouge">number</code> 线程恰好循环 <code class="language-plaintext highlighter-rouge">n</code> 轮，每个数字触发恰好一次「释放许可 + 一次打印 + 归还许可」的常数次同步操作；三个打印线程的循环轮数加起来也不超过 <code class="language-plaintext highlighter-rouge">n</code>。没有任何忙等重试，总操作数与 <code class="language-plaintext highlighter-rouge">n</code> 成正比。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(1)$。凭什么：只有四个信号量对象和几个循环变量，数量固定为常数，不随 <code class="language-plaintext highlighter-rouge">n</code> 增长。线程数固定为 <code class="language-plaintext highlighter-rouge">4</code>，也不计入随输入增长的空间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>并发题的第一步是判断线程之间是「竞争关系」还是「协作关系」。本题任意时刻只有一个合法执行者且这个执行者可以被提前算出来，属于纯协作，因此正确的模型是<strong>定向传递令牌</strong>而不是抢锁，这个判断能直接决定你写出的是忙等版还是信号量版。</li>
+    <li>「许可总量守恒且恒为 <code class="language-plaintext highlighter-rouge">1</code>」是这类题最好用的自证工具。写完代码逐条检查每个分支是否都做了「消耗一个、释放一个」，任何一条路径上少一次 <code class="language-plaintext highlighter-rouge">release</code> 就是死锁，多一次就是乱序，比反复跑用例靠谱得多。</li>
+    <li>让<strong>唯一掌握全局状态的线程</strong>充当调度中心，是并发编排的通用套路。这里只有 <code class="language-plaintext highlighter-rouge">number</code> 知道当前数到几，所有判断逻辑就都集中到它一个人身上，其余线程退化成无脑的「等待—打印—归还」三件套，逻辑复杂度被压到最低。</li>
+    <li>各个线程自己算出精确的循环次数，是这类「每个方法只被调用一次」的题目的固定要求。步长加跳过条件必须让四个线程的打印次数之和恰好等于 <code class="language-plaintext highlighter-rouge">n</code>，多一次死锁、少一次丢输出。</li>
+    <li>面试视角：写完后主动说明三件事——为什么不用 <code class="language-plaintext highlighter-rouge">synchronized</code> + <code class="language-plaintext highlighter-rouge">wait/notify</code>（<code class="language-plaintext highlighter-rouge">notifyAll</code> 会唤醒全部线程再各自判断，等价于忙等的变体，而信号量是精确唤醒）、为什么初值这样取、以及每个线程的循环次数是怎么算出来的。这三点讲清楚，面试官基本不会再追问。</li>
+    <li>Go 里容量为 <code class="language-plaintext highlighter-rouge">1</code> 的 <code class="language-plaintext highlighter-rouge">chan struct{}</code> 就是天然的二元信号量，<code class="language-plaintext highlighter-rouge">&lt;-ch</code> 对应 <code class="language-plaintext highlighter-rouge">acquire</code>、<code class="language-plaintext highlighter-rouge">ch &lt;- struct{}{}</code> 对应 <code class="language-plaintext highlighter-rouge">release</code>，比引入 <code class="language-plaintext highlighter-rouge">sync.Cond</code> 简洁得多，也是 Go 面试里期望看到的写法。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>把 <code class="language-plaintext highlighter-rouge">if (i % 15 == 0)</code> 放在 <code class="language-plaintext highlighter-rouge">if (i % 3 == 0)</code> 后面</strong>：<code class="language-plaintext highlighter-rouge">n = 15</code> 时 <code class="language-plaintext highlighter-rouge">15</code> 会被 <code class="language-plaintext highlighter-rouge">3</code> 那一支接走，输出 <code class="language-plaintext highlighter-rouge">fizz</code> 而不是 <code class="language-plaintext highlighter-rouge">fizzbuzz</code>；更糟的是 <code class="language-plaintext highlighter-rouge">fizzbuzz</code> 线程永远等不到自己的许可，程序卡死不返回。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">fizz</code> 的循环没跳过 <code class="language-plaintext highlighter-rouge">i % 5 == 0</code></strong>：<code class="language-plaintext highlighter-rouge">n = 15</code> 时 <code class="language-plaintext highlighter-rouge">fizz</code> 会为 <code class="language-plaintext highlighter-rouge">15</code> 多做一次 <code class="language-plaintext highlighter-rouge">acquire</code>，而 <code class="language-plaintext highlighter-rouge">number</code> 把许可给了 <code class="language-plaintext highlighter-rouge">fizzbuzz</code>，<code class="language-plaintext highlighter-rouge">fizz</code> 线程永久阻塞在第 5 次 <code class="language-plaintext highlighter-rouge">acquire</code> 上，判题超时。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">number</code> 打印完普通数字后忘记 <code class="language-plaintext highlighter-rouge">numberSem.release()</code></strong>：<code class="language-plaintext highlighter-rouge">n = 1</code> 时打印出 <code class="language-plaintext highlighter-rouge">1</code> 后 <code class="language-plaintext highlighter-rouge">number</code> 就永久阻塞，程序连第一个数字之后都走不动。</li>
+    <li>
+<strong>打印线程把许可还给自己而不是 <code class="language-plaintext highlighter-rouge">numberSem</code></strong>（写成 <code class="language-plaintext highlighter-rouge">fizzSem.release()</code>）：<code class="language-plaintext highlighter-rouge">n = 3</code> 时输出完 <code class="language-plaintext highlighter-rouge">1 2 fizz</code> 后，<code class="language-plaintext highlighter-rouge">number</code> 再也拿不到许可，后续数字全部丢失。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">numberSem</code> 初值写成 <code class="language-plaintext highlighter-rouge">0</code></strong>：四个线程全部阻塞在各自的 <code class="language-plaintext highlighter-rouge">acquire</code> 上，一个字符都打印不出来，是最典型的「全员死锁」。</li>
+    <li>
+<strong>给 <code class="language-plaintext highlighter-rouge">fizzSem</code> 之类的初值写成 <code class="language-plaintext highlighter-rouge">1</code></strong>：<code class="language-plaintext highlighter-rouge">n = 3</code> 时 <code class="language-plaintext highlighter-rouge">fizz</code> 可能在 <code class="language-plaintext highlighter-rouge">number</code> 还没打印 <code class="language-plaintext highlighter-rouge">1</code> 之前就抢先输出 <code class="language-plaintext highlighter-rouge">fizz</code>，得到 <code class="language-plaintext highlighter-rouge">fizz 1 2 ...</code> 这种乱序；而且这种错误只在特定调度下暴露，本地跑十次可能只错一次。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">number</code> 在命中 <code class="language-plaintext highlighter-rouge">3</code>/<code class="language-plaintext highlighter-rouge">5</code>/<code class="language-plaintext highlighter-rouge">15</code> 分支时也调用了 <code class="language-plaintext highlighter-rouge">printNumber.accept(i)</code></strong>：<code class="language-plaintext highlighter-rouge">n = 3</code> 时输出变成 <code class="language-plaintext highlighter-rouge">1 2 3 fizz</code>，多打印了一个数字。</li>
+    <li>
+<strong>改用 <code class="language-plaintext highlighter-rouge">synchronized</code> + 共享计数器但用 <code class="language-plaintext highlighter-rouge">if</code> 而不是 <code class="language-plaintext highlighter-rouge">while</code> 包裹 <code class="language-plaintext highlighter-rouge">wait()</code></strong>：虚假唤醒或 <code class="language-plaintext highlighter-rouge">notifyAll</code> 唤醒了不该动的线程时，该线程会跳过条件检查直接打印，<code class="language-plaintext highlighter-rouge">n = 15</code> 这种长序列跑多次就会偶发乱序。</li>
+    <li>
+<strong>三个打印线程写成 <code class="language-plaintext highlighter-rouge">for (int i = 1; i &lt;= n; i++)</code> 再在循环里判断是否属于自己</strong>：循环次数变成 <code class="language-plaintext highlighter-rouge">n</code> 次而 <code class="language-plaintext highlighter-rouge">acquire</code> 只会成功该线程负责的那几次，剩下的 <code class="language-plaintext highlighter-rouge">acquire</code> 全部永久阻塞。</li>
+    <li>
+<strong>在 <code class="language-plaintext highlighter-rouge">acquire</code> 和 <code class="language-plaintext highlighter-rouge">release</code> 之间加了额外的共享变量读写却没有同步</strong>：本题的许可传递已经隐含了 happens-before 关系，额外加锁不仅多余，还容易和信号量顺序交织出新的死锁路径。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/print-in-order/">1114. 按序打印</a></td>
+      <td>简单</td>
+      <td>最简化的令牌传递，只有一条固定链路，是本题的入门版</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/print-foobar-alternately/">1115. 交替打印 FooBar</a></td>
+      <td>中等</td>
+      <td>两个线程互相唤醒，令牌在双方之间来回摆动，没有调度中心</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/print-zero-even-odd/">1116. 打印零与奇偶数</a></td>
+      <td>中等</td>
+      <td>三线程且 <code class="language-plaintext highlighter-rouge">zero</code> 交替扮演调度中心，与本题的中心化结构最接近</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-bounded-blocking-queue/">1188. 设计有限阻塞队列</a></td>
+      <td>中等</td>
+      <td>计数信号量而非二元信号量，要同时维护空位数和元素数两个计数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/the-dining-philosophers/">1226. 哲学家进餐</a></td>
+      <td>中等</td>
+      <td>真正的资源竞争，重点从编排顺序变成破坏死锁的四个必要条件</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/web-crawler-multithreaded/">1242. 多线程网络爬虫</a></td>
+      <td>中等</td>
+      <td>无顺序要求但需要线程安全的去重集合与任务分发，考察并发容器的选型</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2025/28103603" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 417. 太平洋大西洋水流问题</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2025/18390339" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 934. 最短的桥</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2025/21474916">https://hgnulb.github.io/blog/2025/21474916</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 393. UTF-8 编码验证 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,位运算,华为,字节跳动,微软,数组" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 393. UTF-8 编码验证" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/64169609" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/64169609" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-11-28T16:21:03+08:00" />
+<meta property="article:modified_time" content="2022-11-28T16:21:03+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 393. UTF-8 编码验证" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-11-28T16:21:03+08:00","datePublished":"2022-11-28T16:21:03+08:00","description":"题目描述","headline":"LeetCode 393. UTF-8 编码验证","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/64169609"},"url":"https://hgnulb.github.io/blog/2022/64169609"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法记录还需要的续字节数量">解法：记录还需要的续字节数量</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 393. UTF-8 编码验证">LeetCode 393. UTF-8 编码验证</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-11-28 16:21:03"
+                    datetime="2022-11-28T16:21:03+08:00"
+            >
+                2022-11-28
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2792 字 · 英文 59 词 · 代码 52 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2792 字 · 英文 59 词 · 代码 52 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/1587990752/" title="5-10">
+        5-10
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0106759788/" title="华为">
+        华为
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2535886171/" title="位运算">
+        位运算
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法记录还需要的续字节数量">解法：记录还需要的续字节数量</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/utf-8-validation/">393. UTF-8 编码验证</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个整数数组 <code class="language-plaintext highlighter-rouge">data</code>，每个整数代表一个字节，判断整个数组是否构成一段合法的 UTF-8 编码，返回布尔值。</p>
+</blockquote>
+
+<blockquote>
+  <p>题面里有一条极易被忽略的约束：<strong>每个整数只有低 8 位是有效数据，高位可能是任意值</strong>（因为整数在这里只是字节的容器）。所以每个元素在参与判断之前都必须先与 <code class="language-plaintext highlighter-rouge">0xFF</code> 做按位与，否则右移得到的前缀会混入高位垃圾，判断全错。</p>
+</blockquote>
+
+<blockquote>
+  <p>UTF-8 的规则本身题目已经给出，归纳起来是：一个字符占 1 到 4 个字节；1 字节字符的首字节形如 <code class="language-plaintext highlighter-rouge">0xxxxxxx</code>；<code class="language-plaintext highlighter-rouge">n</code> 字节字符（<code class="language-plaintext highlighter-rouge">n</code> 为 2、3、4）的首字节以 <code class="language-plaintext highlighter-rouge">n</code> 个 1 加一个 0 开头，即 <code class="language-plaintext highlighter-rouge">110xxxxx</code>、<code class="language-plaintext highlighter-rouge">1110xxxx</code>、<code class="language-plaintext highlighter-rouge">11110xxx</code>；而所有<strong>续字节</strong>一律形如 <code class="language-plaintext highlighter-rouge">10xxxxxx</code>。也就是说，只看一个字节的<strong>高位前缀</strong>就能确定它的角色，这是本题所有判断的依据。</p>
+</blockquote>
+
+<blockquote>
+  <p>「首字节自己声明了这个字符还要跟几个续字节」是一个很强的结构信号：它意味着整个数组可以被一趟从左到右扫描完，扫描过程中只需要记住「当前还欠几个续字节」这一个整数即可，不需要回头，也不需要额外容器。这类「读一个头部、按头部声明继续读若干体」的形状，在协议解析里非常常见。</p>
+</blockquote>
+
+<blockquote>
+  <p>边界要盯住三处：数组末尾恰好把某个多字节字符截断了（还欠续字节就结束），必须判为非法；某个字节以 <code class="language-plaintext highlighter-rouge">11111xxx</code> 开头（声称 5 字节或更长），UTF-8 不允许，必须判为非法；在还欠续字节时遇到的字节若不是 <code class="language-plaintext highlighter-rouge">10</code> 开头（哪怕它本身是个合法的首字节），也必须判为非法。</p>
+</blockquote>
+
+<h2 id="解法记录还需要的续字节数量">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E8%AE%B0%E5%BD%95%E8%BF%98%E9%9C%80%E8%A6%81%E7%9A%84%E7%BB%AD%E5%AD%97%E8%8A%82%E6%95%B0%E9%87%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：记录还需要的续字节数量</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>一个想当然的做法是把整个数组按 <code class="language-plaintext highlighter-rouge">10</code> 开头与否切成若干段，再逐段校验长度。这条路要处理很多分组边界，而且「一个合法首字节紧跟在另一个未完成字符后面」这种错误很难在分段视角下被自然发现。</p>
+</blockquote>
+
+<blockquote>
+  <p>关键观察是：<strong>任何时刻，解析器的全部状态只有一个数字——当前字符还欠几个续字节</strong>。因为首字节一旦读到，字符总长度就完全确定了；此后要做的只是核对接下来的若干个字节是不是 <code class="language-plaintext highlighter-rouge">10</code> 开头，不需要记住它们的内容，也不需要记住这是第几个字符。状态空间小到只有 <code class="language-plaintext highlighter-rouge">{0, 1, 2, 3}</code> 四个值，于是一个 <code class="language-plaintext highlighter-rouge">int</code> 就够了，这就是所谓的有限状态机退化成计数器。</p>
+</blockquote>
+
+<blockquote>
+  <p>于是扫描逻辑分成两种互斥的情形。<code class="language-plaintext highlighter-rouge">remaining == 0</code> 时，当前字节必须是某个字符的<strong>首字节</strong>：按高位前缀分类，<code class="language-plaintext highlighter-rouge">0xxxxxxx</code> 是单字节字符（不欠任何续字节），<code class="language-plaintext highlighter-rouge">110xxxxx</code> 欠 1 个，<code class="language-plaintext highlighter-rouge">1110xxxx</code> 欠 2 个，<code class="language-plaintext highlighter-rouge">11110xxx</code> 欠 3 个，其余前缀（包括 <code class="language-plaintext highlighter-rouge">10xxxxxx</code> 这种孤立的续字节，以及 <code class="language-plaintext highlighter-rouge">11111xxx</code> 这种过长声明）一律非法。<code class="language-plaintext highlighter-rouge">remaining &gt; 0</code> 时，当前字节必须是 <code class="language-plaintext highlighter-rouge">10xxxxxx</code>，核对通过就把 <code class="language-plaintext highlighter-rouge">remaining</code> 减一。</p>
+</blockquote>
+
+<blockquote>
+  <p>不变量：<strong>每处理完一个字节，<code class="language-plaintext highlighter-rouge">remaining</code> 恒等于「为了让已扫描部分构成若干个完整字符，还必须紧接着出现的续字节个数」</strong>。初始 <code class="language-plaintext highlighter-rouge">remaining = 0</code> 表示「已扫描部分（空）本身就是完整的」；读首字节时按声明置数，读续字节时减一，不变量得以维持。</p>
+</blockquote>
+
+<blockquote>
+  <p>循环结束后的返回值直接由不变量给出：<code class="language-plaintext highlighter-rouge">remaining == 0</code> 说明所有字符都收尾了，合法；大于 0 说明最后一个字符被数组末尾截断，非法。</p>
+</blockquote>
+
+<blockquote>
+  <p>前缀判断用右移比较常数实现：<code class="language-plaintext highlighter-rouge">b &gt;&gt; 7 == 0</code> 判 <code class="language-plaintext highlighter-rouge">0xxxxxxx</code>，<code class="language-plaintext highlighter-rouge">b &gt;&gt; 5 == 0b110 == 6</code> 判两字节首字节，<code class="language-plaintext highlighter-rouge">b &gt;&gt; 4 == 0b1110 == 14</code> 判三字节，<code class="language-plaintext highlighter-rouge">b &gt;&gt; 3 == 0b11110 == 30</code> 判四字节，<code class="language-plaintext highlighter-rouge">b &gt;&gt; 6 == 0b10 == 2</code> 判续字节。每个判断都把不关心的低位全部移走，只留下前缀本身，比用掩码加比较更短。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+      <p><strong><code class="language-plaintext highlighter-rouge">remaining</code> 初始化为 0</strong>：表示还没有任何未完成的字符，下一个字节必须是首字节。</p>
+    </li>
+    <li>
+      <p><strong>每个元素先做 <code class="language-plaintext highlighter-rouge">b = num &amp; 255</code></strong>：题目只保证低 8 位有效，高位可能有垃圾。不做这一步，<code class="language-plaintext highlighter-rouge">num &gt;&gt; 7</code> 会把高位内容带进来，<code class="language-plaintext highlighter-rouge">num = 256</code>（低 8 位全 0，本应是合法单字节）会被判成非法。</p>
+    </li>
+    <li>
+      <p><strong>按 <code class="language-plaintext highlighter-rouge">remaining == 0</code> 与否分成两条互斥分支</strong>：状态决定了当前字节该被当作首字节还是续字节，两种角色的判据完全不同，混在一起写必然出错。</p>
+    </li>
+    <li>
+      <p><strong>首字节分支按前缀从短到长依次判断</strong>：先判 <code class="language-plaintext highlighter-rouge">b &gt;&gt; 7 == 0</code>（单字节），再判 <code class="language-plaintext highlighter-rouge">&gt;&gt; 5 == 6</code>、<code class="language-plaintext highlighter-rouge">&gt;&gt; 4 == 14</code>、<code class="language-plaintext highlighter-rouge">&gt;&gt; 3 == 30</code>。顺序不能乱——如果先判 <code class="language-plaintext highlighter-rouge">b &gt;&gt; 3 == 30</code>，一个 <code class="language-plaintext highlighter-rouge">0xxxxxxx</code> 的字节右移 3 位得到的值范围是 0 到 15，不会误命中，但 <code class="language-plaintext highlighter-rouge">11110xxx</code> 与 <code class="language-plaintext highlighter-rouge">111110xx</code> 在更粗的前缀判断下会互相干扰，按前缀长度递增的顺序判断最不容易漏。</p>
+    </li>
+    <li>
+      <p><strong>单字节情形直接 <code class="language-plaintext highlighter-rouge">continue</code></strong>：它不欠任何续字节，<code class="language-plaintext highlighter-rouge">remaining</code> 保持 0，下一个字节仍按首字节处理。</p>
+    </li>
+    <li>
+      <p><strong>所有其余前缀走 <code class="language-plaintext highlighter-rouge">else</code> 返回 <code class="language-plaintext highlighter-rouge">false</code></strong>：这一条同时封杀了两类错误——<code class="language-plaintext highlighter-rouge">10xxxxxx</code> 出现在不该出现的位置（孤立续字节），以及 <code class="language-plaintext highlighter-rouge">11111xxx</code> 这种声明 5 字节及以上的前缀。少了这个兜底分支，非法输入会被静默放过。</p>
+    </li>
+    <li>
+      <p><strong>续字节分支只校验 <code class="language-plaintext highlighter-rouge">b &gt;&gt; 6 == 2</code>，通过则 <code class="language-plaintext highlighter-rouge">remaining--</code></strong>：续字节的低 6 位是数据，内容任意，不需要检查；唯一要确认的就是高两位是 <code class="language-plaintext highlighter-rouge">10</code>。</p>
+    </li>
+    <li>
+      <p><strong>返回 <code class="language-plaintext highlighter-rouge">remaining == 0</code></strong>：这是「末尾截断」的唯一检测点。直接 <code class="language-plaintext highlighter-rouge">return true</code> 会漏掉 <code class="language-plaintext highlighter-rouge">[11000010]</code> 这类只有首字节没有续字节的输入。</p>
+    </li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">data = [197, 130, 1]</code> 走一遍。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">197 &amp; 255 = 197</code>，二进制 <code class="language-plaintext highlighter-rouge">11000101</code>。<code class="language-plaintext highlighter-rouge">remaining == 0</code>，走首字节分支：<code class="language-plaintext highlighter-rouge">b &gt;&gt; 7 = 1</code> 不为 0；<code class="language-plaintext highlighter-rouge">b &gt;&gt; 5 = 0b110 = 6</code> 命中，说明这是一个两字节字符的首字节，置 <code class="language-plaintext highlighter-rouge">remaining = 1</code>。<br>
+<code class="language-plaintext highlighter-rouge">130 &amp; 255 = 130</code>，二进制 <code class="language-plaintext highlighter-rouge">10000010</code>。<code class="language-plaintext highlighter-rouge">remaining == 1 &gt; 0</code>，走续字节分支：<code class="language-plaintext highlighter-rouge">b &gt;&gt; 6 = 0b10 = 2</code>，校验通过，<code class="language-plaintext highlighter-rouge">remaining</code> 减为 0。此时两字节字符 <code class="language-plaintext highlighter-rouge">11000101 10000010</code> 完整。<br>
+<code class="language-plaintext highlighter-rouge">1 &amp; 255 = 1</code>，二进制 <code class="language-plaintext highlighter-rouge">00000001</code>。<code class="language-plaintext highlighter-rouge">remaining == 0</code>，走首字节分支：<code class="language-plaintext highlighter-rouge">b &gt;&gt; 7 = 0</code> 命中，是一个单字节字符，<code class="language-plaintext highlighter-rouge">continue</code>。</p>
+
+  <p>循环结束，<code class="language-plaintext highlighter-rouge">remaining == 0</code>，返回 <code class="language-plaintext highlighter-rouge">true</code>。</p>
+
+  <p>再看反例 <code class="language-plaintext highlighter-rouge">data = [235, 140, 4]</code>。<code class="language-plaintext highlighter-rouge">235</code> 是 <code class="language-plaintext highlighter-rouge">11101011</code>，<code class="language-plaintext highlighter-rouge">b &gt;&gt; 4 = 0b1110 = 14</code>，是三字节首字节，<code class="language-plaintext highlighter-rouge">remaining = 2</code>。<code class="language-plaintext highlighter-rouge">140</code> 是 <code class="language-plaintext highlighter-rouge">10001100</code>，<code class="language-plaintext highlighter-rouge">b &gt;&gt; 6 = 2</code> 通过，<code class="language-plaintext highlighter-rouge">remaining = 1</code>。<code class="language-plaintext highlighter-rouge">4</code> 是 <code class="language-plaintext highlighter-rouge">00000100</code>，此时 <code class="language-plaintext highlighter-rouge">remaining &gt; 0</code> 要求它必须是 <code class="language-plaintext highlighter-rouge">10</code> 开头，而 <code class="language-plaintext highlighter-rouge">4 &gt;&gt; 6 = 0</code>，校验失败，立刻返回 <code class="language-plaintext highlighter-rouge">false</code>。注意 <code class="language-plaintext highlighter-rouge">4</code> 本身是一个完全合法的单字节字符——但它出现在了一个未完成的三字节字符中间，所以整体非法。这正是「必须按状态分支判断」而不是「逐字节独立判断」的原因。</p>
+
+  <p>最后看末尾截断的 <code class="language-plaintext highlighter-rouge">data = [194]</code>：<code class="language-plaintext highlighter-rouge">11000010</code> 置 <code class="language-plaintext highlighter-rouge">remaining = 1</code> 后数组就结束了，循环外的 <code class="language-plaintext highlighter-rouge">remaining == 0</code> 判断给出 <code class="language-plaintext highlighter-rouge">false</code>，正确。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">validUtf8</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">data</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">remaining</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">data</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">num</span> <span class="o">&amp;</span> <span class="mi">255</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">remaining</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">((</span><span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="mi">7</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">((</span><span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="mi">5</span><span class="o">)</span> <span class="o">==</span> <span class="mi">6</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">remaining</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">((</span><span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="o">)</span> <span class="o">==</span> <span class="mi">14</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">remaining</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">((</span><span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="o">)</span> <span class="o">==</span> <span class="mi">30</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">remaining</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">((</span><span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="mi">6</span><span class="o">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">remaining</span><span class="o">--;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">remaining</span> <span class="o">==</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">validUtf8</span><span class="p">(</span><span class="n">data</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="n">remaining</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">num</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">data</span> <span class="p">{</span>
+        <span class="n">b</span> <span class="o">:=</span> <span class="n">num</span> <span class="o">&amp;</span> <span class="m">255</span>
+        <span class="k">if</span> <span class="n">remaining</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">b</span><span class="o">&gt;&gt;</span><span class="m">7</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+                <span class="k">continue</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">b</span><span class="o">&gt;&gt;</span><span class="m">5</span> <span class="o">==</span> <span class="m">6</span> <span class="p">{</span>
+                <span class="n">remaining</span> <span class="o">=</span> <span class="m">1</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">b</span><span class="o">&gt;&gt;</span><span class="m">4</span> <span class="o">==</span> <span class="m">14</span> <span class="p">{</span>
+                <span class="n">remaining</span> <span class="o">=</span> <span class="m">2</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">b</span><span class="o">&gt;&gt;</span><span class="m">3</span> <span class="o">==</span> <span class="m">30</span> <span class="p">{</span>
+                <span class="n">remaining</span> <span class="o">=</span> <span class="m">3</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="no">false</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">b</span><span class="o">&gt;&gt;</span><span class="m">6</span> <span class="o">!=</span> <span class="m">2</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="no">false</span>
+            <span class="p">}</span>
+            <span class="n">remaining</span><span class="o">--</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">remaining</span> <span class="o">==</span> <span class="m">0</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$，<code class="language-plaintext highlighter-rouge">n</code> 是数组长度。每个字节恰好被访问一次，内部只做常数次移位和比较，没有回退也没有嵌套循环。这是下限——判断合法性必须看完每一个字节，因为最后一个字节就可能让整体非法。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(1)$。只有 <code class="language-plaintext highlighter-rouge">remaining</code> 和 <code class="language-plaintext highlighter-rouge">b</code> 两个整数，与输入规模无关。相比「先分组再校验」的思路，这里连一个存放分组结果的容器都不需要，因为状态被压缩成了一个计数器。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「读一个头部、按头部声明再读若干个体」的协议解析题，都可以用「还欠几个」的计数器一趟扫完。状态空间越小越好，本题压到了一个 0 到 3 的整数，这是解法优雅的根源。</li>
+    <li>判断字节角色只看<strong>高位前缀</strong>，用右移把不关心的低位移走后与常数比较，比构造掩码再按位与更简洁。写的时候把二进制形式写在注释或心里对齐一遍，<code class="language-plaintext highlighter-rouge">6</code>、<code class="language-plaintext highlighter-rouge">14</code>、<code class="language-plaintext highlighter-rouge">30</code>、<code class="language-plaintext highlighter-rouge">2</code> 这几个魔数就不再难记。</li>
+    <li>只要题目说「只用低 8 位」，就必须先 <code class="language-plaintext highlighter-rouge">&amp; 0xFF</code> 再做任何移位。这类「输入容器比实际数据宽」的约定在位运算题里很常见，漏掉一次就全盘皆错。</li>
+    <li>循环结束后的收尾判断（本题的 <code class="language-plaintext highlighter-rouge">remaining == 0</code>）和循环内的非法返回同等重要。状态机类题目的正确性由「过程合法」与「终态合法」两部分共同保证，只写前者是最常见的失分点。</li>
+    <li>面试中被追问「还有哪些 UTF-8 规则没验」时，可以指出真实的 UTF-8 还禁止过长编码（比如用两字节表示本该单字节的码点）和代理区码点，但本题只要求校验前缀结构。能划清「题目要求」与「真实规范」的边界，比多写一堆无关校验更受认可。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>不做 <code class="language-plaintext highlighter-rouge">num &amp; 255</code></strong>：<code class="language-plaintext highlighter-rouge">data = [256]</code> 的低 8 位是 <code class="language-plaintext highlighter-rouge">00000000</code>，本应是合法单字节；直接算 <code class="language-plaintext highlighter-rouge">256 &gt;&gt; 7 = 2</code> 不为 0，接着 <code class="language-plaintext highlighter-rouge">256 &gt;&gt; 5 = 8</code>、<code class="language-plaintext highlighter-rouge">&gt;&gt; 4 = 16</code>、<code class="language-plaintext highlighter-rouge">&gt;&gt; 3 = 32</code> 都不命中，返回 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>
+<strong>循环结束后直接 <code class="language-plaintext highlighter-rouge">return true</code></strong>：<code class="language-plaintext highlighter-rouge">data = [194]</code> 声明了两字节字符却没有续字节，会被误判为合法。</li>
+    <li>
+<strong>不检查 5 字节及以上前缀</strong>：<code class="language-plaintext highlighter-rouge">data = [248]</code> 即 <code class="language-plaintext highlighter-rouge">11111000</code>，若没有 <code class="language-plaintext highlighter-rouge">else return false</code> 的兜底而是默认当作合法首字节，会漏掉这个非法输入。</li>
+    <li>
+<strong>续字节判断写成 <code class="language-plaintext highlighter-rouge">b &gt;&gt; 6 == 3</code></strong>：<code class="language-plaintext highlighter-rouge">data = [197, 130]</code> 中 <code class="language-plaintext highlighter-rouge">130 &gt;&gt; 6 = 2</code>，条件不成立而返回 <code class="language-plaintext highlighter-rouge">false</code>，把合法输入判成非法。</li>
+    <li>
+<strong>在 <code class="language-plaintext highlighter-rouge">remaining &gt; 0</code> 时仍按首字节分支处理</strong>：<code class="language-plaintext highlighter-rouge">data = [235, 140, 4]</code> 中的 <code class="language-plaintext highlighter-rouge">4</code> 是合法单字节，若不区分状态就会被放行，最终返回 <code class="language-plaintext highlighter-rouge">true</code>，而正确答案是 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>
+<strong>首字节分支里把 <code class="language-plaintext highlighter-rouge">remaining</code> 设成字符总长度而不是续字节数</strong>：<code class="language-plaintext highlighter-rouge">data = [197, 130]</code> 中 <code class="language-plaintext highlighter-rouge">remaining</code> 被设成 2，扫完 <code class="language-plaintext highlighter-rouge">130</code> 后还剩 1，循环结束返回 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>
+<strong>单字节情形忘记 <code class="language-plaintext highlighter-rouge">continue</code> 而落入后续分支</strong>：<code class="language-plaintext highlighter-rouge">data = [1]</code> 中 <code class="language-plaintext highlighter-rouge">1 &gt;&gt; 7 == 0</code> 命中后若不跳过，接着判 <code class="language-plaintext highlighter-rouge">1 &gt;&gt; 5 == 6</code> 不成立、一路走到 <code class="language-plaintext highlighter-rouge">else</code> 返回 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>
+<strong>续字节校验通过后忘记 <code class="language-plaintext highlighter-rouge">remaining--</code></strong>：<code class="language-plaintext highlighter-rouge">data = [197, 130, 1]</code> 中 <code class="language-plaintext highlighter-rouge">remaining</code> 永远停在 1，<code class="language-plaintext highlighter-rouge">1</code> 这个字节被当成续字节校验失败，返回 <code class="language-plaintext highlighter-rouge">false</code>；即便侥幸不失败，末尾判断也会因为 <code class="language-plaintext highlighter-rouge">remaining != 0</code> 而返回 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>
+<strong>用 <code class="language-plaintext highlighter-rouge">&gt;&gt;&gt;</code> 之外的算术右移处理负数输入</strong>：若题目变体允许传入负整数表示字节，Java 的 <code class="language-plaintext highlighter-rouge">&gt;&gt;</code> 会做符号扩展，<code class="language-plaintext highlighter-rouge">-1 &gt;&gt; 7</code> 得到 <code class="language-plaintext highlighter-rouge">-1</code> 而不是 <code class="language-plaintext highlighter-rouge">1</code>；先做 <code class="language-plaintext highlighter-rouge">&amp; 255</code> 恰好也顺带消除了这个隐患，这也是那一步不能省的另一个理由。</li>
+    <li>
+<strong>误以为 <code class="language-plaintext highlighter-rouge">10xxxxxx</code> 在任何位置都合法</strong>：<code class="language-plaintext highlighter-rouge">data = [130]</code> 是一个孤立的续字节，没有对应的首字节，正确答案是 <code class="language-plaintext highlighter-rouge">false</code>；若首字节分支缺少兜底返回，这个输入会被当成合法。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/validate-ip-address/">468. 验证IP地址</a></td>
+      <td>中等</td>
+      <td>同为格式校验，规则分支更多且要处理分段与进制，考察分类讨论的完备性</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/valid-number/">65. 有效数字</a></td>
+      <td>困难</td>
+      <td>典型的有限状态机题，状态数远多于本题，适合对照「状态能否压成计数器」</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/valid-parentheses/">20. 有效的括号</a></td>
+      <td>简单</td>
+      <td>同样靠「计数或栈 + 终态校验」判定合法性，收尾时也必须检查是否有未闭合项</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/compare-version-numbers/">165. 比较版本号</a></td>
+      <td>中等</td>
+      <td>手写分段解析并逐段比较，重点在补位与前导零处理而非位运算</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/string-to-integer-atoi/">8. 字符串转换整数 (atoi)</a></td>
+      <td>中等</td>
+      <td>按阶段解析输入并随时判断非法，还需处理溢出边界</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-1-bits/">191. 位1的个数</a></td>
+      <td>简单</td>
+      <td>位运算基本功，练习移位与掩码取位，是本题前缀判断的底层技能</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/convert-a-number-to-hexadecimal/">405. 数字转换为十六进制数</a></td>
+      <td>简单</td>
+      <td>按 4 位一组做移位与掩码，是「只取某几位」这一手法的直接应用</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/count-and-say/">38. 外观数列</a></td>
+      <td>中等</td>
+      <td>同为「读一段、按声明生成下一段」的结构，可对照编码与解码两个方向</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/34153245" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 面试题 10.01. 合并排序的数组</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/22314173" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1204. 最后一个能进入巴士的人</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/64169609">https://hgnulb.github.io/blog/2022/64169609</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

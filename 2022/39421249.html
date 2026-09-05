@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 485. 最大连续 1 的个数 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,字节跳动,微软,数组,最大连续 1 问题,滑动窗口,滑动窗口经典题" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 485. 最大连续 1 的个数" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/39421249" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/39421249" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-04-24T09:26:35+08:00" />
+<meta property="article:modified_time" content="2022-04-24T09:26:35+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 485. 最大连续 1 的个数" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-04-24T09:26:35+08:00","datePublished":"2022-04-24T09:26:35+08:00","description":"题目描述","headline":"LeetCode 485. 最大连续 1 的个数","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/39421249"},"url":"https://hgnulb.github.io/blog/2022/39421249"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法线性扫描">解法：线性扫描</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 485. 最大连续 1 的个数">LeetCode 485. 最大连续 1 的个数</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-04-24 09:26:35"
+                    datetime="2022-04-24T09:26:35+08:00"
+            >
+                2022-04-24
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2442 字 · 英文 171 词 · 代码 32 行 · 图片 1 张"
+            aria-label="预计阅读时间约 8 分钟，正文 2442 字 · 英文 171 词 · 代码 32 行 · 图片 1 张"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 8 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4923693516/" title="简单">
+        简单
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5692196181/" title="滑动窗口">
+        滑动窗口
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2754572847/" title="滑动窗口经典题">
+        滑动窗口经典题
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0033537332/" title="最大连续 1 问题">
+        最大连续 1 问题
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法线性扫描">解法：线性扫描</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/max-consecutive-ones/">485. 最大连续 1 的个数</a></p>
+</blockquote>
+
+<p><img src="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/post-list/image-20230307212841379.png" alt="image-20230307212841379" decoding="async" loading="lazy" width="856" height="674"></p>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个只含 0 和 1 的数组，求其中<strong>连续的 1</strong> 最长能有多长，返回这个长度。</p>
+
+  <p>关键词是「连续」，也就是要求这些 1 在下标上首尾相接、中间不能夹任何 0。这与「1 的总个数」完全不同，<code class="language-plaintext highlighter-rouge">[1,0,1,1]</code> 的答案是 2 而不是 3。读题时要先把这一点锁死。</p>
+
+  <p>数组只有 0 和 1 两种取值，这个约束非常强：<strong>0 是唯一的分隔符</strong>。整个数组被 0 天然切成若干段全 1 的区间，问题等价于求这些区间里最长的那段。识别出「元素只有两类、其中一类做分隔符」这个结构，解法方向就基本定了。</p>
+
+  <p>题目<strong>不允许翻转或删除任何元素</strong>，这也是它比 487、1004、1493 简单的根本原因——那几道题允许把有限个 0 当成 1 用，必须维护一个可伸缩的窗口；本题不允许，窗口一旦遇到 0 就整段作废，无需回退。</p>
+
+  <p>数据规模是长度不超过 $10^5$，线性扫描绰绰有余，不需要任何预处理或额外结构。</p>
+
+  <p>边界上，题目保证数组非空，但要考虑全 0（答案 0）、全 1（答案是数组长度）、以及最长的一段恰好紧贴数组末尾这三种情况——最后一种是本题最容易漏掉的。</p>
+</blockquote>
+
+<h2 id="解法线性扫描">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E7%BA%BF%E6%80%A7%E6%89%AB%E6%8F%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：线性扫描</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是枚举所有子数组，检查每个子数组是否全为 1，取最长的。这是 $O(n^2)$ 甚至 $O(n^3)$ 的量级，在 $10^5$ 规模下不可行。</p>
+
+  <p>瓶颈在于反复重新检查了同一段数据。而观察到一个可以直接消掉这个开销的性质：<strong>从左往右扫描时，「以当前位置结尾的连续 1 的长度」只取决于前一个位置的同类信息</strong>。如果当前是 1，它等于前一个位置的值加一；如果当前是 0，它等于 0。这是一条极简的递推关系，只需要保存前一个值，不需要保存整个历史。</p>
+
+  <p>于是用一个变量 <code class="language-plaintext highlighter-rouge">cur</code> 承担这个递推，另一个变量 <code class="language-plaintext highlighter-rouge">best</code> 记录扫描过程中 <code class="language-plaintext highlighter-rouge">cur</code> 达到过的最大值。</p>
+
+  <p>循环不变量是：<strong>每处理完下标 <code class="language-plaintext highlighter-rouge">i</code>，<code class="language-plaintext highlighter-rouge">cur</code> 恰好等于以 <code class="language-plaintext highlighter-rouge">nums[i]</code> 结尾的连续 1 的长度，<code class="language-plaintext highlighter-rouge">best</code> 恰好等于前缀 <code class="language-plaintext highlighter-rouge">nums[0..i]</code> 中所有连续 1 段的最大长度</strong>。初始时前缀为空，两者都是 0；每一步按上面的递推更新 <code class="language-plaintext highlighter-rouge">cur</code>，再用 <code class="language-plaintext highlighter-rouge">cur</code> 去刷新 <code class="language-plaintext highlighter-rouge">best</code>，不变量得以维持。扫描结束时前缀就是整个数组，<code class="language-plaintext highlighter-rouge">best</code> 就是答案。</p>
+
+  <p>之所以「遇到 0 直接把 <code class="language-plaintext highlighter-rouge">cur</code> 清零」是正确的，是因为任何跨越这个 0 的区间都不可能全为 1，前面积累的长度对后面的段没有任何参考价值，可以安全丢弃。这正是本题不需要滑动窗口的原因——窗口左边界永远直接跳到 0 的后面，不存在渐进收缩。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">best</code> 的更新放在「遇到 1」的分支里即可，因为 <code class="language-plaintext highlighter-rouge">cur</code> 只可能在这个分支变大；放在循环末尾无条件更新同样正确，只是多做几次无用比较。这个选择也解释了为什么循环结束后<strong>不需要再补一次比较</strong>——最长段即使紧贴数组末尾，它的最后一个 1 也已经在循环内部刷新过 <code class="language-plaintext highlighter-rouge">best</code> 了。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>初始化 <code class="language-plaintext highlighter-rouge">cur = 0</code>、<code class="language-plaintext highlighter-rouge">best = 0</code></strong>：<code class="language-plaintext highlighter-rouge">cur</code> 是「以当前位置结尾的连续 1 长度」，扫描开始前没有任何元素，所以是 0；<code class="language-plaintext highlighter-rouge">best</code> 初值取 0 而不是 <code class="language-plaintext highlighter-rouge">Integer.MIN_VALUE</code>，因为答案下界本来就是 0（全 0 数组的正确答案），这样全 0 用例无需特判。</li>
+    <li>
+<strong>用增强 for 顺序遍历数组</strong>：本题只需要元素值、不需要下标，用 <code class="language-plaintext highlighter-rouge">for (int num : nums)</code> 更简洁；顺序必须从左到右，因为递推方向是「依赖前一个位置」。</li>
+    <li>
+<strong>遇到 1 时 <code class="language-plaintext highlighter-rouge">cur++</code></strong>：把当前元素接到正在积累的这段后面，长度加一。</li>
+    <li>
+<strong>紧接着 <code class="language-plaintext highlighter-rouge">best = Math.max(best, cur)</code></strong>：必须在 <code class="language-plaintext highlighter-rouge">cur++</code> 之后立刻更新，这样每一段的峰值都能被捕获。放在这里而不是循环末尾，是因为 <code class="language-plaintext highlighter-rouge">cur</code> 只在这一支变大，遇到 0 那支只会变小，无需比较。</li>
+    <li>
+<strong>遇到 0 时 <code class="language-plaintext highlighter-rouge">cur = 0</code></strong>：直接清零而不是递减，因为这个 0 把前后彻底隔断，之前积累的长度对后续毫无用处。注意这里<strong>不能顺手更新 <code class="language-plaintext highlighter-rouge">best</code></strong>，也不需要——峰值早在上一个 1 处就记录过了。</li>
+    <li>
+<strong>返回 <code class="language-plaintext highlighter-rouge">best</code></strong>：循环内已经处理完所有位置，末尾无需补任何逻辑。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">nums = [1,1,0,1,1,1]</code> 走一遍。</p>
+
+  <p>初始：<code class="language-plaintext highlighter-rouge">cur = 0</code>、<code class="language-plaintext highlighter-rouge">best = 0</code>。</p>
+
+  <p>下标 0（值 1）：<code class="language-plaintext highlighter-rouge">cur = 1</code>，<code class="language-plaintext highlighter-rouge">best = max(0,1) = 1</code>。以下标 0 结尾的连续 1 长度确实是 1。</p>
+
+  <p>下标 1（值 1）：<code class="language-plaintext highlighter-rouge">cur = 2</code>，<code class="language-plaintext highlighter-rouge">best = max(1,2) = 2</code>。</p>
+
+  <p>下标 2（值 0）：<code class="language-plaintext highlighter-rouge">cur = 0</code>，<code class="language-plaintext highlighter-rouge">best</code> 保持 2。此处清零切断了前后两段。</p>
+
+  <p>下标 3（值 1）：<code class="language-plaintext highlighter-rouge">cur = 1</code>，<code class="language-plaintext highlighter-rouge">best = max(2,1) = 2</code>。新段刚开始，还没超过历史最大值。</p>
+
+  <p>下标 4（值 1）：<code class="language-plaintext highlighter-rouge">cur = 2</code>，<code class="language-plaintext highlighter-rouge">best = 2</code>。</p>
+
+  <p>下标 5（值 1）：<code class="language-plaintext highlighter-rouge">cur = 3</code>，<code class="language-plaintext highlighter-rouge">best = max(2,3) = 3</code>。</p>
+
+  <p>循环结束，返回 3。注意最长的这一段紧贴数组末尾，但因为 <code class="language-plaintext highlighter-rouge">best</code> 是在每个 1 处即时更新的，末尾不需要补充任何比较就已经拿到了正确答案。</p>
+
+  <p>再看两个极端用例。<code class="language-plaintext highlighter-rouge">nums = [0,0]</code>：两轮都走 <code class="language-plaintext highlighter-rouge">cur = 0</code> 分支，<code class="language-plaintext highlighter-rouge">best</code> 始终是初值 0，返回 0，正确。<code class="language-plaintext highlighter-rouge">nums = [1]</code>：一轮后 <code class="language-plaintext highlighter-rouge">cur = 1</code>、<code class="language-plaintext highlighter-rouge">best = 1</code>，返回 1，正确。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// 遇到 1 则计数加一，遇到 0 则重置为 0。</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">findMaxConsecutiveOnes</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">cur</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">best</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">cur</span><span class="o">++;</span>
+                <span class="n">best</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">best</span><span class="o">,</span> <span class="n">cur</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">cur</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">best</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">findMaxConsecutiveOnes</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="c">// 遇到 1 则计数加一，遇到 0 则重置为 0。</span>
+    <span class="n">cur</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="n">best</span> <span class="o">:=</span> <span class="m">0</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+            <span class="n">cur</span><span class="o">++</span>
+            <span class="k">if</span> <span class="n">cur</span> <span class="o">&gt;</span> <span class="n">best</span> <span class="p">{</span>
+                <span class="n">best</span> <span class="o">=</span> <span class="n">cur</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="m">0</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">best</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$，其中 $n$ 是数组长度。只扫描一趟，每个元素做一次判断和至多一次比较，全是常数操作，没有任何回退。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(1)$，只用了 <code class="language-plaintext highlighter-rouge">cur</code> 和 <code class="language-plaintext highlighter-rouge">best</code> 两个整型变量，与数组长度无关。不需要前缀和数组，也不需要记录每段的起止位置。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「最长连续满足某性质的子数组」这类问题，先问一句<strong>违反性质的元素能否被容忍</strong>：不能容忍就是本题的清零式扫描 $O(1)$ 空间；能容忍 $k$ 个就升级成滑动窗口。这个判断能瞬间把 485、487、1004 三题区分开。</li>
+    <li>状态定义写成「以当前位置<strong>结尾</strong>的最优值」，往往能把二维的子数组枚举压成一维递推；最大子数组和、最长递增子序列的 $O(n^2)$ 解法都是同一个思路。</li>
+    <li>遇到分隔符直接清零而非递减，本质是因为<strong>跨越分隔符的答案一定不合法</strong>，历史积累毫无参考价值——能论证「可以安全丢弃」是这类贪心式扫描的正确性来源。</li>
+    <li>答案更新的位置要与「什么时候可能变大」对齐：<code class="language-plaintext highlighter-rouge">cur</code> 只在遇到 1 时增大，所以只在那一支刷新 <code class="language-plaintext highlighter-rouge">best</code> 即可，循环结束后无需补刀。想不清楚时，把更新无条件放在循环末尾是最保险的写法。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">best</code> 初值取答案的自然下界（这里是 0），能让全 0 这种极端输入自然落进主逻辑，比事后特判更干净。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>把 <code class="language-plaintext highlighter-rouge">cur = 0</code> 写成 <code class="language-plaintext highlighter-rouge">cur--</code></strong>：<code class="language-plaintext highlighter-rouge">[1,1,0,1]</code> 时下标 2 处 <code class="language-plaintext highlighter-rouge">cur</code> 从 2 减到 1，下标 3 又加回 2，返回 2 虽然碰巧对，但换成 <code class="language-plaintext highlighter-rouge">[1,1,1,0,1]</code> 就会得到 3 之后再涨到 3，把被 0 隔开的两段错误地部分拼接了。</li>
+    <li>
+<strong>在遇到 0 的分支里忘记重置</strong>：<code class="language-plaintext highlighter-rouge">[1,0,1]</code> 会一路累加成 <code class="language-plaintext highlighter-rouge">cur = 2</code>，返回 2，而正确答案是 1——这等于把题目从「最长连续 1」做成了「1 的总数」。</li>
+    <li>
+<strong>只在遇到 0 时才更新 <code class="language-plaintext highlighter-rouge">best</code></strong>：<code class="language-plaintext highlighter-rouge">[1,1,1]</code> 全程不进 0 分支，<code class="language-plaintext highlighter-rouge">best</code> 停留在初值 0，返回 0 而不是 3；最长段紧贴数组末尾时必然翻车。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">best</code> 初值设成 <code class="language-plaintext highlighter-rouge">nums[0]</code> 或 1</strong>：<code class="language-plaintext highlighter-rouge">[0,0,0]</code> 会返回 1 或 0 之外的错误值，全 0 数组的正确答案必须是 0。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">best = Math.max(best, cur)</code> 写在 <code class="language-plaintext highlighter-rouge">cur++</code> 之前</strong>：<code class="language-plaintext highlighter-rouge">[1]</code> 会用旧的 <code class="language-plaintext highlighter-rouge">cur = 0</code> 去比较，返回 0 而不是 1，整体结果永远比正确答案少 1。</li>
+    <li>
+<strong>判断写成 <code class="language-plaintext highlighter-rouge">if (num != 0)</code>（或 <code class="language-plaintext highlighter-rouge">num &gt; 0</code>）</strong>：本题恰好只有 0 和 1 所以看不出问题，但一旦被面试官改成含有 2 的数组，<code class="language-plaintext highlighter-rouge">[1,2,1]</code> 会返回 3，而 2 本不该被计入。</li>
+    <li>
+<strong>误以为要统计 1 的总个数</strong>：<code class="language-plaintext highlighter-rouge">[1,0,1,1]</code> 会返回 3，正确答案是 2；这是读题层面的错误，比代码错误更致命。</li>
+    <li>
+<strong>用双重循环枚举所有子数组再检查</strong>：逻辑虽对，但 $10^5$ 长度下 $O(n^2)$ 是 $10^{10}$ 次操作，必然超时。</li>
+    <li>
+<strong>借助滑动窗口并允许窗口内含 0</strong>：本题不允许任何翻转，窗口一旦含 0 就非法，写成 1004 的模板并把 <code class="language-plaintext highlighter-rouge">k</code> 设成 0 虽然能过，但多出无谓的左指针收缩逻辑，面试中会被认为没看清题目的简化条件。</li>
+    <li>
+<strong>返回 <code class="language-plaintext highlighter-rouge">cur</code> 而不是 <code class="language-plaintext highlighter-rouge">best</code></strong>：<code class="language-plaintext highlighter-rouge">[1,1,0]</code> 结束时 <code class="language-plaintext highlighter-rouge">cur</code> 已被清零，返回 0 而不是 2；只有当最长段恰好在末尾时才碰巧正确。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/max-consecutive-ones-ii/">487. 最大连续1的个数 II</a></td>
+      <td>中等</td>
+      <td>允许翻转一个 0，清零式扫描升级为记录「上一个 0 位置」的双变量法</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/max-consecutive-ones-iii/">1004. 最大连续1的个数 III</a></td>
+      <td>中等</td>
+      <td>允许翻转 k 个 0，必须用滑动窗口按 0 的个数收缩左边界</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-subarray-of-1s-after-deleting-one-element/">1493. 删掉一个元素以后全为 1 的最长子数组</a></td>
+      <td>中等</td>
+      <td>必须删掉恰好一个元素，答案要在窗口长度上再减一且需处理全 1 特例</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/reverse-bits-lcci/">面试题 05.03. 翻转数位</a></td>
+      <td>简单</td>
+      <td>与 487 同构，但输入是一个整数，需先按位取出再扫描</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/consecutive-characters/">1446. 连续字符</a></td>
+      <td>简单</td>
+      <td>分隔符从「0」变成「与前一个字符不同」，递推条件改成比较相邻元素</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-continuous-increasing-subsequence/">674. 最长连续递增序列</a></td>
+      <td>简单</td>
+      <td>分隔条件是 <code class="language-plaintext highlighter-rouge">nums[i] &lt;= nums[i-1]</code>，同样的清零式扫描骨架</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-subarray/">53. 最大子数组和</a></td>
+      <td>中等</td>
+      <td>同为「以当前位置结尾」的递推，但重置条件从遇 0 变成前缀和为负</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-repeating-character-replacement/">424. 替换后的最长重复字符</a></td>
+      <td>中等</td>
+      <td>字符不止两类，需在窗口内维护各字符计数并用最大频次判断可行性</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-substring-without-repeating-characters/">3. 无重复字符的最长子串</a></td>
+      <td>中等</td>
+      <td>违规元素的位置不固定，左指针需跳到重复字符上次出现处的下一位</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-consecutive-sequence/">128. 最长连续序列</a></td>
+      <td>中等</td>
+      <td>「连续」指数值连续而非下标连续，需借哈希集合从每段起点向后延伸</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/19446425" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 补充题 19. 判断一个点是否在三角形内</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/74178578" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 406. 根据身高重建队列</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/39421249">https://hgnulb.github.io/blog/2022/39421249</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

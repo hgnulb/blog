@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>设计模式-单例模式 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,单例模式" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="设计模式-单例模式" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="HGNULB 的个人技术博客，记录后端开发、全栈工程、算法与 LeetCode 学习笔记" />
+<meta name="twitter:description" property="og:description" content="HGNULB 的个人技术博客，记录后端开发、全栈工程、算法与 LeetCode 学习笔记" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2020/50659901" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2020/50659901" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-05T23:22:21+08:00" />
+<meta property="article:modified_time" content="2020-10-05T23:22:21+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="设计模式-单例模式" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2020-10-05T23:22:21+08:00","datePublished":"2020-10-05T23:22:21+08:00","description":"HGNULB 的个人技术博客，记录后端开发、全栈工程、算法与 LeetCode 学习笔记","headline":"设计模式-单例模式","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2020/50659901"},"url":"https://hgnulb.github.io/blog/2020/50659901"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#问题思考">问题思考</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#单例模式">单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#单例模式的分类">单例模式的分类</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#面试主线从线程不安全到三种推荐写法">面试主线：从线程不安全到三种推荐写法</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#如何实现一个线程安全的单例模式">如何实现一个线程安全的单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#单例模式的七种实现方式线程安全">单例模式的七种实现方式(线程安全)</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#一懒汉式-双重校验单例模式">一、懒汉式-双重校验单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#二懒汉式-静态内部类单例模式">二、懒汉式-静态内部类单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#三懒汉式-同步代码块单例模式">三、懒汉式-同步代码块单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#四懒汉式-同步方法单例模式">四、懒汉式-同步方法单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#五饿汉式-静态代码块单例模式">五、饿汉式-静态代码块单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#六饿汉式-静态常量单例模式">六、饿汉式-静态常量单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#七枚举类单例模式">七、枚举类单例模式</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#单例模式在-jdk-中的应用">单例模式在 JDK 中的应用</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="设计模式-单例模式">设计模式-单例模式</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2020-10-05 23:22:21"
+                    datetime="2020-10-05T23:22:21+08:00"
+            >
+                2020-10-05
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2059 字 · 英文 75 词 · 代码 108 行 · 图片 2 张"
+            aria-label="预计阅读时间约 9 分钟，正文 2059 字 · 英文 75 词 · 代码 108 行 · 图片 2 张"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    1 个分类
+                    <span aria-hidden="true"> · </span>
+                    1 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5459034622/" title="设计模式">
+        设计模式
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1784466390/" title="单例模式">
+        单例模式
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#问题思考">问题思考</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#单例模式">单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#单例模式的分类">单例模式的分类</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#面试主线从线程不安全到三种推荐写法">面试主线：从线程不安全到三种推荐写法</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#如何实现一个线程安全的单例模式">如何实现一个线程安全的单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#单例模式的七种实现方式线程安全">单例模式的七种实现方式(线程安全)</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#一懒汉式-双重校验单例模式">一、懒汉式-双重校验单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#二懒汉式-静态内部类单例模式">二、懒汉式-静态内部类单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#三懒汉式-同步代码块单例模式">三、懒汉式-同步代码块单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#四懒汉式-同步方法单例模式">四、懒汉式-同步方法单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#五饿汉式-静态代码块单例模式">五、饿汉式-静态代码块单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#六饿汉式-静态常量单例模式">六、饿汉式-静态常量单例模式</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#七枚举类单例模式">七、枚举类单例模式</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#单例模式在-jdk-中的应用">单例模式在 JDK 中的应用</a></li>
+</ol></nav>
+    </details>
+
+
+    <p><img src="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/post-list/image-20201005121215846.png" alt="image-20201005121215846" decoding="async" loading="lazy" width="870" height="429"></p>
+
+<h2 id="问题思考">
+<a class="anchor" href="#%E9%97%AE%E9%A2%98%E6%80%9D%E8%80%83" aria-hidden="true"><span class="octicon octicon-link"></span></a>问题思考</h2>
+
+<blockquote>
+  <p>[!blue]</p>
+
+  <ul class="task-list">
+    <li class="task-list-item">
+<input type="checkbox" class="task-list-item-checkbox" disabled checked>说一说常用的设计模式，如何实现一个线程安全的单例模式。</li>
+    <li class="task-list-item">
+<input type="checkbox" class="task-list-item-checkbox" disabled checked>单例模式有哪几种实现方式，<strong>饿汉式</strong>单例模式和<strong>懒汉式</strong>单例模式的区别以及代码实现。</li>
+    <li class="task-list-item">
+<input type="checkbox" class="task-list-item-checkbox" disabled checked><strong>双重校验</strong>单例模式为什么需要加两层校验，为什么要使用 volatile 关键字，不使用 volatile 关键字会导致线程不安全吗。</li>
+    <li class="task-list-item">
+<input type="checkbox" class="task-list-item-checkbox" disabled checked>使用了 synchronized 为什么还需要使用 volatile，使用 synchronized 的作用是什么。</li>
+  </ul>
+</blockquote>
+
+<h2 id="单例模式">
+<a class="anchor" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>单例模式</h2>
+
+<blockquote>
+  <p>[!purple]<br>
+定义：保证一个类仅有一个实例，并提供一个访问它的全局访问点。</p>
+
+  <p>特点：</p>
+
+  <ol>
+    <li>单例模式只能有一个实例。</li>
+    <li>单例类必须创建自己的唯一实例。</li>
+    <li>单例类必须向其他对象提供这一实例。</li>
+  </ol>
+</blockquote>
+
+<h2 id="单例模式的分类">
+<a class="anchor" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%88%86%E7%B1%BB" aria-hidden="true"><span class="octicon octicon-link"></span></a>单例模式的分类</h2>
+
+<blockquote>
+  <p>[!blue]<br>
+饿汉式单例模式：立即加载，类一加载就创建实例，天然线程安全，但不能延迟加载。</p>
+
+  <p>懒汉式单例模式：延迟加载，第一次使用时才创建实例，必须自己解决多线程下的并发创建问题。</p>
+</blockquote>
+
+<h2 id="面试主线从线程不安全到三种推荐写法">
+<a class="anchor" href="#%E9%9D%A2%E8%AF%95%E4%B8%BB%E7%BA%BF%E4%BB%8E%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E5%88%B0%E4%B8%89%E7%A7%8D%E6%8E%A8%E8%8D%90%E5%86%99%E6%B3%95" aria-hidden="true"><span class="octicon octicon-link"></span></a>面试主线：从线程不安全到三种推荐写法</h2>
+
+<blockquote>
+  <p>最朴素的懒汉式是这样写的：<code class="language-plaintext highlighter-rouge">if (instance == null) { instance = new Singleton(); }</code>。<strong>它为什么线程不安全？</strong>因为「判空」和「创建」不是一个原子操作：线程 A 和线程 B 可能<strong>同时</strong>通过判空（都看到 <code class="language-plaintext highlighter-rouge">instance == null</code>），然后各自创建一个实例——单例被破坏。这就是所有线程安全写法要解决的第一个问题。</p>
+
+  <p>各写法的取舍：<strong>同步方法 / 同步代码块</strong>直接给整个「判空 + 创建」加锁，正确但锁粒度太大，实例创建完成后每次读取仍要抢锁，性能差；<strong>饿汉式</strong>（静态常量 / 静态代码块）依靠 JVM 类初始化的加锁机制天然线程安全、零同步开销，但不能延迟加载；<strong>双重校验</strong>在锁外再加一层判空，兼顾正确性与性能，代价是必须配合 volatile 且写法最复杂。</p>
+
+  <p>最终演进出<strong>三种推荐写法</strong>：双重校验（面试必考、可懒加载）、静态内部类（懒加载 + 零同步开销 + 写法简单）、枚举（《Effective Java》推荐，唯一天然防反射与反序列化的写法）。</p>
+</blockquote>
+
+<h2 id="如何实现一个线程安全的单例模式">
+<a class="anchor" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>如何实现一个线程安全的单例模式</h2>
+
+<blockquote>
+  <p>《Effective Java》第 3 条：用私有构造器或者枚举类型强化 Singleton 属性。</p>
+
+  <p>一个严谨的单例模式除了保证线程安全外，还需要防止<strong>反射</strong>、<strong>反序列化</strong>和 <strong>clone</strong> 破坏单例。下面是加固后的双重校验完整实现。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span> <span class="kd">implements</span> <span class="nc">Serializable</span><span class="o">,</span> <span class="nc">Cloneable</span> <span class="o">{</span>
+    <span class="c1">// volatile 禁止指令重排序，并保证写入对其他线程可见</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">volatile</span> <span class="nc">Singleton</span> <span class="n">instance</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+    <span class="c1">// 私有化构造方法，并防止反射调用</span>
+    <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">instance</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"单例模式不允许重复创建对象"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Singleton</span> <span class="nf">getInstance</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">instance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">synchronized</span> <span class="o">(</span><span class="nc">Singleton</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">instance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Singleton</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// 防止 clone 破坏单例</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="nc">Object</span> <span class="nf">clone</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">CloneNotSupportedException</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// 防止反序列化破坏单例</span>
+    <span class="kd">private</span> <span class="nc">Object</span> <span class="nf">readResolve</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[!amber]</p>
+
+  <ol>
+    <li>
+<strong>防反序列化</strong>：在类中添加 <code class="language-plaintext highlighter-rouge">readResolve()</code> 方法并返回已有实例，反序列化时会用该方法的返回值<strong>替换</strong>新创建的对象。</li>
+    <li>
+<strong>防 clone</strong>：实现 <code class="language-plaintext highlighter-rouge">Cloneable</code> 接口并覆盖 <code class="language-plaintext highlighter-rouge">Object</code> 的 <code class="language-plaintext highlighter-rouge">clone()</code> 方法，直接返回已有实例，不产生副本。</li>
+    <li>
+<strong>防反射</strong>：在构造方法中判断 <code class="language-plaintext highlighter-rouge">instance != null</code> 就抛异常，让反射在第二次创建实例时失败。注意这只能防「先正常创建、再反射创建」的场景，若反射先执行则防不住——彻底的方案只有枚举。</li>
+  </ol>
+</blockquote>
+
+<h2 id="单例模式的七种实现方式线程安全">
+<a class="anchor" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%B8%83%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>单例模式的七种实现方式(线程安全)</h2>
+
+<blockquote>
+  <p>[!amber]<br>
+以下七种都是线程安全的实现，按面试主线组织：先看最重要的双重校验（一），再看它的推荐替代静态内部类（二），然后回头看它由之演进而来的粗粒度锁写法（三、四），接着是不能延迟加载的两种饿汉式（五、六），最后是最推荐的枚举（七）。</p>
+</blockquote>
+
+<h3 id="一懒汉式-双重校验单例模式">
+<a class="anchor" href="#%E4%B8%80%E6%87%92%E6%B1%89%E5%BC%8F-%E5%8F%8C%E9%87%8D%E6%A0%A1%E9%AA%8C%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>一、懒汉式-双重校验单例模式</h3>
+
+<p><img src="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/post-list/image-20201114235437907.png" alt="image-20201114235437907" decoding="async" loading="lazy" width="852" height="355"></p>
+
+<blockquote>
+  <p>上图即双重校验（Double-Checked Locking）的标准实现，文字版代码如下：两层 <code class="language-plaintext highlighter-rouge">if (instance == null)</code> 夹着一个 <code class="language-plaintext highlighter-rouge">synchronized</code> 块，实例字段必须用 volatile 修饰。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">volatile</span> <span class="nc">Singleton</span> <span class="n">instance</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Singleton</span> <span class="nf">getInstance</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">instance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 第一次判空：锁外，避免每次调用都抢锁</span>
+            <span class="kd">synchronized</span> <span class="o">(</span><span class="nc">Singleton</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">instance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 第二次判空：锁内，保证只创建一次</span>
+                    <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Singleton</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>为什么要校验两次？</strong>第一次判空在锁外，为了<strong>性能</strong>：实例创建完成后，后续所有调用直接返回，不必再抢锁；第二次判空在锁内，为了<strong>正确性</strong>：多个线程可能同时通过第一次判空并排队进入同步块，第一个线程创建完实例释放锁后，若后续线程不再检查一次，就会重复创建实例。synchronized 保证了创建过程的互斥与原子性。</p>
+
+  <p><strong>为什么还要 volatile？（必考）</strong><code class="language-plaintext highlighter-rouge">instance = new Singleton()</code> 不是原子操作，字节码层面分三步：① 分配内存；② 调用构造方法初始化对象；③ 把 instance 引用指向这块内存。②③ 之间没有数据依赖，编译器 / CPU 可能重排序为 ① → ③ → ②。若线程 A 刚执行完 ①③（引用已非空、对象<strong>尚未初始化</strong>），线程 B 恰好在锁外做第一次判空，会看到 <code class="language-plaintext highlighter-rouge">instance != null</code> 而直接返回这个半初始化对象，使用其字段时就会读到默认值甚至出错。volatile 写之前的操作不能被重排到写之后，即禁止 ②③ 重排，同时保证写入对其他线程立即可见。</p>
+
+  <p><strong>有了 synchronized 为什么还不够？</strong>synchronized 只保证<strong>临界区内</strong>的互斥，以及进出临界区时的可见性；而出问题的第一次判空是<strong>锁外读</strong>，完全不受 synchronized 保护，所以必须由 volatile 兜底。两者分工明确：synchronized 管「只创建一次」，volatile 管「锁外读不到半成品」，缺一不可。</p>
+</blockquote>
+
+<h3 id="二懒汉式-静态内部类单例模式">
+<a class="anchor" href="#%E4%BA%8C%E6%87%92%E6%B1%89%E5%BC%8F-%E9%9D%99%E6%80%81%E5%86%85%E9%83%A8%E7%B1%BB%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>二、懒汉式-静态内部类单例模式</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">SingletonHolder</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Singleton</span> <span class="no">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Singleton</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Singleton</span> <span class="nf">getInstance</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nc">SingletonHolder</span><span class="o">.</span><span class="na">INSTANCE</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>为什么行：</strong>外部类 Singleton 被加载时并不会初始化 SingletonHolder，只有第一次调用 <code class="language-plaintext highlighter-rouge">getInstance()</code> 触发内部类初始化时才创建实例——这就是延迟加载；而类的初始化由 JVM 在内部加锁、保证只执行一次，天然线程安全。既有懒汉式的延迟加载，又没有任何同步开销，也不需要 volatile，写法比双重校验简单得多，是推荐的实现方式之一。</p>
+</blockquote>
+
+<h3 id="三懒汉式-同步代码块单例模式">
+<a class="anchor" href="#%E4%B8%89%E6%87%92%E6%B1%89%E5%BC%8F-%E5%90%8C%E6%AD%A5%E4%BB%A3%E7%A0%81%E5%9D%97%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>三、懒汉式-同步代码块单例模式</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">Singleton</span> <span class="n">instance</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Singleton</span> <span class="nf">getInstance</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">synchronized</span> <span class="o">(</span><span class="nc">Singleton</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">instance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Singleton</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>为什么不推荐：</strong>线程安全没问题——判空和创建整个被锁住；但无论实例是否已经创建，<strong>每次</strong>调用 <code class="language-plaintext highlighter-rouge">getInstance()</code> 都要先获取锁，锁粒度大、并发性能差。在锁外再加一层判空，就演进成了双重校验。</p>
+</blockquote>
+
+<h3 id="四懒汉式-同步方法单例模式">
+<a class="anchor" href="#%E5%9B%9B%E6%87%92%E6%B1%89%E5%BC%8F-%E5%90%8C%E6%AD%A5%E6%96%B9%E6%B3%95%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>四、懒汉式-同步方法单例模式</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">Singleton</span> <span class="n">instance</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">synchronized</span> <span class="nc">Singleton</span> <span class="nf">getInstance</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">instance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Singleton</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>为什么不推荐：</strong>与同步代码块等价——synchronized 加在静态方法上，锁的同样是 <code class="language-plaintext highlighter-rouge">Singleton.class</code>。写法最简单，但同样每次调用都要加锁，性能与写法三相同，不推荐。</p>
+</blockquote>
+
+<h3 id="五饿汉式-静态代码块单例模式">
+<a class="anchor" href="#%E4%BA%94%E9%A5%BF%E6%B1%89%E5%BC%8F-%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>五、饿汉式-静态代码块单例模式</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">Singleton</span> <span class="n">instance</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+    <span class="kd">static</span> <span class="o">{</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Singleton</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Singleton</span> <span class="nf">getInstance</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>为什么行 / 局限：</strong>类的初始化阶段由 JVM 加锁执行且只执行一次，静态代码块里的赋值天然线程安全，还可以在代码块中写额外的初始化逻辑。缺点是类一加载就创建实例，<strong>不能延迟加载</strong>——如果实例很重且可能整个生命周期都用不到，就白白占用资源。</p>
+</blockquote>
+
+<h3 id="六饿汉式-静态常量单例模式">
+<a class="anchor" href="#%E5%85%AD%E9%A5%BF%E6%B1%89%E5%BC%8F-%E9%9D%99%E6%80%81%E5%B8%B8%E9%87%8F%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>六、饿汉式-静态常量单例模式</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Singleton</span> <span class="no">SINGLETON</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Singleton</span><span class="o">();</span>
+
+    <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Singleton</span> <span class="nf">getSingleton</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="no">SINGLETON</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>为什么行 / 局限：</strong>与静态代码块写法等价，是最简单直接的线程安全实现，同样不能延迟加载。另外注意：前六种写法如果不做额外防护，都可能被<strong>反射</strong>和<strong>反序列化</strong>破坏单例，加固方式见上文完整实现。</p>
+</blockquote>
+
+<h3 id="七枚举类单例模式">
+<a class="anchor" href="#%E4%B8%83%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>七、枚举类单例模式</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="nc">Singleton</span> <span class="o">{</span>
+    <span class="no">INSTANCE</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Singleton</span> <span class="n">instance1</span> <span class="o">=</span> <span class="nc">Singleton</span><span class="o">.</span><span class="na">INSTANCE</span><span class="o">;</span>
+        <span class="nc">Singleton</span> <span class="n">instance2</span> <span class="o">=</span> <span class="nc">Singleton</span><span class="o">.</span><span class="na">INSTANCE</span><span class="o">;</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">instance1</span> <span class="o">==</span> <span class="n">instance2</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[!green-fold] 运行结果<br>
+true</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>为什么最推荐：</strong>枚举是《Effective Java》推荐的最佳单例写法，它绝对防止多次实例化，原因有三：</p>
+
+  <ol>
+    <li>
+<strong>线程安全</strong>：枚举实例由 JVM 在类初始化时创建，和饿汉式一样天然线程安全，无需任何同步代码。</li>
+    <li>
+<strong>防反射</strong>：<code class="language-plaintext highlighter-rouge">Constructor.newInstance()</code> 检测到枚举类型会直接抛出 <code class="language-plaintext highlighter-rouge">IllegalArgumentException</code>，从 JDK 层面禁止反射创建枚举实例——这是前六种写法靠构造方法判断都做不到的「绝对防护」。</li>
+    <li>
+<strong>防反序列化</strong>：枚举的序列化只写出实例名字，反序列化时通过 <code class="language-plaintext highlighter-rouge">valueOf()</code> 返回已有实例，无需自己实现 <code class="language-plaintext highlighter-rouge">readResolve()</code>。</li>
+  </ol>
+
+  <p>虽然这种方法还没有广泛采用，但是<strong>单元素的枚举类型经常成为实现 Singleton 的最佳方法</strong>。</p>
+
+  <p><strong>注意：</strong>枚举已隐式继承 <code class="language-plaintext highlighter-rouge">java.lang.Enum</code>，如果 Singleton 必须扩展一个其他超类则不宜使用这个方法（虽然可以声明枚举去实现接口）；另外枚举本质是饿汉式，不能延迟加载。</p>
+</blockquote>
+
+<h2 id="单例模式在-jdk-中的应用">
+<a class="anchor" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E5%9C%A8-jdk-%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>单例模式在 JDK 中的应用</h2>
+
+<blockquote>
+  <p>[!blue]</p>
+
+  <ul class="task-list">
+    <li class="task-list-item">
+<input type="checkbox" class="task-list-item-checkbox" disabled checked>java.lang.Runtime#getRuntime()</li>
+    <li class="task-list-item">
+<input type="checkbox" class="task-list-item-checkbox" disabled checked>java.awt.Desktop#getDesktop()</li>
+    <li class="task-list-item">
+<input type="checkbox" class="task-list-item-checkbox" disabled checked>java.lang.System#getSecurityManager()</li>
+  </ul>
+</blockquote>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2020/69294617" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 929. 独特的电子邮件地址</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2020/48890162" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">开发者网址导航</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2020/50659901">https://hgnulb.github.io/blog/2020/50659901</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1062. 最长重复子串的长度 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,Suffix Automato,Suffix Tree,二分查找,动态规划,后缀数组,哈希函数,字符串,字节跳动,滚动哈希,美团,腾讯" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1062. 最长重复子串的长度" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/45409762" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/45409762" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-08-06T00:00:00+08:00" />
+<meta property="article:modified_time" content="2026-08-06T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1062. 最长重复子串的长度" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-08-06T00:00:00+08:00","datePublished":"2026-08-06T00:00:00+08:00","description":"题目描述","headline":"LeetCode 1062. 最长重复子串的长度","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/45409762"},"url":"https://hgnulb.github.io/blog/2026/45409762"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法二分长度--滚动哈希">解法：二分长度 + 滚动哈希</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1062. 最长重复子串的长度">LeetCode 1062. 最长重复子串的长度</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-08-06 00:00:00"
+                    datetime="2026-08-06T00:00:00+08:00"
+            >
+                2026-08-06
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2958 字 · 英文 167 词 · 代码 94 行"
+            aria-label="预计阅读时间约 11 分钟，正文 2958 字 · 英文 167 词 · 代码 94 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 11 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    11 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2381712535/" title="腾讯">
+        腾讯
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0416977247/" title="美团">
+        美团
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3447615142/" title="二分查找">
+        二分查找
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5321850966/" title="哈希函数">
+        哈希函数
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3978270112/" title="滚动哈希">
+        滚动哈希
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9264214643/" title="Suffix Automato">
+        Suffix Automato
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9663110659/" title="Suffix Tree">
+        Suffix Tree
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9609937102/" title="后缀数组">
+        后缀数组
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法二分长度--滚动哈希">解法：二分长度 + 滚动哈希</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/longest-repeating-substring/">1062. 最长重复子串的长度</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给定一个字符串 s，要找出其中最长的、在 s 里至少出现过两次的子串，返回它的长度。这里的两次出现允许重叠，只要起始位置不同就算两次，比如 <code class="language-plaintext highlighter-rouge">"aaa"</code> 里长度为 2 的 <code class="language-plaintext highlighter-rouge">"aa"</code> 分别从下标 0 和 1 开始，就算重复出现。如果不存在任何重复子串，返回 0。</p>
+
+  <p>题目问的是长度而不是子串本身，这一点很重要——它意味着我们只需要一个能回答「是否存在」的判定器，不必真的把子串取出来比较。</p>
+
+  <p>约束里的信号有两条。第一，字符串长度不超过 2000，$O(n^2)$ 量级可行但 $O(n^3)$ 会超时，这个规模恰好卡在「朴素枚举加逐字符比较不行、但枚举加常数时间判定可以」的位置。第二，字符集只有小写字母，取值范围小且连续，非常适合映射成小整数参与数值化计算。</p>
+
+  <p>边界方面：长度为 1 的串必然返回 0；全部字符互不相同的串也返回 0；答案的上界不是 n 而是 n - 1，因为长度为 n 的子串只有一个，不可能出现两次，不过把上界写成 n 也无妨，判定器自然会否掉它。</p>
+</blockquote>
+
+<h2 id="解法二分长度--滚动哈希">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%88%86%E9%95%BF%E5%BA%A6--%E6%BB%9A%E5%8A%A8%E5%93%88%E5%B8%8C" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：二分长度 + 滚动哈希</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最朴素的做法是枚举所有子串的起点和长度，再用哈希表记录见过的子串。子串数量是 $O(n^2)$ 级别，而每个子串的截取和比较又要 $O(n)$，总代价 $O(n^3)$，在 n 为 2000 时是八十亿次字符操作，完全不可行。瓶颈有两处：一是候选长度被逐个试遍，二是每个子串的相等判断花了线性时间。</p>
+
+  <p>先解决第一处。观察这样一个性质：如果存在长度为 L 的重复子串，那么它的任意一个长度为 L - 1 的前缀也在两个不同位置出现过，所以长度 L - 1 的重复子串也必然存在。反过来说，如果长度 L 不可行，那么任何大于 L 的长度都不可行。于是「是否存在长度为 L 的重复子串」这个谓词关于 L 单调，可以对 L 做二分，把 n 次尝试压成 $\log n$ 次。</p>
+
+  <p>再解决第二处。要在常数时间内比较任意两个等长子串，就得给每个子串算一个能 $O(1)$ 取到的数值指纹。把字符串看成一个 BASE 进制的大数，预处理前缀值 <code class="language-plaintext highlighter-rouge">pre[i] = s[0..i) 对应的数</code>，那么子串 <code class="language-plaintext highlighter-rouge">s[i, i + L)</code> 的值就是 <code class="language-plaintext highlighter-rouge">pre[i + L] - pre[i] * BASE^L</code>，全部在模意义下运算即可 $O(1)$ 求出。同一长度下把所有指纹丢进哈希集合，一旦插入失败就说明找到了重复。</p>
+
+  <p>于是不变量可以写成：<strong>二分维护的区间 <code class="language-plaintext highlighter-rouge">[left, right]</code> 始终包含真正的答案，其中 <code class="language-plaintext highlighter-rouge">left</code> 是已知可行的最大长度、<code class="language-plaintext highlighter-rouge">right</code> 是尚未被排除的最大候选</strong>；而判定函数 <code class="language-plaintext highlighter-rouge">exists(L)</code> 的语义是「s 中存在两个起点不同、长度为 L 的相同子串」，它靠一次线性扫描和 $O(1)$ 的子串指纹计算完成。</p>
+
+  <p>单模数哈希在 2000 个子串的规模下碰撞概率虽低但并非可以忽略，尤其面对刻意构造的数据，因此代码同时用了两组互不相同的大质数模数，把两个指纹拼成一个 64 位的键，碰撞概率降到可以放心的程度。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <p>第一步，预处理四个长度为 n + 1 的数组：<code class="language-plaintext highlighter-rouge">pow1</code>、<code class="language-plaintext highlighter-rouge">pow2</code> 存 BASE 的各次幂，<code class="language-plaintext highlighter-rouge">pre1</code>、<code class="language-plaintext highlighter-rouge">pre2</code> 存两套模数下的前缀哈希。选择长度 n + 1 而不是 n，是为了让下标 0 表示空前缀，这样任意子串区间 <code class="language-plaintext highlighter-rouge">[i, i + L)</code> 都能用 <code class="language-plaintext highlighter-rouge">pre[i + L]</code> 与 <code class="language-plaintext highlighter-rouge">pre[i]</code> 相减表达，不必对起点为 0 的情况另开分支。</p>
+
+  <p>第二步，把字符映射成 <code class="language-plaintext highlighter-rouge">s.charAt(i) - 'a' + 1</code>。加一是必要的：如果 <code class="language-plaintext highlighter-rouge">'a'</code> 被映射成 0，那么 <code class="language-plaintext highlighter-rouge">"a"</code>、<code class="language-plaintext highlighter-rouge">"aa"</code>、<code class="language-plaintext highlighter-rouge">"aaa"</code> 的哈希值都会是 0，前导字符被静默吞掉，不同长度的串会撞在一起。</p>
+
+  <p>第三步，按 <code class="language-plaintext highlighter-rouge">pre[i + 1] = (pre[i] * BASE + v) % MOD</code> 递推前缀哈希，同时按 <code class="language-plaintext highlighter-rouge">pow[i + 1] = pow[i] * BASE % MOD</code> 递推幂次。两者必须用同一个 BASE 和同一个 MOD，否则后面的减法公式不成立。</p>
+
+  <p>第四步，令 <code class="language-plaintext highlighter-rouge">left = 0</code>、<code class="language-plaintext highlighter-rouge">right = n</code> 开始二分。左端取 0 是因为「长度为 0 的重复子串」平凡成立，这样可以保证区间里至少有一个可行值，最终返回的 <code class="language-plaintext highlighter-rouge">left</code> 天然覆盖了「无重复子串」时应返回 0 的情况。</p>
+
+  <p>第五步，取中点 <code class="language-plaintext highlighter-rouge">mid = (left + right + 1) / 2</code>。这里必须向上取整，因为下面的更新方式是「可行时 <code class="language-plaintext highlighter-rouge">left = mid</code>、不可行时 <code class="language-plaintext highlighter-rouge">right = mid - 1</code>」；如果向下取整，当区间只剩两个数且 <code class="language-plaintext highlighter-rouge">mid</code> 等于 <code class="language-plaintext highlighter-rouge">left</code> 并且可行时，<code class="language-plaintext highlighter-rouge">left = mid</code> 不会让区间缩小，循环就永远停不下来。</p>
+
+  <p>第六步，调用 <code class="language-plaintext highlighter-rouge">exists(mid)</code>。可行则说明答案至少是 <code class="language-plaintext highlighter-rouge">mid</code>，把下界抬到 <code class="language-plaintext highlighter-rouge">mid</code>（保留 <code class="language-plaintext highlighter-rouge">mid</code> 本身，因为它可能就是答案）；不可行则说明 <code class="language-plaintext highlighter-rouge">mid</code> 及以上全部无望，把上界压到 <code class="language-plaintext highlighter-rouge">mid - 1</code>。</p>
+
+  <p>第七步，在 <code class="language-plaintext highlighter-rouge">exists</code> 内部，对每个满足 <code class="language-plaintext highlighter-rouge">i + len &lt;= n</code> 的起点 i 计算两套指纹。公式是 <code class="language-plaintext highlighter-rouge">(pre[i + len] - pre[i] * pow[len] % MOD + MOD) % MOD</code>：先取模再减，最后补一个 MOD 是为了消除减法可能产生的负数，Java 和 Go 的 <code class="language-plaintext highlighter-rouge">%</code> 对负数都返回负余数，不补就会得到负的哈希值并破坏比较。</p>
+
+  <p>第八步，把两个指纹合成一个键 <code class="language-plaintext highlighter-rouge">(h1 &lt;&lt; 32) ^ h2</code> 存入集合。左移 32 位是因为单个哈希值小于 $10^9$ 即不超过 30 位，左移后与低位的 h2 不会互相干扰，等价于把两个哈希拼成一个 64 位整数一起比较。<code class="language-plaintext highlighter-rouge">seen.add</code> 返回 false 就意味着这个键之前出现过，立即返回 true。</p>
+
+  <p>第九步，循环结束后返回 <code class="language-plaintext highlighter-rouge">left</code>。此时 <code class="language-plaintext highlighter-rouge">left</code> 与 <code class="language-plaintext highlighter-rouge">right</code> 重合，指向最大的可行长度。</p>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">s = "banana"</code> 走一遍：n 为 6，预处理出六个字符 <code class="language-plaintext highlighter-rouge">b, a, n, a, n, a</code> 的前缀哈希。二分区间初始为 <code class="language-plaintext highlighter-rouge">[0, 6]</code>。第一轮 <code class="language-plaintext highlighter-rouge">mid = (0 + 6 + 1) / 2 = 3</code>，调用 <code class="language-plaintext highlighter-rouge">exists(3)</code>，枚举起点 0 到 3 得到子串 <code class="language-plaintext highlighter-rouge">ban</code>、<code class="language-plaintext highlighter-rouge">ana</code>、<code class="language-plaintext highlighter-rouge">nan</code>、<code class="language-plaintext highlighter-rouge">ana</code>，第四个 <code class="language-plaintext highlighter-rouge">ana</code> 的指纹与第二个相同，插入失败，返回 true，于是 <code class="language-plaintext highlighter-rouge">left = 3</code>。第二轮区间 <code class="language-plaintext highlighter-rouge">[3, 6]</code>，<code class="language-plaintext highlighter-rouge">mid = 5</code>，<code class="language-plaintext highlighter-rouge">exists(5)</code> 枚举出 <code class="language-plaintext highlighter-rouge">banan</code> 和 <code class="language-plaintext highlighter-rouge">anana</code>，两者指纹不同，返回 false，于是 <code class="language-plaintext highlighter-rouge">right = 4</code>。第三轮区间 <code class="language-plaintext highlighter-rouge">[3, 4]</code>，<code class="language-plaintext highlighter-rouge">mid = 4</code>，<code class="language-plaintext highlighter-rouge">exists(4)</code> 枚举出 <code class="language-plaintext highlighter-rouge">bana</code>、<code class="language-plaintext highlighter-rouge">anan</code>、<code class="language-plaintext highlighter-rouge">nana</code>，互不相同，返回 false，<code class="language-plaintext highlighter-rouge">right = 3</code>。此时 <code class="language-plaintext highlighter-rouge">left == right == 3</code>，循环退出，返回 3，对应重复出现的 <code class="language-plaintext highlighter-rouge">"ana"</code>（起点 1 和起点 3），与预期一致。再看 <code class="language-plaintext highlighter-rouge">s = "abcd"</code>：<code class="language-plaintext highlighter-rouge">mid = 2</code> 时四个字符两两组合出 <code class="language-plaintext highlighter-rouge">ab</code>、<code class="language-plaintext highlighter-rouge">bc</code>、<code class="language-plaintext highlighter-rouge">cd</code> 互不相同返回 false，<code class="language-plaintext highlighter-rouge">right = 1</code>；<code class="language-plaintext highlighter-rouge">mid = 1</code> 时四个单字符也互不相同返回 false，<code class="language-plaintext highlighter-rouge">right = 0</code>；<code class="language-plaintext highlighter-rouge">left == right == 0</code>，返回 0。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// 使用滚动哈希快速计算所有长度为 L 的子串哈希。</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="no">MOD1</span> <span class="o">=</span> <span class="mi">1_000_000_007L</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="no">MOD2</span> <span class="o">=</span> <span class="mi">1_000_000_009L</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="no">BASE</span> <span class="o">=</span> <span class="mi">131L</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">longestRepeatingSubstring</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">long</span><span class="o">[]</span> <span class="n">pow1</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="kt">long</span><span class="o">[]</span> <span class="n">pow2</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="kt">long</span><span class="o">[]</span> <span class="n">pre1</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="kt">long</span><span class="o">[]</span> <span class="n">pre2</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="n">pow1</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="n">pow2</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">pow1</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">pow1</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">*</span> <span class="no">BASE</span> <span class="o">%</span> <span class="no">MOD1</span><span class="o">;</span>
+            <span class="n">pow2</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">pow2</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">*</span> <span class="no">BASE</span> <span class="o">%</span> <span class="no">MOD2</span><span class="o">;</span>
+            <span class="n">pre1</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">pre1</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">*</span> <span class="no">BASE</span> <span class="o">+</span> <span class="n">v</span><span class="o">)</span> <span class="o">%</span> <span class="no">MOD1</span><span class="o">;</span>
+            <span class="n">pre2</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">pre2</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">*</span> <span class="no">BASE</span> <span class="o">+</span> <span class="n">v</span><span class="o">)</span> <span class="o">%</span> <span class="no">MOD2</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">exists</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">mid</span><span class="o">,</span> <span class="n">pre1</span><span class="o">,</span> <span class="n">pre2</span><span class="o">,</span> <span class="n">pow1</span><span class="o">,</span> <span class="n">pow2</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">left</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">exists</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span> <span class="n">len</span><span class="o">,</span> <span class="kt">long</span><span class="o">[]</span> <span class="n">pre1</span><span class="o">,</span> <span class="kt">long</span><span class="o">[]</span> <span class="n">pre2</span><span class="o">,</span> <span class="kt">long</span><span class="o">[]</span> <span class="n">pow1</span><span class="o">,</span> <span class="kt">long</span><span class="o">[]</span> <span class="n">pow2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">len</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">seen</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">+</span> <span class="n">len</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">long</span> <span class="n">h1</span> <span class="o">=</span> <span class="o">(</span><span class="n">pre1</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">len</span><span class="o">]</span> <span class="o">-</span> <span class="n">pre1</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">*</span> <span class="n">pow1</span><span class="o">[</span><span class="n">len</span><span class="o">]</span> <span class="o">%</span> <span class="no">MOD1</span> <span class="o">+</span> <span class="no">MOD1</span><span class="o">)</span> <span class="o">%</span> <span class="no">MOD1</span><span class="o">;</span>
+            <span class="kt">long</span> <span class="n">h2</span> <span class="o">=</span> <span class="o">(</span><span class="n">pre2</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">len</span><span class="o">]</span> <span class="o">-</span> <span class="n">pre2</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">*</span> <span class="n">pow2</span><span class="o">[</span><span class="n">len</span><span class="o">]</span> <span class="o">%</span> <span class="no">MOD2</span> <span class="o">+</span> <span class="no">MOD2</span><span class="o">)</span> <span class="o">%</span> <span class="no">MOD2</span><span class="o">;</span>
+            <span class="kt">long</span> <span class="n">key</span> <span class="o">=</span> <span class="o">(</span><span class="n">h1</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span><span class="o">)</span> <span class="o">^</span> <span class="n">h2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">seen</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">key</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">longestRepeatingSubstring</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="c">// 使用滚动哈希快速计算所有长度为 L 的子串哈希。</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">const</span> <span class="n">mod1</span> <span class="kt">int64</span> <span class="o">=</span> <span class="m">1_000_000_007</span>
+    <span class="k">const</span> <span class="n">mod2</span> <span class="kt">int64</span> <span class="o">=</span> <span class="m">1_000_000_009</span>
+    <span class="k">const</span> <span class="n">base</span> <span class="kt">int64</span> <span class="o">=</span> <span class="m">131</span>
+
+    <span class="n">pow1</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="n">pow2</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="n">pre1</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="n">pre2</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="n">pow1</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">pow2</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">v</span> <span class="o">:=</span> <span class="kt">int64</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="sc">'a'</span><span class="p">)</span> <span class="o">+</span> <span class="m">1</span>
+        <span class="n">pow1</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pow1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">base</span> <span class="o">%</span> <span class="n">mod1</span>
+        <span class="n">pow2</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pow2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">base</span> <span class="o">%</span> <span class="n">mod2</span>
+        <span class="n">pre1</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pre1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">base</span> <span class="o">+</span> <span class="n">v</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod1</span>
+        <span class="n">pre2</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pre2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">base</span> <span class="o">+</span> <span class="n">v</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod2</span>
+    <span class="p">}</span>
+
+    <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="n">n</span>
+    <span class="k">for</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="p">{</span>
+        <span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span> <span class="o">+</span> <span class="m">1</span><span class="p">)</span> <span class="o">/</span> <span class="m">2</span>
+        <span class="k">if</span> <span class="n">existsRepeat</span><span class="p">(</span><span class="n">mid</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">pre1</span><span class="p">,</span> <span class="n">pre2</span><span class="p">,</span> <span class="n">pow1</span><span class="p">,</span> <span class="n">pow2</span><span class="p">,</span> <span class="n">mod1</span><span class="p">,</span> <span class="n">mod2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="m">1</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">left</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">existsRepeat</span><span class="p">(</span><span class="n">length</span> <span class="kt">int</span><span class="p">,</span> <span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">pre1</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">pre2</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">pow1</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">pow2</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">mod1</span> <span class="kt">int64</span><span class="p">,</span> <span class="n">mod2</span> <span class="kt">int64</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">length</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="no">true</span>
+    <span class="p">}</span>
+    <span class="n">seen</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">uint64</span><span class="p">]</span><span class="k">struct</span><span class="p">{})</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="o">+</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">h1</span> <span class="o">:=</span> <span class="p">(</span><span class="n">pre1</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">length</span><span class="p">]</span> <span class="o">-</span> <span class="n">pre1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">pow1</span><span class="p">[</span><span class="n">length</span><span class="p">]</span><span class="o">%</span><span class="n">mod1</span> <span class="o">+</span> <span class="n">mod1</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod1</span>
+        <span class="n">h2</span> <span class="o">:=</span> <span class="p">(</span><span class="n">pre2</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">length</span><span class="p">]</span> <span class="o">-</span> <span class="n">pre2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">pow2</span><span class="p">[</span><span class="n">length</span><span class="p">]</span><span class="o">%</span><span class="n">mod2</span> <span class="o">+</span> <span class="n">mod2</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod2</span>
+        <span class="n">key</span> <span class="o">:=</span> <span class="p">(</span><span class="kt">uint64</span><span class="p">(</span><span class="n">h1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="m">32</span><span class="p">)</span> <span class="o">^</span> <span class="kt">uint64</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">seen</span><span class="p">[</span><span class="n">key</span><span class="p">];</span> <span class="n">ok</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="no">true</span>
+        <span class="p">}</span>
+        <span class="n">seen</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="k">struct</span><span class="p">{}{}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="no">false</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n \log n)$，其中 n 为字符串长度。预处理前缀哈希与幂次是一次线性扫描；二分把候选长度压到 $\log n$ 轮，每轮的判定函数枚举不超过 n 个起点、每个起点只做常数次乘法取模和一次哈希表操作。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。四个长度为 n + 1 的长整型数组是固定开销，判定函数里的哈希集合最多同时存放 n 个键，两者都与字符串长度同阶。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>先证明谓词的单调性再谈二分：本题的关键一步是「长度 L 可行则 L - 1 必可行」，只有单调才能二分答案，面试时必须显式说出这个论证而不是直接开二分。</li>
+    <li>把「求最优值」转成「判定可行性」：答案本身难算时，先设计一个便宜的 <code class="language-plaintext highlighter-rouge">exists(x)</code>，再让二分去逼近边界，这个套路适用于一大类最大化或最小化题目。</li>
+    <li>前缀哈希是等长子串比较的标准加速器：预处理出前缀值与幂次后，任意子串的指纹都能 $O(1)$ 取到，把 $O(n)$ 的字符串比较压成常数时间。</li>
+    <li>双模数是对抗构造数据的必要保险：单模数哈希在 2000 个子串的规模下仍有被针对的风险，用两组模数拼成 64 位键几乎可以杜绝碰撞，写的时候记得两套幂次数组要各自对应各自的模数。</li>
+    <li>上取整中点与左闭更新必须成对出现：只要更新方式是 <code class="language-plaintext highlighter-rouge">left = mid</code>，中点就必须写成 <code class="language-plaintext highlighter-rouge">(left + right + 1) / 2</code>，这条配套规则比死记二分模板更可靠。</li>
+    <li>面试视角：先给 $O(n^3)$ 暴力并点明两处瓶颈，再分别用二分和前缀哈希各消掉一处，最后主动说明哈希碰撞的风险与双模数的应对；如果面试官继续追问确定性算法，可以补充后缀数组配合最长公共前缀数组，或者用 <code class="language-plaintext highlighter-rouge">dp[i][j]</code> 表示以 i、j 结尾的最长公共后缀的 $O(n^2)$ 动态规划写法，并说明后者在 n 为 2000 时同样能过。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>中点写成 <code class="language-plaintext highlighter-rouge">(left + right) / 2</code> 却仍用 <code class="language-plaintext highlighter-rouge">left = mid</code> 更新：<code class="language-plaintext highlighter-rouge">s = "aa"</code> 时区间收缩到 <code class="language-plaintext highlighter-rouge">[1, 2]</code> 后 <code class="language-plaintext highlighter-rouge">mid</code> 恒为 1 且可行，<code class="language-plaintext highlighter-rouge">left</code> 反复被赋成 1，循环永不退出。</li>
+    <li>字符映射成 <code class="language-plaintext highlighter-rouge">s.charAt(i) - 'a'</code> 而不加一：<code class="language-plaintext highlighter-rouge">s = "aab"</code> 中 <code class="language-plaintext highlighter-rouge">"a"</code> 和 <code class="language-plaintext highlighter-rouge">"aa"</code> 的哈希都是 0，长度判定被污染，<code class="language-plaintext highlighter-rouge">exists(2)</code> 会因为不同长度的串撞值而给出错误结论。</li>
+    <li>减法后不补 MOD：<code class="language-plaintext highlighter-rouge">s = "banana"</code> 计算中 <code class="language-plaintext highlighter-rouge">pre[i + len] - pre[i] * pow[len] % MOD</code> 极易为负，负的哈希值与正的哈希值永不相等，本该命中的重复被漏掉，答案偏小。</li>
+    <li>忘记先对 <code class="language-plaintext highlighter-rouge">pre[i] * pow[len]</code> 取模再相减：两个接近 $10^9$ 的数相乘约为 $10^{18}$，虽然仍在长整型范围内，但若把两次乘法或多个中间量叠加起来就会溢出，结果完全不可控。</li>
+    <li>只用一套模数：<code class="language-plaintext highlighter-rouge">s</code> 为 2000 个字符的构造串时，单模数在生日悖论下有实打实的碰撞概率，<code class="language-plaintext highlighter-rouge">exists</code> 会误报存在重复，最终答案偏大。</li>
+    <li>拼键时左移位数不足，例如写成 <code class="language-plaintext highlighter-rouge">(h1 &lt;&lt; 20) ^ h2</code>：两个哈希的比特区间重叠，不同的 <code class="language-plaintext highlighter-rouge">(h1, h2)</code> 组合可能拼出同一个键，双模数的保护形同虚设。</li>
+    <li>判定函数忘记处理 <code class="language-plaintext highlighter-rouge">len == 0</code>：二分的下界就是 0，<code class="language-plaintext highlighter-rouge">s = "abc"</code> 时若对长度 0 走进循环，空子串的指纹恒为 0 且起点有 n + 1 个，会立刻误报 true，虽然结论碰巧不影响最终答案，但逻辑上是靠运气。</li>
+    <li>枚举起点时把条件写成 <code class="language-plaintext highlighter-rouge">i + len &lt; n</code>：<code class="language-plaintext highlighter-rouge">s = "aa"</code>、<code class="language-plaintext highlighter-rouge">len = 1</code> 时只枚举到起点 0，漏掉了末尾的那个 <code class="language-plaintext highlighter-rouge">a</code>，返回 0 而正确答案是 1。</li>
+    <li>二分上界设成 <code class="language-plaintext highlighter-rouge">n - 1</code> 后又把返回值写成 <code class="language-plaintext highlighter-rouge">right</code>：在 <code class="language-plaintext highlighter-rouge">s = "aaa"</code> 这类答案接近上界的用例上，两处边界含义不一致会导致答案差 1，返回值应始终与循环不变量约定的那一侧保持一致。</li>
+    <li>判定函数里每轮都重建长度为 n 的数组而不是复用预处理结果：<code class="language-plaintext highlighter-rouge">s</code> 长度 2000 时二分十一轮各重算一遍前缀哈希，常数被放大十倍以上，容易卡在时间上限。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-palindromic-substring/">5. 最长回文子串</a></td>
+      <td>中等</td>
+      <td>同为子串最优长度，但靠中心扩展或 Manacher 而非哈希</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/">28. 找出字符串中第一个匹配项的下标</a></td>
+      <td>简单</td>
+      <td>单模式匹配，滚动哈希与 KMP 两条路线的经典对照</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/repeated-dna-sequences/">187. 重复的DNA序列</a></td>
+      <td>中等</td>
+      <td>长度固定为 10 不需二分，且要输出全部重复串而非长度</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-palindrome/">214. 最短回文串</a></td>
+      <td>困难</td>
+      <td>求最长回文前缀，可用正反哈希对比或 KMP 的失配数组</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/find-the-duplicate-number/">287. 寻找重复数</a></td>
+      <td>中等</td>
+      <td>同样二分答案，判定依据换成小于等于中点的计数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/split-array-largest-sum/">410. 分割数组的最大值</a></td>
+      <td>困难</td>
+      <td>二分答案的判定器是贪心分段，考察上下界的初始化</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/repeated-substring-pattern/">459. 重复的子字符串</a></td>
+      <td>简单</td>
+      <td>判断整串能否由某个子串循环拼成，可用 <code class="language-plaintext highlighter-rouge">s + s</code> 技巧一步判定</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-length-of-repeated-subarray/">718. 最长重复子数组</a></td>
+      <td>中等</td>
+      <td>在两个数组之间找公共段，标准解是二维动态规划</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/koko-eating-bananas/">875. 爱吃香蕉的珂珂</a></td>
+      <td>中等</td>
+      <td>二分答案的入门题，判定器是一次除法求和</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/distinct-subsequences-ii/">940. 不同的子序列 II</a></td>
+      <td>困难</td>
+      <td>统计去重后的子序列个数，靠按末尾字符归并的递推</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-duplicate-substring/">1044. 最长重复子串</a></td>
+      <td>困难</td>
+      <td>同一模型放大到三万量级，对哈希碰撞与常数优化的要求更严苛</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-common-subsequence/">1143. 最长公共子序列</a></td>
+      <td>中等</td>
+      <td>允许不连续，因此无法用子串指纹，只能走动态规划</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/62704507" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 82. 删除排序链表中的重复元素 II</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/34466363" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 107. 二叉树的层序遍历 II</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/45409762">https://hgnulb.github.io/blog/2026/45409762</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1245. 树的直径 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,图,字节跳动,广度优先搜索,微软,拓扑排序,树,树形 DP,深度优先搜索,美团" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1245. 树的直径" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/68665120" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/68665120" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-08-07T19:59:12+08:00" />
+<meta property="article:modified_time" content="2022-08-07T19:59:12+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1245. 树的直径" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-08-07T19:59:12+08:00","datePublished":"2022-08-07T19:59:12+08:00","description":"题目描述","headline":"LeetCode 1245. 树的直径","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/68665120"},"url":"https://hgnulb.github.io/blog/2022/68665120"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法两次广度优先搜索">解法：两次广度优先搜索</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1245. 树的直径">LeetCode 1245. 树的直径</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-08-07 19:59:12"
+                    datetime="2022-08-07T19:59:12+08:00"
+            >
+                2022-08-07
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2299 字 · 英文 231 词 · 代码 74 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2299 字 · 英文 231 词 · 代码 74 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    9 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0416977247/" title="美团">
+        美团
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2805463697/" title="树">
+        树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5789791753/" title="图">
+        图
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1845450306/" title="拓扑排序">
+        拓扑排序
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3684495289/" title="树形 DP">
+        树形 DP
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法两次广度优先搜索">解法：两次广度优先搜索</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/tree-diameter/">1245. 树的直径</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一棵无向树的边列表，求树的直径——任意两个节点之间最长路径所包含的边数。</p>
+
+  <p>输入形式值得注意：给的是无向边而不是父子关系，没有指定根，节点编号从 0 到 n-1，而 n 等于边数加一（这是树的定义决定的：n 个节点恰好 n-1 条边且连通）。所以第一步必然是建无向邻接表，并且不能假设 0 号节点是根。</p>
+
+  <p>「树」这个前提给了两条极强的性质：任意两点之间路径唯一，且图连通无环。路径唯一意味着「最短路」和「唯一路径」是同一回事，因此可以用 BFS 求距离；无环意味着遍历时只要不走回头路就不会重复访问。</p>
+
+  <p>答案统计的是边数而不是节点数，一条经过 k 个节点的路径长度是 k-1，这个细节直接影响返回值。</p>
+
+  <p>边界包括：只有一个节点（edges 为空）时直径是 0；链状树的直径就是 n-1；星形树的直径恒为 2。</p>
+</blockquote>
+
+<h2 id="解法两次广度优先搜索">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%B8%A4%E6%AC%A1%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：两次广度优先搜索</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是从每个节点各跑一次 BFS，取所有最远距离里的最大值，复杂度 $O(n^2)$。它一定正确，但做了大量重复工作——绝大多数起点根本不可能是直径的端点。</p>
+
+  <p>关键结论是：<strong>从树上任意一点出发，BFS 找到的最远节点，一定是某条直径的端点</strong>。因此只需要两次 BFS：第一次从任意节点（比如 0 号）出发定位到一个直径端点 u，第二次从 u 出发，得到的最远距离就是直径。</p>
+
+  <p>为什么第一次找到的最远点必然是端点？设某条直径为 (x, y)，从任意起点 s 出发的最远点为 u。若 u 既不是 x 也不是 y，考察 s 到 u 的路径与直径路径的关系：树上路径唯一，两条路径要么相交于某点 m，要么完全不相交。相交时，因为 <code class="language-plaintext highlighter-rouge">dist(s,u) &gt;= dist(s,x)</code>，可推出 <code class="language-plaintext highlighter-rouge">dist(m,u) &gt;= dist(m,x)</code>，于是把 x 换成 u 得到的路径 (u, y) 长度不小于原直径，说明 u 也是一条直径的端点；不相交的情况在连通树上会导出一条连接两条路径的通道，同样可以推出 <code class="language-plaintext highlighter-rouge">dist(m,u) &gt;= dist(m,x)</code>，结论一致。所以用 u 当第二次的起点是安全的。</p>
+
+  <p>每次 BFS 内部维护的不变量是：<strong>节点第一次被访问时写入的 dist 就是它到起点的距离，且这个距离等于唯一路径上的边数</strong>。在树上这一点尤其干净——不存在第二条路径，所以「第一次访问」和「最短路径」天然重合，visited 数组的作用只是防止沿着无向边走回父节点。</p>
+
+  <p>BFS 返回两个值：最远节点编号和该节点的距离。第一次调用只用编号，第二次调用只用距离。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>由 <code class="language-plaintext highlighter-rouge">n = edges.length + 1</code> 算出节点数。这一步用的正是树的定义，不需要扫描边去找最大编号。</li>
+    <li>建无向邻接表，对每条边 <code class="language-plaintext highlighter-rouge">[u, v]</code> 双向各加一次。漏掉一个方向会让树退化成有向图，从某些起点出发根本走不通。</li>
+    <li>以 0 号节点为起点做第一次 BFS，拿到最远节点 u。起点选谁都行，正是上面那条结论保证的。</li>
+    <li>以 u 为起点做第二次 BFS，返回的最远距离即为直径。</li>
+    <li>BFS 内部：用 visited 标记已访问，起点距离为 0；每弹出一个节点就和当前最远节点比较并更新；扩展邻居时，只对未访问的邻居写距离、打标记并入队。</li>
+    <li>标记必须在入队时立刻打上。树上虽然不会形成环，但无向边会让子节点试图走回父节点，不及时标记就会来回震荡；即便加了「不等于父节点」的判断，入队时标记也是更通用、更不易错的写法。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">edges = [[0,1],[0,2],[0,3],[2,4],[2,5]]</code> 走一遍。节点数 n = 6，邻接表为：0 连 1、2、3；1 连 0；2 连 0、4、5；3 连 0；4 连 2；5 连 2。这棵树的形状是 0 为中心，挂着叶子 1、3 和一个分支 2，2 下面又挂着 4、5。</p>
+
+  <p>第一次 BFS 从 0 出发。dist[0] = 0；弹出 0，扩展得 dist[1] = dist[2] = dist[3] = 1，三者入队；弹出 1，无新邻居（0 已访问），此时 <code class="language-plaintext highlighter-rouge">dist[1] = 1 &gt; dist[0] = 0</code>，farthest 更新为 1；弹出 2，<code class="language-plaintext highlighter-rouge">dist[2] = 1</code> 不大于 <code class="language-plaintext highlighter-rouge">dist[1] = 1</code>，farthest 保持 1，扩展得 dist[4] = dist[5] = 2；弹出 3，距离 1 不更优；弹出 4，<code class="language-plaintext highlighter-rouge">dist[4] = 2 &gt; 1</code>，farthest 更新为 4；弹出 5，距离同为 2 不更新。第一次返回最远节点 4，距离 2。</p>
+
+  <p>第二次 BFS 从 4 出发。dist[4] = 0；弹出 4，扩展得 dist[2] = 1；弹出 2，扩展得 dist[0] = 2、dist[5] = 2；弹出 0，扩展得 dist[1] = 3、dist[3] = 3；弹出 5，距离 2；弹出 1，<code class="language-plaintext highlighter-rouge">dist[1] = 3</code> 成为新的最远；弹出 3，距离同为 3 不更新。最终最远距离是 3。</p>
+
+  <p>返回 3。手工核对：路径 4 → 2 → 0 → 1 经过三条边，确实是这棵树上最长的路径；而如果只做一次从 0 出发的 BFS 并直接返回 2，就会漏掉这条跨越中心的路径——这正是必须做两次 BFS 的原因。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">treeDiameter</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">edges</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">edges</span><span class="o">.</span><span class="na">length</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;[]</span> <span class="n">graph</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">List</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">graph</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">e</span> <span class="o">:</span> <span class="n">edges</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">graph</span><span class="o">[</span><span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">]].</span><span class="na">add</span><span class="o">(</span><span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+            <span class="n">graph</span><span class="o">[</span><span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">]].</span><span class="na">add</span><span class="o">(</span><span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">first</span> <span class="o">=</span> <span class="n">bfs</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">graph</span><span class="o">);</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">second</span> <span class="o">=</span> <span class="n">bfs</span><span class="o">(</span><span class="n">first</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">graph</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">second</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">bfs</span><span class="o">(</span><span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;[]</span> <span class="n">graph</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">start</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">dist</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="kt">boolean</span><span class="o">[]</span> <span class="n">visited</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="n">visited</span><span class="o">[</span><span class="n">start</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+        <span class="kt">int</span> <span class="n">farthest</span> <span class="o">=</span> <span class="n">start</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">queue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">dist</span><span class="o">[</span><span class="n">node</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">dist</span><span class="o">[</span><span class="n">farthest</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">farthest</span> <span class="o">=</span> <span class="n">node</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">next</span> <span class="o">:</span> <span class="n">graph</span><span class="o">[</span><span class="n">node</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">visited</span><span class="o">[</span><span class="n">next</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">visited</span><span class="o">[</span><span class="n">next</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="n">dist</span><span class="o">[</span><span class="n">next</span><span class="o">]</span> <span class="o">=</span> <span class="n">dist</span><span class="o">[</span><span class="n">node</span><span class="o">]</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                    <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">next</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="n">farthest</span><span class="o">,</span> <span class="n">dist</span><span class="o">[</span><span class="n">farthest</span><span class="o">]};</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">treeDiameter</span><span class="p">(</span><span class="n">edges</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span> <span class="o">+</span> <span class="m">1</span>
+    <span class="n">graph</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">edges</span> <span class="p">{</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="n">e</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">e</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+        <span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">],</span> <span class="n">v</span><span class="p">)</span>
+        <span class="n">graph</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">graph</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="n">u</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">start</span><span class="p">,</span> <span class="n">_</span> <span class="o">:=</span> <span class="n">bfsTree</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">graph</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">dist</span> <span class="o">:=</span> <span class="n">bfsTree</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">graph</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dist</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">bfsTree</span><span class="p">(</span><span class="n">start</span> <span class="kt">int</span><span class="p">,</span> <span class="n">graph</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">queue</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+    <span class="n">visited</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">visited</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+    <span class="n">dist</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">farthest</span> <span class="o">:=</span> <span class="n">start</span>
+    <span class="k">for</span> <span class="n">head</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">head</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">);</span> <span class="n">head</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">node</span> <span class="o">:=</span> <span class="n">queue</span><span class="p">[</span><span class="n">head</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">dist</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">farthest</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">farthest</span> <span class="o">=</span> <span class="n">node</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">next</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="o">!</span><span class="n">visited</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="p">{</span>
+                <span class="n">visited</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+                <span class="n">dist</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">+</span> <span class="m">1</span>
+                <span class="n">queue</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">next</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">farthest</span><span class="p">,</span> <span class="n">dist</span><span class="p">[</span><span class="n">farthest</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$，两次 BFS 各自访问每个节点一次、每条边两次，n 个节点 n-1 条边，常数倍的线性扫描。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$，邻接表存 2(n-1) 个方向，dist、visited、队列各占 $O(n)$。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>树的直径有两条主流解法：两次 BFS/DFS，和一次树形 DP（对每个节点求「经过它的最长路径 = 最大子树深度 + 次大子树深度」）。两次 BFS 代码最短，树形 DP 更通用——带负权或需要顺便求路径细节时只能用后者。</li>
+    <li>「从任意点出发的最远点必是直径端点」这条结论必须能证明，面试官几乎必问；证明的抓手是树上路径唯一，把两条路径的交点拿出来做距离比较。</li>
+    <li>无向图用边列表建图时，两个方向都要加；遍历时靠 visited 或「记录父节点」防止走回头路，前者更通用。</li>
+    <li>距离统计的是边数还是节点数，要在写第一行代码前就确定；本题起点距离置 0、每扩展一层加一，返回值天然是边数。</li>
+    <li>面试视角：面试官常追问三处——为什么两次 BFS 就够（给证明）、能不能换成 DFS（可以，但要注意递归深度，链状树上有十万层会栈溢出，BFS 更安全）、如果边有权重会怎样（正权时两次 BFS 换成两次 Dijkstra 或带权 DFS 仍成立，存在负权则该结论失效，必须改用树形 DP）。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>错误写法：建图时只加一个方向 <code class="language-plaintext highlighter-rouge">graph[e[0]].add(e[1])</code> → 用例 <code class="language-plaintext highlighter-rouge">edges = [[1,0]]</code>，从 0 出发根本走不到 1，两次 BFS 都返回 0，正确答案是 1。</li>
+    <li>错误写法：只做一次 BFS 就返回最远距离 → 用例 <code class="language-plaintext highlighter-rouge">edges = [[0,1],[0,2],[0,3],[2,4],[2,5]]</code>，从 0 出发的最远距离是 2，正确答案是 3。</li>
+    <li>错误写法：第二次 BFS 仍从 0 出发而不是从第一次的最远点出发 → 用例同上，返回 2 而不是 3。</li>
+    <li>错误写法：返回第一次 BFS 的距离而不是第二次的 → 用例同上，把 2 当成答案。</li>
+    <li>错误写法：把节点数写成 <code class="language-plaintext highlighter-rouge">edges.length</code> → 用例 <code class="language-plaintext highlighter-rouge">edges = [[0,1]]</code>，数组只开 1 格，访问节点 1 时越界异常。</li>
+    <li>错误写法：出队时才标记 visited → 用例 <code class="language-plaintext highlighter-rouge">edges = [[0,1],[0,2]]</code>，节点 1 和 2 会被 0 入队后，又在各自扩展时把 0 重新入队，队列反复震荡，规模膨胀甚至在大图上超时。</li>
+    <li>错误写法：用「不等于父节点」代替 visited，却在多重边或自环输入上失效 → 本题保证是树可以这样写，但若把同一模板套到含重边的图上，<code class="language-plaintext highlighter-rouge">next != parent</code> 挡不住第二条平行边，会死循环。</li>
+    <li>错误写法：距离数组用「节点数」语义，起点置为 1 → 用例 <code class="language-plaintext highlighter-rouge">edges = [[0,1]]</code>，返回 2，正确答案是边数 1。</li>
+    <li>错误写法：忘记处理 edges 为空的情形而直接访问 <code class="language-plaintext highlighter-rouge">edges[0]</code> → 用例 <code class="language-plaintext highlighter-rouge">edges = []</code>，单节点树直接抛越界异常，正确答案是 0。</li>
+    <li>错误写法：用 DFS 递归实现且不控制深度 → 用例是十万节点的链状树，递归深度等于节点数，Java 默认栈直接 StackOverflowError。</li>
+    <li>错误写法：第二次 BFS 复用第一次的 visited 和 dist 数组而不重置 → 用例 <code class="language-plaintext highlighter-rouge">edges = [[0,1],[1,2]]</code>，所有节点都已被标记为已访问，第二次 BFS 一步也扩展不出去，返回 0，正确答案是 2。</li>
+    <li>错误写法：认为直径必然经过 0 号节点，只在 0 上做「最大深度 + 次大深度」 → 用例 <code class="language-plaintext highlighter-rouge">edges = [[0,1],[1,2],[2,3],[1,4],[4,5]]</code>，0 是叶子只有一个分支，算出 3，正确答案是 3 → 2 → 1 → 4 → 5 共 4 条边；「最大加次大」必须对每个节点都取一遍最大值才成立。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/diameter-of-binary-tree/">543. 二叉树的直径</a></td>
+      <td>简单</td>
+      <td>有根二叉树，用一次后序递归返回深度并在回溯时更新答案</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/binary-tree-maximum-path-sum/">124. 二叉树中的最大路径和</a></td>
+      <td>困难</td>
+      <td>边带权且可为负，回溯时要对负贡献取 0 截断</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-univalue-path/">687. 最长同值路径</a></td>
+      <td>中等</td>
+      <td>路径还需满足节点值相同，向上传递时要判断父子值是否一致</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-zigzag-path-in-a-binary-tree/">1372. 二叉树中的最长交错路径</a></td>
+      <td>中等</td>
+      <td>路径必须左右交替，状态要带上「上一步往哪边走」</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-height-trees/">310. 最小高度树</a></td>
+      <td>中等</td>
+      <td>求的是直径的中点，用拓扑式地逐层剥叶子直到剩一两个节点</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/er-cha-shu-de-shen-du-lcof/">剑指 Offer 55 - I. 二叉树的深度</a></td>
+      <td>简单</td>
+      <td>只需单侧最大深度，是直径类问题的最小组成部件</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/73571125" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1208. 尽可能使字符串相等</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/46372050" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1344. 时钟指针的夹角</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/68665120">https://hgnulb.github.io/blog/2022/68665120</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

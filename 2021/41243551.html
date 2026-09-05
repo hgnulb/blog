@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1166. 设计文件系统 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,哈希表,字典树,字符串,腾讯,设计" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1166. 设计文件系统" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/41243551" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/41243551" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-08-12T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-08-12T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1166. 设计文件系统" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-08-12T00:00:00+08:00","datePublished":"2021-08-12T00:00:00+08:00","description":"题目描述","headline":"LeetCode 1166. 设计文件系统","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/41243551"},"url":"https://hgnulb.github.io/blog/2021/41243551"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希表记录路径">解法：哈希表记录路径</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1166. 设计文件系统">LeetCode 1166. 设计文件系统</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-08-12 00:00:00"
+                    datetime="2021-08-12T00:00:00+08:00"
+            >
+                2021-08-12
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1800 字 · 英文 30 词 · 代码 61 行"
+            aria-label="预计阅读时间约 7 分钟，正文 1800 字 · 英文 30 词 · 代码 61 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 7 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2381712535/" title="腾讯">
+        腾讯
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1523889636/" title="字典树">
+        字典树
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希表记录路径">解法：哈希表记录路径</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/design-file-system/">1166. 设计文件系统</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>设计一个支持两个操作的文件系统：<code class="language-plaintext highlighter-rouge">createPath(path, value)</code> 给一条形如 <code class="language-plaintext highlighter-rouge">/a/b/c</code> 的路径关联一个整数值，成功返回 <code class="language-plaintext highlighter-rouge">true</code>；<code class="language-plaintext highlighter-rouge">get(path)</code> 返回该路径上的值，不存在则返回 -1。</p>
+
+  <p>创建的规则有三条，缺一不可。第一，<strong>路径不能已经存在</strong>——重复创建返回 <code class="language-plaintext highlighter-rouge">false</code>。第二，<strong>父路径必须已经存在</strong>——想创建 <code class="language-plaintext highlighter-rouge">/a/b</code> 就得先有 <code class="language-plaintext highlighter-rouge">/a</code>；这一条把文件系统的树形结构约束了出来，不允许凭空产生「悬空」的深层路径。第三，<strong>根路径 <code class="language-plaintext highlighter-rouge">/</code> 不能被创建</strong>，它天生存在但没有值。</p>
+
+  <p>路径的格式题目已经保证：以 <code class="language-plaintext highlighter-rouge">/</code> 开头、不以 <code class="language-plaintext highlighter-rouge">/</code> 结尾、中间不会有连续的 <code class="language-plaintext highlighter-rouge">//</code>、至少含一个字符的名字。这条保证很关键——它意味着<strong>不需要写任何路径规范化或非法输入的解析代码</strong>，可以放心地把路径当作一个普通字符串来处理。</p>
+
+  <p>再看一个容易被忽略的点：题目从头到尾<strong>没有要求列目录、遍历子节点或删除</strong>。所有操作都是「给定一条完整路径，问它在不在、值是多少」。这个观察决定了数据结构的选择——既然从来不需要沿着树往下走，就没必要真的建一棵树。</p>
+
+  <p>边界：<code class="language-plaintext highlighter-rouge">/a</code> 这种一级路径的父路径是根 <code class="language-plaintext highlighter-rouge">/</code>，截取父路径时会得到空串，必须映射回 <code class="language-plaintext highlighter-rouge">/</code>；<code class="language-plaintext highlighter-rouge">get</code> 一个从未创建过的路径要返回 -1 而不是抛异常；值可以是任意整数，包括负数与 0。</p>
+</blockquote>
+
+<h2 id="解法哈希表记录路径">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%93%88%E5%B8%8C%E8%A1%A8%E8%AE%B0%E5%BD%95%E8%B7%AF%E5%BE%84" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：哈希表记录路径</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>两个接口都按<strong>完整路径</strong>访问，题目没有列目录、前缀查询或删除子树，因此无需真正构造字典树。用哈希表保存 <code class="language-plaintext highlighter-rouge">完整路径 -&gt; 值</code>，键是否存在就代表路径是否已创建。</p>
+
+  <p>核心不变量是：表中只有根 <code class="language-plaintext highlighter-rouge">/</code> 和所有成功创建的路径，而且每个非根键的父路径也在表中。初始预置根；创建时先验证父键存在，再写入新键，所以该不变量可由归纳法保持。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">/a/b/c</code> 的父路径是最后一个 <code class="language-plaintext highlighter-rouge">/</code> 之前的 <code class="language-plaintext highlighter-rouge">"/a/b"</code>。一级路径 <code class="language-plaintext highlighter-rouge">/a</code> 截取得到空串，把它映射为根 <code class="language-plaintext highlighter-rouge">/</code>，之后所有层级都走同一套父存在性判断。</p>
+
+  <p>重复创建必须用 <code class="language-plaintext highlighter-rouge">containsKey</code> 判断，不能用返回值是否为 <code class="language-plaintext highlighter-rouge">-1</code> 代替存在性判断；写入只能发生在查重和父校验全部通过之后。<code class="language-plaintext highlighter-rouge">get</code> 则按接口约定在缺失时返回 <code class="language-plaintext highlighter-rouge">-1</code>。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>构造函数放哨兵</strong>：<code class="language-plaintext highlighter-rouge">values.put("/", -1)</code>。根只表示“存在”，占位值不会参与业务判断。</li>
+    <li>
+<strong>先查重</strong>：<code class="language-plaintext highlighter-rouge">if (values.containsKey(path)) return false;</code>。根已经在表中，所以 <code class="language-plaintext highlighter-rouge">createPath("/", ...)</code> 也会自然失败。题目保证路径格式合法，不额外编写规范化或空值分支。</li>
+    <li>
+<strong>截取父路径</strong>：<code class="language-plaintext highlighter-rouge">idx = path.lastIndexOf('/')</code>，<code class="language-plaintext highlighter-rouge">parent = path.substring(0, idx)</code>。用<strong>最后一个</strong> <code class="language-plaintext highlighter-rouge">/</code> 而不是第一个：<code class="language-plaintext highlighter-rouge">/a/b/c</code> 的父是 <code class="language-plaintext highlighter-rouge">/a/b</code>，取第一个 <code class="language-plaintext highlighter-rouge">/</code> 会得到空串。因为题目保证路径不以 <code class="language-plaintext highlighter-rouge">/</code> 结尾，<code class="language-plaintext highlighter-rouge">lastIndexOf</code> 找到的一定是分隔父与子的那个斜杠。</li>
+    <li>
+<strong>把空父路径映射回根</strong>：<code class="language-plaintext highlighter-rouge">if (parent.isEmpty()) parent = "/";</code>。这一步对应 <code class="language-plaintext highlighter-rouge">/a</code> 这类一级路径——<code class="language-plaintext highlighter-rouge">lastIndexOf('/')</code> 返回 0，截取 <code class="language-plaintext highlighter-rouge">[0, 0)</code> 得到空串，而它真正的父是根。漏掉这行会让所有一级路径都创建失败，进而整个测试全线崩溃。</li>
+    <li>
+<strong>校验父存在</strong>：<code class="language-plaintext highlighter-rouge">if (!values.containsKey(parent)) return false;</code>。这是树形结构的唯一守卫。</li>
+    <li>
+<strong>写入并返回 <code class="language-plaintext highlighter-rouge">true</code></strong>：<code class="language-plaintext highlighter-rouge">values.put(path, value)</code>。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">get</code> 直接查表</strong>：<code class="language-plaintext highlighter-rouge">values.getOrDefault(path, -1)</code>。</li>
+  </ul>
+
+  <p>以一组操作走一遍：</p>
+
+  <p>初始表为 <code class="language-plaintext highlighter-rouge">{ "/": -1 }</code>。创建 <code class="language-plaintext highlighter-rouge">/leet</code> 时父路径映射为 <code class="language-plaintext highlighter-rouge">/</code>，成功；再创建 <code class="language-plaintext highlighter-rouge">/leet/code</code> 时父路径 <code class="language-plaintext highlighter-rouge">/leet</code> 已存在，也成功。直接创建 <code class="language-plaintext highlighter-rouge">/c/d</code> 时父路径 <code class="language-plaintext highlighter-rouge">/c</code> 缺失，返回 <code class="language-plaintext highlighter-rouge">false</code> 且表不变。重复创建 <code class="language-plaintext highlighter-rouge">/leet</code> 同样返回 <code class="language-plaintext highlighter-rouge">false</code>，原值仍为 1。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">FileSystem</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">values</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">FileSystem</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// 根作为哨兵预置，让一级路径的父检查自然命中。</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">values</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">values</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"/"</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">createPath</span><span class="o">(</span><span class="nc">String</span> <span class="n">path</span><span class="o">,</span> <span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">values</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">path</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 父路径是最后一个 '/' 之前的部分；一级路径截出空串，映射回根。</span>
+        <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="na">lastIndexOf</span><span class="o">(</span><span class="sc">'/'</span><span class="o">);</span>
+        <span class="nc">String</span> <span class="n">parent</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">idx</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">parent</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="s">"/"</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(!</span><span class="n">values</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">parent</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="n">values</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">get</span><span class="o">(</span><span class="nc">String</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">values</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="s">"strings"</span>
+
+<span class="k">type</span> <span class="n">FileSystem</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">values</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">FileSystem</span> <span class="p">{</span>
+	<span class="c">// 根作为哨兵预置，让一级路径的父检查自然命中。</span>
+	<span class="k">return</span> <span class="n">FileSystem</span><span class="p">{</span>
+		<span class="n">values</span><span class="o">:</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="s">"/"</span><span class="o">:</span> <span class="o">-</span><span class="m">1</span><span class="p">},</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">fs</span> <span class="o">*</span><span class="n">FileSystem</span><span class="p">)</span> <span class="n">CreatePath</span><span class="p">(</span><span class="n">path</span> <span class="kt">string</span><span class="p">,</span> <span class="n">value</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">fs</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">path</span><span class="p">];</span> <span class="n">ok</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">false</span>
+	<span class="p">}</span>
+
+	<span class="c">// 父路径是最后一个 '/' 之前的部分；一级路径截出空串，映射回根。</span>
+	<span class="n">idx</span> <span class="o">:=</span> <span class="n">strings</span><span class="o">.</span><span class="n">LastIndex</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">"/"</span><span class="p">)</span>
+	<span class="n">parent</span> <span class="o">:=</span> <span class="n">path</span><span class="p">[</span><span class="o">:</span><span class="n">idx</span><span class="p">]</span>
+	<span class="k">if</span> <span class="n">parent</span> <span class="o">==</span> <span class="s">""</span> <span class="p">{</span>
+		<span class="n">parent</span> <span class="o">=</span> <span class="s">"/"</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">fs</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">parent</span><span class="p">];</span> <span class="o">!</span><span class="n">ok</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">false</span>
+	<span class="p">}</span>
+
+	<span class="n">fs</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+	<span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">fs</span> <span class="o">*</span><span class="n">FileSystem</span><span class="p">)</span> <span class="n">Get</span><span class="p">(</span><span class="n">path</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">v</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">fs</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">path</span><span class="p">];</span> <span class="n">ok</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">v</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：<code class="language-plaintext highlighter-rouge">createPath</code> 与 <code class="language-plaintext highlighter-rouge">get</code> 的平均时间都是 $O(L)$，$L$ 为传入路径长度；完整字符串键的哈希、父路径截取都至多线性。哈希表发生极端冲突时不承诺该平均界。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(\sum \lvert path\rvert)$，即所有已创建路径字符串的总长度；哈希表不共享公共前缀。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>设计题的第一步是<strong>读清访问模式</strong>：本题只有「整条路径的存在性与取值」两种查询，从不列目录、不遍历子项，所以扁平哈希表就够了，不必真的建树。需求决定结构，这是设计题最核心的判断。</li>
+    <li>树形约束不必用指针维护：只要每次插入都强制校验父键存在，键集合就归纳地保持为一棵合法的树。把不变量说出来，比画出树形图更能说服面试官。</li>
+    <li>父路径靠 <code class="language-plaintext highlighter-rouge">lastIndexOf('/')</code> 截取，父子关系天然编码在字符串里，无需额外结构。</li>
+    <li>预置根哨兵后，一级路径也走统一的“父路径必须存在”判断；<code class="language-plaintext highlighter-rouge">createPath("/")</code> 则由查重自然拒绝。</li>
+    <li>校验必须全部通过后才写入，任何「先写后判」的写法都会破坏结构不变量并污染后续操作。</li>
+    <li>面试视角：应主动说明取舍——当前只有完整路径操作，哈希表最直接；若增加列目录、前缀搜索或递归删除，再改为字典树节点结构。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：漏掉 <code class="language-plaintext highlighter-rouge">parent.isEmpty()</code> 到 <code class="language-plaintext highlighter-rouge">"/"</code> 的映射。用例 <code class="language-plaintext highlighter-rouge">createPath("/leet", 1)</code>：父被截成空串，表中没有空串键，返回 <code class="language-plaintext highlighter-rouge">false</code>，此后所有一级路径都建不出来，整套用例全线失败。</li>
+    <li>
+<strong>错误写法</strong>：用 <code class="language-plaintext highlighter-rouge">indexOf('/')</code> 而不是 <code class="language-plaintext highlighter-rouge">lastIndexOf('/')</code> 截父路径。用例 <code class="language-plaintext highlighter-rouge">createPath("/leet/code", 2)</code>：父被算成空串（第一个 <code class="language-plaintext highlighter-rouge">/</code> 在下标 0），映射到根后校验通过，于是绕过了「必须先有 <code class="language-plaintext highlighter-rouge">/leet</code>」的规则，<code class="language-plaintext highlighter-rouge">createPath("/a/b/c")</code> 在 <code class="language-plaintext highlighter-rouge">/a</code> 不存在时也会成功。</li>
+    <li>
+<strong>错误写法</strong>：先 <code class="language-plaintext highlighter-rouge">values.put(path, value)</code> 再做父存在性校验。用例 <code class="language-plaintext highlighter-rouge">createPath("/c/d", 1)</code>（<code class="language-plaintext highlighter-rouge">/c</code> 不存在）：虽然返回了 <code class="language-plaintext highlighter-rouge">false</code>，但 <code class="language-plaintext highlighter-rouge">/c/d</code> 已被写进表里，随后 <code class="language-plaintext highlighter-rouge">get("/c/d")</code> 返回 1、<code class="language-plaintext highlighter-rouge">createPath("/c/d/e", 2)</code> 也会成功，结构彻底失效。</li>
+    <li>
+<strong>错误写法</strong>：查重时用 <code class="language-plaintext highlighter-rouge">get(path) != -1</code> 判断是否已存在。用例 <code class="language-plaintext highlighter-rouge">createPath("/a", -1)</code> 后再 <code class="language-plaintext highlighter-rouge">createPath("/a", 5)</code>：第一次存的值恰好是 -1，查重误判为不存在，值被覆盖成 5，第二次还错误地返回 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+    <li>
+<strong>错误写法</strong>：不预置根或重复创建时覆盖旧值。前者使 <code class="language-plaintext highlighter-rouge">createPath("/a", 1)</code> 失败，后者使第二次 <code class="language-plaintext highlighter-rouge">createPath("/a", 2)</code> 错误成功；根哨兵和先查重分别守住这两个边界。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">get</code> 未命中返回 0。<code class="language-plaintext highlighter-rouge">get("/missing")</code> 必须返回 -1，否则会与值确实为 0 的已创建路径混淆。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-in-memory-file-system/">588. 设计内存文件系统</a></td>
+      <td>困难</td>
+      <td>需要 <code class="language-plaintext highlighter-rouge">ls</code> 列目录并区分文件与目录，此时必须真的建树，哈希表不再够用</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/implement-trie-prefix-tree/">208. 实现 Trie (前缀树)</a></td>
+      <td>中等</td>
+      <td>需要前缀查询，展示字典树相对扁平哈希表不可替代的能力</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-add-and-search-words-data-structure/">211. 添加与搜索单词 - 数据结构设计</a></td>
+      <td>中等</td>
+      <td>支持通配符匹配，必须在字典树上做 DFS，键级哈希彻底失效</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/map-sum-pairs/">677. 键值映射</a></td>
+      <td>中等</td>
+      <td>同为「键到值」的映射，但要按前缀求和，考察前缀聚合的维护方式</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/search-suggestions-system/">1268. 搜索推荐系统</a></td>
+      <td>中等</td>
+      <td>前缀检索 + 取字典序最小的若干项，字典树与排序数组两种方案的取舍</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lru-cache/">146. LRU 缓存</a></td>
+      <td>中等</td>
+      <td>另一类设计题，考察「按访问模式选结构」的同一种判断力</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2021/53597550" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 842. 将数组拆分成斐波那契序列</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/36698285" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1003. 检查替换后的词是否有效</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/41243551">https://hgnulb.github.io/blog/2021/41243551</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

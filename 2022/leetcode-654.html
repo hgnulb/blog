@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 654. 最大二叉树 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,Cartesian Tree,二叉树,分治,华为,单调栈,数组,构造树,栈,树,美团" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 654. 最大二叉树" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/leetcode-654" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/leetcode-654" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-04-08T15:23:37+08:00" />
+<meta property="article:modified_time" content="2022-04-08T15:23:37+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 654. 最大二叉树" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-04-08T15:23:37+08:00","datePublished":"2022-04-08T15:23:37+08:00","description":"题目描述","headline":"LeetCode 654. 最大二叉树","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/leetcode-654"},"url":"https://hgnulb.github.io/blog/2022/leetcode-654"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法单调递减栈一次构建">解法：单调递减栈一次构建</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 654. 最大二叉树">LeetCode 654. 最大二叉树</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-04-08 15:23:37"
+                    datetime="2022-04-08T15:23:37+08:00"
+            >
+                2022-04-08
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3738 字 · 英文 142 词 · 代码 39 行"
+            aria-label="预计阅读时间约 11 分钟，正文 3738 字 · 英文 142 词 · 代码 39 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 11 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    10 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0416977247/" title="美团">
+        美团
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0106759788/" title="华为">
+        华为
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2805463697/" title="树">
+        树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3241866243/" title="二叉树">
+        二叉树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5147323714/" title="分治">
+        分治
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2085989135/" title="单调栈">
+        单调栈
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0031983836/" title="Cartesian Tree">
+        Cartesian Tree
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0987899558/" title="构造树">
+        构造树
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法单调递减栈一次构建">解法：单调递减栈一次构建</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/maximum-binary-tree/">654. 最大二叉树</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个元素互不相同的整数数组 <code class="language-plaintext highlighter-rouge">nums</code>，按如下规则递归地构造一棵树：整个数组的最大值作为根；最大值左边的子数组按同样规则构造成左子树；右边的子数组构造成右子树；空数组对应空节点。返回根节点。</p>
+
+  <p>要什么：一棵具体的树，不是某个数值。所以答案的正确性体现在每条父子边上，必须逐条说清楚每个节点的父亲是谁、挂在左边还是右边。</p>
+
+  <p>题面的构造规则本身就是一个递归定义，直接照抄成代码就能得到一个可行解。所以真正的问题不是「能不能做」，而是「能做到多快」。规则里那句「区间最大值作为根」是全部代价的来源——朴素做法每次都要线性扫描区间求最大值。</p>
+
+  <p>约束透露的信号：数组长度在千级，元素互不相同且非负。互不相同这一条非常关键，它保证了每个区间的最大值唯一，构造出的树也唯一，比较大小时不必纠结相等的情形。数据规模虽然不大（$O(n^2)$ 也能过），但这道题被反复考的原因恰恰在于它有一个漂亮的 $O(n)$ 单调栈解法，面试时被问到就是冲着这个来的。</p>
+
+  <p>换个视角看这棵树的结构，能得到一条决定性的观察：对任意元素 <code class="language-plaintext highlighter-rouge">nums[i]</code>，它的父亲一定是「它左边第一个比它大的元素」与「它右边第一个比它大的元素」中<strong>较小的那一个</strong>；若两侧都不存在更大元素，它就是全局最大值即根。这句话把树形结构和「下一个更大元素」这个经典单调栈问题直接挂上了钩。</p>
+
+  <p>边界：数组长度至少为 1，所以结果不会是空树；元素互不相同，无需处理相等；数组本身可能是严格递增或严格递减的，此时树退化成一条只有右孩子或只有左孩子的链，递归解法在这种输入下栈深会达到 $n$。</p>
+</blockquote>
+
+<h2 id="解法单调递减栈一次构建">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%8D%95%E8%B0%83%E9%80%92%E5%87%8F%E6%A0%88%E4%B8%80%E6%AC%A1%E6%9E%84%E5%BB%BA" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：单调递减栈一次构建</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先看照着题面直译的分治写法：<code class="language-plaintext highlighter-rouge">build(lo, hi)</code> 先线性扫描 <code class="language-plaintext highlighter-rouge">[lo, hi]</code> 找到最大值下标 <code class="language-plaintext highlighter-rouge">m</code>，建节点，然后递归 <code class="language-plaintext highlighter-rouge">build(lo, m-1)</code> 与 <code class="language-plaintext highlighter-rouge">build(m+1, hi)</code>。每层扫描的总长度是 $O(n)$，树高在随机数据下是 $O(\log n)$，但输入严格递增时树退化成链，层数达到 $n$，总时间变成 $O(n^2)$，递归也有栈溢出风险。瓶颈很清楚：<strong>同一段区间的元素被反复扫描比大小，而这些比较结果本可以只算一次</strong>。</p>
+
+  <p>顺着上面「父亲是两侧第一个更大元素中较小者」的观察往下推，还能得到更细的结论：若父亲取自左边第一个更大元素 <code class="language-plaintext highlighter-rouge">L</code>，那么当前节点是 <code class="language-plaintext highlighter-rouge">L</code> 的右孩子（它在 <code class="language-plaintext highlighter-rouge">L</code> 右边）；若取自右边第一个更大元素 <code class="language-plaintext highlighter-rouge">R</code>，那么当前节点是 <code class="language-plaintext highlighter-rouge">R</code> 的左孩子。这意味着只要能一次扫描求出每个元素左右两侧第一个更大的元素，树就完全确定了——而这正是单调栈的看家本领。</p>
+
+  <p>于是采用从左到右的一次扫描，维护一个<strong>从栈底到栈顶严格递减</strong>的单调栈，栈中存放的是已经建好的节点。核心不变量是：</p>
+
+  <p><strong>任意时刻，栈从底到顶的节点值严格递减；栈中相邻的两个节点已经确定了「上一个是下一个的父亲、下一个挂在上一个的右孩子上」这条边；栈底节点是「已扫描前缀的最大值」，也就是已建部分的根；栈中每个节点的左子树都已经最终确定，而右子树还可能被后续更大的元素改写。</strong></p>
+
+  <p>处理新元素 <code class="language-plaintext highlighter-rouge">v</code> 时分两步。第一步，把栈顶所有比 <code class="language-plaintext highlighter-rouge">v</code> 小的节点弹出——它们比 <code class="language-plaintext highlighter-rouge">v</code> 小且在 <code class="language-plaintext highlighter-rouge">v</code> 左边，<code class="language-plaintext highlighter-rouge">v</code> 会成为包含它们的那个区间的更大值，从而把它们全部收进自己的左子树；由于被弹出的节点从栈底到栈顶递减，最后一个被弹出的（也就是弹出序列中值最大的那个）恰好是这棵左子树的根，所以 <code class="language-plaintext highlighter-rouge">cur.left</code> 直接取「最后一次弹出的节点」。第二步，弹完之后若栈非空，栈顶就是 <code class="language-plaintext highlighter-rouge">v</code> 左边第一个比它大的元素，此时把 <code class="language-plaintext highlighter-rouge">cur</code> 挂成栈顶的右孩子。最后把 <code class="language-plaintext highlighter-rouge">cur</code> 压栈，不变量重新成立。</p>
+
+  <p>注意第二步会覆盖栈顶之前的右孩子指针，这是正确的而不是 bug：栈顶节点的右子树在扫描过程中会被不断「加高」，旧的右孩子已经在第一步里被 <code class="language-plaintext highlighter-rouge">cur</code> 收进左子树，两次赋值语义上是连贯的。</p>
+
+  <p>扫描结束后，栈中剩下一条严格递减的链，栈底即全局最大值，就是整棵树的根。用 <code class="language-plaintext highlighter-rouge">ArrayDeque</code> 配合 <code class="language-plaintext highlighter-rouge">push</code>（等价于 <code class="language-plaintext highlighter-rouge">addFirst</code>）时，栈底位于队列的<strong>尾部</strong>，所以取根要用 <code class="language-plaintext highlighter-rouge">peekLast()</code>。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>准备一个空的 <code class="language-plaintext highlighter-rouge">ArrayDeque&lt;TreeNode&gt;</code> 作为单调栈，从左到右遍历 <code class="language-plaintext highlighter-rouge">nums</code>，为每个值新建节点 <code class="language-plaintext highlighter-rouge">cur</code></strong>。为什么栈里存节点而不是下标或值：后续要直接改 <code class="language-plaintext highlighter-rouge">left</code> / <code class="language-plaintext highlighter-rouge">right</code> 指针，存节点省去了下标到节点的二次映射。</li>
+    <li>
+<strong>准备局部变量 <code class="language-plaintext highlighter-rouge">left = null</code>，然后 <code class="language-plaintext highlighter-rouge">while (栈非空 &amp;&amp; 栈顶值 &lt; v)</code> 不断弹栈并把弹出的节点赋给 <code class="language-plaintext highlighter-rouge">left</code></strong>。为什么最后一次弹出的就是左子树的根：栈从底到顶严格递减，被弹出的这一批也满足递减，越晚弹出的越靠近栈底、值越大；这一批元素连同它们各自的子树构成了 <code class="language-plaintext highlighter-rouge">v</code> 左侧那段全部小于 <code class="language-plaintext highlighter-rouge">v</code> 的区间，区间最大值正是最后弹出的那个。</li>
+    <li>
+<strong>令 <code class="language-plaintext highlighter-rouge">cur.left = left</code></strong>。为什么可以一次性赋值而不需要逐个拼接：被弹出的节点之间的父子关系在它们入栈时就已经通过「挂成栈顶的右孩子」建立好了，弹出时那棵子树已经是完整的，只差认一个父亲。</li>
+    <li>
+<strong>弹栈结束后若栈非空，执行 <code class="language-plaintext highlighter-rouge">栈顶.right = cur</code></strong>。为什么是右孩子：栈顶是 <code class="language-plaintext highlighter-rouge">v</code> 左边第一个比它大的元素，<code class="language-plaintext highlighter-rouge">v</code> 在它右边，按构造规则必须落在它的右子树里。为什么此处的覆盖是安全的：栈顶原来的右孩子必然小于 <code class="language-plaintext highlighter-rouge">v</code>（否则它不会在上一步被弹出，或者它还在栈里且比 <code class="language-plaintext highlighter-rouge">v</code> 大就轮不到栈顶做父亲），它已经被收进了 <code class="language-plaintext highlighter-rouge">cur.left</code>。</li>
+    <li>
+<strong>把 <code class="language-plaintext highlighter-rouge">cur</code> 压栈</strong>。为什么压栈后不变量仍然成立：所有比 <code class="language-plaintext highlighter-rouge">v</code> 小的栈顶元素都已被弹走，剩余栈顶必然大于 <code class="language-plaintext highlighter-rouge">v</code>，严格递减性得以维持。</li>
+    <li>
+<strong>遍历结束后返回栈底节点，即 <code class="language-plaintext highlighter-rouge">stack.peekLast()</code></strong>。为什么是 <code class="language-plaintext highlighter-rouge">peekLast</code> 而不是 <code class="language-plaintext highlighter-rouge">peek</code>：<code class="language-plaintext highlighter-rouge">ArrayDeque.push</code> 是从头部插入，栈顶在头部、栈底在尾部；栈底是整个数组的最大值，也就是根。这里用 <code class="language-plaintext highlighter-rouge">peek()</code> 会拿到最后一个入栈的节点，在严格递减的输入（如 <code class="language-plaintext highlighter-rouge">[3,2,1]</code>）下会返回最小的那个元素，结果完全错误。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">具体用例 nums = [3,2,1,6,0,5]</code> 走一遍。用「栈底 → 栈顶」的顺序描述栈内容。</p>
+
+  <p><strong>v = 3</strong>：新建节点 3。栈空，不弹栈，<code class="language-plaintext highlighter-rouge">left = null</code>，<code class="language-plaintext highlighter-rouge">3.left = null</code>。栈空，不设父亲。压栈，栈 = <code class="language-plaintext highlighter-rouge">[3]</code>。<br>
+<strong>v = 2</strong>：栈顶 3 不小于 2，不弹栈，<code class="language-plaintext highlighter-rouge">2.left = null</code>。栈非空，栈顶 3 是 2 左边第一个更大元素，执行 <code class="language-plaintext highlighter-rouge">3.right = 2</code>。压栈，栈 = <code class="language-plaintext highlighter-rouge">[3, 2]</code>。<br>
+<strong>v = 1</strong>：栈顶 2 不小于 1，不弹栈，<code class="language-plaintext highlighter-rouge">1.left = null</code>。<code class="language-plaintext highlighter-rouge">2.right = 1</code>。压栈，栈 = <code class="language-plaintext highlighter-rouge">[3, 2, 1]</code>。此时已建好的部分是 <code class="language-plaintext highlighter-rouge">3 → 右 2 → 右 1</code> 这条右链，恰好对应前缀 <code class="language-plaintext highlighter-rouge">[3,2,1]</code> 的正确答案。<br>
+<strong>v = 6</strong>：栈顶 1 &lt; 6，弹出，<code class="language-plaintext highlighter-rouge">left = 1</code>；新栈顶 2 &lt; 6，弹出，<code class="language-plaintext highlighter-rouge">left = 2</code>；新栈顶 3 &lt; 6，弹出，<code class="language-plaintext highlighter-rouge">left = 3</code>。栈空，弹栈结束。<code class="language-plaintext highlighter-rouge">6.left = 3</code>——注意这里挂的是最后弹出的 3，而 3 已经带着 <code class="language-plaintext highlighter-rouge">3.right = 2</code>、<code class="language-plaintext highlighter-rouge">2.right = 1</code> 这棵完整子树，一次赋值就把整段 <code class="language-plaintext highlighter-rouge">[3,2,1]</code> 收编了。栈为空，6 没有父亲。压栈，栈 = <code class="language-plaintext highlighter-rouge">[6]</code>。<br>
+<strong>v = 0</strong>：栈顶 6 不小于 0，不弹栈，<code class="language-plaintext highlighter-rouge">0.left = null</code>。<code class="language-plaintext highlighter-rouge">6.right = 0</code>。压栈，栈 = <code class="language-plaintext highlighter-rouge">[6, 0]</code>。<br>
+<strong>v = 5</strong>：栈顶 0 &lt; 5，弹出，<code class="language-plaintext highlighter-rouge">left = 0</code>；新栈顶 6 不小于 5，停止。<code class="language-plaintext highlighter-rouge">5.left = 0</code>。栈非空，<code class="language-plaintext highlighter-rouge">6.right = 5</code>——这一步覆盖了刚才的 <code class="language-plaintext highlighter-rouge">6.right = 0</code>，正是「旧的右孩子被新元素收进左子树」的体现，而 0 并没有丢失，它此刻挂在 <code class="language-plaintext highlighter-rouge">5.left</code> 上。压栈，栈 = <code class="language-plaintext highlighter-rouge">[6, 5]</code>。</p>
+
+  <p>遍历结束，栈 = <code class="language-plaintext highlighter-rouge">[6, 5]</code>，栈底是 6，返回 6。最终树形：根 6，左子树是 <code class="language-plaintext highlighter-rouge">3 →(右) 2 →(右) 1</code>，右子树是 <code class="language-plaintext highlighter-rouge">5 →(左) 0</code>。与题面规则逐层核对：<code class="language-plaintext highlighter-rouge">[3,2,1,6,0,5]</code> 最大值 6，左段 <code class="language-plaintext highlighter-rouge">[3,2,1]</code> 最大值 3、其右段 <code class="language-plaintext highlighter-rouge">[2,1]</code> 最大值 2、再右段 <code class="language-plaintext highlighter-rouge">[1]</code> 最大值 1；右段 <code class="language-plaintext highlighter-rouge">[0,5]</code> 最大值 5、其左段 <code class="language-plaintext highlighter-rouge">[0]</code> 最大值 0。完全一致。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// 线性单调栈能用一次扫描保持“候选父子关系”，避免每次在区间里重新找最大值。</span>
+    <span class="kd">public</span> <span class="nc">TreeNode</span> <span class="nf">constructMaximumBinaryTree</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">ArrayDeque</span><span class="o">&lt;</span><span class="nc">TreeNode</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">TreeNode</span> <span class="n">cur</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TreeNode</span><span class="o">(</span><span class="n">v</span><span class="o">);</span>
+            <span class="nc">TreeNode</span> <span class="n">left</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">().</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="n">cur</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">left</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">().</span><span class="na">right</span> <span class="o">=</span> <span class="n">cur</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">cur</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="c1">// push 从头部入栈，栈底在尾部；栈底即全局最大值，也就是树根。</span>
+        <span class="k">return</span> <span class="n">stack</span><span class="o">.</span><span class="na">peekLast</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">constructMaximumBinaryTree</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">TreeNode</span> <span class="p">{</span>
+    <span class="c">// 线性单调栈能用一次扫描保持“候选父子关系”，避免每次在区间里重新找最大值。</span>
+    <span class="n">stack</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="n">TreeNode</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+        <span class="n">cur</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">TreeNode</span><span class="p">{</span><span class="n">Val</span><span class="o">:</span> <span class="n">v</span><span class="p">}</span>
+        <span class="k">var</span> <span class="n">left</span> <span class="o">*</span><span class="n">TreeNode</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">.</span><span class="n">Val</span> <span class="o">&lt;</span> <span class="n">v</span> <span class="p">{</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">Left</span> <span class="o">=</span> <span class="n">left</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">.</span><span class="n">Right</span> <span class="o">=</span> <span class="n">cur</span>
+        <span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">cur</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c">// 切片头部是栈底，存放的正是全局最大值。</span>
+    <span class="k">return</span> <span class="n">stack</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。凭什么：外层每个元素只被处理一次；内层的 <code class="language-plaintext highlighter-rouge">while</code> 虽然可能一次弹出多个节点，但每个节点在整个过程中最多入栈一次、出栈一次，弹栈总次数不超过 $n$，两层循环合起来是均摊 $O(n)$ 而非 $O(n^2)$。相比之下，直译题面的分治解法在严格递增输入下会退化到 $O(n^2)$。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。凭什么：单调栈在严格递减的输入（如 <code class="language-plaintext highlighter-rouge">[5,4,3,2,1]</code>）下会同时容纳全部 $n$ 个节点；此外要为 $n$ 个节点分配对象，这部分是输出本身的必需开销。好处是全程没有递归，不存在栈溢出风险。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>把「构造规则」翻译成「每个元素的父亲是谁」，是从分治跳到线性的关键一步</strong>。原规则是自顶向下的，难以线性化；改写成「父亲 = 左右两侧第一个更大元素中较小的那个」之后，问题立刻变成两个经典的单调栈子问题。</li>
+    <li>
+<strong>单调栈的本质是维护「尚未被更大元素终结的候选集合」</strong>。栈中元素严格递减，等价于说它们各自的右子树还开放、还可能接纳新节点；一个元素被弹出，就意味着它的右子树封版、同时它整体沉入某个更大元素的左子树。</li>
+    <li>
+<strong>一次赋值收编整棵子树，靠的是弹出顺序的单调性</strong>。因为被弹出的一批元素之间的父子边早已建好，只需把最后弹出的那个（值最大的）认作子树根即可，无需在循环里做任何拼接。</li>
+    <li>
+<strong>「覆盖旧指针」在增量构造类的单调栈里是常态而非错误</strong>，前提是被覆盖的那个旧值已经在同一轮中被安置到了别处。写这类代码时要能说清「旧的右孩子去哪了」，说不清就说明逻辑有洞。</li>
+    <li>
+<strong>容器 API 的方向必须和心智模型对齐</strong>。<code class="language-plaintext highlighter-rouge">ArrayDeque.push</code> 从头部入栈，因此栈顶用 <code class="language-plaintext highlighter-rouge">peek()</code>、栈底用 <code class="language-plaintext highlighter-rouge">peekLast()</code>；用 Go 切片模拟时则相反，栈顶是 <code class="language-plaintext highlighter-rouge">stack[len-1]</code>、栈底是 <code class="language-plaintext highlighter-rouge">stack[0]</code>。取根时方向搞反，在严格递减的输入下会静默返回最小元素。</li>
+    <li>
+<strong>面试视角</strong>：面试官问这题，$O(n^2)$ 的分治只能算及格。标准答法是先用一分钟说清分治解法和它在递增输入下退化到 $O(n^2)$ 的原因，然后给出「父亲是两侧第一个更大元素中较小者」的观察，再写单调栈。写完后主动补一句「这棵树其实就是笛卡尔树，同一套单调栈还能解 <a href="https://leetcode.cn/problems/largest-rectangle-in-histogram/">84. 柱状图中最大的矩形</a>」，能明显拉开区分度。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：最后返回 <code class="language-plaintext highlighter-rouge">stack.peek()</code>（拿栈顶当根）</strong> → 用例 <code class="language-plaintext highlighter-rouge">nums = [3,2,1]</code>，全程无弹栈，栈从底到顶是 <code class="language-plaintext highlighter-rouge">3, 2, 1</code>，<code class="language-plaintext highlighter-rouge">peek()</code> 返回节点 1，得到的「树」只有一个孤立节点 1，而正确的根是 3。</li>
+    <li>
+<strong>错误写法：最后写成 <code class="language-plaintext highlighter-rouge">while (!stack.isEmpty()) root = stack.removeLast();</code> 再返回 <code class="language-plaintext highlighter-rouge">root</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">nums = [3,2,1]</code>，循环依次移除尾部的 3、2，最后一次移除的是头部的 1，<code class="language-plaintext highlighter-rouge">root</code> 停在 1 上，同样返回错误的根。想取栈底就该只取一次尾部元素，反复弹到空反而拿到了栈顶。</li>
+    <li>
+<strong>错误写法：弹栈条件写成 <code class="language-plaintext highlighter-rouge">stack.peek().val &lt;= v</code></strong> → 本题元素互不相同，用例上看不出差别，但把这个习惯带到允许重复值的变形题时，相等元素会被错误弹出，导致同一个值被重复收编、父子关系错乱。弹栈条件的严格与否必须与题目对相等的定义一致。</li>
+    <li>
+<strong>错误写法：在弹栈的 <code class="language-plaintext highlighter-rouge">while</code> 里写 <code class="language-plaintext highlighter-rouge">cur.left = stack.pop()</code>（每次都覆盖）</strong> → 用例 <code class="language-plaintext highlighter-rouge">nums = [3,2,1,6]</code>，弹出顺序是 1、2、3，最终 <code class="language-plaintext highlighter-rouge">6.left</code> 停在 3 上，结果碰巧正确；但若写成 <code class="language-plaintext highlighter-rouge">if (cur.left == null) cur.left = stack.pop();</code>，<code class="language-plaintext highlighter-rouge">6.left</code> 会停在<strong>第一个</strong>弹出的 1 上，节点 3 和 2 整段丢失。必须取最后一次弹出的节点。</li>
+    <li>
+<strong>错误写法：先执行 <code class="language-plaintext highlighter-rouge">stack.peek().right = cur</code> 再做弹栈</strong> → 用例 <code class="language-plaintext highlighter-rouge">nums = [3,2,1,6]</code>，处理 6 时会先把 6 挂到栈顶 1 的右边，然后又把 1 弹出收进 <code class="language-plaintext highlighter-rouge">6.left</code>，于是 <code class="language-plaintext highlighter-rouge">1.right</code> 指回 6、<code class="language-plaintext highlighter-rouge">6.left</code> 指向 1，形成父子互指的环，遍历时死循环。顺序必须是先弹栈、再认父亲。</li>
+    <li>
+<strong>错误写法：弹栈后忘记 <code class="language-plaintext highlighter-rouge">cur.left = left</code>，只在栈非空时挂右孩子</strong> → 用例 <code class="language-plaintext highlighter-rouge">nums = [3,2,1,6,0,5]</code>，节点 6 的左子树 <code class="language-plaintext highlighter-rouge">[3,2,1]</code> 整段丢失，最终树只剩 <code class="language-plaintext highlighter-rouge">6 →(右) 5 →(左) 0</code>，节点数从 6 个变成 3 个。</li>
+    <li>
+<strong>错误写法：Go 中返回 <code class="language-plaintext highlighter-rouge">stack[len(stack)-1]</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">nums = [3,2,1]</code>，切片是 <code class="language-plaintext highlighter-rouge">[3,2,1]</code>，返回末尾的节点 1；Go 切片模拟栈时头部才是栈底，取根要用 <code class="language-plaintext highlighter-rouge">stack[0]</code>。</li>
+    <li>
+<strong>错误写法：直译题面写成递归分治，每层用 <code class="language-plaintext highlighter-rouge">for</code> 扫描区间求最大值</strong> → 用例 <code class="language-plaintext highlighter-rouge">nums = [1,2,3,...,1000]</code> 严格递增时，树退化成一条长 1000 的右链，每层扫描长度依次是 1000、999、…，总比较次数约 $5 \times 10^5$，本题数据下能过，但递归深度也达到 1000；同样的写法搬到 $n = 10^5$ 的变形题上会同时超时和栈溢出。</li>
+    <li>
+<strong>错误写法：以为「栈顶的右孩子被覆盖」是 bug，于是加上 <code class="language-plaintext highlighter-rouge">if (stack.peek().right == null)</code> 的保护</strong> → 用例 <code class="language-plaintext highlighter-rouge">nums = [6,0,5]</code>，处理 5 时 <code class="language-plaintext highlighter-rouge">6.right</code> 已是 0，保护条件不成立于是不挂，节点 5 及其左子树 0 全部游离在树外，返回的树只有 6 和 0 两个节点。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/largest-rectangle-in-histogram/">84. 柱状图中最大的矩形</a></td>
+      <td>困难</td>
+      <td>同样用单调栈求两侧第一个更小元素，但要在弹栈的瞬间结算面积而不是连边</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/daily-temperatures/">739. 每日温度</a></td>
+      <td>中等</td>
+      <td>单调栈的最小形态，只求右侧第一个更大元素的距离，栈里存下标而非节点</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/next-greater-element-i/">496. 下一个更大元素 I</a></td>
+      <td>简单</td>
+      <td>在单调栈之外多一层哈希映射，把子数组的查询转接到主数组的预处理结果上</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/next-greater-element-ii/">503. 下一个更大元素 II</a></td>
+      <td>中等</td>
+      <td>数组首尾相接，靠遍历两遍下标取模来模拟环形，考的是边界的处理方式</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/trapping-rain-water/">42. 接雨水</a></td>
+      <td>困难</td>
+      <td>单调递减栈按横向层结算积水，弹栈时需要同时用到左右两个边界而非单侧</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/remove-duplicate-letters/">316. 去除重复字母</a></td>
+      <td>中等</td>
+      <td>单调栈维护字典序，弹栈条件里额外附加「后面还有没有这个字符」的可行性判断</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/">105. 从前序与中序遍历序列构造二叉树</a></td>
+      <td>中等</td>
+      <td>同为递归建树，但根由前序给出、左右划分靠中序定位，可用哈希把定位降到 $O(1)$</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/">108. 将有序数组转换为二叉搜索树</a></td>
+      <td>简单</td>
+      <td>划分点由「取中点」直接给定而非依赖数据，因此天然平衡，不存在退化成链的风险</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/47681401" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 656. 成本最小路径</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/21981661" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 436. 寻找右区间</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/leetcode-654">https://hgnulb.github.io/blog/2022/leetcode-654</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

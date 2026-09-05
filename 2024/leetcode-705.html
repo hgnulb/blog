@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 705. 设计哈希集合 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,哈希函数,哈希表,字节跳动,拼多多,数组,美团,设计,链表" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 705. 设计哈希集合" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2024/leetcode-705" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2024/leetcode-705" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-11-03T18:27:47+08:00" />
+<meta property="article:modified_time" content="2024-11-03T18:27:47+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 705. 设计哈希集合" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2024-11-03T18:27:47+08:00","datePublished":"2024-11-03T18:27:47+08:00","description":"题目描述","headline":"LeetCode 705. 设计哈希集合","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2024/leetcode-705"},"url":"https://hgnulb.github.io/blog/2024/leetcode-705"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法固定域布尔数组">解法：固定域布尔数组</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 705. 设计哈希集合">LeetCode 705. 设计哈希集合</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2024-11-03 18:27:47"
+                    datetime="2024-11-03T18:27:47+08:00"
+            >
+                2024-11-03
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3254 字 · 英文 172 词 · 代码 33 行"
+            aria-label="预计阅读时间约 10 分钟，正文 3254 字 · 英文 172 词 · 代码 33 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 10 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    8 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4923693516/" title="简单">
+        简单
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0416977247/" title="美团">
+        美团
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7041841112/" title="拼多多">
+        拼多多
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6005735281/" title="链表">
+        链表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5321850966/" title="哈希函数">
+        哈希函数
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法固定域布尔数组">解法：固定域布尔数组</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/design-hashset/">705. 设计哈希集合</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>不借助任何内建的哈希表库，自己实现一个只装非负整数的集合，支持三个操作：<code class="language-plaintext highlighter-rouge">add(key)</code> 插入（已存在则无效果）、<code class="language-plaintext highlighter-rouge">remove(key)</code> 删除（不存在则无效果）、<code class="language-plaintext highlighter-rouge">contains(key)</code> 查询是否存在。</p>
+
+  <p>要什么：一个满足集合语义的数据结构。集合语义的核心是<strong>幂等</strong>——重复 <code class="language-plaintext highlighter-rouge">add</code> 同一个 key 不应产生第二份，重复 <code class="language-plaintext highlighter-rouge">remove</code> 不应报错。这一点决定了内部表示必须是「每个 key 对应一个唯一的存在位」，而不是可追加的列表。</p>
+
+  <p>约束透露的信号极其关键：<code class="language-plaintext highlighter-rouge">0 &lt;= key &lt;= 10^6</code>，调用次数最多 $10^4$。键的<strong>值域有限且很小</strong>，这是整道题最重要的一句话。值域封闭意味着我们可以为每一个可能的键预留一个专属位置，从而把「哈希」这个动作退化成「直接用键当下标」——恒等映射本身就是一个完美哈希，零冲突。$10^6 + 1$ 个 <code class="language-plaintext highlighter-rouge">boolean</code> 在 Java 中占约 1 MB，完全在内存限制之内。</p>
+
+  <p>反过来说，如果题目把值域放开到整个 <code class="language-plaintext highlighter-rouge">int</code> 范围甚至任意对象，直接寻址就不可行了，那时才必须回到真正的哈希设计：取模分桶 + 冲突处理 + 负载因子扩容。识别出「值域是否封闭」，就是识别出该走哪条路。</p>
+
+  <p>边界：<code class="language-plaintext highlighter-rouge">key = 0</code> 和 <code class="language-plaintext highlighter-rouge">key = 10^6</code> 都是合法输入，数组长度必须开到 $10^6 + 1$ 而不是 $10^6$；对不存在的 key 调用 <code class="language-plaintext highlighter-rouge">remove</code> 必须静默成功而不是抛异常；<code class="language-plaintext highlighter-rouge">contains</code> 在从未 <code class="language-plaintext highlighter-rouge">add</code> 过的 key 上必须返回 <code class="language-plaintext highlighter-rouge">false</code>，这要求数组初值全为 <code class="language-plaintext highlighter-rouge">false</code>（Java 与 Go 的数组/切片默认零值恰好满足）。</p>
+</blockquote>
+
+<h2 id="解法固定域布尔数组">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%BA%E5%AE%9A%E5%9F%9F%E5%B8%83%E5%B0%94%E6%95%B0%E7%BB%84" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：固定域布尔数组</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先看一个显然可行但很差的做法：用一个动态数组存所有已插入的键，<code class="language-plaintext highlighter-rouge">contains</code> 线性扫描、<code class="language-plaintext highlighter-rouge">add</code> 先扫描去重再追加、<code class="language-plaintext highlighter-rouge">remove</code> 扫描后删除。三个操作都是 $O(S)$（$S$ 为当前元素个数），$10^4$ 次调用下最坏约 $10^8$ 次比较，而且 <code class="language-plaintext highlighter-rouge">remove</code> 还要处理元素搬移。瓶颈很清楚：<strong>每次操作都在「查找 key 在哪」上花线性时间</strong>。</p>
+
+  <p>真正的哈希表用「哈希函数把 key 映射到桶下标」来把查找压到均摊 $O(1)$，代价是要处理两个 key 撞进同一个桶的冲突。但冲突本身是「值域比桶数大得多」被迫压缩的产物。本题的值域只有 $10^6 + 1$ 个取值，而我们完全开得起 $10^6 + 1$ 个桶——于是可以选择最朴素的哈希函数：</p>
+
+\[h(key) = key\]
+
+  <p>这个恒等映射是<strong>单射</strong>，不同的 key 永远落在不同的下标上，冲突率恒为 0。冲突处理、负载因子、扩容重哈希这三大块复杂度直接消失。这种技巧叫<strong>直接寻址表（direct-address table）</strong>，它是哈希表在「值域可枚举」这一特例下的退化形态。</p>
+
+  <p>于是内部表示定为一个长度 $10^6 + 1$ 的布尔数组 <code class="language-plaintext highlighter-rouge">data</code>，不变量是：</p>
+
+  <p><strong>对任意 $0 \le key \le 10^6$，<code class="language-plaintext highlighter-rouge">data[key] == true</code> 当且仅当 <code class="language-plaintext highlighter-rouge">key</code> 当前在集合中。</strong></p>
+
+  <p>三个操作在这个不变量下都退化成一行：<code class="language-plaintext highlighter-rouge">add</code> 是把对应位置为 <code class="language-plaintext highlighter-rouge">true</code>，<code class="language-plaintext highlighter-rouge">remove</code> 是置为 <code class="language-plaintext highlighter-rouge">false</code>，<code class="language-plaintext highlighter-rouge">contains</code> 是直接读取。集合的幂等性也是白送的——把一个已经是 <code class="language-plaintext highlighter-rouge">true</code> 的位置再置 <code class="language-plaintext highlighter-rouge">true</code>，值不变；对已经是 <code class="language-plaintext highlighter-rouge">false</code> 的位置再置 <code class="language-plaintext highlighter-rouge">false</code>，同样不变。这正是「用布尔位而非计数器/列表」的好处：赋值天然幂等，而 <code class="language-plaintext highlighter-rouge">count++</code> 或 <code class="language-plaintext highlighter-rouge">list.add</code> 都不是。</p>
+
+  <p>唯一的代价是空间：无论集合里实际只有 1 个元素还是 $10^4$ 个元素，都固定占用 $10^6 + 1$ 字节。这是一次明确的<strong>空间换时间且换简洁</strong>的交易，在值域已知且不大时非常划算。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>构造函数中分配长度为 <code class="language-plaintext highlighter-rouge">1_000_001</code> 的布尔数组</strong>。为什么是 <code class="language-plaintext highlighter-rouge">1_000_001</code> 而不是 <code class="language-plaintext highlighter-rouge">1_000_000</code>：题面的键范围是闭区间 $[0, 10^6]$，两端都取得到，共 $10^6 + 1$ 个合法值；开成 $10^6$ 会在 <code class="language-plaintext highlighter-rouge">key = 10^6</code> 时越界。为什么可以在构造时一次性分配：调用次数有限而值域固定，预分配避免了运行期任何扩容判断，也让三个操作彻底无分支。</li>
+    <li>
+<strong>数组不需要显式初始化</strong>。为什么：Java 的 <code class="language-plaintext highlighter-rouge">new boolean[n]</code> 保证全部元素为 <code class="language-plaintext highlighter-rouge">false</code>，Go 的 <code class="language-plaintext highlighter-rouge">make([]bool, n)</code> 同样是零值 <code class="language-plaintext highlighter-rouge">false</code>，而 <code class="language-plaintext highlighter-rouge">false</code> 恰好就是「不在集合中」的正确初始语义。若把存在性用 <code class="language-plaintext highlighter-rouge">int</code> 的 0/1 表示也可以，但布尔更贴合语义且省内存。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">add(key)</code> 执行 <code class="language-plaintext highlighter-rouge">data[key] = true</code></strong>。为什么不先判断是否已存在：赋值是幂等的，重复插入不会破坏不变量；多一次判断只会增加分支预测失败的机会，没有任何收益。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">remove(key)</code> 执行 <code class="language-plaintext highlighter-rouge">data[key] = false</code></strong>。为什么删除不存在的 key 也安全：同样是幂等赋值，把 <code class="language-plaintext highlighter-rouge">false</code> 写成 <code class="language-plaintext highlighter-rouge">false</code> 不改变任何状态，天然满足「不存在则无效果」的要求，不需要任何特判或异常。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">contains(key)</code> 直接返回 <code class="language-plaintext highlighter-rouge">data[key]</code></strong>。为什么不需要边界检查：题面已保证 <code class="language-plaintext highlighter-rouge">key</code> 落在合法范围内，数组长度覆盖了整个范围；如果是工程代码而非竞赛代码，这里应当补上范围校验。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">data</code> 声明为 <code class="language-plaintext highlighter-rouge">final</code>（Java）</strong>。为什么：数组引用在对象生命周期内不再改变，标记 <code class="language-plaintext highlighter-rouge">final</code> 既表达了「这个表不会被替换或扩容」的设计意图，也让 JIT 可以更激进地优化字段访问。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">具体用例</code> 走一遍完整的调用序列：</p>
+
+  <div class="language-plaintext highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>MyHashSet(); add(1); add(2); contains(1); contains(3); add(2); contains(2); remove(2); contains(2);
+</code></pre></div>  </div>
+
+  <p><strong><code class="language-plaintext highlighter-rouge">MyHashSet()</code></strong>：分配 <code class="language-plaintext highlighter-rouge">data</code>，长度 $10^6 + 1$，全部为 <code class="language-plaintext highlighter-rouge">false</code>。此时集合为空，不变量成立（所有位置都是 <code class="language-plaintext highlighter-rouge">false</code>，集合里确实没有任何元素）。<br>
+<strong><code class="language-plaintext highlighter-rouge">add(1)</code></strong>：<code class="language-plaintext highlighter-rouge">data[1] = true</code>。集合内容 <code class="language-plaintext highlighter-rouge">{1}</code>。<br>
+<strong><code class="language-plaintext highlighter-rouge">add(2)</code></strong>：<code class="language-plaintext highlighter-rouge">data[2] = true</code>。集合内容 <code class="language-plaintext highlighter-rouge">{1, 2}</code>。<br>
+<strong><code class="language-plaintext highlighter-rouge">contains(1)</code></strong>：读 <code class="language-plaintext highlighter-rouge">data[1]</code>，得 <code class="language-plaintext highlighter-rouge">true</code>，返回 <code class="language-plaintext highlighter-rouge">true</code>。正确。<br>
+<strong><code class="language-plaintext highlighter-rouge">contains(3)</code></strong>：读 <code class="language-plaintext highlighter-rouge">data[3]</code>，从未被写过，仍是初始的 <code class="language-plaintext highlighter-rouge">false</code>，返回 <code class="language-plaintext highlighter-rouge">false</code>。正确——这里体现了「零值即默认语义」的价值，不需要任何「是否被初始化过」的额外判断。<br>
+<strong><code class="language-plaintext highlighter-rouge">add(2)</code></strong>：<code class="language-plaintext highlighter-rouge">data[2]</code> 本已是 <code class="language-plaintext highlighter-rouge">true</code>，再赋 <code class="language-plaintext highlighter-rouge">true</code> 值不变。集合仍是 <code class="language-plaintext highlighter-rouge">{1, 2}</code> 而不是 <code class="language-plaintext highlighter-rouge">{1, 2, 2}</code>。这一步验证了集合的幂等性——如果内部改用「计数器 +1」或「链表追加」，这里就会错误地产生第二份 2。<br>
+<strong><code class="language-plaintext highlighter-rouge">contains(2)</code></strong>：返回 <code class="language-plaintext highlighter-rouge">true</code>。正确。<br>
+<strong><code class="language-plaintext highlighter-rouge">remove(2)</code></strong>：<code class="language-plaintext highlighter-rouge">data[2] = false</code>。集合内容 <code class="language-plaintext highlighter-rouge">{1}</code>。<br>
+<strong><code class="language-plaintext highlighter-rouge">contains(2)</code></strong>：读 <code class="language-plaintext highlighter-rouge">data[2]</code>，得 <code class="language-plaintext highlighter-rouge">false</code>，返回 <code class="language-plaintext highlighter-rouge">false</code>。正确。</p>
+
+  <p>再补一个边界调用 <strong><code class="language-plaintext highlighter-rouge">remove(999999)</code></strong>：该位置从未被写过、本就是 <code class="language-plaintext highlighter-rouge">false</code>，赋 <code class="language-plaintext highlighter-rouge">false</code> 后依然是 <code class="language-plaintext highlighter-rouge">false</code>，函数正常返回，没有异常，集合内容不变。这验证了「删除不存在的元素必须静默成功」。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">MyHashSet</span> <span class="o">{</span>
+    <span class="c1">// 这类题不是考察散列冲突方案，而是考察“在固定值域里如何用最少复杂度实现常量操作”。</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">boolean</span><span class="o">[]</span> <span class="n">data</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">MyHashSet</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="mi">1_000_001</span><span class="o">];</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">data</span><span class="o">[</span><span class="n">key</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">data</span><span class="o">[</span><span class="n">key</span><span class="o">]</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">contains</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">data</span><span class="o">[</span><span class="n">key</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">MyHashSet</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="c">// 这类题不是考察散列冲突方案，而是考察“在固定值域里如何用最少复杂度实现常量操作”。</span>
+    <span class="n">data</span> <span class="p">[]</span><span class="kt">bool</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">ConstructorMyHashSet</span><span class="p">()</span> <span class="n">MyHashSet</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">MyHashSet</span><span class="p">{</span><span class="n">data</span><span class="o">:</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="m">1_000_001</span><span class="p">)}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">MyHashSet</span><span class="p">)</span> <span class="n">Add</span><span class="p">(</span><span class="n">key</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">MyHashSet</span><span class="p">)</span> <span class="n">Remove</span><span class="p">(</span><span class="n">key</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="no">false</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">MyHashSet</span><span class="p">)</span> <span class="n">Contains</span><span class="p">(</span><span class="n">key</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：三个操作均为最坏 $O(1)$。凭什么：恒等哈希是单射，不存在冲突，因此没有任何探测循环或链表遍历；每个操作只是一次数组下标读或写，是真正的<strong>最坏情况</strong>常数而非均摊常数——这一点强于工业级哈希表，后者在扩容重哈希那一次调用上是 $O(n)$。构造函数是 $O(V)$，$V = 10^6 + 1$ 为值域大小。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(V)$，即 $10^6 + 1$ 个布尔值，Java 中约 1 MB。凭什么不是 $O(1)$ 也不是 $O(n)$：占用量既与实际元素个数 $n$ 无关（存 1 个和存 $10^4$ 个一样大），也不是常数（它随题目给定的值域上界线性增长）。这正是直接寻址表的本质代价：<strong>用与值域成正比的空间，换取零冲突的常数时间</strong>。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>先看值域，再选结构</strong>。「键的取值范围有限且不大」是直接寻址表的准入条件；一旦满足，哈希函数取恒等映射即可，冲突处理、负载因子、扩容三大块复杂度全部消失。这个判断在位图去重、计数排序、桶排序、字符频次统计里反复出现，是同一条原则的不同外衣。</li>
+    <li>
+<strong>幂等的表示天然给出幂等的操作</strong>。用布尔位表达「在/不在」，<code class="language-plaintext highlighter-rouge">add</code> 与 <code class="language-plaintext highlighter-rouge">remove</code> 都是赋值，重复调用零副作用；若改用计数器或链表追加，就必须额外写去重逻辑。设计数据结构时，让不变量把边界情况吃掉，比事后打补丁可靠得多。</li>
+    <li>
+<strong>让语言的零值承担默认语义</strong>。<code class="language-plaintext highlighter-rouge">false</code> 恰好等于「不在集合中」，于是构造函数一行不写也能保证初始状态正确；反之若用 <code class="language-plaintext highlighter-rouge">-1</code> 表示空、<code class="language-plaintext highlighter-rouge">0</code> 表示某个合法状态，就必须显式填充整个数组。选表示法时优先让零值有意义。</li>
+    <li>
+<strong>空间换时间是一次要说清代价的交易</strong>。这里固定花 1 MB，无论集合里有几个元素。当值域扩大到 $10^9$ 或键是任意对象时，这笔交易立刻不成立，必须换方案。</li>
+    <li>
+<strong>同样的思路可以再压缩 8 倍</strong>：用 <code class="language-plaintext highlighter-rouge">long[] bits = new long[(1_000_001 &gt;&gt; 6) + 1]</code>，把每个键映射到 <code class="language-plaintext highlighter-rouge">bits[key &gt;&gt; 6]</code> 的第 <code class="language-plaintext highlighter-rouge">key &amp; 63</code> 位，<code class="language-plaintext highlighter-rouge">add</code> 是 <code class="language-plaintext highlighter-rouge">|= 1L &lt;&lt; (key &amp; 63)</code>，<code class="language-plaintext highlighter-rouge">remove</code> 是 <code class="language-plaintext highlighter-rouge">&amp;= ~(1L &lt;&lt; (key &amp; 63))</code>，<code class="language-plaintext highlighter-rouge">contains</code> 是 <code class="language-plaintext highlighter-rouge">(bits[key &gt;&gt; 6] &gt;&gt;&gt; (key &amp; 63) &amp; 1) == 1</code>。空间从 1 MB 降到 128 KB，时间仍是 $O(1)$。这就是位图（bitset），面试中主动提出往往是加分项。</li>
+    <li>
+<strong>面试视角</strong>：这道题挂着「设计」标签，面试官很可能不满足于直接寻址表，会追问「如果 key 是任意 32 位整数，或者内存只有 64 KB 呢」。标准答案是回到真正的哈希设计：开一个质数大小（如 769）的桶数组，<code class="language-plaintext highlighter-rouge">hash(key) = key % 769</code>，每个桶挂一条链表（或用 <code class="language-plaintext highlighter-rouge">ArrayList</code>），<code class="language-plaintext highlighter-rouge">add</code> 先在桶内查重再头插，<code class="language-plaintext highlighter-rouge">remove</code> 在桶内删除，<code class="language-plaintext highlighter-rouge">contains</code> 在桶内线性查找；元素数超过 <code class="language-plaintext highlighter-rouge">桶数 × 负载因子</code> 时扩容并重哈希。回答时要能说清「链地址法 vs 开放寻址法」的取舍、「桶数取质数是为了让低位分布更均匀」、以及「均摊 $O(1)$ 与最坏 $O(n)$ 的区别」。把直接寻址表当作「值域封闭时的特例优化」讲出来，而不是当作唯一解法，才是这题该有的答法。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">data = new boolean[1_000_000]</code>（少开一格）</strong> → 用例 <code class="language-plaintext highlighter-rouge">add(1000000)</code>，题面允许 <code class="language-plaintext highlighter-rouge">key</code> 取到 $10^6$，此时下标等于数组长度，直接抛 <code class="language-plaintext highlighter-rouge">ArrayIndexOutOfBoundsException</code>。闭区间 $[0, N]$ 需要 $N + 1$ 个格子。</li>
+    <li>
+<strong>错误写法：在 <code class="language-plaintext highlighter-rouge">add</code> 里写 <code class="language-plaintext highlighter-rouge">if (!data[key]) data[key] = true;</code></strong> → 逻辑正确但毫无收益，多出的分支在 $10^4$ 次调用里纯属浪费；更糟的是这种写法容易被顺手改成 <code class="language-plaintext highlighter-rouge">count++</code> 之类的副作用，破坏幂等性。</li>
+    <li>
+<strong>错误写法：用 <code class="language-plaintext highlighter-rouge">int[] count</code> 记录出现次数，<code class="language-plaintext highlighter-rouge">add</code> 时 <code class="language-plaintext highlighter-rouge">count[key]++</code>、<code class="language-plaintext highlighter-rouge">remove</code> 时 <code class="language-plaintext highlighter-rouge">count[key]--</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">add(1); add(1); remove(1); contains(1)</code>，计数从 0 加到 2 再减到 1，<code class="language-plaintext highlighter-rouge">contains</code> 返回 <code class="language-plaintext highlighter-rouge">true</code>；集合语义下正确答案是 <code class="language-plaintext highlighter-rouge">false</code>，因为集合里 1 只应存在一份。</li>
+    <li>
+<strong>错误写法：用 <code class="language-plaintext highlighter-rouge">ArrayList&lt;Integer&gt;</code> 存元素，<code class="language-plaintext highlighter-rouge">add</code> 直接 <code class="language-plaintext highlighter-rouge">list.add(key)</code> 不查重</strong> → 用例 <code class="language-plaintext highlighter-rouge">add(1); add(1); remove(1); contains(1)</code>，列表里有两个 1，删掉一个还剩一个，返回 <code class="language-plaintext highlighter-rouge">true</code>，错误；同时三个操作都退化成 $O(S)$。</li>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">remove</code> 里先判断存在性，不存在就抛异常或返回错误</strong> → 用例 <code class="language-plaintext highlighter-rouge">remove(5)</code> 在空集合上调用，题面要求静默无效果，抛异常会直接判错。删除操作在集合语义下必须容忍不存在的键。</li>
+    <li>
+<strong>错误写法：把数组声明成静态字段 <code class="language-plaintext highlighter-rouge">private static boolean[] data</code></strong> → 用例是判题程序连续构造两个 <code class="language-plaintext highlighter-rouge">MyHashSet</code> 实例时，第二个实例会继承第一个实例残留的所有元素，<code class="language-plaintext highlighter-rouge">contains</code> 返回莫名其妙的 <code class="language-plaintext highlighter-rouge">true</code>。实例状态必须是实例字段。</li>
+    <li>
+<strong>错误写法：为了省内存改用 <code class="language-plaintext highlighter-rouge">HashSet&lt;Integer&gt;</code> 或 <code class="language-plaintext highlighter-rouge">Set</code> 接口的内建实现</strong> → 逻辑上能过，但题面明确要求「不使用任何内建的哈希库」，这是直接绕开考点，面试中等同于没答。</li>
+    <li>
+<strong>错误写法：改用取模分桶 <code class="language-plaintext highlighter-rouge">int idx = key % 1000</code> 却把桶里存成单个 <code class="language-plaintext highlighter-rouge">int</code> 而非链表</strong> → 用例 <code class="language-plaintext highlighter-rouge">add(1); add(1001); contains(1)</code>，两个键都映射到桶 1，后者覆盖前者，<code class="language-plaintext highlighter-rouge">contains(1)</code> 返回 <code class="language-plaintext highlighter-rouge">false</code>。一旦哈希函数不是单射，就必须配套冲突处理。</li>
+    <li>
+<strong>错误写法：改用位图但把移位量写成 <code class="language-plaintext highlighter-rouge">1 &lt;&lt; (key &amp; 63)</code>（用 <code class="language-plaintext highlighter-rouge">int</code> 字面量 1）</strong> → 用例 <code class="language-plaintext highlighter-rouge">add(64)</code>，<code class="language-plaintext highlighter-rouge">key &amp; 63 = 0</code> 尚且正常，但 <code class="language-plaintext highlighter-rouge">add(127)</code> 时 <code class="language-plaintext highlighter-rouge">key &amp; 63 = 63</code>，<code class="language-plaintext highlighter-rouge">1 &lt;&lt; 63</code> 在 <code class="language-plaintext highlighter-rouge">int</code> 下按 <code class="language-plaintext highlighter-rouge">63 % 32 = 31</code> 处理，得到 <code class="language-plaintext highlighter-rouge">Integer.MIN_VALUE</code> 再符号扩展成 <code class="language-plaintext highlighter-rouge">long</code>，把整个高 32 位全部置 1，污染了 32 个不相关的键。移位必须写成 <code class="language-plaintext highlighter-rouge">1L &lt;&lt; ...</code>。</li>
+    <li>
+<strong>错误写法：Go 中把接收者写成值类型 <code class="language-plaintext highlighter-rouge">func (this MyHashSet) Add(key int)</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">add(1); contains(1)</code>，虽然切片底层数组是共享的所以本题侥幸能过，但一旦结构体里增加了 <code class="language-plaintext highlighter-rouge">size</code> 之类的标量字段，对它的修改就会作用在副本上而丢失。设计类题目的所有方法应统一用指针接收者。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-hashmap/">706. 设计哈希映射</a></td>
+      <td>简单</td>
+      <td>从「存在性」升级到「键值对」，直接寻址表要存值且需要一个哨兵表示「无此键」</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/contains-duplicate/">217. 存在重复元素</a></td>
+      <td>简单</td>
+      <td>集合的最直接应用，元素值域不受限，只能用真正的哈希集合或先排序</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/intersection-of-two-arrays/">349. 两个数组的交集</a></td>
+      <td>简单</td>
+      <td>用集合做去重与求交，考的是把「查存在性」这个 $O(1)$ 能力用在双数组上</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/insert-delete-getrandom-o1/">380. O(1) 时间插入、删除和获取随机元素</a></td>
+      <td>中等</td>
+      <td>集合外还要支持等概率随机取，必须「数组 + 哈希表」双向索引并用尾部交换做删除</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lru-cache/">146. LRU 缓存</a></td>
+      <td>中等</td>
+      <td>哈希表提供 $O(1)$ 定位，双向链表维护访问顺序，考的是两种结构的组合</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/implement-trie-prefix-tree/">208. 实现 Trie (前缀树)</a></td>
+      <td>中等</td>
+      <td>同样是「值域有限（26 个字母）所以直接用下标」，但按字符逐层展开成树</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-skiplist/">1206. 设计跳表</a></td>
+      <td>困难</td>
+      <td>键值域无限且要求有序，只能靠随机化的多层链表做到期望 $O(\log n)$</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-circular-queue/">622. 设计循环队列</a></td>
+      <td>中等</td>
+      <td>同为定长数组的设计题，难点在用取模复用空间以及区分「队满」与「队空」</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/min-stack/">155. 最小栈</a></td>
+      <td>中等</td>
+      <td>设计题的另一类范式：靠辅助栈把「查询极值」也压到 $O(1)$</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2024/37412023" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 222. 完全二叉树的节点个数</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2024/74255171" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1135. 最低成本连通所有城市</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2024/leetcode-705">https://hgnulb.github.io/blog/2024/leetcode-705</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

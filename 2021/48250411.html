@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 588. 设计内存文件系统 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,哈希表,字典树,字符串,排序,腾讯,设计" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 588. 设计内存文件系统" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/48250411" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/48250411" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-03-12T15:07:44+08:00" />
+<meta property="article:modified_time" content="2021-03-12T15:07:44+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 588. 设计内存文件系统" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-03-12T15:07:44+08:00","datePublished":"2021-03-12T15:07:44+08:00","description":"题目描述","headline":"LeetCode 588. 设计内存文件系统","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/48250411"},"url":"https://hgnulb.github.io/blog/2021/48250411"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法trie-模拟文件系统">解法：Trie 模拟文件系统</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 588. 设计内存文件系统">LeetCode 588. 设计内存文件系统</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-03-12 15:07:44"
+                    datetime="2021-03-12T15:07:44+08:00"
+            >
+                2021-03-12
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3527 字 · 英文 66 词 · 代码 116 行"
+            aria-label="预计阅读时间约 13 分钟，正文 3527 字 · 英文 66 词 · 代码 116 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 13 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2381712535/" title="腾讯">
+        腾讯
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3320177889/" title="排序">
+        排序
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1523889636/" title="字典树">
+        字典树
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法trie-模拟文件系统">解法：Trie 模拟文件系统</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/design-in-memory-file-system/">588. 设计内存文件系统</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>设计一个内存文件系统，支持四个接口：<code class="language-plaintext highlighter-rouge">ls(path)</code> 列出路径下的内容、<code class="language-plaintext highlighter-rouge">mkdir(path)</code> 创建目录（含中间缺失的各级目录）、<code class="language-plaintext highlighter-rouge">addContentToFile(filePath, content)</code> 向文件<strong>追加</strong>内容（文件不存在则创建）、<code class="language-plaintext highlighter-rouge">readContentFromFile(filePath)</code> 读取文件全部内容。所有路径都以 <code class="language-plaintext highlighter-rouge">/</code> 开头，且题目保证输入合法。</p>
+
+  <p>先看数据形态。路径 <code class="language-plaintext highlighter-rouge">/a/b/c</code> 天然是一串用 <code class="language-plaintext highlighter-rouge">/</code> 分隔的名字，而且<strong>不同路径共享前缀</strong>——<code class="language-plaintext highlighter-rouge">/a/b/c</code> 与 <code class="language-plaintext highlighter-rouge">/a/b/d</code> 共用 <code class="language-plaintext highlighter-rouge">/a/b</code> 这一段。这正是前缀树（Trie）的定义域：把每一段路径名当作一条边、把目录当作节点，整个文件系统就是一棵以根目录为根的树，路径查找退化成沿着名字逐层下行。与字符 Trie 唯一的区别是<strong>边上标的是整个名字而不是单个字符</strong>，所以子节点用 <code class="language-plaintext highlighter-rouge">Map&lt;String, Node&gt;</code> 而不是长度 26 的数组。</p>
+
+  <p>再看接口的语义差异。<code class="language-plaintext highlighter-rouge">mkdir</code> 要求「路径中不存在的中间目录也一并创建」，<code class="language-plaintext highlighter-rouge">addContentToFile</code> 要求「文件不存在则创建」——这两个都是<strong>写路径</strong>，走到哪一层缺哪一层就补上。而 <code class="language-plaintext highlighter-rouge">ls</code> 和 <code class="language-plaintext highlighter-rouge">readContentFromFile</code> 是<strong>读路径</strong>，题目保证目标存在，不该顺手创建节点。四个接口只在「缺节点时创建还是不创建」这一点上不同，其余的逐层下行逻辑完全一样，所以应当抽出一个带开关的公共遍历函数。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">ls</code> 的返回规则是本题最容易读漏的地方：<strong>如果路径指向一个文件，返回的是只含该文件名的单元素列表；如果指向目录，返回目录下所有子项（文件与子目录都算）的名字，并按字典序排序</strong>。两种情形的返回内容完全不同，必须先判断节点类型再决定怎么返回。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">addContentToFile</code> 是<strong>追加</strong>而不是覆盖，所以文件内容要用可增长的缓冲区（<code class="language-plaintext highlighter-rouge">StringBuilder</code> / <code class="language-plaintext highlighter-rouge">strings.Builder</code>）而不是简单赋值。</p>
+
+  <p>边界：根路径 <code class="language-plaintext highlighter-rouge">"/"</code> 要单独处理——按 <code class="language-plaintext highlighter-rouge">/</code> 切分后会得到空片段，直接进循环会去找一个名为空串的子节点；一个节点既可能是目录也可能是文件，需要一个标志位区分；<code class="language-plaintext highlighter-rouge">ls("/")</code> 在空系统上应返回空列表而不是报错。</p>
+</blockquote>
+
+<h2 id="解法trie-模拟文件系统">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95trie-%E6%A8%A1%E6%8B%9F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：Trie 模拟文件系统</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最容易想到的偷懒做法是用一张 <code class="language-plaintext highlighter-rouge">Map&lt;完整路径字符串, 内容&gt;</code> 把所有文件平铺存起来。读写单个文件确实简单，但 <code class="language-plaintext highlighter-rouge">ls</code> 会变成灾难：要列出 <code class="language-plaintext highlighter-rouge">/a/b</code> 下的子项，必须遍历整张表、对每个键做前缀匹配、再截出下一段名字并去重。单次 <code class="language-plaintext highlighter-rouge">ls</code> 是 $O(总文件数 \times 路径长度)$，而且「空目录」根本无法表示（<code class="language-plaintext highlighter-rouge">mkdir</code> 创建了目录但没有任何文件，平铺表里留不下痕迹）。</p>
+
+  <p>问题的根源在于<strong>平铺结构丢掉了层级信息</strong>。而层级恰恰是文件系统的本质，也是 <code class="language-plaintext highlighter-rouge">ls</code> 唯一关心的东西。所以应当让数据结构本身承载层级：每一级目录是一个节点，节点通过「名字 → 子节点」的映射连向下一级。这样 <code class="language-plaintext highlighter-rouge">ls</code> 就退化成「走到目标节点，把它的子映射的键集合取出来」，与系统总规模无关，只与该目录的子项数有关。</p>
+
+  <p>节点的定义要同时容纳目录和文件两种角色：<code class="language-plaintext highlighter-rouge">children</code> 是「名字 → 子节点」的映射（目录用），<code class="language-plaintext highlighter-rouge">content</code> 是可追加的内容缓冲（文件用），<code class="language-plaintext highlighter-rouge">file</code> 是一个布尔标志用来区分。之所以不拆成两个类，是因为 <code class="language-plaintext highlighter-rouge">ls</code> 拿到节点后需要先判类型再决定行为，同一个字段布局最省事；而且题目保证同名不会既是文件又是目录，一个标志位足够。</p>
+
+  <p>四个接口的公共部分抽成 <code class="language-plaintext highlighter-rouge">traverse(path, create)</code>：从根出发，把路径按 <code class="language-plaintext highlighter-rouge">/</code> 切成若干段，逐段在 <code class="language-plaintext highlighter-rouge">children</code> 里查找并下行。<code class="language-plaintext highlighter-rouge">create</code> 为真时（<code class="language-plaintext highlighter-rouge">mkdir</code>、<code class="language-plaintext highlighter-rouge">addContentToFile</code>）遇到缺失的名字就新建节点再继续；为假时（<code class="language-plaintext highlighter-rouge">ls</code>、<code class="language-plaintext highlighter-rouge">read</code>）遇到缺失直接返回空。这个开关把「写路径会创建、读路径不创建」这条语义差异集中到了一处，其余三个接口都变成两三行。</p>
+
+  <p>路径切分有个细节：<code class="language-plaintext highlighter-rouge">"/a/b".split("/")</code> 得到的是 <code class="language-plaintext highlighter-rouge">["", "a", "b"]</code>——因为路径以 <code class="language-plaintext highlighter-rouge">/</code> 开头，第一段是空串。所以循环要<strong>从下标 1 开始</strong>，跳过这个空片段。而 <code class="language-plaintext highlighter-rouge">"/"</code> 切分后只得到 <code class="language-plaintext highlighter-rouge">[""]</code>（甚至可能是空数组），循环压根不会执行，但为了语义清晰仍然把它单独判掉、直接返回根节点。</p>
+
+  <p>不变量：<strong>任意时刻，从根出发沿路径各段下行所到达的节点，就是该路径对应的目录或文件；节点的 <code class="language-plaintext highlighter-rouge">children</code> 恰好是该目录下全部直接子项</strong>。只要 <code class="language-plaintext highlighter-rouge">traverse</code> 是唯一的下行入口，这个不变量就不会被破坏，四个接口也就天然一致。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">ls</code> 的排序放在返回前做而不是维护有序结构，是因为 <code class="language-plaintext highlighter-rouge">ls</code> 的调用频率通常低于写操作，用 <code class="language-plaintext highlighter-rouge">HashMap</code> 保证 $O(1)$ 的写入、只在 <code class="language-plaintext highlighter-rouge">ls</code> 时付一次 $O(d \log d)$ 的排序代价，是更划算的取舍。若题目改成 <code class="language-plaintext highlighter-rouge">ls</code> 极其频繁，则可以换成 <code class="language-plaintext highlighter-rouge">TreeMap</code> 把排序摊进插入。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>定义节点类：<code class="language-plaintext highlighter-rouge">children</code> 为 <code class="language-plaintext highlighter-rouge">Map&lt;String, Node&gt;</code>、<code class="language-plaintext highlighter-rouge">content</code> 为可追加缓冲、<code class="language-plaintext highlighter-rouge">file</code> 为布尔标志</strong>。<strong>为什么</strong>：路径段是完整单词而非单字符，所以子节点用哈希表而不是定长数组；<code class="language-plaintext highlighter-rouge">content</code> 用 <code class="language-plaintext highlighter-rouge">StringBuilder</code> 是因为 <code class="language-plaintext highlighter-rouge">addContentToFile</code> 语义是追加，反复字符串拼接会产生 $O(L^2)$ 的复制；<code class="language-plaintext highlighter-rouge">file</code> 标志让 <code class="language-plaintext highlighter-rouge">ls</code> 能区分两套返回规则。</li>
+    <li>
+<strong>持有一个 <code class="language-plaintext highlighter-rouge">root</code> 节点代表根目录 <code class="language-plaintext highlighter-rouge">/</code></strong>。<strong>为什么</strong>：根目录没有名字、也不是任何节点的子项，必须单独持有作为所有遍历的起点。</li>
+    <li>
+<strong>实现 <code class="language-plaintext highlighter-rouge">traverse(path, create)</code>：先判 <code class="language-plaintext highlighter-rouge">path</code> 等于 <code class="language-plaintext highlighter-rouge">"/"</code> 则直接返回 <code class="language-plaintext highlighter-rouge">root</code></strong>。<strong>为什么</strong>：根路径切分后只剩空片段，进循环会去查找名为空串的子节点；单独判掉既避免了这个坑，也让「根目录」这个特殊情形一眼可见。</li>
+    <li>
+<strong>把路径按 <code class="language-plaintext highlighter-rouge">/</code> 切分，循环从下标 <code class="language-plaintext highlighter-rouge">1</code> 开始</strong>。<strong>为什么</strong>：路径以 <code class="language-plaintext highlighter-rouge">/</code> 开头，切分结果的第 0 段必然是空串；从 1 开始正好跳过它，剩下的每一段都是一级名字。</li>
+    <li>
+<strong>每一段先查 <code class="language-plaintext highlighter-rouge">children</code>，缺失时：<code class="language-plaintext highlighter-rouge">create</code> 为真则新建节点，为假则返回空</strong>。<strong>为什么</strong>：这一个开关同时表达了 <code class="language-plaintext highlighter-rouge">mkdir</code> 的「递归创建中间目录」和 <code class="language-plaintext highlighter-rouge">ls</code> 的「只读不创建」；把差异收在一处，四个接口的行为就不会各自漂移。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">mkdir</code> 直接调用 <code class="language-plaintext highlighter-rouge">traverse(path, true)</code> 并丢弃返回值</strong>。<strong>为什么</strong>：创建这个动作本身就是遍历的副作用，路径上每一级缺失的目录都会在下行过程中被补齐，不需要额外逻辑。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">addContentToFile</code> 调用 <code class="language-plaintext highlighter-rouge">traverse(filePath, true)</code>，把节点标记为文件并 <code class="language-plaintext highlighter-rouge">append</code> 内容</strong>。<strong>为什么</strong>：文件不存在时要创建，所以开关为真；标记 <code class="language-plaintext highlighter-rouge">file = true</code> 是为了让后续 <code class="language-plaintext highlighter-rouge">ls</code> 走文件分支；用 <code class="language-plaintext highlighter-rouge">append</code> 而不是赋值，因为语义是追加。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">readContentFromFile</code> 调用 <code class="language-plaintext highlighter-rouge">traverse(filePath, false)</code> 后返回缓冲的字符串形式</strong>。<strong>为什么</strong>：读操作不应产生副作用，开关为假；题目保证文件存在，所以不必处理空返回。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">ls</code> 先定位节点，若 <code class="language-plaintext highlighter-rouge">node.file</code> 为真，取路径中最后一个 <code class="language-plaintext highlighter-rouge">/</code> 之后的部分作为文件名，返回单元素列表</strong>。<strong>为什么</strong>：题目规定路径指向文件时只返回文件名本身；用「最后一个 <code class="language-plaintext highlighter-rouge">/</code> 之后」来截取，不依赖路径深度，任何层级都适用。</li>
+    <li>
+<strong>否则取 <code class="language-plaintext highlighter-rouge">children</code> 的键集合，排序后返回</strong>。<strong>为什么</strong>：目录下的子项既包括子目录也包括文件，它们都在 <code class="language-plaintext highlighter-rouge">children</code> 里；题目要求字典序，而哈希表不保证顺序，必须显式排序。</li>
+  </ul>
+
+  <p><strong>走一遍一串完整的调用</strong>。初始只有一个 <code class="language-plaintext highlighter-rouge">root</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">ls("/")</code>：<code class="language-plaintext highlighter-rouge">traverse</code> 命中 <code class="language-plaintext highlighter-rouge">"/"</code> 分支直接返回 <code class="language-plaintext highlighter-rouge">root</code>；<code class="language-plaintext highlighter-rouge">root.file</code> 为假，取 <code class="language-plaintext highlighter-rouge">root.children</code> 的键集合——此时为空，排序后返回 <code class="language-plaintext highlighter-rouge">[]</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">mkdir("/a/b/c")</code>：切分得 <code class="language-plaintext highlighter-rouge">["", "a", "b", "c"]</code>，从下标 1 开始。查 <code class="language-plaintext highlighter-rouge">root.children["a"]</code> 不存在，<code class="language-plaintext highlighter-rouge">create</code> 为真，新建节点并下行；同理创建 <code class="language-plaintext highlighter-rouge">b</code>、<code class="language-plaintext highlighter-rouge">c</code>。此时树形为 <code class="language-plaintext highlighter-rouge">root → a → b → c</code>，三个节点的 <code class="language-plaintext highlighter-rouge">file</code> 都是假。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">addContentToFile("/a/b/c/d", "hello")</code>：切分得 <code class="language-plaintext highlighter-rouge">["", "a", "b", "c", "d"]</code>。<code class="language-plaintext highlighter-rouge">a</code>、<code class="language-plaintext highlighter-rouge">b</code>、<code class="language-plaintext highlighter-rouge">c</code> 都已存在，直接下行；<code class="language-plaintext highlighter-rouge">d</code> 不存在，因 <code class="language-plaintext highlighter-rouge">create</code> 为真而被创建。随后把 <code class="language-plaintext highlighter-rouge">d</code> 标记为文件，向它的缓冲追加 <code class="language-plaintext highlighter-rouge">"hello"</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">ls("/")</code>：返回 <code class="language-plaintext highlighter-rouge">root.children</code> 的键，只有 <code class="language-plaintext highlighter-rouge">["a"]</code>。注意这里返回的是子目录名，而不是深层的文件名——<code class="language-plaintext highlighter-rouge">ls</code> 只看一层。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">readContentFromFile("/a/b/c/d")</code>：一路下行到 <code class="language-plaintext highlighter-rouge">d</code>，返回 <code class="language-plaintext highlighter-rouge">"hello"</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">ls("/a/b/c/d")</code>：下行到 <code class="language-plaintext highlighter-rouge">d</code>，<code class="language-plaintext highlighter-rouge">d.file</code> 为真，走文件分支——取路径中最后一个 <code class="language-plaintext highlighter-rouge">/</code> 之后的部分得 <code class="language-plaintext highlighter-rouge">"d"</code>，返回 <code class="language-plaintext highlighter-rouge">["d"]</code>。这正是「路径指向文件时只返回文件名」那条规则，若不判 <code class="language-plaintext highlighter-rouge">file</code> 而直接返回 <code class="language-plaintext highlighter-rouge">children</code> 的键集合，会得到空列表 <code class="language-plaintext highlighter-rouge">[]</code>，是本题最典型的错误。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">addContentToFile("/a/b/c/d", " world")</code>：<code class="language-plaintext highlighter-rouge">d</code> 已存在，直接定位并追加，内容变成 <code class="language-plaintext highlighter-rouge">"hello world"</code>。若这里写成赋值而非追加，结果会退化成 <code class="language-plaintext highlighter-rouge">" world"</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">ls("/a/b/c")</code>：<code class="language-plaintext highlighter-rouge">c</code> 不是文件，返回它的子项名 <code class="language-plaintext highlighter-rouge">["d"]</code>。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">FileSystem</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Node</span> <span class="o">{</span>
+        <span class="c1">// 路径段是完整名字而非单字符，所以用哈希表而不是定长数组。</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Node</span><span class="o">&gt;</span> <span class="n">children</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="c1">// addContentToFile 语义是追加，用可增长缓冲避免反复复制。</span>
+        <span class="nc">StringBuilder</span> <span class="n">content</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+        <span class="kt">boolean</span> <span class="n">file</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Node</span> <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">();</span>
+
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">ls</span><span class="o">(</span><span class="nc">String</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">traverse</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+        <span class="c1">// 路径指向文件时，只返回文件名本身。</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">file</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="na">lastIndexOf</span><span class="o">(</span><span class="sc">'/'</span><span class="o">);</span>
+            <span class="k">return</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">path</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="o">));</span>
+        <span class="o">}</span>
+
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">keySet</span><span class="o">());</span>
+        <span class="c1">// 哈希表不保证顺序，题目要求字典序。</span>
+        <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">res</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">mkdir</span><span class="o">(</span><span class="nc">String</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 创建是遍历的副作用：路径上缺失的每一级都会被补齐。</span>
+        <span class="n">traverse</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addContentToFile</span><span class="o">(</span><span class="nc">String</span> <span class="n">filePath</span><span class="o">,</span> <span class="nc">String</span> <span class="n">content</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">traverse</span><span class="o">(</span><span class="n">filePath</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">file</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">content</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">content</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">readContentFromFile</span><span class="o">(</span><span class="nc">String</span> <span class="n">filePath</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">traverse</span><span class="o">(</span><span class="n">filePath</span><span class="o">,</span> <span class="kc">false</span><span class="o">).</span><span class="na">content</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="c1">// create 开关集中表达「写路径创建、读路径不创建」的语义差异。</span>
+    <span class="kd">private</span> <span class="nc">Node</span> <span class="nf">traverse</span><span class="o">(</span><span class="nc">String</span> <span class="n">path</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">create</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+        <span class="c1">// 根路径切分后只剩空片段，单独处理。</span>
+        <span class="k">if</span> <span class="o">(</span><span class="s">"/"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">path</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">cur</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">String</span><span class="o">[]</span> <span class="n">parts</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">"/"</span><span class="o">);</span>
+        <span class="c1">// 路径以 / 开头，第 0 段必为空串，从 1 开始。</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">parts</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">parts</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">cur</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">name</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">create</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">cur</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">());</span>
+            <span class="o">}</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">cur</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">node588</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="c">// 路径段是完整名字而非单字符，所以用哈希表而不是定长数组。</span>
+    <span class="n">children</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="o">*</span><span class="n">node588</span>
+    <span class="c">// AddContentToFile 语义是追加，用可增长缓冲避免反复复制。</span>
+    <span class="n">content</span> <span class="n">strings</span><span class="o">.</span><span class="n">Builder</span>
+    <span class="n">file</span>    <span class="kt">bool</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">FileSystem</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">root</span> <span class="o">*</span><span class="n">node588</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">FileSystem</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">FileSystem</span><span class="p">{</span><span class="n">root</span><span class="o">:</span> <span class="o">&amp;</span><span class="n">node588</span><span class="p">{</span><span class="n">children</span><span class="o">:</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="o">*</span><span class="n">node588</span><span class="p">)}}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">fs</span> <span class="o">*</span><span class="n">FileSystem</span><span class="p">)</span> <span class="n">Ls</span><span class="p">(</span><span class="n">path</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+    <span class="n">node</span> <span class="o">:=</span> <span class="n">fs</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="no">false</span><span class="p">)</span>
+    <span class="c">// 路径指向文件时，只返回文件名本身。</span>
+    <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">file</span> <span class="p">{</span>
+        <span class="n">parts</span> <span class="o">:=</span> <span class="n">strings</span><span class="o">.</span><span class="n">Split</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">"/"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="n">parts</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]}</span>
+    <span class="p">}</span>
+
+    <span class="n">res</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span> <span class="p">{</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c">// map 遍历顺序随机，题目要求字典序。</span>
+    <span class="n">sort</span><span class="o">.</span><span class="n">Strings</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">fs</span> <span class="o">*</span><span class="n">FileSystem</span><span class="p">)</span> <span class="n">Mkdir</span><span class="p">(</span><span class="n">path</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c">// 创建是遍历的副作用：路径上缺失的每一级都会被补齐。</span>
+    <span class="n">fs</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="no">true</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">fs</span> <span class="o">*</span><span class="n">FileSystem</span><span class="p">)</span> <span class="n">AddContentToFile</span><span class="p">(</span><span class="n">filePath</span> <span class="kt">string</span><span class="p">,</span> <span class="n">content</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">node</span> <span class="o">:=</span> <span class="n">fs</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">filePath</span><span class="p">,</span> <span class="no">true</span><span class="p">)</span>
+    <span class="n">node</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="no">true</span>
+    <span class="n">node</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">WriteString</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">fs</span> <span class="o">*</span><span class="n">FileSystem</span><span class="p">)</span> <span class="n">ReadContentFromFile</span><span class="p">(</span><span class="n">filePath</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">fs</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">filePath</span><span class="p">,</span> <span class="no">false</span><span class="p">)</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">String</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="c">// create 开关集中表达「写路径创建、读路径不创建」的语义差异。</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">fs</span> <span class="o">*</span><span class="n">FileSystem</span><span class="p">)</span> <span class="n">traverse</span><span class="p">(</span><span class="n">path</span> <span class="kt">string</span><span class="p">,</span> <span class="n">create</span> <span class="kt">bool</span><span class="p">)</span> <span class="o">*</span><span class="n">node588</span> <span class="p">{</span>
+    <span class="n">cur</span> <span class="o">:=</span> <span class="n">fs</span><span class="o">.</span><span class="n">root</span>
+    <span class="c">// 根路径切分后只剩空片段，单独处理。</span>
+    <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="s">"/"</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">cur</span>
+    <span class="p">}</span>
+    <span class="n">parts</span> <span class="o">:=</span> <span class="n">strings</span><span class="o">.</span><span class="n">Split</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">"/"</span><span class="p">)</span>
+    <span class="c">// 路径以 / 开头，第 0 段必为空串，从 1 开始。</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">name</span> <span class="o">:=</span> <span class="n">parts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">cur</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="o">!</span><span class="n">create</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="no">nil</span>
+            <span class="p">}</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">node588</span><span class="p">{</span><span class="n">children</span><span class="o">:</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="o">*</span><span class="n">node588</span><span class="p">)}</span>
+        <span class="p">}</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">cur</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：<code class="language-plaintext highlighter-rouge">mkdir</code>、<code class="language-plaintext highlighter-rouge">addContentToFile</code>、<code class="language-plaintext highlighter-rouge">readContentFromFile</code> 为 $O(p + c)$，<code class="language-plaintext highlighter-rouge">ls</code> 为 $O(p + d \log d)$。凭什么：<code class="language-plaintext highlighter-rouge">p</code> 是路径字符串长度，切分与逐层哈希查找合计与路径长度成正比，层数不超过 <code class="language-plaintext highlighter-rouge">p</code>；<code class="language-plaintext highlighter-rouge">c</code> 是本次写入或读取的内容长度，追加是均摊 $O(c)$、读取要把缓冲物化成字符串同样是 $O(c)$；<code class="language-plaintext highlighter-rouge">ls</code> 在目录情形下要把 <code class="language-plaintext highlighter-rouge">d</code> 个子项名收集起来并排序，排序是 $O(d \log d)$，<code class="language-plaintext highlighter-rouge">d</code> 只是该目录的直接子项数，与系统总规模无关——这正是树形结构相对平铺哈希表的核心优势。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(N + C)$。凭什么：<code class="language-plaintext highlighter-rouge">N</code> 是所有路径段的总数，每一段对应树上一个节点，共享前缀的路径共用节点，所以不会重复存储；<code class="language-plaintext highlighter-rouge">C</code> 是所有文件内容的总长度，存在各自的缓冲里。除此之外只有常数个临时变量与 <code class="language-plaintext highlighter-rouge">ls</code> 中长度为 <code class="language-plaintext highlighter-rouge">d</code> 的结果列表。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>看到「路径」「前缀共享」「按层级列举」三个特征同时出现，就该想到 Trie。文件系统是 Trie 最直观的现实模型，区别只是边上标的是整个名字而非单个字符——因此子节点容器从定长数组换成哈希表。</li>
+    <li>平铺哈希表和树形结构的分界线在于<strong>有没有「列举下一层」的需求</strong>。只做单点读写时平铺更简单，一旦要 <code class="language-plaintext highlighter-rouge">ls</code>，层级信息就必须显式建模，否则每次都得全表前缀扫描，而且空目录无法表示。</li>
+    <li>把多个接口的公共下行逻辑抽成带开关的 <code class="language-plaintext highlighter-rouge">traverse</code>，是设计题里最值钱的一步。开关（这里是 <code class="language-plaintext highlighter-rouge">create</code>）恰好对应了接口之间<strong>唯一的</strong>语义差异，其余部分零重复，行为也不会各自漂移。面试时先写出这个函数签名，思路的清晰度立刻显现。</li>
+    <li>一个节点同时承担目录与文件两种角色时，用一个布尔标志区分比拆成两个类型更省事，因为调用方（<code class="language-plaintext highlighter-rouge">ls</code>）本来就需要先判类型再分派。</li>
+    <li>排序放在读取时还是写入时，取决于读写频率的相对大小。用 <code class="language-plaintext highlighter-rouge">HashMap</code> + <code class="language-plaintext highlighter-rouge">ls</code> 时排序，是「写多读少」的取舍；换成 <code class="language-plaintext highlighter-rouge">TreeMap</code> 则把成本摊进每次插入。能主动说出这个权衡，比直接写 <code class="language-plaintext highlighter-rouge">Collections.sort</code> 更有说服力。</li>
+    <li>面试延伸：被问到「怎么支持删除」时，答案是从父节点的 <code class="language-plaintext highlighter-rouge">children</code> 里移除对应键，递归释放子树；被问到「怎么支持并发」时，可以按目录粒度加读写锁，或用不可变节点 + 写时复制。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">ls</code> 不判 <code class="language-plaintext highlighter-rouge">node.file</code> 就直接返回 <code class="language-plaintext highlighter-rouge">children</code> 的键集合</strong>：<code class="language-plaintext highlighter-rouge">ls("/a/b/c/d")</code> 指向文件 → 文件节点没有子项，返回空列表 <code class="language-plaintext highlighter-rouge">[]</code>，而正确答案是 <code class="language-plaintext highlighter-rouge">["d"]</code>。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">ls</code> 返回目录下所有后代而不是直接子项</strong>：<code class="language-plaintext highlighter-rouge">ls("/")</code> 在存在 <code class="language-plaintext highlighter-rouge">/a/b/c/d</code> 时 → 返回 <code class="language-plaintext highlighter-rouge">["a", "b", "c", "d"]</code>，而正确答案只有 <code class="language-plaintext highlighter-rouge">["a"]</code>；<code class="language-plaintext highlighter-rouge">ls</code> 只看一层。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">ls</code> 忘记排序</strong>：Java 的 <code class="language-plaintext highlighter-rouge">HashMap</code>、Go 的 <code class="language-plaintext highlighter-rouge">map</code> 遍历顺序都不保证 → 同一份数据多次运行返回顺序不同，判题随机失败。</li>
+    <li>
+<strong>切分路径后从下标 <code class="language-plaintext highlighter-rouge">0</code> 开始遍历</strong>：<code class="language-plaintext highlighter-rouge">"/a"</code> 切分得 <code class="language-plaintext highlighter-rouge">["", "a"]</code> → 先去查找名为空串的子节点，<code class="language-plaintext highlighter-rouge">create</code> 为真时会凭空创建一个名字为空的目录，<code class="language-plaintext highlighter-rouge">ls("/")</code> 里因此多出一个空字符串项。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">addContentToFile</code> 用赋值代替追加</strong>：先写 <code class="language-plaintext highlighter-rouge">"hello"</code> 再写 <code class="language-plaintext highlighter-rouge">" world"</code> → 内容变成 <code class="language-plaintext highlighter-rouge">" world"</code>，而正确结果是 <code class="language-plaintext highlighter-rouge">"hello world"</code>。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">addContentToFile</code> 用字符串拼接而非可增长缓冲</strong>：向同一文件追加 <code class="language-plaintext highlighter-rouge">n</code> 次、每次长度 <code class="language-plaintext highlighter-rouge">L</code> → 每次都复制一遍全量内容，总代价 $O(n^2 L)$，大量追加时超时。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">addContentToFile</code> 忘记把节点标记为 <code class="language-plaintext highlighter-rouge">file</code></strong>：随后 <code class="language-plaintext highlighter-rouge">ls</code> 该路径 → 走进目录分支返回空列表，而不是文件名。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">readContentFromFile</code> 传入 <code class="language-plaintext highlighter-rouge">create = true</code></strong>：读一个不存在的文件时 → 静默创建出一个空文件节点，污染后续 <code class="language-plaintext highlighter-rouge">ls</code> 的结果，把一个本该报错的场景变成了难查的脏数据。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">mkdir</code> 只创建最后一级、不补齐中间目录</strong>：<code class="language-plaintext highlighter-rouge">mkdir("/a/b/c")</code> 而 <code class="language-plaintext highlighter-rouge">/a</code> 不存在 → 抛空指针或只建出孤立的节点，后续 <code class="language-plaintext highlighter-rouge">ls("/")</code> 看不到 <code class="language-plaintext highlighter-rouge">a</code>。</li>
+    <li>
+<strong>用 <code class="language-plaintext highlighter-rouge">Map&lt;完整路径, 内容&gt;</code> 平铺存储</strong>：<code class="language-plaintext highlighter-rouge">mkdir("/a/b")</code> 后 <code class="language-plaintext highlighter-rouge">ls("/a")</code> → 空目录在平铺表里没有任何记录，返回空列表而不是 <code class="language-plaintext highlighter-rouge">["b"]</code>；且每次 <code class="language-plaintext highlighter-rouge">ls</code> 都要全表前缀扫描，规模一大就慢。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/implement-trie-prefix-tree/">208. 实现 Trie (前缀树)</a></td>
+      <td>中等</td>
+      <td>Trie 的最小形态，边上是单个字符，子节点可用长度 26 的定长数组</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-file-system/">1166. 设计文件系统</a></td>
+      <td>中等</td>
+      <td>只需创建与取值、不支持 <code class="language-plaintext highlighter-rouge">ls</code>，因此平铺哈希表就够，正好对照本题为何需要树</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-add-and-search-words-data-structure/">211. 添加与搜索单词 - 数据结构设计</a></td>
+      <td>中等</td>
+      <td>查询支持通配符 <code class="language-plaintext highlighter-rouge">.</code>，遇到它要对所有子节点分支递归，查找不再是单路下行</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/word-search-ii/">212. 单词搜索 II</a></td>
+      <td>困难</td>
+      <td>把词典建成 Trie 后在网格上回溯，考的是用 Trie 给搜索剪枝</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/replace-words/">648. 单词替换</a></td>
+      <td>中等</td>
+      <td>沿 Trie 下行找<strong>最短</strong>匹配前缀即停，考的是提前终止而非走到底</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/map-sum-pairs/">677. 键值映射</a></td>
+      <td>中等</td>
+      <td>节点上挂的是数值并需按前缀求和，涉及更新已存在键时的差值处理</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-word-in-dictionary/">720. 词典中最长的单词</a></td>
+      <td>中等</td>
+      <td>要求路径上每一级都是完整单词，本质是在 Trie 上做受限的深度优先搜索</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/QC3q1f/">LCR 062. 实现 Trie (前缀树)</a></td>
+      <td>中等</td>
+      <td>与 208 同题，可直接套用同一套节点定义与插入查找骨架</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2021/16485878" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 361. 轰炸敌人</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/35656737" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 278. 第一个错误的版本</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/48250411">https://hgnulb.github.io/blog/2021/48250411</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

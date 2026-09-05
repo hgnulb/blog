@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1575. 统计所有可行路径 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,动态规划,微软,数组,记忆化" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1575. 统计所有可行路径" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2023/45191846" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2023/45191846" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-04-03T14:14:34+08:00" />
+<meta property="article:modified_time" content="2023-04-03T14:14:34+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1575. 统计所有可行路径" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2023-04-03T14:14:34+08:00","datePublished":"2023-04-03T14:14:34+08:00","description":"题目描述","headline":"LeetCode 1575. 统计所有可行路径","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2023/45191846"},"url":"https://hgnulb.github.io/blog/2023/45191846"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法记忆化搜索">解法：记忆化搜索</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1575. 统计所有可行路径">LeetCode 1575. 统计所有可行路径</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2023-04-03 14:14:34"
+                    datetime="2023-04-03T14:14:34+08:00"
+            >
+                2023-04-03
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1367 字 · 英文 44 词 · 代码 76 行"
+            aria-label="预计阅读时间约 6 分钟，正文 1367 字 · 英文 44 词 · 代码 76 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 6 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4895158673/" title="记忆化">
+        记忆化
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法记忆化搜索">解法：记忆化搜索</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/count-all-possible-routes/">1575. 统计所有可行路径</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>数轴上有 <code class="language-plaintext highlighter-rouge">n</code> 座城市，<code class="language-plaintext highlighter-rouge">locations[i]</code> 是第 <code class="language-plaintext highlighter-rouge">i</code> 座城市的坐标。从 <code class="language-plaintext highlighter-rouge">start</code> 出发、油箱里有 <code class="language-plaintext highlighter-rouge">fuel</code> 升油，每次可以开到任意一座不同的城市，耗油量等于两地坐标差的绝对值。问总共有多少条不同的路径能到达 <code class="language-plaintext highlighter-rouge">finish</code>，答案对 $10^9 + 7$ 取模。</p>
+
+  <p>有几处措辞必须抠死。第一，路径可以经过 <code class="language-plaintext highlighter-rouge">finish</code> 之后继续开走再回来，只要最终停在 <code class="language-plaintext highlighter-rouge">finish</code> 就算数——所以到达 <code class="language-plaintext highlighter-rouge">finish</code> 不是终止条件，而是一个可以「记一笔」但仍要继续展开的时刻。第二，城市可以重复访问，路径长度没有上限，唯一的限制是油量。第三，<code class="language-plaintext highlighter-rouge">start</code> 可以等于 <code class="language-plaintext highlighter-rouge">finish</code>，此时「原地不动」本身就是一条合法路径。</p>
+
+  <p>既然能反复往返，路径条数是可以爆炸的，这解释了为什么要取模。</p>
+
+  <p>约束给得很克制：<code class="language-plaintext highlighter-rouge">n</code> 不超过 100，<code class="language-plaintext highlighter-rouge">fuel</code> 不超过 200。两者相乘只有两万，这个数字明确指向「以（当前城市，剩余油量）为状态」的动规——状态数两万，每个状态枚举 100 个下一站，总计两百万次转移，绰绰有余。反过来，若按路径去搜索则是指数级，必然超时。</p>
+
+  <p>油量单调递减是这个问题能被拆解的根本原因：任意一次移动都严格消耗至少 1 升油（城市坐标互不相同），所以状态不会成环，递归一定会终止。</p>
+
+  <p>边界上，油量耗尽时若恰好停在 <code class="language-plaintext highlighter-rouge">finish</code> 计 1 条，否则计 0 条；<code class="language-plaintext highlighter-rouge">start == finish</code> 时初始状态就贡献 1。</p>
+</blockquote>
+
+<h2 id="解法记忆化搜索">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：记忆化搜索</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>定义 <code class="language-plaintext highlighter-rouge">dfs(city, remain)</code>：当前位于 <code class="language-plaintext highlighter-rouge">city</code>、剩余 <code class="language-plaintext highlighter-rouge">remain</code> 油量时，最终停在 <code class="language-plaintext highlighter-rouge">finish</code> 的路径数。后续选择只由这两个量决定，因此用二维记忆表缓存。</p>
+
+  <p>若 <code class="language-plaintext highlighter-rouge">city == finish</code>，当前立即停止就是一条路径，所以初值为 1；但不能直接返回，因为还可以离开终点再回来。随后枚举所有其他城市，移动费用不超过剩余油量时，累加下一状态的答案。</p>
+
+  <p><strong>燃料单调性</strong>：坐标互不相同，每次移动费用至少为 1，递归中的 <code class="language-plaintext highlighter-rouge">remain</code> 严格减小。因此状态图无环，不需要城市访问标记，也不会无限递归。</p>
+
+  <p><strong>不变量</strong>：<code class="language-plaintext highlighter-rouge">memo[city][remain]</code> 一旦写入，就等于从该状态出发的完整合法路径数，并已按模数归一化。</p>
+
+  <p><strong>正确性</strong>：任意合法路径要么在当前终点立即结束，要么选择唯一的第一站，再接上一条对应子状态的合法路径。转移枚举所有付得起费用的第一站，分类互斥且完整；记忆化只复用相同状态结果，不改变计数。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ol>
+    <li>创建 <code class="language-plaintext highlighter-rouge">n x (fuel+1)</code> 的缓存并填为 <code class="language-plaintext highlighter-rouge">-1</code>，区分“未计算”和合法答案 0。</li>
+    <li>递归入口先查缓存；当前位置是终点时令答案初值为 1，但继续枚举移动。</li>
+    <li>枚举不同的下一城市，计算坐标绝对差；费用不超过剩余油量才递归。</li>
+    <li>每次累加后取模，写入缓存并返回。</li>
+  </ol>
+
+  <p><code class="language-plaintext highlighter-rouge">locations=[2,3,6,8,4]</code>、<code class="language-plaintext highlighter-rouge">start=1</code>、<code class="language-plaintext highlighter-rouge">finish=3</code>、<code class="language-plaintext highlighter-rouge">fuel=5</code> 有 4 条路径，包括直达以及经城市 2、4 的组合。</p>
+
+  <p>边界 <code class="language-plaintext highlighter-rouge">start==finish</code> 时空路径先贡献 1，但仍需统计有油时离开再返回的路线。<code class="language-plaintext highlighter-rouge">locations=[1,2]</code>、油量 1 时，恰好耗尽到达终点也必须计入。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">MOD</span> <span class="o">=</span> <span class="mi">1_000_000_007</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">loc</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">finish</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">memo</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">countRoutes</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">locations</span><span class="o">,</span> <span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">finish</span><span class="o">,</span> <span class="kt">int</span> <span class="n">fuel</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">loc</span> <span class="o">=</span> <span class="n">locations</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">finish</span> <span class="o">=</span> <span class="n">finish</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">locations</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="n">memo</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">fuel</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">f</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">f</span> <span class="o">&lt;=</span> <span class="n">fuel</span><span class="o">;</span> <span class="n">f</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">memo</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">f</span><span class="o">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="nf">dfs</span><span class="o">(</span><span class="n">start</span><span class="o">,</span> <span class="n">fuel</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">int</span> <span class="n">pos</span><span class="o">,</span> <span class="kt">int</span> <span class="n">fuel</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">memo</span><span class="o">[</span><span class="n">pos</span><span class="o">][</span><span class="n">fuel</span><span class="o">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">memo</span><span class="o">[</span><span class="n">pos</span><span class="o">][</span><span class="n">fuel</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="kt">long</span> <span class="n">answer</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">pos</span> <span class="o">==</span> <span class="n">finish</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">next</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">next</span> <span class="o">&lt;</span> <span class="n">loc</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">next</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">next</span> <span class="o">==</span> <span class="n">pos</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="kt">int</span> <span class="n">cost</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">loc</span><span class="o">[</span><span class="n">pos</span><span class="o">]</span> <span class="o">-</span> <span class="n">loc</span><span class="o">[</span><span class="n">next</span><span class="o">]);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cost</span> <span class="o">&lt;=</span> <span class="n">fuel</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">answer</span> <span class="o">+=</span> <span class="n">dfs</span><span class="o">(</span><span class="n">next</span><span class="o">,</span> <span class="n">fuel</span> <span class="o">-</span> <span class="n">cost</span><span class="o">);</span>
+                <span class="n">answer</span> <span class="o">%=</span> <span class="no">MOD</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">memo</span><span class="o">[</span><span class="n">pos</span><span class="o">][</span><span class="n">fuel</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">answer</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">memo</span><span class="o">[</span><span class="n">pos</span><span class="o">][</span><span class="n">fuel</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">countRoutes</span><span class="p">(</span><span class="n">locations</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">start</span> <span class="kt">int</span><span class="p">,</span> <span class="n">finish</span> <span class="kt">int</span><span class="p">,</span> <span class="n">fuel</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">const</span> <span class="n">mod</span> <span class="o">=</span> <span class="m">1_000_000_007</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">locations</span><span class="p">)</span>
+	<span class="n">memo</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">memo</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">fuel</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">f</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">f</span> <span class="o">&lt;=</span> <span class="n">fuel</span><span class="p">;</span> <span class="n">f</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">memo</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">f</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="n">pos</span> <span class="kt">int</span><span class="p">,</span> <span class="n">fuel</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span>
+	<span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">pos</span> <span class="kt">int</span><span class="p">,</span> <span class="n">fuel</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">memo</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">fuel</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">memo</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">fuel</span><span class="p">]</span>
+		<span class="p">}</span>
+		<span class="n">answer</span> <span class="o">:=</span> <span class="m">0</span>
+		<span class="k">if</span> <span class="n">pos</span> <span class="o">==</span> <span class="n">finish</span> <span class="p">{</span>
+			<span class="n">answer</span> <span class="o">=</span> <span class="m">1</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="n">next</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">next</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">next</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">next</span> <span class="o">==</span> <span class="n">pos</span> <span class="p">{</span>
+				<span class="k">continue</span>
+			<span class="p">}</span>
+			<span class="n">cost</span> <span class="o">:=</span> <span class="n">locations</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">-</span> <span class="n">locations</span><span class="p">[</span><span class="n">next</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">cost</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="n">cost</span> <span class="o">=</span> <span class="o">-</span><span class="n">cost</span>
+			<span class="p">}</span>
+			<span class="k">if</span> <span class="n">cost</span> <span class="o">&lt;=</span> <span class="n">fuel</span> <span class="p">{</span>
+				<span class="n">answer</span> <span class="o">+=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">next</span><span class="p">,</span> <span class="n">fuel</span><span class="o">-</span><span class="n">cost</span><span class="p">)</span>
+				<span class="n">answer</span> <span class="o">%=</span> <span class="n">mod</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="n">memo</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">fuel</span><span class="p">]</span> <span class="o">=</span> <span class="n">answer</span>
+		<span class="k">return</span> <span class="n">answer</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">dfs</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">fuel</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n^2 \cdot fuel)$。共有 $O(n \cdot fuel)$ 个状态，每个状态枚举 <code class="language-plaintext highlighter-rouge">n</code> 个下一站。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n \cdot fuel)$ 用于缓存；递归栈深度至多为 <code class="language-plaintext highlighter-rouge">fuel</code>。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>状态是“当前城市 + 剩余油量”，历史访问顺序不影响后续选择。</li>
+    <li>到达终点只是多一种“现在结束”的选择，不能终止搜索。</li>
+    <li>坐标互异保证每次移动严格耗油，状态不会成环。</li>
+    <li>缓存哨兵必须用 <code class="language-plaintext highlighter-rouge">-1</code>，因为 0 是合法路径数。</li>
+    <li>城市允许重复访问，不能使用普通图搜索的 <code class="language-plaintext highlighter-rouge">visited</code>。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>到达 <code class="language-plaintext highlighter-rouge">finish</code> 就 <code class="language-plaintext highlighter-rouge">return 1</code>：会漏掉离开终点再返回的合法路径。</li>
+    <li>允许 <code class="language-plaintext highlighter-rouge">next==city</code>：产生零油耗自调用，递归无法终止。</li>
+    <li>距离不取绝对值：向坐标较小的城市移动会得到负费用。</li>
+    <li>使用 <code class="language-plaintext highlighter-rouge">cost&lt;remain</code>：恰好耗尽燃料到达终点的路径被漏掉。</li>
+    <li>缓存第二维长度只开 <code class="language-plaintext highlighter-rouge">fuel</code>：初始状态访问下标 <code class="language-plaintext highlighter-rouge">fuel</code> 时越界。</li>
+    <li>添加城市级 <code class="language-plaintext highlighter-rouge">visited</code>：合法路线可以重复经过同一城市，会被错误剪掉。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/out-of-boundary-paths/">576. 出界的路径数</a></td>
+      <td>中等</td>
+      <td>状态是（位置，剩余步数），计数目标改为走出边界，转移只有四个方向</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-dice-rolls-with-target-sum/">1155. 掷骰子等于目标和的方法数</a></td>
+      <td>中等</td>
+      <td>状态是（骰子数，剩余目标和），资源同样单调递减，是本题的一维版</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/unique-paths/">62. 不同路径</a></td>
+      <td>中等</td>
+      <td>转移方向单一且无资源维度，可用组合数直接闭式求解</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/unique-paths-ii/">63. 不同路径 II</a></td>
+      <td>中等</td>
+      <td>在计数基础上加入障碍物，考的是不可达状态的初始化</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/unique-paths-iii/">980. 不同路径 III</a></td>
+      <td>困难</td>
+      <td>要求恰好走遍所有空格，状态需用位掩码记录访问集合，无法只靠资源量</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/cheapest-flights-within-k-stops/">787. K 站中转内最便宜的航班</a></td>
+      <td>中等</td>
+      <td>同为「位置 + 剩余额度」的二维状态，但目标从计数换成最小化代价</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/coin-change/">322. 零钱兑换</a></td>
+      <td>中等</td>
+      <td>单维资源递减的最优化问题，适合对比自顶向下与自底向上的写法</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2023/42544811" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1301. 最大得分的路径数目</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2023/21426690" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 576. 出界的路径数</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2023/45191846">https://hgnulb.github.io/blog/2023/45191846</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

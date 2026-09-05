@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode LCR 040. 最大矩形 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,LCR,动态规划,单调栈,数组,栈,矩阵" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode LCR 040. 最大矩形" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/25732663" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/25732663" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-29T01:59:06+08:00" />
+<meta property="article:modified_time" content="2026-03-29T01:59:06+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode LCR 040. 最大矩形" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-03-29T01:59:06+08:00","datePublished":"2026-03-29T01:59:06+08:00","description":"题目描述","headline":"LeetCode LCR 040. 最大矩形","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/25732663"},"url":"https://hgnulb.github.io/blog/2026/25732663"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法逐行转柱状图--单调栈">解法：逐行转柱状图 + 单调栈</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode LCR 040. 最大矩形">LeetCode LCR 040. 最大矩形</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-03-29 01:59:06"
+                    datetime="2026-03-29T01:59:06+08:00"
+            >
+                2026-03-29
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2989 字 · 英文 173 词 · 代码 78 行"
+            aria-label="预计阅读时间约 11 分钟，正文 2989 字 · 英文 173 词 · 代码 78 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 11 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3007053882/" title="119 经典题变种挑战">
+        119 经典题变种挑战
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3355311990/" title="剑指 Offer">
+        剑指 Offer
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7450658006/" title="剑指 Offer（专项突击版）">
+        剑指 Offer（专项突击版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6142931175/" title="LCR">
+        LCR
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9242240291/" title="矩阵">
+        矩阵
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2085989135/" title="单调栈">
+        单调栈
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法逐行转柱状图--单调栈">解法：逐行转柱状图 + 单调栈</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/PLYXKQ/">LCR 040. 最大矩形</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个只含字符 <code class="language-plaintext highlighter-rouge">'0'</code> 和 <code class="language-plaintext highlighter-rouge">'1'</code> 的二维矩阵，要在其中找出一块<strong>全部由 1 组成的轴对齐矩形</strong>，返回它的最大面积。注意矩形必须是连续的整块区域，不能是若干散落 1 的集合，也不能斜着放。</p>
+
+  <p>题面给的是字符矩阵而不是整数矩阵，比较时要写 <code class="language-plaintext highlighter-rouge">'1'</code> 而不是 <code class="language-plaintext highlighter-rouge">1</code>，这是最容易被忽略的一个信号。规模上行列数最多各 200，元素总量四万，说明 $O(mn)$ 到 $O(mn\log n)$ 的做法都很宽裕，但穷举所有矩形的 $O(m^2n^2)$ 会明显偏慢。</p>
+
+  <p>边界要考虑：矩阵可能为空或某一行为空，此时答案为 0；矩阵中可能一个 1 都没有，答案同样是 0；只有单行或单列时答案退化成最长连续 1 的长度；全 1 矩阵时答案是整个矩阵面积。</p>
+</blockquote>
+
+<h2 id="解法逐行转柱状图--单调栈">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E9%80%90%E8%A1%8C%E8%BD%AC%E6%9F%B1%E7%8A%B6%E5%9B%BE--%E5%8D%95%E8%B0%83%E6%A0%88" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：逐行转柱状图 + 单调栈</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最朴素的做法是枚举矩形的上下左右四条边，再验证内部是否全为 1，复杂度高达 $O(m^2n^2 \cdot mn)$；即使用二维前缀和把验证降到 $O(1)$，枚举四条边本身仍是 $O(m^2n^2)$，在 200 乘 200 上是 $1.6 \times 10^9$ 量级，依然吃力。瓶颈在于四个自由度同时枚举，信息完全没有被复用。</p>
+
+  <p>关键观察是：任何一个全 1 矩形，它的<strong>底边一定落在某一行上</strong>。于是可以把「枚举矩形」改成「枚举底边所在的行」，只剩一个自由度需要外层遍历，剩下三个自由度交给对单行的高效处理。一旦把底边固定在第 <code class="language-plaintext highlighter-rouge">i</code> 行，对每一列 <code class="language-plaintext highlighter-rouge">j</code> 而言，真正有意义的信息只有一个数：从第 <code class="language-plaintext highlighter-rouge">i</code> 行往上数，这一列连续有多少个 1。因为矩形的下沿贴着第 <code class="language-plaintext highlighter-rouge">i</code> 行，它在第 <code class="language-plaintext highlighter-rouge">j</code> 列上能往上伸多高，恰好被这个连续长度封顶。</p>
+
+  <p>这样第 <code class="language-plaintext highlighter-rouge">i</code> 行就被压成了一根根柱子，整行变成一个柱状图，而「以第 <code class="language-plaintext highlighter-rouge">i</code> 行为底的最大全 1 矩形」精确等于「这个柱状图里的最大矩形面积」—— 因为柱状图矩形的高受限于区间内最矮的柱子，而这正对应「这段列范围内每一列都至少有这么多层连续的 1」。至此问题被完全化归为 84 题。</p>
+
+  <p><strong>递推定义</strong>：<code class="language-plaintext highlighter-rouge">heights[j]</code> 表示以当前处理行为底、第 <code class="language-plaintext highlighter-rouge">j</code> 列向上连续 1 的个数。递推是 <code class="language-plaintext highlighter-rouge">heights[j] = matrix[i][j] == '1' ? heights[j] + 1 : 0</code>。为什么遇到 0 要清零而不是保留：0 把这一列的连续性彻底切断，任何以第 <code class="language-plaintext highlighter-rouge">i</code> 行为底的矩形都不可能跨过它。这个数组沿着行方向滚动复用，不必为每一行重建。</p>
+
+  <p><strong>单调栈的不变量</strong>：处理单个柱状图时维护一个栈，<strong>栈内下标对应的高度自底向上严格递增</strong>。这个不变量带来的好处是，对栈顶元素而言，它下方的栈内元素就是它左边第一个比它矮的柱子，而促使它被弹出的当前位置就是它右边第一个比它矮的柱子 —— 左右两个边界同时到手，以它为高度的最大矩形宽度就唯一确定了，等于 <code class="language-plaintext highlighter-rouge">右边界下标 - 左边界下标 - 1</code>。</p>
+
+  <p>遍历时若当前高度不小于栈顶高度，直接入栈，不变量保持；否则不断弹栈结算，直到不变量恢复。最后额外用一个高度为 0 的哨兵位置走一轮，保证栈里剩下的所有柱子都被强制弹出结算。全部行的结果取最大值即为答案。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>先判空：矩阵行数为 0 或第一行列数为 0 时直接返回 0。为什么：后面要按第一行的长度开高度数组，空输入会导致下标异常。</li>
+    <li>开一个长度为列数的 <code class="language-plaintext highlighter-rouge">heights</code> 数组，初值全 0，答案 <code class="language-plaintext highlighter-rouge">ans</code> 初始化为 0。为什么初值是 0：处理第一行之前，任何一列向上的连续 1 个数都是 0。</li>
+    <li>按行遍历矩阵。对当前行的每一列，若字符是 <code class="language-plaintext highlighter-rouge">'1'</code> 则 <code class="language-plaintext highlighter-rouge">heights[col]</code> 加一，否则置 0。为什么用同一个数组滚动：第 <code class="language-plaintext highlighter-rouge">i</code> 行的连续高度只依赖第 <code class="language-plaintext highlighter-rouge">i-1</code> 行的结果和本行的字符，不需要保存历史行。</li>
+    <li>更新完本行高度后，把 <code class="language-plaintext highlighter-rouge">heights</code> 交给柱状图子过程求最大矩形，并用返回值刷新 <code class="language-plaintext highlighter-rouge">ans</code>。为什么每行都要算一遍：每一行都可能是最优矩形的底边，漏掉任何一行都可能错过答案。</li>
+    <li>柱状图子过程中，让下标 <code class="language-plaintext highlighter-rouge">i</code> 从 0 走到 <code class="language-plaintext highlighter-rouge">heights.length</code>（含末尾这个越界位置），当 <code class="language-plaintext highlighter-rouge">i</code> 等于长度时把当前高度 <code class="language-plaintext highlighter-rouge">cur</code> 视作 0。为什么要多走一格：这个高度为 0 的哨兵比任何真实柱子都矮，能保证循环结束前把栈清空，否则单调递增的输入会让一堆柱子留在栈里从未结算。</li>
+    <li>当栈非空且栈顶高度严格大于 <code class="language-plaintext highlighter-rouge">cur</code> 时，弹出栈顶记为 <code class="language-plaintext highlighter-rouge">height</code>，取弹出后的新栈顶为左边界 <code class="language-plaintext highlighter-rouge">left</code>（栈空则记作 -1），用 <code class="language-plaintext highlighter-rouge">height * (i - left - 1)</code> 更新答案，然后把 <code class="language-plaintext highlighter-rouge">i</code> 入栈。为什么用严格大于而不是大于等于：等高时保留旧元素不影响正确性，因为等高柱子的最大宽度会在更矮的柱子到来时由留下的那个一并结算，避免了重复计算。</li>
+    <li>遍历完所有行后返回 <code class="language-plaintext highlighter-rouge">ans</code>。</li>
+  </ul>
+
+  <p><strong>以四行五列的矩阵走一遍</strong>（第一行 <code class="language-plaintext highlighter-rouge">1 0 1 0 0</code>，第二行 <code class="language-plaintext highlighter-rouge">1 0 1 1 1</code>，第三行 <code class="language-plaintext highlighter-rouge">1 1 1 1 1</code>，第四行 <code class="language-plaintext highlighter-rouge">1 0 0 1 0</code>）：</p>
+
+  <p>第一行处理后 <code class="language-plaintext highlighter-rouge">heights</code> 为 <code class="language-plaintext highlighter-rouge">[1, 0, 1, 0, 0]</code>。柱状图中每根柱子左右都被 0 夹住，最大面积是 1，<code class="language-plaintext highlighter-rouge">ans</code> 更新为 1。</p>
+
+  <p>第二行处理后，第 0 列和第 2 列各自续上一层，第 1 列遇到 0 清零，第 3、4 列由 0 变为 1，得到 <code class="language-plaintext highlighter-rouge">[2, 0, 2, 1, 1]</code>。这个柱状图里最好的选择是第 2 到 4 列这三根柱子，最矮高度为 1，面积 3；单独取第 0 列或第 2 列面积均为 2。本行最大值 3，<code class="language-plaintext highlighter-rouge">ans</code> 更新为 3。</p>
+
+  <p>第三行整行都是 1，<code class="language-plaintext highlighter-rouge">heights</code> 变成 <code class="language-plaintext highlighter-rouge">[3, 1, 3, 2, 2]</code>。跟一遍单调栈：<code class="language-plaintext highlighter-rouge">i = 0</code> 入栈，栈为 <code class="language-plaintext highlighter-rouge">[0]</code>；<code class="language-plaintext highlighter-rouge">i = 1</code> 时 <code class="language-plaintext highlighter-rouge">cur = 1</code> 小于栈顶高度 3，弹出下标 0，此时栈空故 <code class="language-plaintext highlighter-rouge">left = -1</code>，面积 <code class="language-plaintext highlighter-rouge">3 * (1 - (-1) - 1) = 3</code>，随后 1 入栈，栈为 <code class="language-plaintext highlighter-rouge">[1]</code>；<code class="language-plaintext highlighter-rouge">i = 2</code> 时 <code class="language-plaintext highlighter-rouge">cur = 3</code> 大于栈顶高度 1，直接入栈，栈为 <code class="language-plaintext highlighter-rouge">[1, 2]</code>；<code class="language-plaintext highlighter-rouge">i = 3</code> 时 <code class="language-plaintext highlighter-rouge">cur = 2</code> 小于栈顶高度 3，弹出下标 2，新栈顶为 1 故 <code class="language-plaintext highlighter-rouge">left = 1</code>，面积 <code class="language-plaintext highlighter-rouge">3 * (3 - 1 - 1) = 3</code>，此时栈顶高度 1 不大于 2，把 3 入栈，栈为 <code class="language-plaintext highlighter-rouge">[1, 3]</code>；<code class="language-plaintext highlighter-rouge">i = 4</code> 时 <code class="language-plaintext highlighter-rouge">cur = 2</code> 不大于栈顶高度 2，直接入栈，栈为 <code class="language-plaintext highlighter-rouge">[1, 3, 4]</code>；<code class="language-plaintext highlighter-rouge">i = 5</code> 是哨兵 <code class="language-plaintext highlighter-rouge">cur = 0</code>，先弹出下标 4，<code class="language-plaintext highlighter-rouge">left = 3</code>，面积 <code class="language-plaintext highlighter-rouge">2 * (5 - 3 - 1) = 2</code>，再弹出下标 3，<code class="language-plaintext highlighter-rouge">left = 1</code>，面积 <code class="language-plaintext highlighter-rouge">2 * (5 - 1 - 1) = 6</code>，最后弹出下标 1，栈空故 <code class="language-plaintext highlighter-rouge">left = -1</code>，面积 <code class="language-plaintext highlighter-rouge">1 * (5 - (-1) - 1) = 5</code>。本行最大值 6，<code class="language-plaintext highlighter-rouge">ans</code> 更新为 6。这个 6 正对应第二、三两行与第 2、3、4 三列围成的 2 乘 3 矩形。</p>
+
+  <p>第四行处理后，第 0 列续到 4，第 1、2 列遇到 0 清零，第 3 列续到 3，第 4 列清零，得到 <code class="language-plaintext highlighter-rouge">[4, 0, 0, 3, 0]</code>。两根柱子都被 0 隔开，最大面积是 4，不足以超过 6。</p>
+
+  <p>遍历结束返回 <code class="language-plaintext highlighter-rouge">ans = 6</code>。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maximalRectangle</span><span class="o">(</span><span class="kt">char</span><span class="o">[][]</span> <span class="n">matrix</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">matrix</span><span class="o">.</span><span class="na">length</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">matrix</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">heights</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">matrix</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">char</span><span class="o">[]</span> <span class="n">row</span> <span class="o">:</span> <span class="n">matrix</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="n">row</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">col</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">heights</span><span class="o">[</span><span class="n">col</span><span class="o">]</span> <span class="o">=</span> <span class="n">row</span><span class="o">[</span><span class="n">col</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'1'</span> <span class="o">?</span> <span class="n">heights</span><span class="o">[</span><span class="n">col</span><span class="o">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">largestRectangleArea</span><span class="o">(</span><span class="n">heights</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">largestRectangleArea</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">heights</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">heights</span><span class="o">.</span><span class="na">length</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">top</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">heights</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">i</span> <span class="o">==</span> <span class="n">heights</span><span class="o">.</span><span class="na">length</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">heights</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">top</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">heights</span><span class="o">[</span><span class="n">stack</span><span class="o">[</span><span class="n">top</span><span class="o">]]</span> <span class="o">&gt;</span> <span class="n">cur</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// 当前柱子右侧第一个更矮位置已出现，可以结算栈顶高度。</span>
+                <span class="kt">int</span> <span class="n">height</span> <span class="o">=</span> <span class="n">heights</span><span class="o">[</span><span class="n">stack</span><span class="o">[</span><span class="n">top</span><span class="o">--]];</span>
+                <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">top</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">stack</span><span class="o">[</span><span class="n">top</span><span class="o">]</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">height</span> <span class="o">*</span> <span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="mi">1</span><span class="o">));</span>
+            <span class="o">}</span>
+            <span class="n">stack</span><span class="o">[++</span><span class="n">top</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">maximalRectangle</span><span class="p">(</span><span class="n">matrix</span> <span class="p">[][]</span><span class="kt">byte</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span> <span class="o">||</span> <span class="nb">len</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="m">0</span><span class="p">])</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="m">0</span>
+    <span class="p">}</span>
+
+    <span class="n">heights</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="m">0</span><span class="p">]))</span>
+    <span class="n">ans</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">matrix</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">);</span> <span class="n">col</span><span class="o">++</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'1'</span> <span class="p">{</span>
+                <span class="n">heights</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">++</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">heights</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="m">0</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">area</span> <span class="o">:=</span> <span class="n">largestRectangleArea</span><span class="p">(</span><span class="n">heights</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">ans</span> <span class="p">{</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">area</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">largestRectangleArea</span><span class="p">(</span><span class="n">heights</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">stack</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="n">ans</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">heights</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">cur</span> <span class="o">:=</span> <span class="m">0</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">heights</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">heights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">heights</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">cur</span> <span class="p">{</span>
+            <span class="c">// 弹栈时左右边界都已确定，可以计算该高度的最大矩形。</span>
+            <span class="n">height</span> <span class="o">:=</span> <span class="n">heights</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">left</span> <span class="o">:=</span> <span class="o">-</span><span class="m">1</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="p">}</span>
+            <span class="n">area</span> <span class="o">:=</span> <span class="n">height</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="m">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">ans</span> <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">area</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(mn)$。凭什么：外层遍历 <code class="language-plaintext highlighter-rouge">m</code> 行，每行先花 $O(n)$ 更新高度数组，再花 $O(n)$ 跑一遍单调栈。单调栈部分是线性的关键在于每个下标只入栈一次、出栈一次，弹栈虽然写在内层 <code class="language-plaintext highlighter-rouge">while</code> 里，但总弹出次数被入栈次数上界卡住，摊还下来仍是每格常数代价。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。凭什么：高度数组长度是列数 <code class="language-plaintext highlighter-rouge">n</code>，单调栈最多同时容纳 <code class="language-plaintext highlighter-rouge">n</code> 个下标（高度严格递增时），两者都与行数无关，没有保存历史行的二维结构。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「降维打击」是二维问题的通用套路：把二维矩形按底边所在行拆成 <code class="language-plaintext highlighter-rouge">m</code> 个一维子问题，用已有的一维最优算法逐个求解再取最值。同样的思路可以套在「最大全 1 正方形」「统计全 1 子矩形」上，区别只在于一维子问题换成了什么。</li>
+    <li>化归要保证等价性。这里成立的理由是「以第 <code class="language-plaintext highlighter-rouge">i</code> 行为底的全 1 矩形」与「该行柱状图中的矩形」一一对应，说明白这层对应关系比记住代码更重要，否则很难解释为什么只枚举底边就不会漏解。</li>
+    <li>单调栈解决的问题类型是「为每个元素找左右两侧第一个更小（或更大）的位置」。识别标志是答案形如「以某元素为极值时的最优区间」，本题正是「以某根柱子为最矮高度时能延伸多宽」。</li>
+    <li>哨兵是让单调栈代码变短的标准手段。在末尾补一个不可能被超越的极小值，就能省掉循环结束后单独清空栈的那段重复代码；对称地，有些题会在头部也补哨兵来省掉栈空判断。</li>
+    <li>滚动数组让空间从 $O(mn)$ 降到 $O(n)$。识别标志是递推只依赖上一行，本题的高度数组正是如此，原地更新即可。</li>
+    <li>面试视角：这题的标准打开方式是先问面试官「84 题是否可以直接当作已知」。如果可以，主干只剩十行；如果不可以，就要现场把单调栈那段写对，包括严格大于的比较、<code class="language-plaintext highlighter-rouge">left</code> 取栈空时的 -1、宽度的 <code class="language-plaintext highlighter-rouge">i - left - 1</code>。建议先讲清降维思路再动笔，并主动提醒自己矩阵里存的是字符 <code class="language-plaintext highlighter-rouge">'1'</code> 而非数字，这些细节往往就是评分点。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：比较时写 <code class="language-plaintext highlighter-rouge">matrix[i][j] == 1</code> 而不是 <code class="language-plaintext highlighter-rouge">matrix[i][j] == '1'</code>。用例 任意含 1 的矩阵 → 字符 <code class="language-plaintext highlighter-rouge">'1'</code> 的编码值是 49，与整数 1 永不相等，所有高度恒为 0，答案总是返回 0。</li>
+    <li>
+<strong>错误写法</strong>：遇到 <code class="language-plaintext highlighter-rouge">'0'</code> 时不清零，只是跳过不加。用例 单列矩阵 <code class="language-plaintext highlighter-rouge">1</code> 、<code class="language-plaintext highlighter-rouge">0</code>、<code class="language-plaintext highlighter-rouge">1</code> 三行 → 第三行的高度会被算成 2，误以为存在一个 2 乘 1 的全 1 矩形，返回 2 而正确答案是 1。</li>
+    <li>
+<strong>错误写法</strong>：柱状图循环只走到 <code class="language-plaintext highlighter-rouge">heights.length - 1</code>，不补高度为 0 的哨兵。用例 高度数组 <code class="language-plaintext highlighter-rouge">[1, 2, 3]</code> → 三根柱子始终满足递增而全部留在栈里从未结算，返回 0 而正确答案是 4（后两根柱子宽 2 高 2）。</li>
+    <li>
+<strong>错误写法</strong>：宽度算成 <code class="language-plaintext highlighter-rouge">i - left</code> 或 <code class="language-plaintext highlighter-rouge">i - left + 1</code>。用例 高度数组 <code class="language-plaintext highlighter-rouge">[2, 1]</code> → 弹出下标 0 时 <code class="language-plaintext highlighter-rouge">left = -1</code>、<code class="language-plaintext highlighter-rouge">i = 1</code>，正确宽度是 <code class="language-plaintext highlighter-rouge">1 - (-1) - 1 = 1</code>，面积 2；写成 <code class="language-plaintext highlighter-rouge">i - left</code> 会得到宽度 2、面积 4，凭空多出一格。</li>
+    <li>
+<strong>错误写法</strong>：弹栈时把左边界取成被弹出元素自身的下标，而不是弹出后的新栈顶。用例 高度数组 <code class="language-plaintext highlighter-rouge">[3, 1, 3, 2, 2]</code> → 在哨兵处弹出下标 3 时，正确的 <code class="language-plaintext highlighter-rouge">left</code> 是 1、宽度 3、面积 6；误取 3 则宽度算成 <code class="language-plaintext highlighter-rouge">5 - 3 - 1 = 1</code>，本行最大值从 6 塌成 3，整个矩阵的答案随之出错。</li>
+    <li>
+<strong>错误写法</strong>：单调栈里存高度值而不是下标。用例 高度数组 <code class="language-plaintext highlighter-rouge">[2, 1, 2]</code> → 弹栈时拿不到位置信息，无法算出 <code class="language-plaintext highlighter-rouge">i - left - 1</code> 这个宽度，只能退化成按弹出次数估算，遇到中间夹着更矮柱子的情形就会把不相邻的列错误地并进同一个矩形。</li>
+    <li>
+<strong>错误写法</strong>：把 <code class="language-plaintext highlighter-rouge">heights</code> 数组放在行循环内部重新分配并只填当前行。用例 全 1 矩阵 → 每行高度都被重置成 1，只能找到高为 1 的矩形，返回列数而不是整个矩阵面积。</li>
+    <li>
+<strong>错误写法</strong>：只对最后一行调用柱状图子过程，或只用最大高度那一行。用例 上文的四行五列矩阵 → 最优解出现在第三行，若只看第四行会返回 4 而不是 6。</li>
+    <li>
+<strong>错误写法</strong>：忘记判空直接访问 <code class="language-plaintext highlighter-rouge">matrix[0].length</code>。用例 空矩阵 → 抛出下标越界，无法返回应有的 0。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/largest-rectangle-in-histogram/">84. 柱状图中最大的矩形</a></td>
+      <td>困难</td>
+      <td>单调栈的一维原型，本题正是把每一行化归到它</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/count-submatrices-with-all-ones/">1504. 统计全 1 子矩形</a></td>
+      <td>中等</td>
+      <td>同样逐行压高度，但要用单调栈累计子矩形个数而非取最大面积</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/0ynMMM/">LCR 039. 柱状图中最大的矩形</a></td>
+      <td>困难</td>
+      <td>84 题的同题异号版本，可直接复用同一份单调栈模板</td>
+    </tr>
+    <tr>
+      <td><a href="https://hgnulb.github.io/blog/2024/37425078">补充题 3. 求区间最小数乘区间和的最大值</a></td>
+      <td>困难</td>
+      <td>区间贡献从「最小值乘长度」换成「最小值乘区间和」，需配前缀和</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/87749836" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode LCR 039. 柱状图中最大的矩形</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/81678186" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode LCR 041. 数据流中的移动平均值</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/25732663">https://hgnulb.github.io/blog/2026/25732663</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

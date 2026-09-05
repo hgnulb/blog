@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 211. 添加与搜索单词 - 数据结构设计 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,字典树,字符串,字节跳动,深度优先搜索,设计" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 211. 添加与搜索单词 - 数据结构设计" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/87049048" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/87049048" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-21T21:18:46+08:00" />
+<meta property="article:modified_time" content="2022-09-21T21:18:46+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 211. 添加与搜索单词 - 数据结构设计" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-09-21T21:18:46+08:00","datePublished":"2022-09-21T21:18:46+08:00","description":"题目描述","headline":"LeetCode 211. 添加与搜索单词 - 数据结构设计","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/87049048"},"url":"https://hgnulb.github.io/blog/2022/87049048"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法trie--dfs">解法：Trie + DFS</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 211. 添加与搜索单词 - 数据结构设计">LeetCode 211. 添加与搜索单词 - 数据结构设计</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-09-21 21:18:46"
+                    datetime="2022-09-21T21:18:46+08:00"
+            >
+                2022-09-21
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2523 字 · 英文 57 词 · 代码 84 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2523 字 · 英文 57 词 · 代码 84 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    6 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3017352688/" title="面试经典 150 题">
+        面试经典 150 题
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1523889636/" title="字典树">
+        字典树
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法trie--dfs">解法：Trie + DFS</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/design-add-and-search-words-data-structure/">211. 添加与搜索单词 - 数据结构设计</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>需要设计一个支持两种操作的容器：<code class="language-plaintext highlighter-rouge">addWord</code> 把一个单词存进去，<code class="language-plaintext highlighter-rouge">search</code> 判断是否存在一个已存过的单词能与给定模式串完全匹配，模式串里可能出现 <code class="language-plaintext highlighter-rouge">.</code>，一个 <code class="language-plaintext highlighter-rouge">.</code> 恰好匹配任意一个小写字母。</p>
+
+  <p>关键在于「完全匹配」而不是「前缀匹配」，长度必须相等，所以 <code class="language-plaintext highlighter-rouge">.</code> 不能吞掉多个字符，也不能匹配空。</p>
+
+  <p>字符集只有 26 个小写字母，单词长度不超过 25，<code class="language-plaintext highlighter-rouge">addWord</code> 和 <code class="language-plaintext highlighter-rouge">search</code> 合计最多调用 10^4 次，其中带 <code class="language-plaintext highlighter-rouge">.</code> 的查询保证最多含 2 个 <code class="language-plaintext highlighter-rouge">.</code>。字符集小且固定，暗示每个节点可以用定长 26 的数组而不是哈希表来存孩子；<code class="language-plaintext highlighter-rouge">.</code> 的数量被限制住，暗示在 <code class="language-plaintext highlighter-rouge">.</code> 处做分叉枚举是被出题人允许的开销。</p>
+
+  <p>边界包括：同一个单词被重复添加、模式串全是 <code class="language-plaintext highlighter-rouge">.</code>、模式串比库中所有单词都长或都短、以及在还没添加任何单词时就查询。</p>
+</blockquote>
+
+<h2 id="解法trie--dfs">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95trie--dfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：Trie + DFS</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是把所有单词存进一个列表，每次 <code class="language-plaintext highlighter-rouge">search</code> 遍历列表逐个做「同长度且逐位匹配，<code class="language-plaintext highlighter-rouge">.</code> 位跳过」的比较。这是对的，但每次查询要扫全部单词，总代价是「单词数 × 单词长度」，在 10^4 次查询下退化成千万次字符比较，瓶颈在于不同单词的公共前缀被反复重新比较了无数遍。</p>
+
+  <p>观察点是：所有单词按字符逐位展开后，公共前缀天然共享同一条路径。如果把单词组织成一棵以字符为边的树，那么「按位比较」就变成「沿边下沉」，一次下沉同时代表了所有共享该前缀的单词，公共前缀的重复比较被彻底消掉。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">.</code> 的存在让匹配不再是唯一路径，而是从当前节点出发的一次分叉。但分叉只发生在 <code class="language-plaintext highlighter-rouge">.</code> 所在的这一层，且分支数被字符集大小 26 卡死，因此变成一个可控的深度优先搜索。</p>
+
+  <p>数据结构不变量：树上从根到任意节点的边序列，恰好是某个已添加单词的一个前缀；节点上的布尔标记 <code class="language-plaintext highlighter-rouge">isEnd</code> 为真，当且仅当从根到该节点的边序列本身是一个被完整添加过的单词。有了这条不变量，「完全匹配」就等价于「沿着模式串走满全部字符后，落点节点的 <code class="language-plaintext highlighter-rouge">isEnd</code> 为真」。</p>
+
+  <p>递归函数的语义固定为：<code class="language-plaintext highlighter-rouge">dfs(pos, node)</code> 返回「以 <code class="language-plaintext highlighter-rouge">node</code> 为根的子树中，是否存在一条路径能匹配模式串从下标 <code class="language-plaintext highlighter-rouge">pos</code> 到末尾的这一段」。这个返回值含义在空节点、走到串尾、普通字符、通配符四种情况下必须完全一致。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>定义节点结构：一个长度 26 的孩子指针数组加一个 <code class="language-plaintext highlighter-rouge">isEnd</code> 布尔位。之所以用定长数组而不是哈希表，是因为字符集固定，数组下标 <code class="language-plaintext highlighter-rouge">c - 'a'</code> 的定位是无分支的常数操作，且在 <code class="language-plaintext highlighter-rouge">.</code> 分叉时可以直接顺序枚举 26 个槽位，代码比遍历哈希表的 entry 更短更稳。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">addWord</code> 从根出发逐字符下沉，孩子为空就新建节点，走完全部字符后把落点的 <code class="language-plaintext highlighter-rouge">isEnd</code> 置真。之所以只在末尾置真而不在中途置真，是因为 <code class="language-plaintext highlighter-rouge">isEnd</code> 承担的正是「这里是一个完整单词的终点」这一唯一语义，中途置真会让 <code class="language-plaintext highlighter-rouge">"apple"</code> 的前缀 <code class="language-plaintext highlighter-rouge">"app"</code> 被误判为已存在。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">search</code> 直接调用 <code class="language-plaintext highlighter-rouge">dfs(word, 0, root)</code>，把所有逻辑收进递归。之所以不写迭代，是因为 <code class="language-plaintext highlighter-rouge">.</code> 会产生分叉，迭代需要手动维护栈，而分叉深度天然对应递归深度，递归写法更贴合问题结构。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">dfs</code> 的第一件事是判空节点返回 <code class="language-plaintext highlighter-rouge">false</code>。之所以要判，是因为普通字符分支会直接把 <code class="language-plaintext highlighter-rouge">node.next[c - 'a']</code> 传下去而不做检查，把空指针的处理统一收拢到函数入口，比在每个调用点各写一次判断更不容易漏。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">dfs</code> 的第二件事是判 <code class="language-plaintext highlighter-rouge">pos == word.length()</code> 时返回 <code class="language-plaintext highlighter-rouge">node.isEnd</code>。之所以返回 <code class="language-plaintext highlighter-rouge">isEnd</code> 而不是 <code class="language-plaintext highlighter-rouge">true</code>，正是「完全匹配」与「前缀匹配」的分水岭：模式串走完了，但当前节点未必是某个单词的终点。</li>
+    <li>遇到 <code class="language-plaintext highlighter-rouge">.</code> 时枚举 26 个孩子，任一非空孩子的 <code class="language-plaintext highlighter-rouge">dfs(pos + 1, child)</code> 为真就立刻返回真。之所以能短路返回，是因为题目只问存在性，找到一条可行路径后其余分支的结果不影响答案。</li>
+    <li>遇到普通字符时只递归唯一确定的那个孩子。之所以不需要循环，是因为普通字符把分支因子压回 1，这也是为什么 <code class="language-plaintext highlighter-rouge">.</code> 的个数才是复杂度的主导因素。</li>
+  </ul>
+
+  <p>以调用序列 <code class="language-plaintext highlighter-rouge">addWord("bad")</code>、<code class="language-plaintext highlighter-rouge">addWord("dad")</code>、<code class="language-plaintext highlighter-rouge">addWord("mad")</code>、<code class="language-plaintext highlighter-rouge">search("pad")</code>、<code class="language-plaintext highlighter-rouge">search(".ad")</code> 走一遍。三次添加后，根节点的 <code class="language-plaintext highlighter-rouge">b</code>、<code class="language-plaintext highlighter-rouge">d</code>、<code class="language-plaintext highlighter-rouge">m</code> 三个槽位各挂一棵深度为 3 的链，三条链的末端节点 <code class="language-plaintext highlighter-rouge">isEnd</code> 都为真。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">search("pad")</code>：<code class="language-plaintext highlighter-rouge">dfs(0, root)</code>，<code class="language-plaintext highlighter-rouge">pos = 0</code> 不等于 3，字符 <code class="language-plaintext highlighter-rouge">p</code> 不是 <code class="language-plaintext highlighter-rouge">.</code>，取 <code class="language-plaintext highlighter-rouge">root.next['p' - 'a']</code>，这个槽从未被写过，为空，递归进入后在入口判空返回 <code class="language-plaintext highlighter-rouge">false</code>，整个查询返回 <code class="language-plaintext highlighter-rouge">false</code>，符合预期。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">search(".ad")</code>：<code class="language-plaintext highlighter-rouge">dfs(0, root)</code>，字符是 <code class="language-plaintext highlighter-rouge">.</code>，进入枚举。下标 1 对应 <code class="language-plaintext highlighter-rouge">b</code>，孩子非空，递归 <code class="language-plaintext highlighter-rouge">dfs(1, b节点)</code>；<code class="language-plaintext highlighter-rouge">pos = 1</code>，字符 <code class="language-plaintext highlighter-rouge">a</code> 非通配，取 <code class="language-plaintext highlighter-rouge">b节点.next['a' - 'a']</code>，非空，递归 <code class="language-plaintext highlighter-rouge">dfs(2, ba节点)</code>；字符 <code class="language-plaintext highlighter-rouge">d</code>，取 <code class="language-plaintext highlighter-rouge">ba节点.next['d' - 'a']</code>，非空，递归 <code class="language-plaintext highlighter-rouge">dfs(3, bad节点)</code>；<code class="language-plaintext highlighter-rouge">pos = 3</code> 等于串长，返回该节点的 <code class="language-plaintext highlighter-rouge">isEnd</code>，为真。真值沿调用链一路短路返回，<code class="language-plaintext highlighter-rouge">.</code> 的枚举在第一个命中的分支就停下，不再试 <code class="language-plaintext highlighter-rouge">d</code> 和 <code class="language-plaintext highlighter-rouge">m</code>，最终返回 <code class="language-plaintext highlighter-rouge">true</code>。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">WordDictionary</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">TrieNode</span> <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TrieNode</span><span class="o">();</span>
+
+    <span class="kd">public</span> <span class="nf">WordDictionary</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addWord</span><span class="o">(</span><span class="nc">String</span> <span class="n">word</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">TrieNode</span> <span class="n">node</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">word</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TrieNode</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">[</span><span class="n">idx</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">isEnd</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">search</span><span class="o">(</span><span class="nc">String</span> <span class="n">word</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">dfs</span><span class="o">(</span><span class="n">word</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">root</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">dfs</span><span class="o">(</span><span class="nc">String</span> <span class="n">word</span><span class="o">,</span> <span class="kt">int</span> <span class="n">pos</span><span class="o">,</span> <span class="nc">TrieNode</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">pos</span> <span class="o">==</span> <span class="n">word</span><span class="o">.</span><span class="na">length</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="na">isEnd</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">pos</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">'.'</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">TrieNode</span> <span class="n">child</span> <span class="o">:</span> <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">child</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">dfs</span><span class="o">(</span><span class="n">word</span><span class="o">,</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">child</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="nf">dfs</span><span class="o">(</span><span class="n">word</span><span class="o">,</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">[</span><span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">]);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TrieNode</span> <span class="o">{</span>
+        <span class="nc">TrieNode</span><span class="o">[]</span> <span class="n">next</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TrieNode</span><span class="o">[</span><span class="mi">26</span><span class="o">];</span>
+        <span class="kt">boolean</span> <span class="n">isEnd</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">WordDictionary</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">root</span> <span class="o">*</span><span class="n">TrieNode</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">TrieNode</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">next</span>  <span class="p">[</span><span class="m">26</span><span class="p">]</span><span class="o">*</span><span class="n">TrieNode</span>
+    <span class="n">isEnd</span> <span class="kt">bool</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">WordDictionary</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">WordDictionary</span><span class="p">{</span><span class="n">root</span><span class="o">:</span> <span class="nb">new</span><span class="p">(</span><span class="n">TrieNode</span><span class="p">)}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">w</span> <span class="o">*</span><span class="n">WordDictionary</span><span class="p">)</span> <span class="n">AddWord</span><span class="p">(</span><span class="n">word</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">node</span> <span class="o">:=</span> <span class="n">w</span><span class="o">.</span><span class="n">root</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">idx</span> <span class="o">:=</span> <span class="n">word</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span>
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">TrieNode</span><span class="p">{}</span>
+        <span class="p">}</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">.</span><span class="n">isEnd</span> <span class="o">=</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">w</span> <span class="o">*</span><span class="n">WordDictionary</span><span class="p">)</span> <span class="n">Search</span><span class="p">(</span><span class="n">word</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="o">*</span><span class="n">TrieNode</span><span class="p">)</span> <span class="kt">bool</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">pos</span> <span class="kt">int</span><span class="p">,</span> <span class="n">node</span> <span class="o">*</span><span class="n">TrieNode</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="no">false</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">pos</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">isEnd</span>
+        <span class="p">}</span>
+
+        <span class="n">c</span> <span class="o">:=</span> <span class="n">word</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'.'</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">26</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="no">nil</span> <span class="o">&amp;&amp;</span> <span class="n">dfs</span><span class="p">(</span><span class="n">pos</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="no">true</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="no">false</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">dfs</span><span class="p">(</span><span class="n">pos</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">c</span><span class="o">-</span><span class="sc">'a'</span><span class="p">])</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">dfs</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">w</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：<code class="language-plaintext highlighter-rouge">addWord</code> 为 $O(L)$，因为只是沿着 $L$ 个字符各下沉一层；<code class="language-plaintext highlighter-rouge">search</code> 为 $O(26^k \cdot L)$，其中 $L$ 是模式串长度、$k$ 是其中 <code class="language-plaintext highlighter-rouge">.</code> 的个数，凭据是普通字符处分支因子恒为 1，只有 <code class="language-plaintext highlighter-rouge">.</code> 处会把当前搜索状态扩展成至多 26 个，$k$ 个通配符叠乘就得到这个上界，题目限定 $k \le 2$ 时实际只有常数倍开销。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(26 \cdot N)$，其中 $N$ 是所有已添加单词的字符总数，凭据是每插入一个新字符最多新建一个节点，而每个节点固定持有 26 个孩子指针；递归栈深度不超过模式串长度 $L$，被节点开销吸收。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「多个字符串共享前缀」这个信号出现时，应该立刻想到把线性容器换成前缀树，把重复的前缀比较折叠成一次路径下沉，这是所有前缀类题目的通用第一步。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">isEnd</code> 标记是区分「前缀存在」和「单词存在」的唯一手段，任何基于前缀树的设计题都必须先想清楚这个标记放在哪、由谁置位、被谁读取。</li>
+    <li>递归函数的返回值语义必须一次性定死并在所有分支保持一致，本题定为「子树内能否匹配剩余模式段」，空节点、串尾、通配、普通四个分支才能各自独立地写正确。</li>
+    <li>把空指针检查上提到递归入口，而不是分散在每个调用点，能显著减少分支遗漏，这在树和图的 DFS 里是可以稳定复用的写法。</li>
+    <li>分支因子的来源要单独识别：本题只有 <code class="language-plaintext highlighter-rouge">.</code> 会制造分叉，识别出这一点后复杂度分析和优化方向都变得清晰，同样的思路可用于任何「带通配的匹配」问题。</li>
+    <li>面试视角：面试官期待你先说清朴素列表存储的瓶颈在哪，再主动提出前缀树，然后当场把 <code class="language-plaintext highlighter-rouge">.</code> 的处理定位为「唯一的分叉点」并给出 $26^k$ 的估计。如果被追问优化，可以提「按长度分桶后再建树」或「记录每层最长单词长度以提前剪枝」，但不必真的写出来。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>在 <code class="language-plaintext highlighter-rouge">pos == word.length()</code> 处直接 <code class="language-plaintext highlighter-rouge">return true</code>：用例先 <code class="language-plaintext highlighter-rouge">addWord("apple")</code> 再 <code class="language-plaintext highlighter-rouge">search("app")</code>，会错误返回 <code class="language-plaintext highlighter-rouge">true</code>，因为把前缀当成了完整单词，必须返回 <code class="language-plaintext highlighter-rouge">node.isEnd</code>。</li>
+    <li>普通字符分支不判空就解引用，例如写成 <code class="language-plaintext highlighter-rouge">return dfs(word, pos + 1, node.next[c - 'a'].xxx)</code> 或在调用前访问孩子字段：用例 <code class="language-plaintext highlighter-rouge">search("pad")</code> 而库中只有 <code class="language-plaintext highlighter-rouge">"bad"</code>，<code class="language-plaintext highlighter-rouge">root.next['p'-'a']</code> 为 <code class="language-plaintext highlighter-rouge">null</code>，会直接抛空指针异常。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">.</code> 分支枚举孩子时写成 <code class="language-plaintext highlighter-rouge">for (TrieNode child : node.next) return dfs(...)</code>，只试第一个非空孩子就返回：用例 <code class="language-plaintext highlighter-rouge">addWord("bad")</code>、<code class="language-plaintext highlighter-rouge">addWord("mad")</code>、<code class="language-plaintext highlighter-rouge">search(".ad")</code> 在字典只含 <code class="language-plaintext highlighter-rouge">"mad"</code> 时会返回 <code class="language-plaintext highlighter-rouge">false</code>，因为遇到空槽或首个失败分支就提前结束，必须遍历完所有 26 个槽才能返回 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">.</code> 分支中把子递归的 <code class="language-plaintext highlighter-rouge">false</code> 也当成最终结果返回，例如 <code class="language-plaintext highlighter-rouge">return dfs(word, pos + 1, child)</code> 写在循环体内：用例 <code class="language-plaintext highlighter-rouge">addWord("bad")</code>、<code class="language-plaintext highlighter-rouge">addWord("dad")</code>、<code class="language-plaintext highlighter-rouge">search(".ad")</code>，先试到 <code class="language-plaintext highlighter-rouge">b</code> 失败就整体返回 <code class="language-plaintext highlighter-rouge">false</code>，漏掉了后面能匹配的 <code class="language-plaintext highlighter-rouge">d</code> 分支。</li>
+    <li>在 <code class="language-plaintext highlighter-rouge">addWord</code> 的循环中途给每个经过的节点都置 <code class="language-plaintext highlighter-rouge">isEnd = true</code>：用例 <code class="language-plaintext highlighter-rouge">addWord("bad")</code> 后 <code class="language-plaintext highlighter-rouge">search("ba")</code> 会返回 <code class="language-plaintext highlighter-rouge">true</code>，把所有前缀都变成了合法单词。</li>
+    <li>把 <code class="language-plaintext highlighter-rouge">.</code> 当作可匹配零个或多个字符处理：用例 <code class="language-plaintext highlighter-rouge">addWord("bad")</code>、<code class="language-plaintext highlighter-rouge">search(".")</code>，会错误返回 <code class="language-plaintext highlighter-rouge">true</code>，而正确答案是 <code class="language-plaintext highlighter-rouge">false</code>，因为一个 <code class="language-plaintext highlighter-rouge">.</code> 只匹配恰好一个字符。</li>
+    <li>忘记为每次 <code class="language-plaintext highlighter-rouge">search</code> 重新从 <code class="language-plaintext highlighter-rouge">root</code> 开始，而是复用了上一次查询结束时的节点指针：用例连续 <code class="language-plaintext highlighter-rouge">search("bad")</code>、<code class="language-plaintext highlighter-rouge">search("mad")</code>，第二次会从 <code class="language-plaintext highlighter-rouge">bad</code> 的末端继续下沉，必然返回 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>用 <code class="language-plaintext highlighter-rouge">HashMap&lt;Character, TrieNode&gt;</code> 存孩子却在 <code class="language-plaintext highlighter-rouge">.</code> 分支里遍历 <code class="language-plaintext highlighter-rouge">'a'</code> 到 <code class="language-plaintext highlighter-rouge">'z'</code> 并对不存在的键调用 <code class="language-plaintext highlighter-rouge">get</code> 后直接使用：用例任何含 <code class="language-plaintext highlighter-rouge">.</code> 的查询，返回的 <code class="language-plaintext highlighter-rouge">null</code> 未判空会抛异常；用定长数组则天然把「不存在」表示为 <code class="language-plaintext highlighter-rouge">null</code> 槽位。</li>
+    <li>Go 版本把 <code class="language-plaintext highlighter-rouge">next</code> 声明成 <code class="language-plaintext highlighter-rouge">[]*TrieNode</code> 但没有 <code class="language-plaintext highlighter-rouge">make</code> 初始化：用例第一次 <code class="language-plaintext highlighter-rouge">AddWord("bad")</code>，对 nil 切片按下标赋值会 panic，声明成数组 <code class="language-plaintext highlighter-rouge">[26]*TrieNode</code> 才是零值可用的。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/implement-trie-prefix-tree/">208. 实现 Trie (前缀树)</a></td>
+      <td>中等</td>
+      <td>无通配的基础版，只需迭代下沉，重点是区分 <code class="language-plaintext highlighter-rouge">search</code> 与 <code class="language-plaintext highlighter-rouge">startsWith</code>
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/word-search-ii/">212. 单词搜索 II</a></td>
+      <td>困难</td>
+      <td>把前缀树挂到网格回溯上，考察边搜索边剪枝与命中后摘除节点</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/replace-words/">648. 单词替换</a></td>
+      <td>中等</td>
+      <td>求最短匹配前缀，下沉过程中一旦遇到 <code class="language-plaintext highlighter-rouge">isEnd</code> 就立即停止</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/map-sum-pairs/">677. 键值映射</a></td>
+      <td>中等</td>
+      <td>节点上存的是数值而非布尔，需要处理同键覆盖时的差值更新</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-word-in-dictionary/">720. 词典中最长的单词</a></td>
+      <td>中等</td>
+      <td>要求路径上每个前缀都是合法单词，遍历时需沿 <code class="language-plaintext highlighter-rouge">isEnd</code> 链推进</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/58573618" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 676. 实现一个魔法字典</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/24707848" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 剑指 Offer 68 - II. 二叉树的最近公共祖先</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/87049048">https://hgnulb.github.io/blog/2022/87049048</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

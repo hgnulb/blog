@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 713. 乘积小于 K 的子数组 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,二分查找,前缀和,华为,子数组问题,微软,数组,滑动窗口,滑动窗口经典题" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 713. 乘积小于 K 的子数组" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/17160017" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/17160017" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-18T00:08:07+08:00" />
+<meta property="article:modified_time" content="2022-09-18T00:08:07+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 713. 乘积小于 K 的子数组" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-09-18T00:08:07+08:00","datePublished":"2022-09-18T00:08:07+08:00","description":"题目描述","headline":"LeetCode 713. 乘积小于 K 的子数组","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/17160017"},"url":"https://hgnulb.github.io/blog/2022/17160017"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法正数乘积滑动窗口">解法：正数乘积滑动窗口</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 713. 乘积小于 K 的子数组">LeetCode 713. 乘积小于 K 的子数组</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-09-18 00:08:07"
+                    datetime="2022-09-18T00:08:07+08:00"
+            >
+                2022-09-18
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2837 字 · 英文 125 词 · 代码 38 行 · 图片 1 张"
+            aria-label="预计阅读时间约 9 分钟，正文 2837 字 · 英文 125 词 · 代码 38 行 · 图片 1 张"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    8 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0106759788/" title="华为">
+        华为
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3447615142/" title="二分查找">
+        二分查找
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5692196181/" title="滑动窗口">
+        滑动窗口
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7488286296/" title="前缀和">
+        前缀和
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2754572847/" title="滑动窗口经典题">
+        滑动窗口经典题
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3661710916/" title="子数组问题">
+        子数组问题
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法正数乘积滑动窗口">解法：正数乘积滑动窗口</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/subarray-product-less-than-k/">713. 乘积小于 K 的子数组</a></p>
+</blockquote>
+
+<p><img src="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/post-list/image-20250420052921389.png" alt="image-20250420052921389" decoding="async" loading="lazy" width="919" height="686"></p>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个整数数组 <code class="language-plaintext highlighter-rouge">nums</code> 和一个整数 <code class="language-plaintext highlighter-rouge">k</code>，要求统计有多少个<strong>连续非空子数组</strong>，它们所有元素的乘积严格小于 <code class="language-plaintext highlighter-rouge">k</code>。注意要的是个数，不是把这些子数组列出来，也不是求最长的那一个。</p>
+</blockquote>
+
+<blockquote>
+  <p>「连续」这两个字把候选集合钉死成了 $O(n^2)$ 个区间——每个子数组由左右端点唯一确定。如果逐个枚举区间再算乘积，是 $O(n^3)$；预先算好前缀积可以降到 $O(n^2)$，但前缀积很快就会溢出，而且题目给的 <code class="language-plaintext highlighter-rouge">n</code> 到 $3 \times 10^4$，$O(n^2)$ 是 $9 \times 10^8$ 级别，明显超时。所以必须找到线性做法。</p>
+</blockquote>
+
+<blockquote>
+  <p>真正的算法信号藏在数据范围里：<code class="language-plaintext highlighter-rouge">1 &lt;= nums[i] &lt;= 1000</code>，<strong>所有元素都是正整数，没有 0 也没有负数</strong>。这一条决定了整道题的解法。正数意味着乘积具有单调性：往窗口右端加一个元素，乘积只增不减；从窗口左端删一个元素，乘积只减不增。有了这层单调性，「满足条件」这个性质对区间就是<strong>向内继承</strong>的——一个区间合法，它的所有子区间必然也合法。这正是双指针能成立的前提。一旦允许出现 0 或负数，乘积就会来回震荡，窗口一收缩说不定反而变大，这条路立刻断掉。</p>
+</blockquote>
+
+<blockquote>
+  <p>另一个必须提前想到的点是 <code class="language-plaintext highlighter-rouge">k</code> 的取值可以低到 0。由于每个元素至少是 1，任何子数组的乘积也至少是 1，所以 <code class="language-plaintext highlighter-rouge">k &lt;= 1</code> 时不可能有任何合法子数组，答案恒为 0。这不只是「顺手写个特判」，它还牵扯到主循环的正确性：如果不拦住这种情况，收缩循环会把左指针一路推过右指针，导致越界或死循环。</p>
+</blockquote>
+
+<blockquote>
+  <p>边界还有：<code class="language-plaintext highlighter-rouge">n</code> 可以是 1；单个元素本身就可能大于等于 <code class="language-plaintext highlighter-rouge">k</code>（比如 <code class="language-plaintext highlighter-rouge">nums = [1000]</code>、<code class="language-plaintext highlighter-rouge">k = 5</code>），此时它自己不合法但不该影响后续统计；乘积可能很大，<code class="language-plaintext highlighter-rouge">nums</code> 全是 1000 时哪怕只有几个元素也会冲破 <code class="language-plaintext highlighter-rouge">int</code>，需要留意中间量的类型。</p>
+</blockquote>
+
+<h2 id="解法正数乘积滑动窗口">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%AD%A3%E6%95%B0%E4%B9%98%E7%A7%AF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：正数乘积滑动窗口</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先看暴力：固定左端点 <code class="language-plaintext highlighter-rouge">i</code>，向右扩展右端点 <code class="language-plaintext highlighter-rouge">j</code>，累乘并统计。一旦乘积达到 <code class="language-plaintext highlighter-rouge">k</code> 就可以提前 <code class="language-plaintext highlighter-rouge">break</code>（因为再往右只会更大），所以最坏是 $O(n^2)$。瓶颈在于每次换一个左端点都要从头重算乘积，而这些区间之间高度重叠——<code class="language-plaintext highlighter-rouge">[i, j]</code> 和 <code class="language-plaintext highlighter-rouge">[i+1, j]</code> 的乘积只差一个因子。</p>
+</blockquote>
+
+<blockquote>
+  <p>换成「固定右端点」的视角，事情就变了。对每个右端点 <code class="language-plaintext highlighter-rouge">right</code>，设 <code class="language-plaintext highlighter-rouge">L(right)</code> 是使得区间 <code class="language-plaintext highlighter-rouge">[L, right]</code> 乘积小于 <code class="language-plaintext highlighter-rouge">k</code> 的<strong>最小</strong>左端点。由于元素全正、乘积对区间收缩单调不增，<code class="language-plaintext highlighter-rouge">[L(right), right]</code> 的所有子区间 <code class="language-plaintext highlighter-rouge">[i, right]</code>（<code class="language-plaintext highlighter-rouge">L(right) &lt;= i &lt;= right</code>）全都合法，而 <code class="language-plaintext highlighter-rouge">i &lt; L(right)</code> 的全都不合法。<strong>于是以 <code class="language-plaintext highlighter-rouge">right</code> 结尾的合法子数组个数恰好是 <code class="language-plaintext highlighter-rouge">right - L(right) + 1</code></strong>，一个减法就统计完了，不需要逐个枚举。把所有右端点的贡献加起来就是答案，这也保证了不重不漏——每个子数组只在它的右端点处被数一次。</p>
+</blockquote>
+
+<blockquote>
+  <p>更关键的是 <code class="language-plaintext highlighter-rouge">L(right)</code> 具有单调性：<code class="language-plaintext highlighter-rouge">right</code> 右移一格，乘积只增不减，所需的左边界只会往右走，绝不会往左退。所以左指针全程只向右移动，不用回退，两个指针合起来最多走 $2n$ 步。</p>
+</blockquote>
+
+<blockquote>
+  <p>由此得到循环不变量：<strong>每次即将统计答案时，<code class="language-plaintext highlighter-rouge">product</code> 恰好等于区间 <code class="language-plaintext highlighter-rouge">[left, right]</code> 的乘积，且这个乘积严格小于 <code class="language-plaintext highlighter-rouge">k</code>；同时 <code class="language-plaintext highlighter-rouge">left</code> 是满足该条件的最小左端点，即 <code class="language-plaintext highlighter-rouge">left - 1</code> 若存在则 <code class="language-plaintext highlighter-rouge">[left - 1, right]</code> 的乘积必然大于等于 <code class="language-plaintext highlighter-rouge">k</code></strong>。前半句保证统计的都是合法区间，后半句保证没有漏统计。</p>
+</blockquote>
+
+<blockquote>
+  <p>收缩循环的终止性也依赖正数：每次除掉的 <code class="language-plaintext highlighter-rouge">nums[left]</code> 至少是 1，最坏情况下 <code class="language-plaintext highlighter-rouge">left</code> 一路推到 <code class="language-plaintext highlighter-rouge">right + 1</code>，此时窗口为空、<code class="language-plaintext highlighter-rouge">product</code> 回到 1，而前面已经排除了 <code class="language-plaintext highlighter-rouge">k &lt;= 1</code>，所以 <code class="language-plaintext highlighter-rouge">1 &lt; k</code> 必然成立，循环一定停得下来。这时 <code class="language-plaintext highlighter-rouge">right - left + 1</code> 算出的是 0，语义正确——以 <code class="language-plaintext highlighter-rouge">right</code> 结尾的合法子数组一个也没有。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>开头判 <code class="language-plaintext highlighter-rouge">k &lt;= 1</code> 直接返回 0</strong>：元素全部大于等于 1，最小可能乘积就是 1，<code class="language-plaintext highlighter-rouge">k</code> 不超过 1 时无解。这个特判还兼任了安全阀：没有它，<code class="language-plaintext highlighter-rouge">k = 0</code> 时收缩循环因为 <code class="language-plaintext highlighter-rouge">product &gt;= 0</code> 恒成立而不断右移 <code class="language-plaintext highlighter-rouge">left</code>，最终越界访问 <code class="language-plaintext highlighter-rouge">nums[left]</code>。</li>
+    <li>
+<strong>初始化 <code class="language-plaintext highlighter-rouge">left = 0</code>、<code class="language-plaintext highlighter-rouge">product = 1</code>、<code class="language-plaintext highlighter-rouge">res = 0</code></strong>：乘积的单位元是 1 不是 0，写成 0 会让 <code class="language-plaintext highlighter-rouge">product</code> 永远归零、条件永远不满足。</li>
+    <li>
+<strong>枚举右端点 <code class="language-plaintext highlighter-rouge">right</code>，先执行 <code class="language-plaintext highlighter-rouge">product *= nums[right]</code></strong>：先扩张再检查，这是滑动窗口的标准节奏。窗口此刻可能非法，正是下一步要修的。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">while (product &gt;= k)</code> 时除掉 <code class="language-plaintext highlighter-rouge">nums[left]</code> 并右移 <code class="language-plaintext highlighter-rouge">left</code></strong>：用 <code class="language-plaintext highlighter-rouge">while</code> 而不是 <code class="language-plaintext highlighter-rouge">if</code>，因为新加入的元素可能很大，一次收缩不足以让乘积回落，<code class="language-plaintext highlighter-rouge">[1, 1, 1000]</code> 配 <code class="language-plaintext highlighter-rouge">k = 5</code> 就需要连收三次。条件写 <code class="language-plaintext highlighter-rouge">&gt;= k</code> 而不是 <code class="language-plaintext highlighter-rouge">&gt; k</code>，因为题目要求严格小于 <code class="language-plaintext highlighter-rouge">k</code>，等于 <code class="language-plaintext highlighter-rouge">k</code> 也不合法。</li>
+    <li>
+<strong>累加 <code class="language-plaintext highlighter-rouge">res += right - left + 1</code></strong>：这一行必须放在收缩之后，此时不变量成立、窗口已合法。它统计的是所有以 <code class="language-plaintext highlighter-rouge">right</code> 结尾、左端点落在 <code class="language-plaintext highlighter-rouge">[left, right]</code> 内的子数组，长度从 1 到 <code class="language-plaintext highlighter-rouge">right - left + 1</code> 各一个。放在收缩之前会把非法窗口也数进去。</li>
+    <li>
+<strong>遍历结束返回 <code class="language-plaintext highlighter-rouge">res</code></strong>：每个右端点贡献一次，累加即为总数。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>以 <code class="language-plaintext highlighter-rouge">nums = [10, 5, 2, 6]</code>、<code class="language-plaintext highlighter-rouge">k = 100</code> 走一遍（期望 8）。<code class="language-plaintext highlighter-rouge">k &gt; 1</code>，进入主循环，每轮列出「扩张后的乘积 → 收缩过程 → 窗口 → 本轮贡献 → 累计」。</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">right = 0</code>：<code class="language-plaintext highlighter-rouge">product = 1 * 10 = 10</code>，小于 100 不收缩。窗口 <code class="language-plaintext highlighter-rouge">[0, 0]</code> 即 <code class="language-plaintext highlighter-rouge">[10]</code>，贡献 <code class="language-plaintext highlighter-rouge">0 - 0 + 1 = 1</code>，<code class="language-plaintext highlighter-rouge">res = 1</code>。这一个是子数组 <code class="language-plaintext highlighter-rouge">[10]</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">right = 1</code>：<code class="language-plaintext highlighter-rouge">product = 10 * 5 = 50</code>，小于 100 不收缩。窗口 <code class="language-plaintext highlighter-rouge">[0, 1]</code>，贡献 <code class="language-plaintext highlighter-rouge">1 - 0 + 1 = 2</code>，<code class="language-plaintext highlighter-rouge">res = 3</code>。新增的两个是 <code class="language-plaintext highlighter-rouge">[5]</code> 和 <code class="language-plaintext highlighter-rouge">[10, 5]</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">right = 2</code>：<code class="language-plaintext highlighter-rouge">product = 50 * 2 = 100</code>，达到 100 不满足严格小于，进入收缩——除掉 <code class="language-plaintext highlighter-rouge">nums[0] = 10</code>，<code class="language-plaintext highlighter-rouge">product = 10</code>，<code class="language-plaintext highlighter-rouge">left = 1</code>；此时 <code class="language-plaintext highlighter-rouge">10 &lt; 100</code>，收缩结束。窗口 <code class="language-plaintext highlighter-rouge">[1, 2]</code>，贡献 <code class="language-plaintext highlighter-rouge">2 - 1 + 1 = 2</code>，<code class="language-plaintext highlighter-rouge">res = 5</code>。新增的是 <code class="language-plaintext highlighter-rouge">[2]</code> 和 <code class="language-plaintext highlighter-rouge">[5, 2]</code>；<code class="language-plaintext highlighter-rouge">[10, 5, 2]</code> 乘积正好等于 100 被正确排除，而这一步也顺手说明了为什么条件要写 <code class="language-plaintext highlighter-rouge">&gt;= k</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">right = 3</code>：<code class="language-plaintext highlighter-rouge">product = 10 * 6 = 60</code>，小于 100 不收缩。窗口 <code class="language-plaintext highlighter-rouge">[1, 3]</code>，贡献 <code class="language-plaintext highlighter-rouge">3 - 1 + 1 = 3</code>，<code class="language-plaintext highlighter-rouge">res = 8</code>。新增的是 <code class="language-plaintext highlighter-rouge">[6]</code>、<code class="language-plaintext highlighter-rouge">[2, 6]</code>、<code class="language-plaintext highlighter-rouge">[5, 2, 6]</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p>遍历结束返回 8，与期望一致。数一下总共 8 个：<code class="language-plaintext highlighter-rouge">[10]</code>、<code class="language-plaintext highlighter-rouge">[5]</code>、<code class="language-plaintext highlighter-rouge">[2]</code>、<code class="language-plaintext highlighter-rouge">[6]</code>、<code class="language-plaintext highlighter-rouge">[10, 5]</code>、<code class="language-plaintext highlighter-rouge">[5, 2]</code>、<code class="language-plaintext highlighter-rouge">[2, 6]</code>、<code class="language-plaintext highlighter-rouge">[5, 2, 6]</code>，正好不重不漏。</p>
+</blockquote>
+
+<blockquote>
+  <p>再看一个触发窗口清空的用例，<code class="language-plaintext highlighter-rouge">nums = [1, 2, 3]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code>。<code class="language-plaintext highlighter-rouge">right = 0</code> 时 <code class="language-plaintext highlighter-rouge">product = 1 &lt; 2</code>，贡献 1；<code class="language-plaintext highlighter-rouge">right = 1</code> 时 <code class="language-plaintext highlighter-rouge">product = 2 &gt;= 2</code>，收缩除掉 <code class="language-plaintext highlighter-rouge">nums[0] = 1</code> 得 <code class="language-plaintext highlighter-rouge">product = 2</code>、<code class="language-plaintext highlighter-rouge">left = 1</code>，仍不满足，再除掉 <code class="language-plaintext highlighter-rouge">nums[1] = 2</code> 得 <code class="language-plaintext highlighter-rouge">product = 1</code>、<code class="language-plaintext highlighter-rouge">left = 2</code>，此时 <code class="language-plaintext highlighter-rouge">left &gt; right</code>，窗口为空，贡献 <code class="language-plaintext highlighter-rouge">1 - 2 + 1 = 0</code>；<code class="language-plaintext highlighter-rouge">right = 2</code> 同理收缩到 <code class="language-plaintext highlighter-rouge">left = 3</code>，贡献 0。返回 1，只有 <code class="language-plaintext highlighter-rouge">[1]</code> 合法，正确。<strong>注意这里 <code class="language-plaintext highlighter-rouge">left</code> 合法地越过了 <code class="language-plaintext highlighter-rouge">right</code>，<code class="language-plaintext highlighter-rouge">right - left + 1</code> 算出 0 而不是负数，这是这个式子的一个隐藏优点。</strong></p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// 当窗口乘积大于等于 k 时，持续移动左指针并除掉左端元素，直到窗口重新满足条件。</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">numSubarrayProductLessThanK</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">long</span> <span class="n">product</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">right</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">product</span> <span class="o">*=</span> <span class="n">nums</span><span class="o">[</span><span class="n">right</span><span class="o">];</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">product</span> <span class="o">&gt;=</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">product</span> <span class="o">/=</span> <span class="n">nums</span><span class="o">[</span><span class="n">left</span><span class="o">];</span>
+                <span class="n">left</span><span class="o">++;</span>
+            <span class="o">}</span>
+
+            <span class="n">res</span> <span class="o">+=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">numSubarrayProductLessThanK</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="c">// 当窗口乘积大于等于 k 时，持续移动左指针并除掉左端元素，直到窗口重新满足条件。</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="m">1</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="m">0</span>
+    <span class="p">}</span>
+
+    <span class="n">left</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="n">product</span> <span class="o">:=</span> <span class="m">1</span>
+    <span class="n">res</span> <span class="o">:=</span> <span class="m">0</span>
+
+    <span class="k">for</span> <span class="n">right</span><span class="p">,</span> <span class="n">val</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+        <span class="n">product</span> <span class="o">*=</span> <span class="n">val</span>
+        <span class="k">for</span> <span class="n">product</span> <span class="o">&gt;=</span> <span class="n">k</span> <span class="p">{</span>
+            <span class="n">product</span> <span class="o">/=</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span>
+            <span class="n">left</span><span class="o">++</span>
+        <span class="p">}</span>
+
+        <span class="n">res</span> <span class="o">+=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="m">1</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。凭什么：外层 <code class="language-plaintext highlighter-rouge">for</code> 走 <code class="language-plaintext highlighter-rouge">n</code> 步，内层 <code class="language-plaintext highlighter-rouge">while</code> 看似嵌套，但 <code class="language-plaintext highlighter-rouge">left</code> 全程只增不减且不会超过 <code class="language-plaintext highlighter-rouge">n</code>，所有轮次的收缩次数加起来最多 <code class="language-plaintext highlighter-rouge">n</code> 次，摊还下来每轮是常数。两个指针合计移动至多 $2n$ 步，每步只做一次乘除和比较。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(1)$。凭什么：只用了 <code class="language-plaintext highlighter-rouge">left</code>、<code class="language-plaintext highlighter-rouge">product</code>、<code class="language-plaintext highlighter-rouge">res</code>、<code class="language-plaintext highlighter-rouge">right</code> 四个标量，没有前缀积数组、没有哈希表，窗口本身是靠两个下标隐式表示的，不占额外存储。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「统计满足条件的子数组个数」而不是「求最优子数组」时，<strong>固定右端点、用 <code class="language-plaintext highlighter-rouge">right - left + 1</code> 一次性吃掉一整批</strong>是核心技巧，它把逐个枚举压成一次减法，也天然保证了不重不漏（每个子数组只在右端点处被计数）。</li>
+    <li>双指针能成立的充分条件是<strong>性质的单调性</strong>：右扩使指标单调变差、左缩使指标单调变好。本题靠「元素全为正」拿到这个单调性，做题时应该先去数据范围里确认这一条，而不是看到子数组就上滑动窗口。</li>
+    <li>乘法窗口的单位元是 1，收缩时用除法回滚。如果题目允许元素为 0，除法会直接崩，那时要改成对数转加法、或按 0 分段处理，这是本题最常见的变形追问。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">k &lt;= 1</code> 的特判既是数学结论也是代码的安全阀，它保证了收缩循环一定能终止。<strong>能说清「不特判会死循环还是会越界」比只说「要特判」更有说服力。</strong>
+</li>
+    <li>答案累加的位置（收缩之后而非之前）体现的是循环不变量的作用点，写滑动窗口时应该先明确「在哪一行不变量成立」，再把统计语句放到那里。</li>
+    <li>面试时值得主动补充的是「为什么 $O(n^2)$ 的前缀积不行」和「负数或 0 会怎样破坏解法」，前者解释为什么要滑窗，后者证明你理解的是前提而不是模板。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>漏掉 <code class="language-plaintext highlighter-rouge">k &lt;= 1</code> 的特判</strong>：<code class="language-plaintext highlighter-rouge">nums = [1, 2, 3]</code>、<code class="language-plaintext highlighter-rouge">k = 0</code> 时 <code class="language-plaintext highlighter-rouge">product &gt;= 0</code> 恒成立，收缩循环把 <code class="language-plaintext highlighter-rouge">left</code> 一路推到超出数组长度，访问 <code class="language-plaintext highlighter-rouge">nums[left]</code> 抛越界异常。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">product</code> 初始化成 0</strong>：任何数乘 0 还是 0，<code class="language-plaintext highlighter-rouge">[10, 5, 2, 6]</code> 配 <code class="language-plaintext highlighter-rouge">k = 100</code> 会让 <code class="language-plaintext highlighter-rouge">product</code> 永远是 0，每轮都不收缩，把所有 $n(n+1)/2$ 个子数组全数进去，返回 10 而不是 8。</li>
+    <li>
+<strong>收缩条件写成 <code class="language-plaintext highlighter-rouge">product &gt; k</code></strong>：<code class="language-plaintext highlighter-rouge">[10, 5, 2]</code>、<code class="language-plaintext highlighter-rouge">k = 100</code> 时乘积正好 100 被判为合法，多算出 <code class="language-plaintext highlighter-rouge">[10, 5, 2]</code> 这个子数组，答案从 8 变成 9。</li>
+    <li>
+<strong>收缩用 <code class="language-plaintext highlighter-rouge">if</code> 而不是 <code class="language-plaintext highlighter-rouge">while</code></strong>：<code class="language-plaintext highlighter-rouge">nums = [1, 1, 1000]</code>、<code class="language-plaintext highlighter-rouge">k = 5</code> 时读入 1000 后乘积是 1000，只收缩一次得到 1000（除掉的是 1），窗口仍非法就去统计，答案凭空多出两个。</li>
+    <li>
+<strong>把 <code class="language-plaintext highlighter-rouge">res += right - left + 1</code> 写在收缩循环之前</strong>：<code class="language-plaintext highlighter-rouge">[10, 5, 2]</code>、<code class="language-plaintext highlighter-rouge">k = 100</code> 在 <code class="language-plaintext highlighter-rouge">right = 2</code> 时用尚未修正的窗口 <code class="language-plaintext highlighter-rouge">[0, 2]</code> 统计出 3，包含了乘积等于 100 的非法区间。</li>
+    <li>
+<strong>贡献写成 <code class="language-plaintext highlighter-rouge">res += right - left</code></strong>：漏掉了长度为 1 的子数组 <code class="language-plaintext highlighter-rouge">[nums[right]]</code>，<code class="language-plaintext highlighter-rouge">[10, 5, 2, 6]</code> 会返回 4 而不是 8，答案系统性偏小 <code class="language-plaintext highlighter-rouge">n</code>。</li>
+    <li>
+<strong>贡献写成 <code class="language-plaintext highlighter-rouge">res++</code>，以为每个右端点只贡献一个</strong>：只数了以每个位置结尾的最长合法子数组，<code class="language-plaintext highlighter-rouge">[10, 5, 2, 6]</code> 返回 4，把「统计个数」做成了「统计位置数」。</li>
+    <li>
+<strong>Java 里 <code class="language-plaintext highlighter-rouge">product</code> 用 <code class="language-plaintext highlighter-rouge">int</code></strong>：<code class="language-plaintext highlighter-rouge">nums</code> 全是 1000 时 4 个元素相乘就是 $10^{12}$，<code class="language-plaintext highlighter-rouge">int</code> 溢出成负数，<code class="language-plaintext highlighter-rouge">product &gt;= k</code> 判为假，窗口永不收缩，返回一个远超正确值的结果。</li>
+    <li>
+<strong>收缩时先 <code class="language-plaintext highlighter-rouge">left++</code> 再 <code class="language-plaintext highlighter-rouge">product /= nums[left]</code></strong>：除掉的是新左端点而不是要移出窗口的那个元素，<code class="language-plaintext highlighter-rouge">[10, 5, 2]</code> 会把 5 除掉却保留 10，<code class="language-plaintext highlighter-rouge">product</code> 与窗口彻底脱节，后续统计全错。</li>
+    <li>
+<strong>误把题目当成求最长子数组</strong>：返回的是某个长度而不是计数，<code class="language-plaintext highlighter-rouge">[10, 5, 2, 6]</code> 会返回 3，方向性错误且改起来要重写统计逻辑。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-size-subarray-sum/">209. 长度最小的子数组</a></td>
+      <td>中等</td>
+      <td>求最短长度而非计数，指标是加法和，收缩时机变成「合法后尽量缩」并在缩的过程中取最小</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-substring-without-repeating-characters/">3. 无重复字符的最长子串</a></td>
+      <td>中等</td>
+      <td>窗口指标是字符集合，靠哈希表维护重复情况，求最长而不是个数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/fruit-into-baskets/">904. 水果成篮</a></td>
+      <td>中等</td>
+      <td>约束是「窗口内至多两种元素」，需要计数哈希表判断种类数，收缩条件不是数值比较</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/max-consecutive-ones-iii/">1004. 最大连续1的个数 III</a></td>
+      <td>中等</td>
+      <td>窗口指标是 0 的个数上限 <code class="language-plaintext highlighter-rouge">k</code>，可以有反转配额，本质是带预算的最长窗口</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-operations-to-reduce-x-to-zero/">1658. 将 x 减到 0 的最小操作数</a></td>
+      <td>中等</td>
+      <td>要先把「删两端最少个数」转化成「求中间和为定值的最长窗口」，多一层问题转化</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/subarray-sum-equals-k/">560. 和为 K 的子数组</a></td>
+      <td>中等</td>
+      <td>元素可为负，前缀和不再单调，滑动窗口彻底失效，必须改用前缀和加哈希表计数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/binary-subarrays-with-sum/">930. 和相同的二元子数组</a></td>
+      <td>中等</td>
+      <td>求恰好等于某值的个数，常用「至多 goal 减至多 goal-1」的差分技巧转成两次滑窗</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/count-number-of-nice-subarrays/">1248. 统计「优美子数组」</a></td>
+      <td>中等</td>
+      <td>把奇数视作 1、偶数视作 0 后与 930 同构，考的是问题映射而不是窗口本身</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/2VG8Kg/">LCR 008. 长度最小的子数组</a></td>
+      <td>中等</td>
+      <td>与 209 同题，可直接套用求最短长度的模板</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/ZVAVXX/">LCR 009. 乘积小于 K 的子数组</a></td>
+      <td>中等</td>
+      <td>与本题同题，可直接套用</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/17038017" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 729. 我的日程安排表 I</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/88741267" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 403. 青蛙过河</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/17160017">https://hgnulb.github.io/blog/2022/17160017</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

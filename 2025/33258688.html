@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 37. 解数独 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,Dancing Links,X 算法,亚马逊,哈希表,回溯,字节跳动,小米,微软,数组,矩阵,美团,腾讯,虾皮,阿里巴巴" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 37. 解数独" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2025/33258688" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2025/33258688" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-04-23T00:00:00+08:00" />
+<meta property="article:modified_time" content="2025-04-23T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 37. 解数独" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2025-04-23T00:00:00+08:00","datePublished":"2025-04-23T00:00:00+08:00","description":"题目描述","headline":"LeetCode 37. 解数独","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2025/33258688"},"url":"https://hgnulb.github.io/blog/2025/33258688"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法回溯--三组占用标记">解法：回溯 + 三组占用标记</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 37. 解数独">LeetCode 37. 解数独</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2025-04-23 00:00:00"
+                    datetime="2025-04-23T00:00:00+08:00"
+            >
+                2025-04-23
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1465 字 · 英文 37 词 · 代码 100 行"
+            aria-label="预计阅读时间约 7 分钟，正文 1465 字 · 英文 37 词 · 代码 100 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 7 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    14 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4290426122/" title="20-50">
+        20-50
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2381712535/" title="腾讯">
+        腾讯
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8699249851/" title="阿里巴巴">
+        阿里巴巴
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0416977247/" title="美团">
+        美团
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5590284568/" title="小米">
+        小米
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6901340989/" title="虾皮">
+        虾皮
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1155171317/" title="亚马逊">
+        亚马逊
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9242240291/" title="矩阵">
+        矩阵
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9755043388/" title="回溯">
+        回溯
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5184628651/" title="X 算法">
+        X 算法
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4330201692/" title="Dancing Links">
+        Dancing Links
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法回溯--三组占用标记">解法：回溯 + 三组占用标记</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/sudoku-solver/">37. 解数独</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给定一个 $9 \times 9$ 的字符棋盘，已填格子是 <code class="language-plaintext highlighter-rouge">'1'</code> 到 <code class="language-plaintext highlighter-rouge">'9'</code> 的字符，待填格子是 <code class="language-plaintext highlighter-rouge">'.'</code>。要把所有 <code class="language-plaintext highlighter-rouge">'.'</code> 补齐，使得每一行、每一列、以及九个 $3 \times 3$ 的小宫格内部，<code class="language-plaintext highlighter-rouge">1</code> 到 <code class="language-plaintext highlighter-rouge">9</code> 各出现且仅出现一次。</p>
+
+  <p>交付形式很关键：函数签名没有返回值，题目要求<strong>原地修改</strong>传入的 <code class="language-plaintext highlighter-rouge">board</code>。判题读的是被改动后的那个二维数组，任何「另建一份新棋盘再返回」的写法都等于什么也没做。</p>
+
+  <p>约束里有三个强信号。第一，棋盘尺寸固定为 $9 \times 9$，规模极小但组合空间极大，$9^{81}$ 量级的朴素枚举不可能跑完，因此必须能在填错的第一时间就止损。第二，题目保证输入<strong>有且只有一个解</strong>，这意味着不需要收集所有解，一旦搜到就可以立刻沿调用链一路返回，不再继续搜索。第三，约束只有三条，而且形式完全一致：都是「某个集合内 $1$ 到 $9$ 不重复」，这种高度对称的结构提示我们可以用三张同构的表来统一维护。</p>
+
+  <p>边界情形：棋盘可能一开始就没有空格（全部填满），此时不需要做任何事；也可能空格很多、给定数字很少，此时搜索深度接近 81。输入保证合法且有解，所以不必处理「无解」和「初始就冲突」的情况，但代码结构上仍然要有失败返回值，否则回溯无从进行。</p>
+</blockquote>
+
+<h2 id="解法回溯--三组占用标记">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%9E%E6%BA%AF--%E4%B8%89%E7%BB%84%E5%8D%A0%E7%94%A8%E6%A0%87%E8%AE%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：回溯 + 三组占用标记</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>数独需要在多个候选中试探，选错后撤销，因此使用回溯。关键剪枝是：放入数字前立即检查它是否已出现在当前行、当前列或当前九宫格，非法选择不再递归。</p>
+
+  <p>用三组布尔表维护占用状态：</p>
+
+  <ul>
+    <li>
+<code class="language-plaintext highlighter-rouge">rows[row][digit]</code>：第 <code class="language-plaintext highlighter-rouge">row</code> 行是否已有 <code class="language-plaintext highlighter-rouge">digit</code>；</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">cols[col][digit]</code>：第 <code class="language-plaintext highlighter-rouge">col</code> 列是否已有 <code class="language-plaintext highlighter-rouge">digit</code>；</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">boxes[box][digit]</code>：第 <code class="language-plaintext highlighter-rouge">box</code> 宫是否已有 <code class="language-plaintext highlighter-rouge">digit</code>。</li>
+  </ul>
+
+  <p>宫编号为 <code class="language-plaintext highlighter-rouge">row / 3 * 3 + col / 3</code>。这样一次合法性检查只需查三张表。预处理时还把所有空格坐标收集到 <code class="language-plaintext highlighter-rouge">spaces</code>，递归状态只需记录当前处理到第几个空格。</p>
+
+  <p>循环不变量是：进入 <code class="language-plaintext highlighter-rouge">backtrack(idx)</code> 时，前 <code class="language-plaintext highlighter-rouge">idx</code> 个空格已经合法填好，三张表与棋盘当前状态完全一致。尝试一个数字时同步写入棋盘和三张表；该分支失败时再同步撤销。</p>
+
+  <p>算法会枚举当前格的每个合法数字，因此不会漏掉任何可能解；被剪掉的分支已经违反数独约束，不可能成为答案。处理完所有空格时得到合法解。题目保证唯一解，所以找到后返回 <code class="language-plaintext highlighter-rouge">true</code>，让成功路径跳过撤销并保留在原棋盘中。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ol>
+    <li>每次调用先重置三张占用表和空格列表，避免复用同一个 <code class="language-plaintext highlighter-rouge">Solution</code> 时残留状态。</li>
+    <li>扫描棋盘：数字写入对应的行、列、宫标记；<code class="language-plaintext highlighter-rouge">'.'</code> 的坐标加入 <code class="language-plaintext highlighter-rouge">spaces</code>。</li>
+    <li>从 <code class="language-plaintext highlighter-rouge">backtrack(board, 0)</code> 开始处理空格。</li>
+    <li>对当前空格枚举 <code class="language-plaintext highlighter-rouge">1</code> 到 <code class="language-plaintext highlighter-rouge">9</code>。若任一占用表已标记该数字，直接跳过。</li>
+    <li>合法时写入数字并设置三处标记，然后递归处理下一个空格。</li>
+    <li>子问题成功就立即返回；失败则把棋盘恢复为 <code class="language-plaintext highlighter-rouge">'.'</code>，并清除三处标记。</li>
+  </ol>
+
+  <p>例如官方样例的第一个空格 <code class="language-plaintext highlighter-rouge">(0, 2)</code>：所在行已有 <code class="language-plaintext highlighter-rouge">3、5、7</code>，所在列已有 <code class="language-plaintext highlighter-rouge">8</code>，所在宫已有 <code class="language-plaintext highlighter-rouge">3、5、6、8、9</code>，所以候选只有 <code class="language-plaintext highlighter-rouge">1、2、4</code>。算法只会进入这三个分支，而不会盲目尝试九种数字。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">boolean</span><span class="o">[][]</span> <span class="n">rows</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">boolean</span><span class="o">[][]</span> <span class="n">cols</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">boolean</span><span class="o">[][]</span> <span class="n">boxes</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">spaces</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">solveSudoku</span><span class="o">(</span><span class="kt">char</span><span class="o">[][]</span> <span class="n">board</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="mi">9</span><span class="o">][</span><span class="mi">10</span><span class="o">];</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="mi">9</span><span class="o">][</span><span class="mi">10</span><span class="o">];</span>
+        <span class="n">boxes</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="mi">9</span><span class="o">][</span><span class="mi">10</span><span class="o">];</span>
+        <span class="n">spaces</span> <span class="o">=</span> <span class="k">new</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">ArrayList</span><span class="o">&lt;&gt;();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">row</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="o">;</span> <span class="n">row</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="o">;</span> <span class="n">col</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">board</span><span class="o">[</span><span class="n">row</span><span class="o">][</span><span class="n">col</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'.'</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">spaces</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="n">row</span><span class="o">,</span> <span class="n">col</span><span class="o">});</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="kt">int</span> <span class="n">digit</span> <span class="o">=</span> <span class="n">board</span><span class="o">[</span><span class="n">row</span><span class="o">][</span><span class="n">col</span><span class="o">]</span> <span class="o">-</span> <span class="sc">'0'</span><span class="o">;</span>
+                <span class="n">rows</span><span class="o">[</span><span class="n">row</span><span class="o">][</span><span class="n">digit</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="n">cols</span><span class="o">[</span><span class="n">col</span><span class="o">][</span><span class="n">digit</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="n">boxes</span><span class="o">[</span><span class="n">boxIndex</span><span class="o">(</span><span class="n">row</span><span class="o">,</span> <span class="n">col</span><span class="o">)][</span><span class="n">digit</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">backtrack</span><span class="o">(</span><span class="n">board</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">backtrack</span><span class="o">(</span><span class="kt">char</span><span class="o">[][]</span> <span class="n">board</span><span class="o">,</span> <span class="kt">int</span> <span class="n">idx</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">idx</span> <span class="o">==</span> <span class="n">spaces</span><span class="o">.</span><span class="na">size</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">row</span> <span class="o">=</span> <span class="n">spaces</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">idx</span><span class="o">)[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="n">spaces</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">idx</span><span class="o">)[</span><span class="mi">1</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">box</span> <span class="o">=</span> <span class="n">boxIndex</span><span class="o">(</span><span class="n">row</span><span class="o">,</span> <span class="n">col</span><span class="o">);</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">digit</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">digit</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="o">;</span> <span class="n">digit</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">rows</span><span class="o">[</span><span class="n">row</span><span class="o">][</span><span class="n">digit</span><span class="o">]</span>
+                    <span class="o">||</span> <span class="n">cols</span><span class="o">[</span><span class="n">col</span><span class="o">][</span><span class="n">digit</span><span class="o">]</span>
+                    <span class="o">||</span> <span class="n">boxes</span><span class="o">[</span><span class="n">box</span><span class="o">][</span><span class="n">digit</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="n">board</span><span class="o">[</span><span class="n">row</span><span class="o">][</span><span class="n">col</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="kt">char</span><span class="o">)</span> <span class="o">(</span><span class="sc">'0'</span> <span class="o">+</span> <span class="n">digit</span><span class="o">);</span>
+            <span class="n">rows</span><span class="o">[</span><span class="n">row</span><span class="o">][</span><span class="n">digit</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="n">cols</span><span class="o">[</span><span class="n">col</span><span class="o">][</span><span class="n">digit</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="n">boxes</span><span class="o">[</span><span class="n">box</span><span class="o">][</span><span class="n">digit</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">backtrack</span><span class="o">(</span><span class="n">board</span><span class="o">,</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="n">board</span><span class="o">[</span><span class="n">row</span><span class="o">][</span><span class="n">col</span><span class="o">]</span> <span class="o">=</span> <span class="sc">'.'</span><span class="o">;</span>
+            <span class="n">rows</span><span class="o">[</span><span class="n">row</span><span class="o">][</span><span class="n">digit</span><span class="o">]</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="n">cols</span><span class="o">[</span><span class="n">col</span><span class="o">][</span><span class="n">digit</span><span class="o">]</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="n">boxes</span><span class="o">[</span><span class="n">box</span><span class="o">][</span><span class="n">digit</span><span class="o">]</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">boxIndex</span><span class="o">(</span><span class="kt">int</span> <span class="n">row</span><span class="o">,</span> <span class="kt">int</span> <span class="n">col</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">row</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">col</span> <span class="o">/</span> <span class="mi">3</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">solveSudoku</span><span class="p">(</span><span class="n">board</span> <span class="p">[][]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">rows</span> <span class="o">:=</span> <span class="p">[</span><span class="m">9</span><span class="p">][</span><span class="m">10</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
+    <span class="n">cols</span> <span class="o">:=</span> <span class="p">[</span><span class="m">9</span><span class="p">][</span><span class="m">10</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
+    <span class="n">boxes</span> <span class="o">:=</span> <span class="p">[</span><span class="m">9</span><span class="p">][</span><span class="m">10</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
+    <span class="n">spaces</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">row</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">row</span> <span class="o">&lt;</span> <span class="m">9</span><span class="p">;</span> <span class="n">row</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="m">9</span><span class="p">;</span> <span class="n">col</span><span class="o">++</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'.'</span> <span class="p">{</span>
+                <span class="n">spaces</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">spaces</span><span class="p">,</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">})</span>
+                <span class="k">continue</span>
+            <span class="p">}</span>
+
+            <span class="n">digit</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'0'</span><span class="p">)</span>
+            <span class="n">box</span> <span class="o">:=</span> <span class="n">row</span><span class="o">/</span><span class="m">3</span><span class="o">*</span><span class="m">3</span> <span class="o">+</span> <span class="n">col</span><span class="o">/</span><span class="m">3</span>
+            <span class="n">rows</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">digit</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+            <span class="n">cols</span><span class="p">[</span><span class="n">col</span><span class="p">][</span><span class="n">digit</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+            <span class="n">boxes</span><span class="p">[</span><span class="n">box</span><span class="p">][</span><span class="n">digit</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">var</span> <span class="n">backtrack</span> <span class="k">func</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span>
+    <span class="n">backtrack</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">spaces</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="no">true</span>
+        <span class="p">}</span>
+
+        <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">:=</span> <span class="n">spaces</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="m">0</span><span class="p">],</span> <span class="n">spaces</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="m">1</span><span class="p">]</span>
+        <span class="n">box</span> <span class="o">:=</span> <span class="n">row</span><span class="o">/</span><span class="m">3</span><span class="o">*</span><span class="m">3</span> <span class="o">+</span> <span class="n">col</span><span class="o">/</span><span class="m">3</span>
+        <span class="k">for</span> <span class="n">digit</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">digit</span> <span class="o">&lt;=</span> <span class="m">9</span><span class="p">;</span> <span class="n">digit</span><span class="o">++</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">digit</span><span class="p">]</span> <span class="o">||</span> <span class="n">cols</span><span class="p">[</span><span class="n">col</span><span class="p">][</span><span class="n">digit</span><span class="p">]</span> <span class="o">||</span> <span class="n">boxes</span><span class="p">[</span><span class="n">box</span><span class="p">][</span><span class="n">digit</span><span class="p">]</span> <span class="p">{</span>
+                <span class="k">continue</span>
+            <span class="p">}</span>
+
+            <span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="kt">byte</span><span class="p">(</span><span class="sc">'0'</span> <span class="o">+</span> <span class="n">digit</span><span class="p">)</span>
+            <span class="n">rows</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">digit</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+            <span class="n">cols</span><span class="p">[</span><span class="n">col</span><span class="p">][</span><span class="n">digit</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+            <span class="n">boxes</span><span class="p">[</span><span class="n">box</span><span class="p">][</span><span class="n">digit</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+
+            <span class="k">if</span> <span class="n">backtrack</span><span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="no">true</span>
+            <span class="p">}</span>
+
+            <span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'.'</span>
+            <span class="n">rows</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">digit</span><span class="p">]</span> <span class="o">=</span> <span class="no">false</span>
+            <span class="n">cols</span><span class="p">[</span><span class="n">col</span><span class="p">][</span><span class="n">digit</span><span class="p">]</span> <span class="o">=</span> <span class="no">false</span>
+            <span class="n">boxes</span><span class="p">[</span><span class="n">box</span><span class="p">][</span><span class="n">digit</span><span class="p">]</span> <span class="o">=</span> <span class="no">false</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="no">false</span>
+    <span class="p">}</span>
+
+    <span class="n">backtrack</span><span class="p">(</span><span class="m">0</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：最坏为 $O(9^e)$，<code class="language-plaintext highlighter-rouge">e</code> 是空格数。每个空格最多尝试 9 个数字；行、列、宫检查均为 $O(1)$。实际分支会被约束大量剪掉。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(e)$，包括空格列表和最深 <code class="language-plaintext highlighter-rouge">e</code> 层递归栈；三张固定大小的占用表是 $O(1)$。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>回溯模板是“选择、递归、撤销”，合法性检查放在递归之前。</li>
+    <li>行、列、宫状态必须和棋盘同步更新、同步恢复。</li>
+    <li>宫编号公式是 <code class="language-plaintext highlighter-rouge">row / 3 * 3 + col / 3</code>。</li>
+    <li>只求一个解时让递归返回布尔值，成功后立即停止并保留答案。</li>
+    <li>进阶追问可说明：困难盘面可优先处理候选数最少的空格，进一步降低分支数。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>宫编号写成 <code class="language-plaintext highlighter-rouge">row / 3 + col / 3</code></strong>：不同九宫格会映射到同一编号。</li>
+    <li>
+<strong>标记数组第二维只开 9 却直接用数字作下标</strong>：访问数字 <code class="language-plaintext highlighter-rouge">9</code> 时越界；本实现开 10 位。</li>
+    <li>
+<strong>没有登记初始数字</strong>：搜索会重复使用题面已有数字。</li>
+    <li>
+<strong>撤销不完整</strong>：只恢复棋盘、未清除三张表，会污染后续兄弟分支。</li>
+    <li>
+<strong>找到答案后仍执行撤销</strong>：最终棋盘会被恢复成未完成状态，成功时必须直接返回。</li>
+    <li>
+<strong>实例字段不在每次调用时重置</strong>：同一个对象连续求解两盘会残留上一盘状态。</li>
+    <li>
+<strong>把答案写到新棋盘</strong>：题目要求原地修改传入的 <code class="language-plaintext highlighter-rouge">board</code>。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/valid-sudoku/">36. 有效的数独</a></td>
+      <td>中等</td>
+      <td>只校验当前盘面是否合法，一次遍历建三张表即可，不涉及搜索</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/n-queens/">51. N 皇后</a></td>
+      <td>困难</td>
+      <td>冲突维度换成列与两条对角线，且要求输出全部解而非提前返回</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/n-queens-ii/">52. N 皇后 II</a></td>
+      <td>困难</td>
+      <td>只统计解的数量，可用位掩码代替数组把常数压到极致</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/word-search/">79. 单词搜索</a></td>
+      <td>中等</td>
+      <td>回溯在网格上按四邻域扩展，撤销的是访问标记而不是数值占用</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/permutations/">46. 全排列</a></td>
+      <td>中等</td>
+      <td>只有「元素是否用过」一个维度的约束，是回溯框架的最小骨架</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/word-search-ii/">212. 单词搜索 II</a></td>
+      <td>困难</td>
+      <td>回溯叠加字典树剪枝，用前缀是否存在来提前砍掉整棵子树</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2025/59586946" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 438. 找到字符串中所有字母异位词</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2025/34986837" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 870. 优势洗牌</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2025/33258688">https://hgnulb.github.io/blog/2025/33258688</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

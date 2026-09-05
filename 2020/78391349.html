@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1147. 段式回文 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,动态规划,双指针,哈希函数,字符串,字节跳动,滚动哈希,贪心" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1147. 段式回文" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2020/78391349" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2020/78391349" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-07T08:00:00+08:00" />
+<meta property="article:modified_time" content="2020-07-07T08:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1147. 段式回文" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2020-07-07T08:00:00+08:00","datePublished":"2020-07-07T08:00:00+08:00","description":"题目描述","headline":"LeetCode 1147. 段式回文","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2020/78391349"},"url":"https://hgnulb.github.io/blog/2020/78391349"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法双指针分段匹配">解法：双指针分段匹配</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1147. 段式回文">LeetCode 1147. 段式回文</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2020-07-07 08:00:00"
+                    datetime="2020-07-07T08:00:00+08:00"
+            >
+                2020-07-07
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1609 字 · 英文 115 词 · 代码 61 行"
+            aria-label="预计阅读时间约 7 分钟，正文 1609 字 · 英文 115 词 · 代码 61 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 7 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    7 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8294756076/" title="双指针">
+        双指针
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7556309699/" title="贪心">
+        贪心
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5321850966/" title="哈希函数">
+        哈希函数
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3978270112/" title="滚动哈希">
+        滚动哈希
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法双指针分段匹配">解法：双指针分段匹配</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/longest-chunked-palindrome-decomposition/">1147. 段式回文</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>把字符串 <code class="language-plaintext highlighter-rouge">text</code> 切成 $k$ 个非空子串 $a_1 a_2 \cdots a_k$，拼接起来正好等于原串，并且要求 $a_i = a_{k+1-i}$ 对所有 $i$ 成立——也就是这个切分序列本身是一个「回文」，只不过回文的单位从字符变成了子串。求 $k$ 的最大值。</p>
+
+  <p>要点一：<strong>相等指的是子串内容完全相同，不是互为反转</strong>。$a_1$ 必须逐字符等于 $a_k$，而不是 $a_k$ 的逆序。这与普通回文串的定义不同，读题时最容易搞反。</p>
+
+  <p>要点二：切分必须是<strong>连续且覆盖全串</strong>的，不能丢字符也不能重叠，所以第一段从头开始、最后一段到尾结束，两者长度必然相同。</p>
+
+  <p>要点三：$k$ 可以是奇数——中间允许剩下一段没有配对的 $a_{(k+1)/2}$，它不需要和任何段相等。</p>
+
+  <p>约束里 <code class="language-plaintext highlighter-rouge">text</code> 长度上限 1000，且只含小写字母。$n \le 1000$ 意味着 $O(n^2)$ 的做法（约 $10^6$ 次字符比较）完全可以接受，不必一上来就上滚动哈希或后缀自动机——这个规模是在告诉我们「朴素比较够用」。</p>
+
+  <p>边界：整串本身总是一个合法切分（$k = 1$），所以答案至少为 1，不存在无解；长度为 1 时答案就是 1；全同字符如 <code class="language-plaintext highlighter-rouge">"aaaa"</code> 时答案是 $n$，每个字符各成一段。</p>
+</blockquote>
+
+<h2 id="解法双指针分段匹配">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%8F%8C%E6%8C%87%E9%92%88%E5%88%86%E6%AE%B5%E5%8C%B9%E9%85%8D" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：双指针分段匹配</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>每次只处理尚未切分的闭区间 <code class="language-plaintext highlighter-rouge">[left, right]</code>。若它还能产生一对外层段，那么两段必定是该区间<strong>等长且相等的前缀、后缀</strong>。因此从长度 1 开始比较，找到第一对相等片段后立即剥掉，再处理更小的中间区间。</p>
+
+  <p>为什么取“最短匹配”而不是继续找更长的？设最短相等前后缀为 $P$、长度为 $p$，某个最优分解的外层块为 $A$、长度为 $q$。必有 $p \le q$。若 $p&lt;q$，则 $P$ 也是 $A$ 的前后缀；而最短真前后缀不会重叠，否则长度 $2p-q$ 的重叠部分会构成更短前后缀。因此 $A=P+M+P$（$M$ 可以为空）。把最优分解两端的每个 $A$ 都细分为 <code class="language-plaintext highlighter-rouge">P | M | P</code>（$M$ 为空时为 <code class="language-plaintext highlighter-rouge">P | P</code>），仍然关于中心对称，却得到更多段，与“最优”矛盾。故某个最优分解必取最短匹配；剥掉它后对中间区间归纳即可。</p>
+
+  <p>循环不变量是：<code class="language-plaintext highlighter-rouge">[0, left)</code> 与 <code class="language-plaintext highlighter-rouge">(right, n-1]</code> 已经被切成相互对称的最优外层段，<code class="language-plaintext highlighter-rouge">answer</code> 是这些段的数量；<code class="language-plaintext highlighter-rouge">[left, right]</code> 是唯一尚待处理的区间。</p>
+
+  <p>对剩余长度 <code class="language-plaintext highlighter-rouge">remain</code>，候选段长最多是 <code class="language-plaintext highlighter-rouge">remain / 2</code>，否则左右片段会重叠。若某个 <code class="language-plaintext highlighter-rouge">len</code> 匹配，就令 <code class="language-plaintext highlighter-rouge">left += len</code>、<code class="language-plaintext highlighter-rouge">right -= len</code> 并把答案加 2；若所有长度都不匹配，剩余区间不可能再产生外层配对，只能整体作为中间一段，答案加 1 后结束。</p>
+
+  <p>实现直接比较原串中的两个区间，不构造子串，也不在缓冲区头部插入字符。题目给出 $n \le 1000$，确定性的 $O(n^2)$ 字符比较足够快，同时避开滚动哈希的碰撞问题。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>初始化 <code class="language-plaintext highlighter-rouge">left = 0</code>、<code class="language-plaintext highlighter-rouge">right = n - 1</code>、<code class="language-plaintext highlighter-rouge">answer = 0</code>。</li>
+    <li>当 <code class="language-plaintext highlighter-rouge">left &lt;= right</code> 时，令 <code class="language-plaintext highlighter-rouge">remain = right - left + 1</code>，只枚举 <code class="language-plaintext highlighter-rouge">1..remain/2</code> 的片段长度，保证左右候选不重叠。</li>
+    <li>用 <code class="language-plaintext highlighter-rouge">equal(text, left, right-len+1, len)</code> 逐字符比较当前前缀和后缀。第一次相等就是最短匹配，计入两段并收缩左右边界。</li>
+    <li>若本轮没有任何匹配，或只剩一个字符，则整个剩余区间只能作为中心段：<code class="language-plaintext highlighter-rouge">answer++</code> 后直接结束。</li>
+    <li>返回 <code class="language-plaintext highlighter-rouge">answer</code>。每次匹配都会严格缩短区间，因此循环必然终止。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">text = "ghiabcdefhelloadamhelloabcdefghi"</code> 走一遍（答案是 7）：</p>
+
+  <p>依次找到最短匹配 <code class="language-plaintext highlighter-rouge">"ghi"</code>、<code class="language-plaintext highlighter-rouge">"abcdef"</code>、<code class="language-plaintext highlighter-rouge">"hello"</code>，每次计入 2 段；剩下 <code class="language-plaintext highlighter-rouge">"adam"</code> 没有相等且不重叠的前后缀，只计 1 段，得到</p>
+
+  <p><code class="language-plaintext highlighter-rouge">ghi | abcdef | hello | adam | hello | abcdef | ghi</code></p>
+
+  <p>答案为 7。边界用例 <code class="language-plaintext highlighter-rouge">"aaa"</code> 会先剥掉一对 <code class="language-plaintext highlighter-rouge">"a"</code>，再把中心 <code class="language-plaintext highlighter-rouge">"a"</code> 计为一段，答案为 3；<code class="language-plaintext highlighter-rouge">"merchant"</code> 找不到任何外层匹配，整串计一段。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">longestDecomposition</span><span class="o">(</span><span class="nc">String</span> <span class="n">text</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">answer</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">boolean</span> <span class="n">paired</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">maxLen</span> <span class="o">=</span> <span class="o">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">len</span> <span class="o">&lt;=</span> <span class="n">maxLen</span><span class="o">;</span> <span class="n">len</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">equal</span><span class="o">(</span><span class="n">text</span><span class="o">,</span> <span class="n">left</span><span class="o">,</span> <span class="n">right</span> <span class="o">-</span> <span class="n">len</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">len</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">answer</span> <span class="o">+=</span> <span class="mi">2</span><span class="o">;</span>
+                    <span class="n">left</span> <span class="o">+=</span> <span class="n">len</span><span class="o">;</span>
+                    <span class="n">right</span> <span class="o">-=</span> <span class="n">len</span><span class="o">;</span>
+                    <span class="n">paired</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">paired</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">answer</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">equal</span><span class="o">(</span><span class="nc">String</span> <span class="n">text</span><span class="o">,</span> <span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">,</span> <span class="kt">int</span> <span class="n">len</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">offset</span> <span class="o">&lt;</span> <span class="n">len</span><span class="o">;</span> <span class="n">offset</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">text</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">offset</span><span class="o">)</span> <span class="o">!=</span> <span class="n">text</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">offset</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">longestDecomposition</span><span class="p">(</span><span class="n">text</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">-</span><span class="m">1</span>
+	<span class="n">answer</span> <span class="o">:=</span> <span class="m">0</span>
+
+	<span class="k">for</span> <span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="p">{</span>
+		<span class="n">paired</span> <span class="o">:=</span> <span class="no">false</span>
+		<span class="n">maxLen</span> <span class="o">:=</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="m">1</span><span class="p">)</span> <span class="o">/</span> <span class="m">2</span>
+		<span class="k">for</span> <span class="n">length</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">length</span> <span class="o">&lt;=</span> <span class="n">maxLen</span><span class="p">;</span> <span class="n">length</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">equalChunk</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="o">-</span><span class="n">length</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span> <span class="p">{</span>
+				<span class="n">answer</span> <span class="o">+=</span> <span class="m">2</span>
+				<span class="n">left</span> <span class="o">+=</span> <span class="n">length</span>
+				<span class="n">right</span> <span class="o">-=</span> <span class="n">length</span>
+				<span class="n">paired</span> <span class="o">=</span> <span class="no">true</span>
+				<span class="k">break</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="o">!</span><span class="n">paired</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">answer</span> <span class="o">+</span> <span class="m">1</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">answer</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">equalChunk</span><span class="p">(</span><span class="n">text</span> <span class="kt">string</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">length</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="n">offset</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">offset</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">offset</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">text</span><span class="p">[</span><span class="n">a</span><span class="o">+</span><span class="n">offset</span><span class="p">]</span> <span class="o">!=</span> <span class="n">text</span><span class="p">[</span><span class="n">b</span><span class="o">+</span><span class="n">offset</span><span class="p">]</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="no">false</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n^2)$。一次匹配到长度 $p$ 的工作量是 $1+2+\cdots+p=O(p^2)$；各轮剥掉的 $p$ 之和不超过 $n/2$，故平方和不超过 $O(n^2)$，最后一次无匹配扫描也至多 $O(n^2)$。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(1)$，只保存边界、长度和计数；没有创建候选子串。返回值之外也没有递归栈。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>段式回文比较的是两段原始内容，不是把右段反转后比较。</li>
+    <li>状态只需 <code class="language-plaintext highlighter-rouge">[left, right]</code>：区间外已经最优配对，区间内尚未处理。每次成功必须同时收缩两端相同长度。</li>
+    <li>枚举上界是剩余长度的一半，防止左右候选重叠；找不到匹配时，剩余内容只能整体成为唯一的中心段。</li>
+    <li>最短匹配优先是贪心成立的关键；面试时要说明 <code class="language-plaintext highlighter-rouge">border</code> 的细化性质，而不是只说“短的段数更多”。</li>
+    <li>$n \le 1000$ 时直接比较最稳妥。若约束升到 $10^5$，可用双哈希把区间比较降为均摊 $O(1)$，但必须说明碰撞处理。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>把右段反转后比较</strong>：<code class="language-plaintext highlighter-rouge">text = "volvo"</code> 中合法切分是 <code class="language-plaintext highlighter-rouge">"vo" | "l" | "vo"</code>；右段必须仍是 <code class="language-plaintext highlighter-rouge">"vo"</code>，不能按字符回文去比较 <code class="language-plaintext highlighter-rouge">"ov"</code>。</li>
+    <li>
+<strong>让候选长度超过剩余长度的一半</strong>：中心会被两段重复占用。<code class="language-plaintext highlighter-rouge">text = "aaa"</code> 的答案是 3，不可能计成 4。</li>
+    <li>
+<strong>命中后继续寻找更长匹配</strong>：<code class="language-plaintext highlighter-rouge">text = "aaaa"</code> 若取 <code class="language-plaintext highlighter-rouge">"aa" | "aa"</code> 只得到 2 段；第一对长度 1 的匹配可得到 4 段。</li>
+    <li>
+<strong>无匹配时继续移动单侧指针</strong>：<code class="language-plaintext highlighter-rouge">text = "merchant"</code> 的剩余区间本应整体算一段；移动一侧会破坏“前后缀等长”的约束。</li>
+    <li>
+<strong>无匹配时返回当前计数</strong>：<code class="language-plaintext highlighter-rouge">text = "abc"</code> 会错误返回 0，必须为中心剩余段补 1。</li>
+    <li>
+<strong>用 <code class="language-plaintext highlighter-rouge">substring</code>/切片构造每个候选</strong>：复杂度阶数不变，却制造大量临时对象；按下标逐字符比较即可。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/palindrome-partitioning/">131. 分割回文串</a></td>
+      <td>中等</td>
+      <td>同为切分字符串，但每段自身要是回文，需回溯枚举所有方案</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-palindrome/">214. 最短回文串</a></td>
+      <td>困难</td>
+      <td>求最长回文前缀，KMP 的 <code class="language-plaintext highlighter-rouge">next</code> 数组或滚动哈希是标准工具</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/repeated-substring-pattern/">459. 重复的子字符串</a></td>
+      <td>简单</td>
+      <td>判断能否由某段重复拼成，同样是「前缀与后缀内容相等」的思路</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/">28. 找出字符串中第一个匹配项的下标</a></td>
+      <td>简单</td>
+      <td>子串匹配的基础题，是把本题优化到 $O(n)$ 所需哈希/KMP 技术的起点</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-palindromic-substring/">5. 最长回文子串</a></td>
+      <td>中等</td>
+      <td>字符级回文的中心扩展，与本题「段级回文」形成概念对照</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-palindromic-subsequence/">516. 最长回文子序列</a></td>
+      <td>中等</td>
+      <td>允许丢弃字符的区间 DP，可与本题的贪心可行性作对比</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2020/72740829" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1201. 丑数 III</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2020/66378510" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 562. 矩阵中最长的连续1线段</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2020/78391349">https://hgnulb.github.io/blog/2020/78391349</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 187. 重复的DNA序列 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,Boyer–Moore 算法,位运算,华为,哈希函数,哈希表,字符串,字节跳动,微软,快手,扩展 KMP,滑动窗口,滚动哈希,虾皮" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 187. 重复的DNA序列" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2025/56017792" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2025/56017792" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-11-01T11:44:40+08:00" />
+<meta property="article:modified_time" content="2025-11-01T11:44:40+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 187. 重复的DNA序列" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2025-11-01T11:44:40+08:00","datePublished":"2025-11-01T11:44:40+08:00","description":"题目描述","headline":"LeetCode 187. 重复的DNA序列","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2025/56017792"},"url":"https://hgnulb.github.io/blog/2025/56017792"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法固定窗口--2-位滚动编码">解法：固定窗口 + 2 位滚动编码</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 187. 重复的DNA序列">LeetCode 187. 重复的DNA序列</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2025-11-01 11:44:40"
+                    datetime="2025-11-01T11:44:40+08:00"
+            >
+                2025-11-01
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1712 字 · 英文 147 词 · 代码 55 行"
+            aria-label="预计阅读时间约 7 分钟，正文 1712 字 · 英文 147 词 · 代码 55 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 7 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    13 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/1587990752/" title="5-10">
+        5-10
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1259449732/" title="快手">
+        快手
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0106759788/" title="华为">
+        华为
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6901340989/" title="虾皮">
+        虾皮
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2535886171/" title="位运算">
+        位运算
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5692196181/" title="滑动窗口">
+        滑动窗口
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5321850966/" title="哈希函数">
+        哈希函数
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3978270112/" title="滚动哈希">
+        滚动哈希
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3083361458/" title="扩展 KMP">
+        扩展 KMP
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0511650388/" title="Boyer–Moore 算法">
+        Boyer–Moore 算法
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法固定窗口--2-位滚动编码">解法：固定窗口 + 2 位滚动编码</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/repeated-dna-sequences/">187. 重复的DNA序列</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个只由 <code class="language-plaintext highlighter-rouge">A</code>、<code class="language-plaintext highlighter-rouge">C</code>、<code class="language-plaintext highlighter-rouge">G</code>、<code class="language-plaintext highlighter-rouge">T</code> 四种字符组成的字符串，要求找出其中所有长度恰好为 10、且在原串中出现次数不止一次的连续子串。</p>
+
+  <p>有两个约定必须先厘清。第一，子串是连续的，且长度固定为 10，所以候选总数只有 $n - 9$ 个，不存在组合爆炸。第二，答案里每个符合条件的子串只列一次，哪怕它出现了五次；返回顺序不作要求。</p>
+
+  <p>约束信号：字符串长度上限 $10^5$，字符集只有 4 个。长度上限说明 $O(n)$ 或 $O(n \log n)$ 都能过，而两两比较所有窗口的 $O(n^2)$ 会有 $10^{10}$ 次字符比较，明显超时。字符集只有 4 个则暗示每个字符可以只用 2 个二进制位编码，10 个字符正好压进一个 20 位整数——这是本题的进阶优化方向。</p>
+
+  <p>边界情况：字符串长度小于 10 时一个候选窗口都没有，应返回空列表；全部字符相同（如 20 个 <code class="language-plaintext highlighter-rouge">A</code>）时，唯一的答案是那 10 个 <code class="language-plaintext highlighter-rouge">A</code> 组成的串，且只能出现一次。</p>
+</blockquote>
+
+<h2 id="解法固定窗口--2-位滚动编码">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%9B%BA%E5%AE%9A%E7%AA%97%E5%8F%A3--2-%E4%BD%8D%E6%BB%9A%E5%8A%A8%E7%BC%96%E7%A0%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：固定窗口 + 2 位滚动编码</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>窗口长度固定为 10，真正需要解决的是两件事：如何 $O(1)$ 地得到下一个窗口的标识，以及如何让同一个重复片段只进答案一次。</p>
+
+  <p>DNA 只有 <code class="language-plaintext highlighter-rouge">A/C/G/T</code> 四种字符，可分别编码为 <code class="language-plaintext highlighter-rouge">00/01/10/11</code>。10 个字符恰好占 20 位，所以一个窗口可表示为基数为 4 的整数：$x = \sum_{j=0}^{9} code(s_{i+j}) \cdot 4^{9-j}$。窗口右移一格时，将旧编码左移 2 位、补入新字符，再用低 20 位掩码丢掉离开窗口的字符：<code class="language-plaintext highlighter-rouge">code = ((code &lt;&lt; 2) | value) &amp; ((1 &lt;&lt; 20) - 1)</code>。</p>
+
+  <p>这里常被叫做「滚动哈希」，但它不存在普通模哈希的碰撞。原因是：长度为 10 的 DNA 序列恰有 $4^{10} = 2^{20}$ 种，20 位整数也恰有 $2^{20}$ 种取值；而固定长度的四进制表示是唯一的，因此这是一一对应的完美编码。掩码只是删掉第 11 个及更早字符的高位，不会让两个不同的 10 字符窗口变成同一个值。若换成「多项式 + 取模」的通用滚动哈希，则必须用原串复核或双哈希处理碰撞，不能直接当作唯一标识。</p>
+
+  <p>用长度为 $2^{20}$ 的计数数组记录每个编码的出现次数。当计数从 1 变为 2 时加入答案；第 3 次以后不再加，于是无需第二个去重集合。</p>
+
+  <p><strong>不变量：</strong>处理完下标 $i$ 后，当 $i \ge 9$ 时，<code class="language-plaintext highlighter-rouge">code</code> 精确表示子串 <code class="language-plaintext highlighter-rouge">s[i-9..i]</code>；更新计数前，<code class="language-plaintext highlighter-rouge">count[code]</code> 等于该窗口在之前结束的窗口中出现的次数。因此计数变为 2 恰好意味着第二次出现，既不会收录只出现一次的窗口，也不会重复收录。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>定义窗口长度 <code class="language-plaintext highlighter-rouge">WINDOW = 10</code> 和低 20 位掩码 <code class="language-plaintext highlighter-rouge">MASK = (1 &lt;&lt; 20) - 1</code>，并创建 $2^{20}$ 长的计数数组。</li>
+    <li>从左到右扫描字符。每次先把 <code class="language-plaintext highlighter-rouge">A/C/G/T</code> 映射为 <code class="language-plaintext highlighter-rouge">0/1/2/3</code>，再通过「左移、补入、保留低 20 位」更新编码。</li>
+    <li>前 9 个字符还凑不成完整窗口，只累积编码，不查计数。从 $i = 9$ 开始，<code class="language-plaintext highlighter-rouge">code</code> 才代表一个合法的长度 10 窗口。</li>
+    <li>将 <code class="language-plaintext highlighter-rouge">count[code]</code> 加一。若新计数恰好为 2，截取 <code class="language-plaintext highlighter-rouge">s[i-9, i+1)</code> 加入答案；若是 1，说明尚未重复；若大于 2，说明已经收录过。</li>
+    <li>扫描结束后返回答案。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">"AAAAAAAAAAA"</code> 走查关键边界：</strong>前 10 个 <code class="language-plaintext highlighter-rouge">A</code> 编码为 0，计数从 0 变为 1，不收录。读入第 11 个 <code class="language-plaintext highlighter-rouge">A</code> 后，左移会把最早的 <code class="language-plaintext highlighter-rouge">A</code> 推向窗口外，掩码保留低 20 位，新窗口编码仍为 0。计数变为 2，所以 <code class="language-plaintext highlighter-rouge">"AAAAAAAAAA"</code> 被加入一次。即使后面还有更多 <code class="language-plaintext highlighter-rouge">A</code>，计数也只会变为 3、4……，不再触发 <code class="language-plaintext highlighter-rouge">== 2</code>。</p>
+
+  <p><strong>正确性：</strong>由滚动不变量，每个合法窗口都被唯一编码并且恰好统计一次。某序列被收录当且仅当它的计数首次到达 2，因此答案中的每个序列都至少出现两次，所有出现至少两次的序列也都会被收录，且每个只收录一次。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">WINDOW</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">MASK</span> <span class="o">=</span> <span class="o">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="o">(</span><span class="no">WINDOW</span> <span class="o">*</span> <span class="mi">2</span><span class="o">))</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">findRepeatedDnaSequences</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">count</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="o">(</span><span class="no">WINDOW</span> <span class="o">*</span> <span class="mi">2</span><span class="o">)];</span>
+        <span class="kt">int</span> <span class="n">code</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="o">((</span><span class="n">code</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="o">)</span> <span class="o">|</span> <span class="n">encode</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)))</span> <span class="o">&amp;</span> <span class="no">MASK</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="no">WINDOW</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="o">++</span><span class="n">count</span><span class="o">[</span><span class="n">code</span><span class="o">]</span> <span class="o">==</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="no">WINDOW</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">encode</span><span class="o">(</span><span class="kt">char</span> <span class="n">nucleotide</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">switch</span> <span class="o">(</span><span class="n">nucleotide</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">case</span> <span class="sc">'A'</span> <span class="o">-&gt;</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">case</span> <span class="sc">'C'</span> <span class="o">-&gt;</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="k">case</span> <span class="sc">'G'</span> <span class="o">-&gt;</span> <span class="mi">2</span><span class="o">;</span>
+            <span class="k">default</span> <span class="o">-&gt;</span> <span class="mi">3</span><span class="o">;</span> <span class="c1">// 题目保证剩余字符只会是 'T'。</span>
+        <span class="o">};</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">findRepeatedDnaSequences</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="n">window</span> <span class="o">=</span> <span class="m">10</span>
+    <span class="k">const</span> <span class="n">mask</span> <span class="o">=</span> <span class="m">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">window</span><span class="o">*</span><span class="m">2</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span>
+
+    <span class="n">count</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">1</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">window</span><span class="o">*</span><span class="m">2</span><span class="p">))</span>
+    <span class="n">res</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="n">code</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="p">(</span><span class="n">code</span><span class="o">&lt;&lt;</span><span class="m">2</span> <span class="o">|</span> <span class="n">encodeNucleotide</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="o">&amp;</span> <span class="n">mask</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">window</span><span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+            <span class="n">count</span><span class="p">[</span><span class="n">code</span><span class="p">]</span><span class="o">++</span>
+            <span class="k">if</span> <span class="n">count</span><span class="p">[</span><span class="n">code</span><span class="p">]</span> <span class="o">==</span> <span class="m">2</span> <span class="p">{</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">window</span><span class="o">+</span><span class="m">1</span><span class="o">:</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">])</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">encodeNucleotide</span><span class="p">(</span><span class="n">nucleotide</span> <span class="kt">byte</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">nucleotide</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="sc">'A'</span><span class="o">:</span>
+        <span class="k">return</span> <span class="m">0</span>
+    <span class="k">case</span> <span class="sc">'C'</span><span class="o">:</span>
+        <span class="k">return</span> <span class="m">1</span>
+    <span class="k">case</span> <span class="sc">'G'</span><span class="o">:</span>
+        <span class="k">return</span> <span class="m">2</span>
+    <span class="k">default</span><span class="o">:</span> <span class="c">// 题目保证剩余字符只会是 'T'。</span>
+        <span class="k">return</span> <span class="m">3</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。每个字符只参与一次移位、或运算和计数；只在某个编码第二次出现时截取一个长度固定为 10 的结果串，不改变线性结论。</li>
+    <li>
+<strong>空间复杂度</strong>：辅助空间是 $O(4^{10}) = O(1)$，计数数组固定为 $2^{20}$ 个整数，不随 $n$ 增长。若把窗口长度推广为变量 $L$，则数组空间是 $O(4^L)$；返回结果占 $O(k)$ 不计入辅助空间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>先利用「字符集只有 4 种」做 2 位编码，再利用「窗口长度固定」做滚动更新，是本题从普通哈希表解法进一步优化的两个约束信号。</li>
+    <li>20 位编码是固定长度四进制数的唯一表示，不是「大概不冲突」的模哈希。面试时要能明确区分「无碰撞编码」与「需要复核的概率哈希」。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">MASK = (1 &lt;&lt; 20) - 1</code> 的作用是保留最近 10 个字符的 20 位，从而在左移时自动移除最早字符。</li>
+    <li>计数变为 2 时才收录，同时完成「确实重复」和「答案去重」，比分别维护 <code class="language-plaintext highlighter-rouge">seen</code> 与 <code class="language-plaintext highlighter-rouge">added</code> 两个集合更直接。</li>
+    <li>只有完整窗口才能记数。用 <code class="language-plaintext highlighter-rouge">i &gt;= WINDOW - 1</code> 分隔「预热编码」与「处理窗口」，长度小于 10 的输入会自然返回空答案。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>忘记保留低 20 位</strong>：编码会混入窗口之前的字符。例如同一个 10 字符片段出现在不同前缀之后时，会得到不同整数，从而漏掉重复。</li>
+    <li>
+<strong>直接用 <code class="language-plaintext highlighter-rouge">nucleotide - 'A'</code> 编码</strong>：<code class="language-plaintext highlighter-rouge">T - A = 19</code>，早已超出 2 位范围，不同窗口可能串位。四个字符必须显式映射到 0、1、2、3。</li>
+    <li>
+<strong>窗口未满 10 就计数</strong>：<code class="language-plaintext highlighter-rouge">"A"</code>、<code class="language-plaintext highlighter-rouge">"AA"</code> 等短前缀都会与高位补 0 的 10 字符窗口共用编码；必须在 $i \ge 9$ 后才更新次数。</li>
+    <li>
+<strong>用 <code class="language-plaintext highlighter-rouge">count[code] &gt;= 2</code> 收录</strong>：同一片段第 3、4 次出现仍会追加答案。例如 12 个 <code class="language-plaintext highlighter-rouge">A</code> 有 3 个相同窗口，答案却只能包含一个 <code class="language-plaintext highlighter-rouge">"AAAAAAAAAA"</code>，判断必须是 <code class="language-plaintext highlighter-rouge">== 2</code>。</li>
+    <li>
+<strong>把编码当成普通模哈希而多做碰撞复核</strong>：本题的 20 位表示本身就是无碰撞编码，再保存所有字符串复核只会增加存储和比较开销。但如果改成小模数的通用滚动哈希，则反过来必须处理碰撞。</li>
+    <li>
+<strong>截取边界少写或多写 1</strong>：以结束下标 $i$ 表示当前窗口时，左端是 $i - 9$，而 Java/Go 的右端为开区间 $i + 1$，因此应取 <code class="language-plaintext highlighter-rouge">[i-9, i+1)</code>。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/contains-duplicate-ii/">219. 存在重复元素 II</a></td>
+      <td>简单</td>
+      <td>重复判定还附带下标距离约束</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/">28. 找出字符串中第一个匹配项的下标</a></td>
+      <td>简单</td>
+      <td>定长模式串匹配，可用滚动哈希或前缀函数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/find-all-anagrams-in-a-string/">438. 找到字符串中所有字母异位词</a></td>
+      <td>中等</td>
+      <td>定长窗口比较的是字符计数而非子串本身</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-duplicate-substring/">1044. 最长重复子串</a></td>
+      <td>困难</td>
+      <td>长度不固定，需二分长度并配合滚动哈希</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2025/38409747" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 617. 合并二叉树</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2025/44507116" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 443. 压缩字符串</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2025/56017792">https://hgnulb.github.io/blog/2025/56017792</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

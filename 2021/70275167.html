@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 218. 天际线问题 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,分治,堆（优先队列）,字节跳动,扫描线,排序,数组,有序集合,树状数组,线段树" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 218. 天际线问题" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/70275167" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/70275167" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-08-30T20:19:19+08:00" />
+<meta property="article:modified_time" content="2021-08-30T20:19:19+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 218. 天际线问题" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-08-30T20:19:19+08:00","datePublished":"2021-08-30T20:19:19+08:00","description":"题目描述","headline":"LeetCode 218. 天际线问题","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/70275167"},"url":"https://hgnulb.github.io/blog/2021/70275167"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法扫描线--高度多重集合">解法：扫描线 + 高度多重集合</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 218. 天际线问题">LeetCode 218. 天际线问题</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-08-30 20:19:19"
+                    datetime="2021-08-30T20:19:19+08:00"
+            >
+                2021-08-30
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3143 字 · 英文 135 词 · 代码 101 行"
+            aria-label="预计阅读时间约 11 分钟，正文 3143 字 · 英文 135 词 · 代码 101 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 11 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    9 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3320177889/" title="排序">
+        排序
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7037379732/" title="堆（优先队列）">
+        堆（优先队列）
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5147323714/" title="分治">
+        分治
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6262465063/" title="有序集合">
+        有序集合
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0190456276/" title="线段树">
+        线段树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2239716578/" title="树状数组">
+        树状数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0196337466/" title="扫描线">
+        扫描线
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法扫描线--高度多重集合">解法：扫描线 + 高度多重集合</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/the-skyline-problem/">218. 天际线问题</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给定若干矩形建筑，每个用 <code class="language-plaintext highlighter-rouge">[left, right, height]</code> 描述，它们从地面长起、可以任意重叠。要求输出这些建筑叠加后从远处看到的外轮廓，用一串「关键点」<code class="language-plaintext highlighter-rouge">[x, y]</code> 表示：每个关键点意味着轮廓高度在横坐标 <code class="language-plaintext highlighter-rouge">x</code> 处变成了 <code class="language-plaintext highlighter-rouge">y</code>。相邻关键点之间高度恒定，最后一个关键点的 <code class="language-plaintext highlighter-rouge">y</code> 必须是 0。</p>
+
+  <p>「轮廓」这个词翻译成可计算的定义是：对任意横坐标 <code class="language-plaintext highlighter-rouge">x</code>，轮廓高度等于所有覆盖 <code class="language-plaintext highlighter-rouge">x</code> 的建筑中的最大高度，没有建筑覆盖时为 0。所以本质上要刻画的是一个从左到右的分段常值函数，而输出只保留<strong>函数值发生跳变的位置</strong>。</p>
+
+  <p>这个定义直接给出两条硬性要求。其一，<strong>同一个横坐标上不能输出两个关键点</strong>——若多栋建筑恰好在同一个 <code class="language-plaintext highlighter-rouge">x</code> 处同时开始和结束，中间过程哪怕高度反复变化，最终也只该记录这一处的最终高度。其二，<strong>高度没变就不能输出</strong>——两栋等高建筑首尾相接时，交界处轮廓是平的，不产生关键点。</p>
+
+  <p>数据规模上限在 $10^4$ 量级而坐标可以取到 $2^{31}$，说明不能按坐标建数组，只能按事件离散化处理；同时 $O(n^2)$ 的两两比较也在可承受边缘之外，需要 $O(n \log n)$ 的方案。</p>
+
+  <p>还有一处细节容易被忽略：建筑的右端点是<strong>开区间</strong>。建筑 <code class="language-plaintext highlighter-rouge">[1, 3, 4]</code> 覆盖的是 $[1, 3)$，在 <code class="language-plaintext highlighter-rouge">x = 3</code> 这一点它已经不再贡献高度。这决定了左端点事件和右端点事件在同一坐标相遇时的处理必须小心。</p>
+
+  <p>边界：只有一栋建筑时输出两个点，左端点升到 <code class="language-plaintext highlighter-rouge">height</code>、右端点降到 0；建筑完全被另一栋更高更宽的建筑包住时，它不产生任何关键点。</p>
+</blockquote>
+
+<h2 id="解法扫描线--高度多重集合">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%89%AB%E6%8F%8F%E7%BA%BF--%E9%AB%98%E5%BA%A6%E5%A4%9A%E9%87%8D%E9%9B%86%E5%90%88" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：扫描线 + 高度多重集合</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是把所有端点坐标收集起来排序，对每个坐标遍历全部建筑求覆盖它的最大高度。这确实能算对，但每个坐标都要扫一遍建筑，是 $O(n^2)$。瓶颈很清楚：<strong>相邻两个坐标之间，覆盖情况只变了几栋建筑，却把全部建筑重新算了一遍</strong>。</p>
+
+  <p>由此得到关键观察：把视线看成一条从左往右移动的竖直扫描线，建筑对它的影响只在两个时刻发生变化——扫描线越过左端点时这栋建筑「进入」，越过右端点时「离开」。中间的所有位置，覆盖集合完全不变，自然也不会产生关键点。所以只需要在这 $2n$ 个「事件」处停下来更新，而不是在每个坐标处重算。</p>
+
+  <p>于是把每栋建筑 <code class="language-plaintext highlighter-rouge">[l, r, h]</code> 拆成两个事件：<code class="language-plaintext highlighter-rouge">(l, -h)</code> 表示加入高度 <code class="language-plaintext highlighter-rouge">h</code>，<code class="language-plaintext highlighter-rouge">(r, h)</code> 表示移除高度 <code class="language-plaintext highlighter-rouge">h</code>。事件只需按横坐标排序；同一 <code class="language-plaintext highlighter-rouge">x</code> 的事件会全部处理完再读取最高高度，所以组内先后不影响结果。</p>
+
+  <p>活跃高度结构要支持插入、删除指定高度和查询最大值，而且重复高度必须分别计数。Java 用 <code class="language-plaintext highlighter-rouge">TreeMap&lt;高度, 次数&gt;</code>；Go 用标准库大顶堆配合计数表惰性删除：结束事件只减计数，读取最大值前持续弹出计数为 0 的堆顶。</p>
+
+  <p>循环不变量可以显式写成：<strong>在处理完横坐标 <code class="language-plaintext highlighter-rouge">x</code> 处的全部事件之后，多重集合恰好等于「所有覆盖区间包含 <code class="language-plaintext highlighter-rouge">x</code> 的建筑高度」的集合（外加一个哨兵 0），<code class="language-plaintext highlighter-rouge">prevHeight</code> 等于上一个已输出关键点的高度</strong>。集合里预置一个 0 是为了让「没有任何建筑覆盖」时 <code class="language-plaintext highlighter-rouge">lastKey()</code> 仍有值可取，省掉空集判断。</p>
+
+  <p>有了这个不变量，产生关键点的判据就是一句话：处理完 <code class="language-plaintext highlighter-rouge">x</code> 的全部事件后，若集合最大值不等于 <code class="language-plaintext highlighter-rouge">prevHeight</code>，就输出 <code class="language-plaintext highlighter-rouge">[x, 最大值]</code> 并更新 <code class="language-plaintext highlighter-rouge">prevHeight</code>。而「处理完 <code class="language-plaintext highlighter-rouge">x</code> 的<strong>全部</strong>事件」这个前提，正是靠内层 <code class="language-plaintext highlighter-rouge">while</code> 把同一坐标的事件一次性吃掉来保证的——这也直接满足了题意分析里「同一坐标只输出一个点」的要求。</p>
+
+  <p>右端点开区间的语义也被这套写法自动照顾到了：建筑 <code class="language-plaintext highlighter-rouge">[1, 3, 4]</code> 的移除事件在 <code class="language-plaintext highlighter-rouge">x = 3</code> 处，处理完之后集合里已经没有高度 4，所以 <code class="language-plaintext highlighter-rouge">x = 3</code> 处算出的高度不含它，正是 $[1, 3)$ 的语义。而若另一栋建筑 <code class="language-plaintext highlighter-rouge">[3, 5, 4]</code> 恰好从 3 开始，它的加入事件与前者的移除事件在同一坐标批处理，一加一减后最大高度不变，于是不输出关键点——两栋等高建筑首尾相接被正确地看成一段连续平顶。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>拆事件</strong>：对每栋建筑生成 <code class="language-plaintext highlighter-rouge">(left, -height)</code> 与 <code class="language-plaintext highlighter-rouge">(right, height)</code>，符号只负责区分加入和移除。</li>
+    <li>
+<strong>排序</strong>：只按横坐标升序。同坐标事件必须批量处理，因此组内顺序无需承担正确性；这比依赖复杂的起终点排序规则更稳。</li>
+    <li>
+<strong>初始化多重集合放入哨兵 0</strong>：为什么要这个 0——它代表「地面」，保证任何时刻集合非空，<code class="language-plaintext highlighter-rouge">lastKey()</code> 不会抛异常；同时地面高度 0 也确实是轮廓在无建筑处的真实取值。</li>
+    <li>
+<strong>外层循环取出当前坐标 <code class="language-plaintext highlighter-rouge">x</code></strong>，内层 <code class="language-plaintext highlighter-rouge">while</code> 把所有横坐标等于 <code class="language-plaintext highlighter-rouge">x</code> 的事件全部处理完：负值表示加入，把 <code class="language-plaintext highlighter-rouge">-height</code> 的计数加一；正值表示移除，把该高度计数减一，减到 0 时从集合里删除键。为什么必须批处理——若逐条事件就判断一次，同一坐标上的中间态会被当成真实高度输出，产生重复横坐标的关键点。</li>
+    <li>
+<strong>批处理结束后取最大高度并比较</strong>：若 <code class="language-plaintext highlighter-rouge">curHeight != prevHeight</code> 就把 <code class="language-plaintext highlighter-rouge">[x, curHeight]</code> 加入答案并更新 <code class="language-plaintext highlighter-rouge">prevHeight</code>。为什么用「变了才输出」而不是无条件输出——这正是题意里「相邻关键点高度必须不同」的约束，等高相接、被完全覆盖的建筑都靠这一句被过滤掉。</li>
+    <li>
+<strong>返回答案</strong>：不需要额外收尾。最后一个事件必然是某栋建筑的移除，处理完后集合只剩哨兵 0，最大高度为 0，与之前的非零 <code class="language-plaintext highlighter-rouge">prevHeight</code> 不同，因此自动输出了以 0 结尾的关键点。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">buildings = [[2,9,10],[3,7,15],[5,12,12],[15,20,10],[19,24,8]]</code> 走一遍。</p>
+
+  <p>拆出 10 条事件，按横坐标依次位于 2、3、5、7、9、12、15、19、20、24。集合初值 <code class="language-plaintext highlighter-rouge">{0:1}</code>，<code class="language-plaintext highlighter-rouge">prevHeight = 0</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">x=2</code>：加入 10，集合 <code class="language-plaintext highlighter-rouge">{0,10}</code>，最大 10 ≠ 0，输出 <code class="language-plaintext highlighter-rouge">[2,10]</code>，<code class="language-plaintext highlighter-rouge">prevHeight=10</code>。<br>
+<code class="language-plaintext highlighter-rouge">x=3</code>：加入 15，集合 <code class="language-plaintext highlighter-rouge">{0,10,15}</code>，最大 15 ≠ 10，输出 <code class="language-plaintext highlighter-rouge">[3,15]</code>，<code class="language-plaintext highlighter-rouge">prevHeight=15</code>。<br>
+<code class="language-plaintext highlighter-rouge">x=5</code>：加入 12，集合 <code class="language-plaintext highlighter-rouge">{0,10,12,15}</code>，最大仍是 15，等于 <code class="language-plaintext highlighter-rouge">prevHeight</code>，<strong>不输出</strong>——这正是「新建筑被更高的建筑挡住」的情形。<br>
+<code class="language-plaintext highlighter-rouge">x=7</code>：移除 15，集合 <code class="language-plaintext highlighter-rouge">{0,10,12}</code>，最大 12 ≠ 15，输出 <code class="language-plaintext highlighter-rouge">[7,12]</code>，<code class="language-plaintext highlighter-rouge">prevHeight=12</code>。<br>
+<code class="language-plaintext highlighter-rouge">x=9</code>：移除 10，集合 <code class="language-plaintext highlighter-rouge">{0,12}</code>，最大仍是 12，不输出——被移除的不是当前最高者，轮廓没变。<br>
+<code class="language-plaintext highlighter-rouge">x=12</code>：移除 12，集合 <code class="language-plaintext highlighter-rouge">{0}</code>，最大 0 ≠ 12，输出 <code class="language-plaintext highlighter-rouge">[12,0]</code>，<code class="language-plaintext highlighter-rouge">prevHeight=0</code>。<br>
+<code class="language-plaintext highlighter-rouge">x=15</code>：加入 10，集合 <code class="language-plaintext highlighter-rouge">{0,10}</code>，输出 <code class="language-plaintext highlighter-rouge">[15,10]</code>，<code class="language-plaintext highlighter-rouge">prevHeight=10</code>。<br>
+<code class="language-plaintext highlighter-rouge">x=19</code>：加入 8，集合 <code class="language-plaintext highlighter-rouge">{0,8,10}</code>，最大仍是 10，不输出。<br>
+<code class="language-plaintext highlighter-rouge">x=20</code>：移除 10，集合 <code class="language-plaintext highlighter-rouge">{0,8}</code>，最大 8 ≠ 10，输出 <code class="language-plaintext highlighter-rouge">[20,8]</code>，<code class="language-plaintext highlighter-rouge">prevHeight=8</code>。<br>
+<code class="language-plaintext highlighter-rouge">x=24</code>：移除 8，集合 <code class="language-plaintext highlighter-rouge">{0}</code>，最大 0 ≠ 8，输出 <code class="language-plaintext highlighter-rouge">[24,0]</code>。</p>
+
+  <p>最终答案 <code class="language-plaintext highlighter-rouge">[[2,10],[3,15],[7,12],[12,0],[15,10],[20,8],[24,0]]</code>，与标准输出一致。</p>
+
+  <p>再用 <code class="language-plaintext highlighter-rouge">[[1,3,4],[3,5,4]]</code> 验证批处理。<code class="language-plaintext highlighter-rouge">x=3</code> 同时有一个高度 4 结束、另一个高度 4 开始；无论组内先处理哪一个，整组结束后的有效计数仍为 1，最高高度仍是 4，因此不能输出新点。最终答案是 <code class="language-plaintext highlighter-rouge">[[1,4],[5,0]]</code>。若逐条事件就判断高度，先移除时会泄漏中间态，错误输出 <code class="language-plaintext highlighter-rouge">[3,0]</code> 和 <code class="language-plaintext highlighter-rouge">[3,4]</code>。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.TreeMap</span><span class="o">;</span>
+
+<span class="c1">// 同一个 x 上必须合并处理所有事件，再统一判断最高高度是否变化，避免同一坐标输出多个关键点。</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="nf">getSkyline</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">buildings</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">events</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">buildings</span><span class="o">.</span><span class="na">length</span> <span class="o">*</span> <span class="mi">2</span><span class="o">][</span><span class="mi">2</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">building</span> <span class="o">:</span> <span class="n">buildings</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">events</span><span class="o">[</span><span class="n">index</span><span class="o">++]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="n">building</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="o">-</span><span class="n">building</span><span class="o">[</span><span class="mi">2</span><span class="o">]};</span>
+            <span class="n">events</span><span class="o">[</span><span class="n">index</span><span class="o">++]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="n">building</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span> <span class="n">building</span><span class="o">[</span><span class="mi">2</span><span class="o">]};</span>
+        <span class="o">}</span>
+
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">events</span><span class="o">,</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">a</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">b</span><span class="o">[</span><span class="mi">0</span><span class="o">]));</span>
+
+        <span class="nc">TreeMap</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">heightCount</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TreeMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">heightCount</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">prevHeight</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">events</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">events</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">0</span><span class="o">];</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">events</span><span class="o">.</span><span class="na">length</span> <span class="o">&amp;&amp;</span> <span class="n">events</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">==</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">height</span> <span class="o">=</span> <span class="n">events</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">1</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">height</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">actualHeight</span> <span class="o">=</span> <span class="o">-</span><span class="n">height</span><span class="o">;</span>
+                    <span class="n">heightCount</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">actualHeight</span><span class="o">,</span> <span class="n">heightCount</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">actualHeight</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">heightCount</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">height</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">count</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">heightCount</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">height</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="n">heightCount</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">height</span><span class="o">,</span> <span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+                <span class="n">i</span><span class="o">++;</span>
+            <span class="o">}</span>
+
+            <span class="kt">int</span> <span class="n">curHeight</span> <span class="o">=</span> <span class="n">heightCount</span><span class="o">.</span><span class="na">lastKey</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">curHeight</span> <span class="o">!=</span> <span class="n">prevHeight</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">curHeight</span><span class="o">));</span>
+                <span class="n">prevHeight</span> <span class="o">=</span> <span class="n">curHeight</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">(</span>
+	<span class="s">"container/heap"</span>
+	<span class="s">"sort"</span>
+<span class="p">)</span>
+
+<span class="k">type</span> <span class="n">maxHeap</span> <span class="p">[]</span><span class="kt">int</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">maxHeap</span><span class="p">)</span> <span class="n">Len</span><span class="p">()</span> <span class="kt">int</span>           <span class="p">{</span> <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">maxHeap</span><span class="p">)</span> <span class="n">Less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span> <span class="k">return</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">maxHeap</span><span class="p">)</span> <span class="n">Swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span>      <span class="p">{</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">maxHeap</span><span class="p">)</span> <span class="n">Push</span><span class="p">(</span><span class="n">value</span> <span class="n">any</span><span class="p">)</span> <span class="p">{</span>
+	<span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="o">*</span><span class="n">h</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="p">(</span><span class="kt">int</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">maxHeap</span><span class="p">)</span> <span class="n">Pop</span><span class="p">()</span> <span class="n">any</span> <span class="p">{</span>
+	<span class="n">old</span> <span class="o">:=</span> <span class="o">*</span><span class="n">h</span>
+	<span class="n">value</span> <span class="o">:=</span> <span class="n">old</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">old</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+	<span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="n">old</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">old</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+	<span class="k">return</span> <span class="n">value</span>
+<span class="p">}</span>
+
+<span class="c">// 同一个 x 上必须合并处理所有事件，再统一判断最高高度是否变化，避免同一坐标输出多个关键点。</span>
+<span class="k">func</span> <span class="n">getSkyline</span><span class="p">(</span><span class="n">buildings</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[][]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="n">events</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">buildings</span><span class="p">)</span><span class="o">*</span><span class="m">2</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">building</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">buildings</span> <span class="p">{</span>
+		<span class="n">events</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="n">building</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="o">-</span><span class="n">building</span><span class="p">[</span><span class="m">2</span><span class="p">]})</span>
+		<span class="n">events</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="n">building</span><span class="p">[</span><span class="m">1</span><span class="p">],</span> <span class="n">building</span><span class="p">[</span><span class="m">2</span><span class="p">]})</span>
+	<span class="p">}</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Slice</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">events</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="m">0</span><span class="p">]</span>
+	<span class="p">})</span>
+
+	<span class="n">heightCount</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="m">0</span><span class="o">:</span> <span class="m">1</span><span class="p">}</span>
+	<span class="n">heights</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">maxHeap</span><span class="p">{</span><span class="m">0</span><span class="p">}</span>
+	<span class="n">heap</span><span class="o">.</span><span class="n">Init</span><span class="p">(</span><span class="n">heights</span><span class="p">)</span>
+	<span class="n">result</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+	<span class="n">previousHeight</span> <span class="o">:=</span> <span class="m">0</span>
+
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">);</span> <span class="p">{</span>
+		<span class="n">x</span> <span class="o">:=</span> <span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">0</span><span class="p">]</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span> <span class="p">{</span>
+			<span class="n">height</span> <span class="o">:=</span> <span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="m">1</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">height</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="n">height</span> <span class="o">=</span> <span class="o">-</span><span class="n">height</span>
+				<span class="n">heightCount</span><span class="p">[</span><span class="n">height</span><span class="p">]</span><span class="o">++</span>
+				<span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="n">heights</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="n">heightCount</span><span class="p">[</span><span class="n">height</span><span class="p">]</span><span class="o">--</span>
+			<span class="p">}</span>
+			<span class="n">i</span><span class="o">++</span>
+		<span class="p">}</span>
+
+		<span class="k">for</span> <span class="n">heightCount</span><span class="p">[(</span><span class="o">*</span><span class="n">heights</span><span class="p">)[</span><span class="m">0</span><span class="p">]]</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="n">heap</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="n">heights</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="n">currentHeight</span> <span class="o">:=</span> <span class="p">(</span><span class="o">*</span><span class="n">heights</span><span class="p">)[</span><span class="m">0</span><span class="p">]</span>
+		<span class="k">if</span> <span class="n">currentHeight</span> <span class="o">!=</span> <span class="n">previousHeight</span> <span class="p">{</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="n">x</span><span class="p">,</span> <span class="n">currentHeight</span><span class="p">})</span>
+			<span class="n">previousHeight</span> <span class="o">=</span> <span class="n">currentHeight</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">result</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n \log n)$。排序 $2n$ 个事件是 $O(n \log n)$；Java 每次多重集合更新为 $O(\log n)$，Go 中每个高度至多入堆一次、出堆一次，惰性清理的总成本同样为 $O(n \log n)$。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$，事件、活跃高度结构和最多 $2n$ 个关键点均为线性规模。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>遇到「区间叠加后的整体效果」类问题，先想能否把区间拆成端点事件，把二维的覆盖关系降成一维的时间轴扫描——这是扫描线的通用套路，56、253、1094 都是同一个模子。</li>
+    <li>数据结构要按<strong>需要的操作</strong>选，而不是按印象选：本题需要「删除指定值 + 查询最大值」，这排除了普通堆（只能删最大）和普通集合（不支持重复），指向多重集合。能当场说清这条排除链，比直接背出 <code class="language-plaintext highlighter-rouge">TreeMap</code> 更有说服力。</li>
+    <li>没有有序容器的语言里，「堆 + 计数表惰性删除」是多重集合的标准替代：删除只记账不动堆，只在读取堆顶时清理失效元素，把删除的代价摊还到读取上。</li>
+    <li>同一坐标的事件必须批量处理后再判断输出，否则中间态会泄漏成答案。凡是「事件在同一时刻并发」的扫描线题，这一步都不能省。</li>
+    <li>在集合里预置一个哨兵 0，把「无建筑覆盖」变成集合里的一个普通元素，消掉了空集特判——用哨兵消除边界分支是链表、单调栈、扫描线共用的技巧。</li>
+    <li>面试表达要讲清两条：普通堆不能删除指定高度，所以需要计数惰性删除；同坐标事件必须先全部更新，才能得到该坐标唯一的最终高度。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>同一坐标的事件逐条处理而不批量合并</strong>：用例 <code class="language-plaintext highlighter-rouge">[[1,3,4],[3,5,4]]</code>，若在 <code class="language-plaintext highlighter-rouge">x=3</code> 处先处理移除再判断，会看到最大高度变成 0 而输出 <code class="language-plaintext highlighter-rouge">[3,0]</code>，接着处理加入又输出 <code class="language-plaintext highlighter-rouge">[3,4]</code>，答案里出现两个横坐标为 3 的点，直接判错。</li>
+    <li>
+<strong>用普通 <code class="language-plaintext highlighter-rouge">TreeSet</code>/<code class="language-plaintext highlighter-rouge">HashSet</code> 而不是多重集合</strong>：用例 <code class="language-plaintext highlighter-rouge">[[1,5,3],[2,4,3]]</code>，两栋等高建筑重叠，<code class="language-plaintext highlighter-rouge">x=4</code> 处移除高度 3 会把集合里唯一的 3 删光，导致错误输出 <code class="language-plaintext highlighter-rouge">[4,0]</code>，而正确轮廓到 <code class="language-plaintext highlighter-rouge">x=5</code> 才落地。</li>
+    <li>
+<strong>结束事件直接弹堆顶</strong>：<code class="language-plaintext highlighter-rouge">[[1,5,10],[2,3,5]]</code> 在 <code class="language-plaintext highlighter-rouge">x=3</code> 结束的是高度 5，但堆顶是仍然有效的高度 10；直接弹顶会删错建筑并让轮廓提前下降。</li>
+    <li>
+<strong>忘记在集合里预置哨兵 0</strong>：用例 <code class="language-plaintext highlighter-rouge">[[1,2,3]]</code>，<code class="language-plaintext highlighter-rouge">x=2</code> 移除后集合为空，<code class="language-plaintext highlighter-rouge">lastKey()</code> 抛 <code class="language-plaintext highlighter-rouge">NoSuchElementException</code>（Go 版则是空堆越界 panic），本该输出的收尾点 <code class="language-plaintext highlighter-rouge">[2,0]</code> 永远出不来。</li>
+    <li>
+<strong>无条件输出每个事件坐标的高度</strong>：用例 <code class="language-plaintext highlighter-rouge">[[1,10,5],[2,3,2]]</code>，矮建筑完全被高建筑包住，<code class="language-plaintext highlighter-rouge">x=2</code> 和 <code class="language-plaintext highlighter-rouge">x=3</code> 处最大高度始终是 5，无条件输出会多出 <code class="language-plaintext highlighter-rouge">[2,5]</code>、<code class="language-plaintext highlighter-rouge">[3,5]</code> 两个与前一点等高的冗余关键点。</li>
+    <li>
+<strong>同坐标只处理一条事件就读取最高值</strong>：<code class="language-plaintext highlighter-rouge">[[1,3,4],[3,5,4]]</code> 在 <code class="language-plaintext highlighter-rouge">x=3</code> 同时结束和开始；泄漏任一中间态都会产生重复横坐标。组内顺序可以任意，但必须整组处理后只比较一次。</li>
+    <li>
+<strong>误以为右端点是闭区间而把移除事件推迟到 <code class="language-plaintext highlighter-rouge">right + 1</code></strong>：用例 <code class="language-plaintext highlighter-rouge">[[1,3,4],[3,5,4]]</code> 的相接会变成重叠，虽然本例答案巧合相同；但用例 <code class="language-plaintext highlighter-rouge">[[1,3,4],[3,5,9]]</code> 会在 <code class="language-plaintext highlighter-rouge">x=3</code> 处仍保留高度 4，虽不影响最大值，而 <code class="language-plaintext highlighter-rouge">[[1,3,9],[3,5,4]]</code> 则会让 <code class="language-plaintext highlighter-rouge">x=3</code> 处仍算出 9，漏掉本该输出的 <code class="language-plaintext highlighter-rouge">[3,4]</code>。</li>
+    <li>
+<strong>建筑坐标可到 $2^{31}-1$ 却按坐标开数组</strong>：用例 <code class="language-plaintext highlighter-rouge">[[0,2147483647,1]]</code>，试图开长度为坐标范围的高度数组会直接内存溢出，这就是必须走事件离散化而非差分数组的原因。</li>
+    <li>
+<strong>Java 里移除时直接 <code class="language-plaintext highlighter-rouge">heightCount.remove(height)</code> 而不判断计数</strong>：用例 <code class="language-plaintext highlighter-rouge">[[1,5,3],[2,4,3]]</code>，<code class="language-plaintext highlighter-rouge">x=4</code> 处计数应从 2 降到 1，直接 <code class="language-plaintext highlighter-rouge">remove</code> 会把仍然有效的那栋建筑一并抹掉，轮廓提前落地。</li>
+    <li>
+<strong>Go 版惰性删除后忘记在读堆顶前调用清理</strong>：用例 <code class="language-plaintext highlighter-rouge">[[1,5,10],[2,3,20]]</code>，<code class="language-plaintext highlighter-rouge">x=3</code> 只把 20 的计数减到 0 而没弹出，读堆顶仍拿到 20，会错误输出 <code class="language-plaintext highlighter-rouge">[3,20]</code> 之后再也降不下来。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/meeting-rooms-ii/">253. 会议室 II</a></td>
+      <td>中等</td>
+      <td>同样拆端点事件，但只需维护当前重叠<strong>数量</strong>，用最小堆即可，无需多重集合</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/car-pooling/">1094. 拼车</a></td>
+      <td>中等</td>
+      <td>事件带权且坐标范围小，可直接用差分数组求前缀和，是扫描线的数组特化版</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/merge-intervals/">56. 合并区间</a></td>
+      <td>中等</td>
+      <td>只按左端点排序后线性合并，不需要事件拆分，体现「何时可以不用扫描线」</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/insert-interval/">57. 插入区间</a></td>
+      <td>中等</td>
+      <td>输入已有序，考察一次遍历中三段式处理，重点在边界的开闭判断</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/remove-covered-intervals/">1288. 删除被覆盖区间</a></td>
+      <td>中等</td>
+      <td>靠「左升右降」的排序技巧把覆盖判定降成单变量比较，是排序设计的典型</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/my-calendar-iii/">732. 我的日程安排表 III</a></td>
+      <td>困难</td>
+      <td>在线版本的最大重叠数，需要动态开点线段树或有序表差分，考察增量维护</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/rectangle-area-ii/">850. 矩形面积 II</a></td>
+      <td>困难</td>
+      <td>扫描线升级到二维求并集面积，需要线段树维护当前被覆盖的纵向长度</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/employee-free-time/">759. 员工空闲时间</a></td>
+      <td>困难</td>
+      <td>求的是覆盖区间的补集，考察合并后取间隙，与本题「求轮廓」是同一扫描线的两面</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2021/62774450" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1232. 缀点成线</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/38780279" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 710. 黑名单中的随机数</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/70275167">https://hgnulb.github.io/blog/2021/70275167</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

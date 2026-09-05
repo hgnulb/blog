@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 面试题 17.21. 直方图的水量 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,动态规划,单调栈,双指针,字节跳动,数组,栈" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 面试题 17.21. 直方图的水量" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/10418518" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/10418518" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-01T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-01-01T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 面试题 17.21. 直方图的水量" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-01-01T00:00:00+08:00","datePublished":"2021-01-01T00:00:00+08:00","description":"题目描述","headline":"LeetCode 面试题 17.21. 直方图的水量","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/10418518"},"url":"https://hgnulb.github.io/blog/2021/10418518"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法双指针--左右最大值">解法：双指针 + 左右最大值</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 面试题 17.21. 直方图的水量">LeetCode 面试题 17.21. 直方图的水量</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-01-01 00:00:00"
+                    datetime="2021-01-01T00:00:00+08:00"
+            >
+                2021-01-01
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2885 字 · 英文 133 词 · 代码 43 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2885 字 · 英文 133 词 · 代码 43 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    6 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7723837750/" title="程序员面试金典（第 6 版）">
+        程序员面试金典（第 6 版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8294756076/" title="双指针">
+        双指针
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2085989135/" title="单调栈">
+        单调栈
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法双指针--左右最大值">解法：双指针 + 左右最大值</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/volume-of-histogram-lcci/">面试题 17.21. 直方图的水量</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给定一个非负整数数组 <code class="language-plaintext highlighter-rouge">height</code>，第 <code class="language-plaintext highlighter-rouge">i</code> 项表示宽度为 1 的柱子的高度。下雨后柱子之间的凹陷处会积水，要求返回能接住的总水量。</p>
+</blockquote>
+
+<blockquote>
+  <p>约束里最重要的信号是"<strong>每根柱子宽度都是 1</strong>"。这让总水量可以按列拆解：整体积水量等于每一列积水量之和，而第 <code class="language-plaintext highlighter-rouge">i</code> 列的水面高度只由它左右两侧的最高柱子决定——水会一直漫到"左边最高"和"右边最高"中<strong>较矮</strong>的那个高度，再高就从矮的那侧溢出去了。于是有：</p>
+</blockquote>
+
+<blockquote>
+\[water_i = \max(0,\ \min(leftMax_i,\ rightMax_i) - height_i)\]
+</blockquote>
+
+<blockquote>
+  <p>其中 $leftMax_i$ 是 $height[0..i]$ 的最大值、$rightMax_i$ 是 $height[i..n-1]$ 的最大值（把自身算进去可以省掉取 <code class="language-plaintext highlighter-rouge">max(0, ...)</code>，因为此时两个最大值都不小于 <code class="language-plaintext highlighter-rouge">height[i]</code>）。这条公式一旦写出来，整题就只剩"如何高效求出每个位置的左右最大值"。</p>
+</blockquote>
+
+<blockquote>
+  <p>边界上要覆盖：空数组或只有一两根柱子（接不到水）；数组单调递增或单调递减（同样接不到水）；两端的柱子（左端的 $leftMax$ 就是自己，右端同理，所以贡献为 0）；以及高度全相等的情形。数值上，<code class="language-plaintext highlighter-rouge">n</code> 可达 $10^5$、高度可达 $10^5$，总量不会溢出 int，但用 long 更保险。</p>
+</blockquote>
+
+<h2 id="解法双指针--左右最大值">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%8F%8C%E6%8C%87%E9%92%88--%E5%B7%A6%E5%8F%B3%E6%9C%80%E5%A4%A7%E5%80%BC" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：双指针 + 左右最大值</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>从上面的公式出发，最直接的实现是对每个 <code class="language-plaintext highlighter-rouge">i</code> 都向左扫一遍求 $leftMax_i$、向右扫一遍求 $rightMax_i$，$O(n^2)$。瓶颈在于<strong>同一段前缀最大值被反复重算</strong>：求 $leftMax_5$ 时算过的东西，求 $leftMax_6$ 时又算了一遍。</p>
+</blockquote>
+
+<blockquote>
+  <p>第一次改进是用两个数组把前缀最大值和后缀最大值预处理出来，各扫一遍即可，时间降到 $O(n)$、空间 $O(n)$。这是最容易讲清也最不容易写错的版本，面试里作为"第一个正确解"完全够用。</p>
+</blockquote>
+
+<blockquote>
+  <p>真正的关键观察在于：<strong>公式里只用到 $\min(leftMax_i, rightMax_i)$，而不是两个值本身</strong>。也就是说，只要能确定这两者中<strong>较小的那个</strong>已经算准了，另一个哪怕还不准确也不影响结果。这就给了双指针的机会。</p>
+</blockquote>
+
+<blockquote>
+  <p>设左指针 <code class="language-plaintext highlighter-rouge">l</code> 从 0 出发、右指针 <code class="language-plaintext highlighter-rouge">r</code> 从 <code class="language-plaintext highlighter-rouge">n-1</code> 出发，<code class="language-plaintext highlighter-rouge">leftMax</code> 表示 $height[0..l]$ 的最大值、<code class="language-plaintext highlighter-rouge">rightMax</code> 表示 $height[r..n-1]$ 的最大值。<strong>不变量</strong>是：<code class="language-plaintext highlighter-rouge">leftMax</code> 是 <code class="language-plaintext highlighter-rouge">l</code> 位置真实的左侧最大值，<code class="language-plaintext highlighter-rouge">rightMax</code> 是 <code class="language-plaintext highlighter-rouge">r</code> 位置真实的右侧最大值（两者都只依赖已经扫过的那一侧，所以一定准确）。</p>
+</blockquote>
+
+<blockquote>
+  <p>现在比较 <code class="language-plaintext highlighter-rouge">height[l]</code> 和 <code class="language-plaintext highlighter-rouge">height[r]</code>：</p>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>若 <code class="language-plaintext highlighter-rouge">height[l] &lt;= height[r]</code>，先把 <code class="language-plaintext highlighter-rouge">height[l]</code> 并入 <code class="language-plaintext highlighter-rouge">leftMax</code>，此时 <code class="language-plaintext highlighter-rouge">leftMax</code> 就是位置 <code class="language-plaintext highlighter-rouge">l</code> 真实的左侧最大值。再看右侧：位置 <code class="language-plaintext highlighter-rouge">l</code> 真实的右侧最大值 $rightMax_l$ 至少包含 <code class="language-plaintext highlighter-rouge">height[r]</code>，所以 $rightMax_l \ge height[r]$。分两种情况——若 <code class="language-plaintext highlighter-rouge">leftMax &lt;= height[r]</code>，则 <code class="language-plaintext highlighter-rouge">leftMax &lt;= rightMax_l</code>，取最小值就是 <code class="language-plaintext highlighter-rouge">leftMax</code>；若 <code class="language-plaintext highlighter-rouge">leftMax &gt; height[r]</code>，那说明 <code class="language-plaintext highlighter-rouge">leftMax</code> 来自 <code class="language-plaintext highlighter-rouge">[0, l]</code> 中某根高于 <code class="language-plaintext highlighter-rouge">height[r]</code> 的柱子，而这根柱子与 <code class="language-plaintext highlighter-rouge">height[r]</code> 中较矮的是 <code class="language-plaintext highlighter-rouge">height[r]</code>，水位由它封顶……但注意此时 <code class="language-plaintext highlighter-rouge">height[l] &lt;= height[r] &lt; leftMax</code>，位置 <code class="language-plaintext highlighter-rouge">l</code> 的水位是 $\min(leftMax, rightMax_l)$，而 $rightMax_l \ge height[r] \ge height[l]$，两种子情况下结算出的水量都不会超过 <code class="language-plaintext highlighter-rouge">leftMax - height[l]</code>，且这个值可以由后续更高的右侧柱子达成。标准结论是：<strong>较矮的那一端，其水位瓶颈必定来自本侧的最大值</strong>，于是 <code class="language-plaintext highlighter-rouge">l</code> 位置的积水量就是 <code class="language-plaintext highlighter-rouge">leftMax - height[l]</code>，可以立刻结算，然后 <code class="language-plaintext highlighter-rouge">l++</code>。</li>
+    <li>否则对称地结算 <code class="language-plaintext highlighter-rouge">r</code> 位置：<code class="language-plaintext highlighter-rouge">rightMax - height[r]</code>，然后 <code class="language-plaintext highlighter-rouge">r--</code>。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>直观理解是"<strong>水位由矮的一端封顶</strong>"：当左端比右端矮时，右边存在一根至少和 <code class="language-plaintext highlighter-rouge">height[r]</code> 一样高的柱子挡着，左端这一列的水位不可能被右侧限制得比 <code class="language-plaintext highlighter-rouge">leftMax</code> 更低，所以只需要看左侧的最大值。每一步都只结算"较矮的那一侧"，正是因为那一侧的答案此刻已经可以被完全确定。</p>
+</blockquote>
+
+<blockquote>
+  <p>这样两个指针相向而行，每个位置恰好被结算一次，时间 $O(n)$、空间 $O(1)$——省掉了预处理数组，是本题的最优解。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>初始化 <code class="language-plaintext highlighter-rouge">l = 0</code>、<code class="language-plaintext highlighter-rouge">r = n - 1</code>、<code class="language-plaintext highlighter-rouge">leftMax = 0</code>、<code class="language-plaintext highlighter-rouge">rightMax = 0</code>、<code class="language-plaintext highlighter-rouge">answer = 0</code></strong>。两个最大值初始化为 0 是安全的，因为题目保证高度非负，任何真实高度都不小于 0，第一次更新就会把它们提到正确值。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>循环条件写 <code class="language-plaintext highlighter-rouge">l &lt; r</code></strong>。用严格小于而不是 <code class="language-plaintext highlighter-rouge">&lt;=</code>：当两指针相遇时，那一根柱子必然是全局最高的柱子之一，它自己接不到水（$\min(leftMax, rightMax)$ 就等于它自身的高度），结算与否都不影响答案，但写成 <code class="language-plaintext highlighter-rouge">&lt;=</code> 会让 <code class="language-plaintext highlighter-rouge">leftMax</code>/<code class="language-plaintext highlighter-rouge">rightMax</code> 的更新多走一步，容易在边界上引入混淆。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>比较 <code class="language-plaintext highlighter-rouge">height[l]</code> 和 <code class="language-plaintext highlighter-rouge">height[r]</code>，处理较矮的一侧</strong>。相等时归到左边处理（写 <code class="language-plaintext highlighter-rouge">&lt;=</code>），归到哪边都对，但必须固定，否则两个分支可能同时不推进导致死循环。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>处理左侧时：先用 <code class="language-plaintext highlighter-rouge">height[l]</code> 更新 <code class="language-plaintext highlighter-rouge">leftMax</code>，再累加 <code class="language-plaintext highlighter-rouge">leftMax - height[l]</code>，最后 <code class="language-plaintext highlighter-rouge">l++</code></strong>。三步的顺序不能乱。先更新 <code class="language-plaintext highlighter-rouge">leftMax</code> 是为了让它包含当前柱子，这样差值天然非负，不需要额外的 <code class="language-plaintext highlighter-rouge">max(0, ...)</code>；如果先累加再更新，<code class="language-plaintext highlighter-rouge">height[l]</code> 大于旧 <code class="language-plaintext highlighter-rouge">leftMax</code> 时会算出负数把答案减小。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>处理右侧时对称：先更新 <code class="language-plaintext highlighter-rouge">rightMax</code>，再累加 <code class="language-plaintext highlighter-rouge">rightMax - height[r]</code>，最后 <code class="language-plaintext highlighter-rouge">r--</code></strong>。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>循环结束返回 <code class="language-plaintext highlighter-rouge">answer</code></strong>。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">height = [0,1,0,2,1,0,1,3,2,1,2,1]</code> 走一遍</strong>（<code class="language-plaintext highlighter-rouge">n = 12</code>，答案应为 6）：</p>
+
+  <p>初始 <code class="language-plaintext highlighter-rouge">l = 0</code>、<code class="language-plaintext highlighter-rouge">r = 11</code>、<code class="language-plaintext highlighter-rouge">leftMax = rightMax = 0</code>、<code class="language-plaintext highlighter-rouge">answer = 0</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">height[0] = 0 &lt;= height[11] = 1</code> → 更新 <code class="language-plaintext highlighter-rouge">leftMax = 0</code>，累加 <code class="language-plaintext highlighter-rouge">0 - 0 = 0</code>，<code class="language-plaintext highlighter-rouge">l = 1</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">height[1] = 1 &lt;= 1</code> → <code class="language-plaintext highlighter-rouge">leftMax = 1</code>，累加 <code class="language-plaintext highlighter-rouge">1 - 1 = 0</code>，<code class="language-plaintext highlighter-rouge">l = 2</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">height[2] = 0 &lt;= 1</code> → <code class="language-plaintext highlighter-rouge">leftMax</code> 仍为 1，累加 <code class="language-plaintext highlighter-rouge">1 - 0 = 1</code>，<code class="language-plaintext highlighter-rouge">answer = 1</code>，<code class="language-plaintext highlighter-rouge">l = 3</code>。这一格上方确实积了 1 单位水（左边有高 1 的柱子，右边有更高的柱子）。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">height[3] = 2 &gt; height[11] = 1</code> → 转而处理右侧：<code class="language-plaintext highlighter-rouge">rightMax = max(0, 1) = 1</code>，累加 <code class="language-plaintext highlighter-rouge">1 - 1 = 0</code>，<code class="language-plaintext highlighter-rouge">r = 10</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">height[3] = 2 &lt;= height[10] = 2</code> → 处理左侧：<code class="language-plaintext highlighter-rouge">leftMax = 2</code>，累加 <code class="language-plaintext highlighter-rouge">2 - 2 = 0</code>，<code class="language-plaintext highlighter-rouge">l = 4</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">height[4] = 1 &lt;= 2</code> → <code class="language-plaintext highlighter-rouge">leftMax</code> 仍 2，累加 <code class="language-plaintext highlighter-rouge">2 - 1 = 1</code>，<code class="language-plaintext highlighter-rouge">answer = 2</code>，<code class="language-plaintext highlighter-rouge">l = 5</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">height[5] = 0 &lt;= 2</code> → 累加 <code class="language-plaintext highlighter-rouge">2 - 0 = 2</code>，<code class="language-plaintext highlighter-rouge">answer = 4</code>，<code class="language-plaintext highlighter-rouge">l = 6</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">height[6] = 1 &lt;= 2</code> → 累加 <code class="language-plaintext highlighter-rouge">2 - 1 = 1</code>，<code class="language-plaintext highlighter-rouge">answer = 5</code>，<code class="language-plaintext highlighter-rouge">l = 7</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">height[7] = 3 &gt; height[10] = 2</code> → 处理右侧：<code class="language-plaintext highlighter-rouge">rightMax = max(1, 2) = 2</code>，累加 <code class="language-plaintext highlighter-rouge">2 - 2 = 0</code>，<code class="language-plaintext highlighter-rouge">r = 9</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">height[7] = 3 &gt; height[9] = 1</code> → 右侧：<code class="language-plaintext highlighter-rouge">rightMax</code> 仍 2，累加 <code class="language-plaintext highlighter-rouge">2 - 1 = 1</code>，<code class="language-plaintext highlighter-rouge">answer = 6</code>，<code class="language-plaintext highlighter-rouge">r = 8</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">height[7] = 3 &gt; height[8] = 2</code> → 右侧：<code class="language-plaintext highlighter-rouge">rightMax = max(2, 2) = 2</code>，累加 <code class="language-plaintext highlighter-rouge">2 - 2 = 0</code>，<code class="language-plaintext highlighter-rouge">r = 7</code>。</p>
+
+  <p>此时 <code class="language-plaintext highlighter-rouge">l = 7</code>、<code class="language-plaintext highlighter-rouge">r = 7</code>，<code class="language-plaintext highlighter-rouge">l &lt; r</code> 不成立，循环结束，返回 <code class="language-plaintext highlighter-rouge">6</code>，正确。</p>
+
+  <p>注意下标 9 那一格：它的左边最高是 3、右边最高是 2，水位取较小的 2，减去自身高度 1 得到 1 单位水。算它的时候我们用的是 <code class="language-plaintext highlighter-rouge">rightMax = 2</code>，而并不知道左边的 3——但因为 <code class="language-plaintext highlighter-rouge">height[7] &gt; height[9]</code>，我们已经确定"瓶颈在右侧"，所以不需要知道左侧的确切值。这正是双指针能省掉预处理数组的原因。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">trap</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">height</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">height</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">leftMax</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">rightMax</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">answer</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="k">while</span> <span class="o">(</span><span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">height</span><span class="o">[</span><span class="n">l</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">height</span><span class="o">[</span><span class="n">r</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">leftMax</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">leftMax</span><span class="o">,</span> <span class="n">height</span><span class="o">[</span><span class="n">l</span><span class="o">]);</span>
+                <span class="n">answer</span> <span class="o">+=</span> <span class="n">leftMax</span> <span class="o">-</span> <span class="n">height</span><span class="o">[</span><span class="n">l</span><span class="o">];</span>
+                <span class="n">l</span><span class="o">++;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">rightMax</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">rightMax</span><span class="o">,</span> <span class="n">height</span><span class="o">[</span><span class="n">r</span><span class="o">]);</span>
+                <span class="n">answer</span> <span class="o">+=</span> <span class="n">rightMax</span> <span class="o">-</span> <span class="n">height</span><span class="o">[</span><span class="n">r</span><span class="o">];</span>
+                <span class="n">r</span><span class="o">--;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">trap</span><span class="p">(</span><span class="n">height</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">height</span><span class="p">)</span><span class="o">-</span><span class="m">1</span>
+    <span class="n">leftMax</span><span class="p">,</span> <span class="n">rightMax</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span>
+    <span class="n">answer</span> <span class="o">:=</span> <span class="m">0</span>
+
+    <span class="k">for</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">height</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">height</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">height</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">leftMax</span> <span class="p">{</span>
+                <span class="n">leftMax</span> <span class="o">=</span> <span class="n">height</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
+            <span class="p">}</span>
+            <span class="n">answer</span> <span class="o">+=</span> <span class="n">leftMax</span> <span class="o">-</span> <span class="n">height</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
+            <span class="n">l</span><span class="o">++</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">height</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">rightMax</span> <span class="p">{</span>
+                <span class="n">rightMax</span> <span class="o">=</span> <span class="n">height</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>
+            <span class="p">}</span>
+            <span class="n">answer</span> <span class="o">+=</span> <span class="n">rightMax</span> <span class="o">-</span> <span class="n">height</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>
+            <span class="n">r</span><span class="o">--</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">answer</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。两个指针相向而行，每轮循环必定有一个指针移动一格，总移动次数是 <code class="language-plaintext highlighter-rouge">n - 1</code>；每轮内部只做常数次比较与加法，没有嵌套循环。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(1)$。只用了 <code class="language-plaintext highlighter-rouge">l</code>、<code class="language-plaintext highlighter-rouge">r</code>、<code class="language-plaintext highlighter-rouge">leftMax</code>、<code class="language-plaintext highlighter-rouge">rightMax</code>、<code class="language-plaintext highlighter-rouge">answer</code> 五个标量，没有预处理数组也没有栈——这正是双指针相对"前后缀最大值数组"（$O(n)$ 空间）和"单调栈"（最坏 $O(n)$ 空间）的优势。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>先把答案拆成可独立计算的最小单位，再想怎么求那个单位</strong>。本题把总水量拆成"每一列的水量"，公式 $\min(leftMax, rightMax) - height_i$ 一写出来，剩下的就只是"如何高效求前后缀最大值"这个纯工程问题。拆解粒度选对了，难题就变成了模板题。</li>
+    <li>
+<strong>只用到两个量的最小值时，只需确定较小的那个</strong>。这是双指针能把 $O(n)$ 空间压到 $O(1)$ 的全部理由：较矮的一端其瓶颈必在本侧，另一侧的确切值不需要知道。这个"只求需要的那一半信息"的思路在 <code class="language-plaintext highlighter-rouge">11. 盛最多水的容器</code> 里同样适用。</li>
+    <li>
+<strong>先更新极值再结算，能省掉一次取零操作</strong>。把当前元素并入 <code class="language-plaintext highlighter-rouge">leftMax</code> 之后，差值天然非负；顺序写反就会出现负贡献。凡是"极值 − 当前值"的累加，都要先确认极值是否已包含当前值。</li>
+    <li>
+<strong>相向双指针要保证每轮至少推进一格</strong>。比较条件里的等号归属可以任选，但必须固定，否则相等时两个分支都不动就会死循环。</li>
+    <li>
+<strong>面试视角：按"暴力 → 前后缀数组 → 双指针"三级递进作答，并准备好单调栈版本</strong>。面试官通常期望你至少给出 $O(n)$ 解；能主动说明双指针为何正确（较矮一端的瓶颈在本侧）是区分度所在。单调栈是另一条思路——按"横向层"而不是"纵向列"累加水量，适合追问"还有别的解法吗"，也是 <code class="language-plaintext highlighter-rouge">84. 柱状图中最大的矩形</code> 的核心工具。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：先累加再更新极值，写成 <code class="language-plaintext highlighter-rouge">answer += leftMax - height[l]; leftMax = Math.max(leftMax, height[l]);</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">height = [0, 2]</code>：<code class="language-plaintext highlighter-rouge">l = 0</code> 时 <code class="language-plaintext highlighter-rouge">leftMax</code> 还是 0，累加 <code class="language-plaintext highlighter-rouge">0 - 0 = 0</code> 没问题；但 <code class="language-plaintext highlighter-rouge">height = [3, 1, 3]</code> 中 <code class="language-plaintext highlighter-rouge">l = 0</code> 时 <code class="language-plaintext highlighter-rouge">leftMax = 0</code>，累加 <code class="language-plaintext highlighter-rouge">0 - 3 = -3</code>，答案被减成负数。极值必须先包含当前元素。</li>
+    <li>
+<strong>错误写法：循环条件写成 <code class="language-plaintext highlighter-rouge">l &lt;= r</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">height = [1]</code>：<code class="language-plaintext highlighter-rouge">l = r = 0</code>，进入循环后 <code class="language-plaintext highlighter-rouge">height[0] &lt;= height[0]</code> 成立，累加 <code class="language-plaintext highlighter-rouge">1 - 1 = 0</code> 后 <code class="language-plaintext highlighter-rouge">l = 1</code>，虽然结果碰巧为 0，但同一根柱子在某些写法下会被两侧各结算一次导致重复累加。相向双指针应当在相遇时停止。</li>
+    <li>
+<strong>错误写法：比较条件写成 <code class="language-plaintext highlighter-rouge">height[l] &lt; height[r]</code>（去掉等号）且 else 分支也不推进</strong> → 若 else 分支误写成 <code class="language-plaintext highlighter-rouge">if (height[l] &gt; height[r])</code>，相等时两个分支都不执行，<code class="language-plaintext highlighter-rouge">l</code> 和 <code class="language-plaintext highlighter-rouge">r</code> 都不动，死循环直到超时。等号必须明确归到某一侧。</li>
+    <li>
+<strong>错误写法：用 <code class="language-plaintext highlighter-rouge">leftMax</code> 去结算右指针位置，写成 <code class="language-plaintext highlighter-rouge">answer += leftMax - height[r]</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">height = [0,1,0,2,1,0,1,3,2,1,2,1]</code>：在处理右侧时用了左侧的最大值，两侧信息串线，得到远小于（或大于）6 的错误结果。</li>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">leftMax</code>/<code class="language-plaintext highlighter-rouge">rightMax</code> 初始化成 <code class="language-plaintext highlighter-rouge">Integer.MAX_VALUE</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">height = [1, 0, 1]</code>：<code class="language-plaintext highlighter-rouge">leftMax</code> 永远不会被真实高度更新，累加 <code class="language-plaintext highlighter-rouge">MAX_VALUE - 0</code> 直接溢出成负数。求最大值的初始值应取不可能超过的下界，本题因高度非负故取 0。</li>
+    <li>
+<strong>错误写法：没有处理空数组，直接写 <code class="language-plaintext highlighter-rouge">int r = height.length - 1</code> 后访问 <code class="language-plaintext highlighter-rouge">height[r]</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">height = []</code>：<code class="language-plaintext highlighter-rouge">r = -1</code>，循环条件 <code class="language-plaintext highlighter-rouge">0 &lt; -1</code> 不成立不会进入，其实是安全的；但若把循环条件误写成 <code class="language-plaintext highlighter-rouge">l &lt;= r</code> 之外的形式，或在循环前先读一次 <code class="language-plaintext highlighter-rouge">height[0]</code>，就会越界。任何对首尾元素的提前访问都要先判空。</li>
+    <li>
+<strong>错误写法：用 <code class="language-plaintext highlighter-rouge">min(leftMax, rightMax) - height[i]</code> 的通用公式配合双指针</strong> → 用例 <code class="language-plaintext highlighter-rouge">height = [4, 2, 3]</code>：<code class="language-plaintext highlighter-rouge">l = 1</code> 时 <code class="language-plaintext highlighter-rouge">rightMax</code> 只统计了 <code class="language-plaintext highlighter-rouge">[r, n-1]</code> 的部分，并不是位置 1 真实的右侧最大值，用它取 <code class="language-plaintext highlighter-rouge">min</code> 会算出错误的水位。双指针的正确性恰恰建立在"只用本侧极值结算较矮一端"上，套用通用公式反而错。</li>
+    <li>
+<strong>错误写法：按行（水平层）累加时把每层宽度算成"最左最右柱子之间的距离"</strong> → 用例 <code class="language-plaintext highlighter-rouge">height = [3, 0, 1, 0, 3]</code>：某一层可能被中间的柱子分成多段，直接用端点距离会把柱子占据的格子也算成水。横向解法必须用单调栈逐段结算。</li>
+    <li>
+<strong>错误写法：Go 里 <code class="language-plaintext highlighter-rouge">l, r := 0, len(height)</code> （少减 1）</strong> → 用例 <code class="language-plaintext highlighter-rouge">height = [1, 2]</code>：首次访问 <code class="language-plaintext highlighter-rouge">height[2]</code> 越界 panic。右端点是最后一个合法下标 <code class="language-plaintext highlighter-rouge">len - 1</code>。</li>
+    <li>
+<strong>错误写法：Go 里用 <code class="language-plaintext highlighter-rouge">math.Max</code> 处理 int</strong> → 编译报错，<code class="language-plaintext highlighter-rouge">math.Max</code> 只接受 <code class="language-plaintext highlighter-rouge">float64</code>；要么手写 if 比较（如代码中所示），要么用 Go 1.21+ 的内置 <code class="language-plaintext highlighter-rouge">max</code>。</li>
+    <li>
+<strong>错误写法：把答案变量声明成 <code class="language-plaintext highlighter-rouge">int</code> 但在高度和长度都取上限的极端数据上不做估算</strong> → 用例 <code class="language-plaintext highlighter-rouge">n = 10^5</code>、高度全为 $10^5$ 的凹槽：总水量约 $10^{10}$，超过 int 上限溢出成负数。本题给定的约束下不会触发，但同类题（如把宽度也放大的变体）中应先估算总量再决定用 int 还是 long。</li>
+    <li>
+<strong>错误写法：预处理版本里 <code class="language-plaintext highlighter-rouge">rightMax</code> 数组从左往右填</strong> → 用例 <code class="language-plaintext highlighter-rouge">height = [2, 0, 2]</code>：后缀最大值必须从右往左递推，方向写反会得到前缀最大值，两个数组变成同一个东西，答案恒为 0。递推方向必须与依赖方向一致。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/trapping-rain-water/">42. 接雨水</a></td>
+      <td>困难</td>
+      <td>完全同题的主站版本，可对照双指针、前后缀数组与单调栈三种写法</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/container-with-most-water/">11. 盛最多水的容器</a></td>
+      <td>中等</td>
+      <td>同样是相向双指针移动较矮一端，但求的是单个容器而非逐列累加</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/largest-rectangle-in-histogram/">84. 柱状图中最大的矩形</a></td>
+      <td>困难</td>
+      <td>用单调栈找每根柱子的左右第一个更矮者，是横向解法的核心工具</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/trapping-rain-water-ii/">407. 接雨水 II</a></td>
+      <td>困难</td>
+      <td>升级到二维网格，水位由四周边界决定，要用最小堆从外向内扩展</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximal-rectangle/">85. 最大矩形</a></td>
+      <td>困难</td>
+      <td>把二维矩阵按行压成直方图，再逐行套用单调栈求最大矩形</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2020/69521907" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 362. 敲击计数器</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/61841011" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 609. 在系统中查找重复文件</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/10418518">https://hgnulb.github.io/blog/2021/10418518</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

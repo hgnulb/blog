@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 978. 最长湍流子数组 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,动态规划,数组,滑动窗口,阿里巴巴" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 978. 最长湍流子数组" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2023/82630774" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2023/82630774" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-05-03T11:57:02+08:00" />
+<meta property="article:modified_time" content="2023-05-03T11:57:02+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 978. 最长湍流子数组" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2023-05-03T11:57:02+08:00","datePublished":"2023-05-03T11:57:02+08:00","description":"题目描述","headline":"LeetCode 978. 最长湍流子数组","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2023/82630774"},"url":"https://hgnulb.github.io/blog/2023/82630774"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dpupdown-滚动更新">解法：DP（up/down 滚动更新）</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 978. 最长湍流子数组">LeetCode 978. 最长湍流子数组</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2023-05-03 11:57:02"
+                    datetime="2023-05-03T11:57:02+08:00"
+            >
+                2023-05-03
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2634 字 · 英文 111 词 · 代码 50 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2634 字 · 英文 111 词 · 代码 50 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8699249851/" title="阿里巴巴">
+        阿里巴巴
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5692196181/" title="滑动窗口">
+        滑动窗口
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dpupdown-滚动更新">解法：DP（up/down 滚动更新）</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/longest-turbulent-subarray/">978. 最长湍流子数组</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个整数数组 <code class="language-plaintext highlighter-rouge">arr</code>，求最长「湍流子数组」的长度。湍流的定义是：子数组内相邻元素的大小关系<strong>严格交替</strong>，即比较符号呈现 <code class="language-plaintext highlighter-rouge">&lt;, &gt;, &lt;, &gt;, ...</code> 或 <code class="language-plaintext highlighter-rouge">&gt;, &lt;, &gt;, &lt;, ...</code> 的模式。</p>
+
+  <p>把定义翻译成可操作的形式：对子数组 <code class="language-plaintext highlighter-rouge">arr[l..r]</code>，要求每一对相邻元素都严格不等，且相邻两对的比较方向相反。等价说法是——<strong>任何一个内部元素都不能与它的两个邻居构成同向的大小关系</strong>，它要么是局部的波峰，要么是局部的波谷。</p>
+
+  <p>有三处必须精确落实。第一，比较是<strong>严格</strong>的，<code class="language-plaintext highlighter-rouge">arr[i] == arr[i+1]</code> 会直接把子数组切断，因为「相等」既不是上升也不是下降，无法参与交替。第二，长度为 1 的子数组<strong>天然是湍流</strong>（没有相邻对，条件空真），所以答案下界是 1，而不是 0。第三，长度为 2 的子数组只要两元素不等就是湍流。</p>
+
+  <p>约束里 <code class="language-plaintext highlighter-rouge">n</code> 最大到 $4 \times 10^4$，$O(n^2)$ 枚举所有子数组约 16 亿次比较，超时；$O(n)$ 一次扫描是期望复杂度。同时注意题目关心的是<strong>子数组</strong>（连续）而不是子序列，这决定了可以用「以某个位置结尾」的线性 DP，而不必上 LIS 那套 $O(n \log n)$ 结构。</p>
+
+  <p>边界方面：数组全部相等（如 <code class="language-plaintext highlighter-rouge">[9,9,9]</code>）时答案是 1；数组严格单调（如 <code class="language-plaintext highlighter-rouge">[1,2,3]</code>）时答案是 2，因为只能取到相邻两个。这两个用例正好卡住「相等切断」和「同向切断」两条规则。</p>
+</blockquote>
+
+<h2 id="解法dpupdown-滚动更新">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95dpupdown-%E6%BB%9A%E5%8A%A8%E6%9B%B4%E6%96%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：DP（up/down 滚动更新）</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是枚举左右端点，逐个验证交替性，$O(n^3)$；稍作优化可以固定左端点向右扩展并在破坏交替时停止，降到 $O(n^2)$。<code class="language-plaintext highlighter-rouge">n</code> 到 4 万时仍然超时。</p>
+
+  <p>瓶颈在于反复重新验证同一段前缀的交替性。观察：湍流是一个<strong>局部可增量维护</strong>的性质——一段以 <code class="language-plaintext highlighter-rouge">i</code> 结尾的湍流子数组能否再往右接上 <code class="language-plaintext highlighter-rouge">arr[i+1]</code>，只取决于「这一段最后一对的比较方向」和「<code class="language-plaintext highlighter-rouge">arr[i]</code> 与 <code class="language-plaintext highlighter-rouge">arr[i+1]</code> 的比较方向」是否相反。也就是说，只需要记住<strong>最后一步是升还是降</strong>，前面的细节全部可以丢掉。</p>
+
+  <p>于是定义两个状态（都是「以下标 <code class="language-plaintext highlighter-rouge">i</code> 结尾」的最长湍流长度）：</p>
+
+  <ul>
+    <li>
+<code class="language-plaintext highlighter-rouge">up[i]</code>：以 <code class="language-plaintext highlighter-rouge">i</code> 结尾、且最后一对是<strong>上升</strong>（<code class="language-plaintext highlighter-rouge">arr[i-1] &lt; arr[i]</code>）的最长湍流子数组长度；</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">down[i]</code>：以 <code class="language-plaintext highlighter-rouge">i</code> 结尾、且最后一对是<strong>下降</strong>（<code class="language-plaintext highlighter-rouge">arr[i-1] &gt; arr[i]</code>）的最长湍流子数组长度。</li>
+  </ul>
+
+  <p>转移直接由交替规则读出：</p>
+
+  <ul>
+    <li>若 <code class="language-plaintext highlighter-rouge">arr[i] &gt; arr[i-1]</code>（本步上升），那么它只能接在「最后一步是下降」的段后面，故 <code class="language-plaintext highlighter-rouge">up[i] = down[i-1] + 1</code>；同时以 <code class="language-plaintext highlighter-rouge">i</code> 结尾且最后一步是下降的段不存在，<code class="language-plaintext highlighter-rouge">down[i]</code> 只能取长度 1 的退化值。</li>
+    <li>若 <code class="language-plaintext highlighter-rouge">arr[i] &lt; arr[i-1]</code>（本步下降），对称地 <code class="language-plaintext highlighter-rouge">down[i] = up[i-1] + 1</code>，<code class="language-plaintext highlighter-rouge">up[i]</code> 重置为 1。</li>
+    <li>若 <code class="language-plaintext highlighter-rouge">arr[i] == arr[i-1]</code>，交替被彻底切断，两个状态都重置为 1。</li>
+  </ul>
+
+  <p>这里把「重置为 1」而不是 0，是因为单个元素本身就是合法的湍流子数组，它是下一段的起点。这个约定让所有边界（数组开头、相等切断）统一，不需要任何特判。</p>
+
+  <p>维持的<strong>不变量</strong>是：处理完位置 <code class="language-plaintext highlighter-rouge">i</code> 后，<code class="language-plaintext highlighter-rouge">up</code> 与 <code class="language-plaintext highlighter-rouge">down</code> 分别等于以 <code class="language-plaintext highlighter-rouge">i</code> 结尾、最后一步为升/降的最长湍流长度，二者中至少有一个反映了真实可扩展的段，另一个为退化值 1。全局答案就是所有位置上 <code class="language-plaintext highlighter-rouge">max(up, down)</code> 的最大值。</p>
+
+  <p>由于转移只依赖 <code class="language-plaintext highlighter-rouge">i - 1</code> 这一层，可以直接用两个标量滚动，无需开数组，空间降到 $O(1)$。注意滚动时<strong>必须先用旧值算出新值再写回</strong>——<code class="language-plaintext highlighter-rouge">up = down + 1</code> 这一行用到的 <code class="language-plaintext highlighter-rouge">down</code> 是上一轮的值，写完 <code class="language-plaintext highlighter-rouge">up</code> 之后才能把 <code class="language-plaintext highlighter-rouge">down</code> 重置，顺序反了就会用到本轮刚写的脏值。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>初始化 <code class="language-plaintext highlighter-rouge">up = down = 1</code>，<code class="language-plaintext highlighter-rouge">answer = 1</code></strong>：对应只看第一个元素时的状态。为什么答案初值是 1 而不是 0：单元素子数组本身合法，且数组长度至少为 1，若初值取 0 则 <code class="language-plaintext highlighter-rouge">[1]</code> 这类输入会返回错误的 0。</li>
+    <li>
+<strong>从 <code class="language-plaintext highlighter-rouge">i = 1</code> 开始遍历</strong>：状态转移需要 <code class="language-plaintext highlighter-rouge">arr[i-1]</code>，所以第一个可比较的位置是 1。为什么不需要对 <code class="language-plaintext highlighter-rouge">n == 1</code> 特判：循环体一次都不执行，直接返回初值 1，正好正确。</li>
+    <li>
+<strong>分支一：<code class="language-plaintext highlighter-rouge">arr[i] &gt; arr[i-1]</code></strong>。先 <code class="language-plaintext highlighter-rouge">up = down + 1</code>，再 <code class="language-plaintext highlighter-rouge">down = 1</code>。为什么 <code class="language-plaintext highlighter-rouge">up</code> 接的是 <code class="language-plaintext highlighter-rouge">down</code>：交替要求上一步必须是下降；接 <code class="language-plaintext highlighter-rouge">up</code> 就变成连续两次上升，违反定义。为什么 <code class="language-plaintext highlighter-rouge">down</code> 要归 1：以 <code class="language-plaintext highlighter-rouge">i</code> 结尾且最后一步是下降的段在本轮不存在，只能退化成单元素。为什么两行不能交换顺序：先写 <code class="language-plaintext highlighter-rouge">down = 1</code> 会让 <code class="language-plaintext highlighter-rouge">up = down + 1</code> 恒等于 2，把历史长度全部抹掉。</li>
+    <li>
+<strong>分支二：<code class="language-plaintext highlighter-rouge">arr[i] &lt; arr[i-1]</code></strong>。对称地 <code class="language-plaintext highlighter-rouge">down = up + 1</code>，<code class="language-plaintext highlighter-rouge">up = 1</code>，理由与上一条镜像。</li>
+    <li>
+<strong>分支三：相等</strong>。<code class="language-plaintext highlighter-rouge">up = down = 1</code>。为什么必须单独处理：相等既不是升也不是降，任何跨过它的子数组都不可能是湍流，两个状态都要从头开始。若把它并进某个不等分支，会让相等对被当作一次有效交替，答案偏大。</li>
+    <li>
+<strong>每轮更新全局答案</strong>：<code class="language-plaintext highlighter-rouge">answer = max(answer, max(up, down))</code>。为什么要每轮更新而不是循环结束后再取：最长段可能结束在中间任何位置，只看末尾会漏。</li>
+    <li>
+<strong>返回 <code class="language-plaintext highlighter-rouge">answer</code></strong>。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">arr = [9,4,2,10,7,8,8,1,9]</code> 走一遍（预期答案 5）。初始 <code class="language-plaintext highlighter-rouge">up = down = 1</code>，<code class="language-plaintext highlighter-rouge">answer = 1</code>。<br>
+<code class="language-plaintext highlighter-rouge">i = 1</code>（<code class="language-plaintext highlighter-rouge">4 &lt; 9</code>，下降）：<code class="language-plaintext highlighter-rouge">down = up + 1 = 2</code>，<code class="language-plaintext highlighter-rouge">up = 1</code>。<code class="language-plaintext highlighter-rouge">answer = 2</code>。<br>
+<code class="language-plaintext highlighter-rouge">i = 2</code>（<code class="language-plaintext highlighter-rouge">2 &lt; 4</code>，下降）：<code class="language-plaintext highlighter-rouge">down = up + 1 = 2</code>（上一轮 <code class="language-plaintext highlighter-rouge">up</code> 已被重置为 1，所以这里正确地重新起段），<code class="language-plaintext highlighter-rouge">up = 1</code>。<code class="language-plaintext highlighter-rouge">answer = 2</code>。<br>
+<code class="language-plaintext highlighter-rouge">i = 3</code>（<code class="language-plaintext highlighter-rouge">10 &gt; 2</code>，上升）：<code class="language-plaintext highlighter-rouge">up = down + 1 = 3</code>，<code class="language-plaintext highlighter-rouge">down = 1</code>。<code class="language-plaintext highlighter-rouge">answer = 3</code>。对应子数组 <code class="language-plaintext highlighter-rouge">[2,10]</code> 之前还接着 <code class="language-plaintext highlighter-rouge">4</code>，即 <code class="language-plaintext highlighter-rouge">[4,2,10]</code>。<br>
+<code class="language-plaintext highlighter-rouge">i = 4</code>（<code class="language-plaintext highlighter-rouge">7 &lt; 10</code>，下降）：<code class="language-plaintext highlighter-rouge">down = up + 1 = 4</code>，<code class="language-plaintext highlighter-rouge">up = 1</code>。<code class="language-plaintext highlighter-rouge">answer = 4</code>，对应 <code class="language-plaintext highlighter-rouge">[4,2,10,7]</code>。<br>
+<code class="language-plaintext highlighter-rouge">i = 5</code>（<code class="language-plaintext highlighter-rouge">8 &gt; 7</code>，上升）：<code class="language-plaintext highlighter-rouge">up = down + 1 = 5</code>，<code class="language-plaintext highlighter-rouge">down = 1</code>。<code class="language-plaintext highlighter-rouge">answer = 5</code>，对应 <code class="language-plaintext highlighter-rouge">[4,2,10,7,8]</code>。<br>
+<code class="language-plaintext highlighter-rouge">i = 6</code>（<code class="language-plaintext highlighter-rouge">8 == 8</code>，相等）：<code class="language-plaintext highlighter-rouge">up = down = 1</code>。<code class="language-plaintext highlighter-rouge">answer</code> 保持 5。这一步正是相等切断规则生效的地方。<br>
+<code class="language-plaintext highlighter-rouge">i = 7</code>（<code class="language-plaintext highlighter-rouge">1 &lt; 8</code>，下降）：<code class="language-plaintext highlighter-rouge">down = up + 1 = 2</code>，<code class="language-plaintext highlighter-rouge">up = 1</code>。<code class="language-plaintext highlighter-rouge">answer</code> 仍是 5。<br>
+<code class="language-plaintext highlighter-rouge">i = 8</code>（<code class="language-plaintext highlighter-rouge">9 &gt; 1</code>，上升）：<code class="language-plaintext highlighter-rouge">up = down + 1 = 3</code>，<code class="language-plaintext highlighter-rouge">down = 1</code>。<code class="language-plaintext highlighter-rouge">answer</code> 仍是 5。<br>
+返回 5，与预期一致。</p>
+
+  <p>再看 <code class="language-plaintext highlighter-rouge">arr = [4,8,12,16]</code>：每一步都是上升，<code class="language-plaintext highlighter-rouge">up = down + 1</code> 中的 <code class="language-plaintext highlighter-rouge">down</code> 始终是上一轮被重置的 1，所以 <code class="language-plaintext highlighter-rouge">up</code> 恒为 2，答案是 2——同向不能连续，这正是规则要求的。而 <code class="language-plaintext highlighter-rouge">arr = [100]</code> 循环不执行，返回 1。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxTurbulenceSize</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// up/down：以当前位置结尾、最后一步为升/降的最长湍流长度。</span>
+        <span class="kt">int</span> <span class="n">up</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">down</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">answer</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                <span class="c1">// 本步上升，只能接在「上一步下降」的段后面。</span>
+                <span class="n">up</span> <span class="o">=</span> <span class="n">down</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="n">down</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">down</span> <span class="o">=</span> <span class="n">up</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="n">up</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c1">// 相等切断交替，两个状态都从单元素重新开始。</span>
+                <span class="n">up</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="n">down</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">answer</span><span class="o">,</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">up</span><span class="o">,</span> <span class="n">down</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">maxTurbulenceSize</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="c">// up/down：以当前位置结尾、最后一步为升/降的最长湍流长度。</span>
+    <span class="n">up</span><span class="p">,</span> <span class="n">down</span> <span class="o">:=</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span>
+    <span class="n">answer</span> <span class="o">:=</span> <span class="m">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+            <span class="c">// 本步上升，只能接在「上一步下降」的段后面。</span>
+            <span class="n">up</span> <span class="o">=</span> <span class="n">down</span> <span class="o">+</span> <span class="m">1</span>
+            <span class="n">down</span> <span class="o">=</span> <span class="m">1</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">down</span> <span class="o">=</span> <span class="n">up</span> <span class="o">+</span> <span class="m">1</span>
+            <span class="n">up</span> <span class="o">=</span> <span class="m">1</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c">// 相等切断交替，两个状态都从单元素重新开始。</span>
+            <span class="n">up</span><span class="p">,</span> <span class="n">down</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span>
+        <span class="p">}</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">max</span><span class="p">(</span><span class="n">up</span><span class="p">,</span> <span class="n">down</span><span class="p">))</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">answer</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">a</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">b</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。凭什么：只有一层从 1 到 <code class="language-plaintext highlighter-rouge">n - 1</code> 的循环，循环体内是常数次比较、赋值与取最大值，没有任何嵌套或回退。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(1)$。凭什么：转移只依赖前一个位置的两个状态，用 <code class="language-plaintext highlighter-rouge">up</code>、<code class="language-plaintext highlighter-rouge">down</code> 两个标量滚动即可，不需要长度为 <code class="language-plaintext highlighter-rouge">n</code> 的 DP 数组；输入数组本身不计入额外空间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「以某个位置结尾」是连续子数组类 DP 的标准状态设计，它把「枚举左端点」的一维彻底消掉；配合最后再取全局最大值，能覆盖所有可能的结束位置。</li>
+    <li>当合法性依赖「上一步的方向」时，就该按方向拆成多个状态构成状态机。本题拆成升/降两个，152 题拆成最大/最小两个，思路完全一致。</li>
+    <li>滚动变量更新时务必确认「新值是否用到了同一轮的旧值」。<code class="language-plaintext highlighter-rouge">up = down + 1</code> 必须排在 <code class="language-plaintext highlighter-rouge">down = 1</code> 前面，顺序一反就用到脏值，这是本题最隐蔽的错误。</li>
+    <li>状态重置成 1 而不是 0，是因为单元素本身合法。把「退化情形」设成合法起点，可以让开头、切断等边界统一走主逻辑，省掉全部特判。</li>
+    <li>严格不等的定义必须显式给相等留一个分支，不能让它落进任何一个不等分支——<code class="language-plaintext highlighter-rouge">&gt;=</code> 与 <code class="language-plaintext highlighter-rouge">&gt;</code> 的差别会直接改变答案。</li>
+    <li>面试视角：面试官想听状态定义。开口说「<code class="language-plaintext highlighter-rouge">up[i]</code> 表示以 <code class="language-plaintext highlighter-rouge">i</code> 结尾且最后一对是上升的最长湍流长度」，转移式几乎自动成立；写完后主动举 <code class="language-plaintext highlighter-rouge">[9,9]</code> 和 <code class="language-plaintext highlighter-rouge">[1,2,3]</code> 两个用例说明相等切断与同向切断。若被追问，可以说这题也能用滑动窗口做（窗口内维护交替性，破坏时收缩左边界），但状态机 DP 更短、更不容易在收缩条件上出错。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：答案初始化为 0 → 用例 <code class="language-plaintext highlighter-rouge">[100]</code> 循环体不执行，返回 0，而单元素子数组合法，正确答案是 1。</li>
+    <li>
+<strong>错误写法</strong>：状态重置成 0 而不是 1 → 用例 <code class="language-plaintext highlighter-rouge">[9,9,4]</code> 中相等切断后 <code class="language-plaintext highlighter-rouge">up</code> 与 <code class="language-plaintext highlighter-rouge">down</code> 都是 0，<code class="language-plaintext highlighter-rouge">i = 2</code> 时 <code class="language-plaintext highlighter-rouge">down = up + 1 = 1</code>，漏掉了 <code class="language-plaintext highlighter-rouge">[9,4]</code> 这段，答案从 2 变成 1。</li>
+    <li>
+<strong>错误写法</strong>：把 <code class="language-plaintext highlighter-rouge">down = 1</code> 写在 <code class="language-plaintext highlighter-rouge">up = down + 1</code> 之前 → 用例 <code class="language-plaintext highlighter-rouge">[9,4,2,10,7,8]</code> 中 <code class="language-plaintext highlighter-rouge">up</code> 恒等于 2，历史长度被抹掉，答案从 5 变成 2。</li>
+    <li>
+<strong>错误写法</strong>：上升时写成 <code class="language-plaintext highlighter-rouge">up = up + 1</code> → 用例 <code class="language-plaintext highlighter-rouge">[4,8,12,16]</code> 中连续上升被累加成 4，而同向不构成湍流，正确答案是 2。</li>
+    <li>
+<strong>错误写法</strong>：比较用 <code class="language-plaintext highlighter-rouge">&gt;=</code> 与 <code class="language-plaintext highlighter-rouge">&lt;=</code>，不给相等留分支 → 用例 <code class="language-plaintext highlighter-rouge">[9,9,9]</code> 中相等被当成有效交替，答案变成 3，正确答案是 1。</li>
+    <li>
+<strong>错误写法</strong>：只用 <code class="language-plaintext highlighter-rouge">max(up, down)</code> 在循环结束后取一次 → 用例 <code class="language-plaintext highlighter-rouge">[9,4,2,10,7,8,8,1,9]</code> 中最长段在 <code class="language-plaintext highlighter-rouge">i = 5</code> 结束，末尾状态只有 3，返回 3 而不是 5。</li>
+    <li>
+<strong>错误写法</strong>：循环从 <code class="language-plaintext highlighter-rouge">i = 0</code> 开始并访问 <code class="language-plaintext highlighter-rouge">arr[i-1]</code> → 用例任意输入都会在首轮越界，Java 抛数组越界异常，Go 直接 panic。</li>
+    <li>
+<strong>错误写法</strong>：只维护一个变量 <code class="language-plaintext highlighter-rouge">len</code>，靠记录上一次比较符号来判断是否延长 → 用例 <code class="language-plaintext highlighter-rouge">[9,9,4]</code> 中符号变量在相等时没有定义，逻辑分叉难以自洽；实际上这等价于把两个状态硬压成一个，遇到切断就会算错。</li>
+    <li>
+<strong>错误写法</strong>：用滑动窗口但收缩时把左边界直接设为 <code class="language-plaintext highlighter-rouge">i</code> → 用例 <code class="language-plaintext highlighter-rouge">[9,4,2,10]</code> 中 <code class="language-plaintext highlighter-rouge">i = 2</code> 处交替被破坏，左边界应设为 <code class="language-plaintext highlighter-rouge">i - 1</code>（保留 <code class="language-plaintext highlighter-rouge">arr[i-1]</code> 作为新段起点），设成 <code class="language-plaintext highlighter-rouge">i</code> 会漏掉 <code class="language-plaintext highlighter-rouge">[2,10]</code> 这样的两元素段。</li>
+    <li>
+<strong>错误写法</strong>：把题目理解成子序列而非子数组，套用 376 摆动序列的解法 → 用例 <code class="language-plaintext highlighter-rouge">[9,4,2,10,7,8,8,1,9]</code> 会返回更长的摆动子序列长度，而本题要求元素连续。</li>
+    <li>
+<strong>错误写法</strong>：认为答案至少为 2 并直接返回 <code class="language-plaintext highlighter-rouge">max(answer, 2)</code> → 用例 <code class="language-plaintext highlighter-rouge">[9,9,9]</code> 中不存在任何长度 2 的湍流段，返回 2 是错的，正确答案是 1。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-subarray/">53. 最大子数组和</a></td>
+      <td>中等</td>
+      <td>同为「以 i 结尾」的线性 DP，但状态只有一个，转移靠与 0 比较取舍</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-product-subarray/">152. 乘积最大子数组</a></td>
+      <td>中等</td>
+      <td>同样拆成两个滚动状态（最大/最小），拆分理由是负号翻转而非方向交替</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-continuous-increasing-subsequence/">674. 最长连续递增序列</a></td>
+      <td>简单</td>
+      <td>只要求单向递增，无需状态机，是本题去掉交替约束后的最简版本</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/wiggle-subsequence/">376. 摆动序列</a></td>
+      <td>中等</td>
+      <td>交替规则相同但对象是子序列可跳元素，允许跳过使得贪心解法成立</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-increasing-subsequence/">300. 最长递增子序列</a></td>
+      <td>中等</td>
+      <td>子序列版本，状态转移需要回看所有更小结尾，$O(n \log n)$ 需配二分</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-mountain-in-array/">845. 数组中的最长山脉</a></td>
+      <td>中等</td>
+      <td>也是连续段上的方向约束，但只允许「先升后降」一次转折而非反复交替</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-length-of-subarray-with-positive-product/">1567. 乘积为正数的最长子数组长度</a></td>
+      <td>中等</td>
+      <td>同样双状态滚动，状态区分的是正负号奇偶而不是升降方向</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2023/83373424" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 265. 粉刷房子 II</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2023/60049703" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1103. 分糖果 II</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2023/82630774">https://hgnulb.github.io/blog/2023/82630774</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

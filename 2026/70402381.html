@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 872. 叶子相似的树 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,二叉树,树,深度优先搜索" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 872. 叶子相似的树" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/70402381" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/70402381" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-29T05:27:13+08:00" />
+<meta property="article:modified_time" content="2026-03-29T05:27:13+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 872. 叶子相似的树" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-03-29T05:27:13+08:00","datePublished":"2026-03-29T05:27:13+08:00","description":"题目描述","headline":"LeetCode 872. 叶子相似的树","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/70402381"},"url":"https://hgnulb.github.io/blog/2026/70402381"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法深度优先搜索">解法：深度优先搜索</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 872. 叶子相似的树">LeetCode 872. 叶子相似的树</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-03-29 05:27:13"
+                    datetime="2026-03-29T05:27:13+08:00"
+            >
+                2026-03-29
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2524 字 · 英文 108 词 · 代码 48 行"
+            aria-label="预计阅读时间约 8 分钟，正文 2524 字 · 英文 108 词 · 代码 48 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 8 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    3 个分类
+                    <span aria-hidden="true"> · </span>
+                    3 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4923693516/" title="简单">
+        简单
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/2986108175/" title="LeetCode 75">
+        LeetCode 75
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2805463697/" title="树">
+        树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3241866243/" title="二叉树">
+        二叉树
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法深度优先搜索">解法：深度优先搜索</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/leaf-similar-trees/">872. 叶子相似的树</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p><strong>题目目标</strong>：把一棵二叉树从左到右的所有叶子节点的值依次连起来，得到「叶值序列」。判断两棵树的叶值序列是否完全相同。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>核心约束</strong>：注意是<strong>序列</strong>而不是集合——顺序必须一致，重复值也必须出现同样的次数，所以不能用哈希集合、求和或排序后比较来偷懒。「从左到右」这个顺序，对应的正是任意一种<strong>保持左子树先于右子树</strong>的深度优先遍历（前序、中序、后序都行，因为叶子在这三种遍历中的相对先后顺序相同）。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>边界处理</strong>：只有一个节点的树，根本身就是叶子；节点值可以是 0，所以不能用 0 当哨兵；两棵树的节点数可以差很多，但只要叶值序列相同就算相似；两个序列长度不同必须直接判为不同。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>实现取舍</strong>：可以分别收集两个序列再比较（写法直白，$O(L)$ 额外空间），也可以用两个迭代器交替产出叶子做流式比较（空间降到 $O(h)$，但要手写显式栈）。面试里先给前者，把后者作为「如果树大到装不下叶值序列怎么办」的追问答案。</p>
+</blockquote>
+
+<h2 id="解法深度优先搜索">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：深度优先搜索</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>题目问的是两棵树的关系，但两棵树之间没有任何结构上的对应——它们的形状可以完全不同。所以不能像「相同的树」那样同步递归比较，唯一可行的路径是：<strong>先把每棵树各自压缩成一个与形状无关的特征（叶值序列），再比较两个特征</strong>。这一步「把结构问题降维成序列问题」是全题的核心。</p>
+</blockquote>
+
+<blockquote>
+  <p>剩下的问题是怎么按「从左到右」的顺序收集叶子。观察一下：只要递归时<strong>先进左子树、后进右子树</strong>，叶子被访问到的先后顺序就一定是从左到右的；至于父节点是在孩子之前还是之后被处理（前序还是后序），完全不影响叶子之间的相对顺序，因为父节点根本不是叶子、不会进入序列。所以不必纠结用哪种遍历。</p>
+</blockquote>
+
+<blockquote>
+  <p>于是不变量是：<strong><code class="language-plaintext highlighter-rouge">dfs(node, nums)</code> 执行完毕后，<code class="language-plaintext highlighter-rouge">nums</code> 末尾追加的正是以 <code class="language-plaintext highlighter-rouge">node</code> 为根的子树中所有叶子的值，且顺序为从左到右</strong>。递归的语义就这一句，父调用只管按「先左后右」的顺序拼接子调用的结果。</p>
+</blockquote>
+
+<blockquote>
+  <p>叶子的判定用了一个小技巧：<code class="language-plaintext highlighter-rouge">root.left == root.right</code>。在二叉树里，一个节点的左右孩子指针相等<strong>当且仅当两者都为 <code class="language-plaintext highlighter-rouge">null</code></strong>（两个不同的子节点不可能是同一个对象），所以这一条比较等价于 <code class="language-plaintext highlighter-rouge">root.left == null &amp;&amp; root.right == null</code>，但只写一次比较。</p>
+</blockquote>
+
+<blockquote>
+  <p>最后是序列比较。必须逐位比较值，先比长度再比元素——长度不同直接判否，这一步同时也避免了越界。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <p><strong>第一步：为两棵树各准备一个列表，分别调用 <code class="language-plaintext highlighter-rouge">dfs</code> 收集叶值。</strong> 为什么必须收集完再比：两棵树的形状无关，没法同步推进递归；只有把它们各自「拍平」成序列，才有共同的比较基准。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第二步：<code class="language-plaintext highlighter-rouge">dfs</code> 里先判 <code class="language-plaintext highlighter-rouge">root.left == root.right</code>，成立就把 <code class="language-plaintext highlighter-rouge">root.val</code> 追加进列表并返回。</strong> 为什么这个判据等价于「是叶子」：见上文，两个孩子指针相等只可能是都为空。为什么判到叶子就返回：叶子没有子树可以继续下探，继续递归会访问空指针。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第三步：否则先递归左孩子（若非空），再递归右孩子（若非空）。</strong> 为什么要各自判空：走到这里说明至少有一个孩子非空，但可能只有一个；不判空就会对 <code class="language-plaintext highlighter-rouge">null</code> 调用 <code class="language-plaintext highlighter-rouge">dfs</code> 并在第一行访问 <code class="language-plaintext highlighter-rouge">root.left</code> 时崩溃。为什么顺序不能颠倒：左右顺序直接决定叶值序列的顺序，反过来就是「从右到左」，与题意不符。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第四步：比较两个列表。先看长度是否相等，再逐位比较元素值。</strong> 为什么不用集合或排序：题目要的是序列相等，<code class="language-plaintext highlighter-rouge">[1,2]</code> 与 <code class="language-plaintext highlighter-rouge">[2,1]</code>、<code class="language-plaintext highlighter-rouge">[1,1,2]</code> 与 <code class="language-plaintext highlighter-rouge">[1,2]</code> 都必须判为不同，而集合和排序都会抹掉这些差别。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">root1 = [3,5,1,6,2,9,8,null,null,7,4]</code> 与 <code class="language-plaintext highlighter-rouge">root2 = [3,5,1,6,7,4,2,null,null,null,null,null,null,9,8]</code> 走一遍</strong>：</p>
+</blockquote>
+
+<blockquote>
+  <p>先看 <code class="language-plaintext highlighter-rouge">root1</code> 的形状：根 3，左孩子 5、右孩子 1；5 的左孩子 6、右孩子 2；2 的左孩子 7、右孩子 4；1 的左孩子 9、右孩子 8。</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">dfs(3)</code>：<code class="language-plaintext highlighter-rouge">3.left = 5</code>、<code class="language-plaintext highlighter-rouge">3.right = 1</code>，两者不等，不是叶子。先递归左孩子 5。<code class="language-plaintext highlighter-rouge">dfs(5)</code>：孩子是 6 和 2，不是叶子，先递归 6。<code class="language-plaintext highlighter-rouge">dfs(6)</code>：<code class="language-plaintext highlighter-rouge">6.left</code> 与 <code class="language-plaintext highlighter-rouge">6.right</code> 都是 <code class="language-plaintext highlighter-rouge">null</code>，相等，判定为叶子，追加 6 → 列表 <code class="language-plaintext highlighter-rouge">[6]</code>。回到 5，递归右孩子 2。<code class="language-plaintext highlighter-rouge">dfs(2)</code>：孩子是 7 和 4，不是叶子，先递归 7 → 追加 7 → <code class="language-plaintext highlighter-rouge">[6,7]</code>；再递归 4 → 追加 4 → <code class="language-plaintext highlighter-rouge">[6,7,4]</code>。5 这一支结束。</p>
+</blockquote>
+
+<blockquote>
+  <p>回到 3，递归右孩子 1。<code class="language-plaintext highlighter-rouge">dfs(1)</code>：孩子是 9 和 8，先递归 9 → 追加 9 → <code class="language-plaintext highlighter-rouge">[6,7,4,9]</code>；再递归 8 → 追加 8 → <code class="language-plaintext highlighter-rouge">[6,7,4,9,8]</code>。<code class="language-plaintext highlighter-rouge">root1</code> 的叶值序列是 <code class="language-plaintext highlighter-rouge">[6,7,4,9,8]</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p>再看 <code class="language-plaintext highlighter-rouge">root2</code>：根 3，左孩子 5、右孩子 1；5 的左孩子 6、右孩子 7；1 的左孩子 4、右孩子 2；4 是叶子？按给定的层序，5 的孩子是 6 和 7（都是叶子），1 的孩子是 4 和 2，其中 4 是叶子，2 的孩子是 9 和 8。同样按「先左后右」收集：6 → 7 → 4 → 9 → 8，得到 <code class="language-plaintext highlighter-rouge">[6,7,4,9,8]</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p>两个序列长度都是 5，逐位比较 6=6、7=7、4=4、9=9、8=8，全部相等，返回 <code class="language-plaintext highlighter-rouge">true</code>。注意两棵树的形状明显不同（<code class="language-plaintext highlighter-rouge">root1</code> 里 7 和 4 挂在 5 的子树下，<code class="language-plaintext highlighter-rouge">root2</code> 里挂在不同位置），但叶值序列一致——这正说明了「先降维再比较」的必要性。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>再看一个反例 <code class="language-plaintext highlighter-rouge">root1 = [1,2,3]</code>、<code class="language-plaintext highlighter-rouge">root2 = [1,3,2]</code></strong>：前者叶值序列是 <code class="language-plaintext highlighter-rouge">[2,3]</code>，后者是 <code class="language-plaintext highlighter-rouge">[3,2]</code>，长度相同但第一位就不等，返回 <code class="language-plaintext highlighter-rouge">false</code>。这个用例说明了为什么不能排序后再比。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">leafSimilar</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root1</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">root2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">l1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">l2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">dfs</span><span class="o">(</span><span class="n">root1</span><span class="o">,</span> <span class="n">l1</span><span class="o">);</span>
+        <span class="n">dfs</span><span class="o">(</span><span class="n">root2</span><span class="o">,</span> <span class="n">l2</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">l1</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">l2</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">dfs</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">==</span> <span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">nums</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">nums</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">nums</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">leafSimilar</span><span class="p">(</span><span class="n">root1</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">,</span> <span class="n">root2</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="n">l1</span><span class="p">,</span> <span class="n">l2</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{},</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{}</span>
+    <span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="o">*</span><span class="n">TreeNode</span><span class="p">,</span> <span class="o">*</span><span class="p">[]</span><span class="kt">int</span><span class="p">)</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">,</span> <span class="n">nums</span> <span class="o">*</span><span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">Left</span> <span class="o">==</span> <span class="n">root</span><span class="o">.</span><span class="n">Right</span> <span class="p">{</span>
+            <span class="o">*</span><span class="n">nums</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="o">*</span><span class="n">nums</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">Val</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">Left</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Left</span><span class="p">,</span> <span class="n">nums</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">Right</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Right</span><span class="p">,</span> <span class="n">nums</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">root1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l1</span><span class="p">)</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">root2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l1</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">l2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="no">false</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">l1</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="n">l2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="no">false</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n_1 + n_2)$。凭什么：两次深度优先遍历各访问自己那棵树的每个节点恰好一次，节点内只做常数次判断与追加；最后的序列比较不超过叶子总数，被遍历开销吸收。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(h_1 + h_2 + L)$，其中 $h$ 为树高、$L$ 为叶子数。凭什么：递归栈的深度等于树高，最坏情况下树退化成链则为 $O(n)$；两个叶值列表合计存放 $L$ 个整数。若改成两个迭代器交替比较，可以去掉 $L$ 这一项。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>两棵结构无关的树要比较，先各自降维成序列，再比序列。</strong> 「同步递归」只适用于形状必须一致的题（如 100 相同的树），本题形状可以完全不同，同步递归无从下手。</li>
+    <li>
+<strong>「从左到右」的叶子顺序由「先递归左子树」保证，与前序/中序/后序的选择无关。</strong> 想清楚这一点就不必纠结遍历方式。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">root.left == root.right</code> 是判断叶子的等价简写。</strong> 两个孩子指针只可能同时为 <code class="language-plaintext highlighter-rouge">null</code> 时相等，比写两个 <code class="language-plaintext highlighter-rouge">== null</code> 更紧凑。</li>
+    <li>
+<strong>递归下探前要各自判空。</strong> 本题的 <code class="language-plaintext highlighter-rouge">dfs</code> 假定入参非空（第一行就访问 <code class="language-plaintext highlighter-rouge">root.left</code>），所以调用方必须保证；判空写在调用点而不是函数入口，是这份代码的约定，改动时要保持一致。</li>
+    <li>
+<strong>序列相等必须逐位比较，不能用集合、排序或求和。</strong> <code class="language-plaintext highlighter-rouge">[1,2]</code> 与 <code class="language-plaintext highlighter-rouge">[2,1]</code>、<code class="language-plaintext highlighter-rouge">[1,1]</code> 与 <code class="language-plaintext highlighter-rouge">[1]</code> 的区分全靠这一点。</li>
+    <li>
+<strong>面试视角</strong>：先点明「两棵树形状无关 → 必须降维成序列」，再写收集与比较。面试官常见追问是「树非常大、叶值序列放不下怎么办」——答案是把递归改成显式栈，做成两个惰性迭代器交替吐出叶子并即时比较，空间从 $O(L)$ 降到 $O(h)$，一旦出现不等立刻返回，还能提前终止。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>错误写法：把叶值放进 <code class="language-plaintext highlighter-rouge">HashSet</code> 再比较集合 → 用例 <code class="language-plaintext highlighter-rouge">root1 = [1,2,3]</code>、<code class="language-plaintext highlighter-rouge">root2 = [1,3,2]</code>，两个集合都是 <code class="language-plaintext highlighter-rouge">{2,3}</code>，返回 <code class="language-plaintext highlighter-rouge">true</code>，而期望 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>错误写法：把两个序列排序后再比较 → 用例同上，排序后都是 <code class="language-plaintext highlighter-rouge">[2,3]</code>，返回 <code class="language-plaintext highlighter-rouge">true</code>，同样漏判顺序差异。</li>
+    <li>错误写法：只比较叶值之和或异或值 → 用例 <code class="language-plaintext highlighter-rouge">root1</code> 叶值 <code class="language-plaintext highlighter-rouge">[1,4]</code>、<code class="language-plaintext highlighter-rouge">root2</code> 叶值 <code class="language-plaintext highlighter-rouge">[2,3]</code>，和都是 5，返回 <code class="language-plaintext highlighter-rouge">true</code>，而两者显然不同。</li>
+    <li>错误写法：先递归右孩子再递归左孩子 → 用例 <code class="language-plaintext highlighter-rouge">root1 = [1,2,3]</code>，收集到 <code class="language-plaintext highlighter-rouge">[3,2]</code> 而非 <code class="language-plaintext highlighter-rouge">[2,3]</code>；若两棵树都写反倒也能对上，但只要有一处顺序不一致就会误判。</li>
+    <li>错误写法：叶子判定写成 <code class="language-plaintext highlighter-rouge">root.left == null || root.right == null</code> → 用例某节点只有左孩子时会被当成叶子，把这个内部节点的值错误地写进序列，同时整棵左子树的真实叶子被跳过。</li>
+    <li>错误写法：递归入口不判空，直接 <code class="language-plaintext highlighter-rouge">dfs(root.left, nums)</code> → 用例 <code class="language-plaintext highlighter-rouge">[1,2]</code>（根只有左孩子），进入 <code class="language-plaintext highlighter-rouge">dfs(null)</code> 后第一行访问 <code class="language-plaintext highlighter-rouge">null.left</code> 抛空指针异常。</li>
+    <li>错误写法：不做叶子判定，对每个访问到的节点都执行 <code class="language-plaintext highlighter-rouge">nums.add(root.val)</code> → 用例 <code class="language-plaintext highlighter-rouge">[1,2,3]</code>，序列变成 <code class="language-plaintext highlighter-rouge">[1,2,3]</code> 而不是 <code class="language-plaintext highlighter-rouge">[2,3]</code>，内部节点污染了特征值，与任何另一棵树比较都会得到错误结论。</li>
+    <li>错误写法：比较时只检查长度或只检查前 <code class="language-plaintext highlighter-rouge">min(len1, len2)</code> 位 → 用例 <code class="language-plaintext highlighter-rouge">root1</code> 叶值 <code class="language-plaintext highlighter-rouge">[6,7]</code>、<code class="language-plaintext highlighter-rouge">root2</code> 叶值 <code class="language-plaintext highlighter-rouge">[6,7,4]</code>，只比前两位会返回 <code class="language-plaintext highlighter-rouge">true</code>，期望 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>错误写法：Go 里直接用 <code class="language-plaintext highlighter-rouge">l1 == l2</code> 比较切片 → 切片不支持 <code class="language-plaintext highlighter-rouge">==</code> 运算，编译报错；必须逐位比较或先比长度。</li>
+    <li>错误写法：Java 里用 <code class="language-plaintext highlighter-rouge">l1 == l2</code> 比较列表引用 → 两个不同的 <code class="language-plaintext highlighter-rouge">ArrayList</code> 对象引用恒不相等，任何输入都返回 <code class="language-plaintext highlighter-rouge">false</code>；必须用 <code class="language-plaintext highlighter-rouge">equals</code>。</li>
+    <li>错误写法：认为节点值为 0 的叶子可以跳过（当作空） → 用例某棵树的叶值序列含 0，跳过后序列长度变短，与另一棵树比较时误判为不同。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/same-tree/">100. 相同的树</a></td>
+      <td>简单</td>
+      <td>形状必须完全一致，可以两棵树同步递归比较，无需先降维成序列</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/binary-tree-preorder-traversal/">144. 二叉树的前序遍历</a></td>
+      <td>简单</td>
+      <td>收集的是全部节点而非仅叶子，进阶要求用显式栈或 Morris 遍历替代递归</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/binary-tree-paths/">257. 二叉树的所有路径</a></td>
+      <td>简单</td>
+      <td>到达叶子时要输出整条根到叶的路径，需要在递归中维护并回溯路径栈</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/diameter-of-binary-tree/">543. 二叉树的直径</a></td>
+      <td>简单</td>
+      <td>递归返回值（子树深度）与全局答案（最长路径）承担不同职责，是典型的双轨递归</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/22875353" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 790. 多米诺和托米诺平铺</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/68584129" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 933. 最近的请求次数</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/70402381">https://hgnulb.github.io/blog/2026/70402381</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

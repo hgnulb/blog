@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1168. 水资源分配优化 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,Boruvka 算法,Kruskal 算法,Prim 算法,商汤,图,堆（优先队列）,并查集,最小生成树" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1168. 水资源分配优化" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/16074398" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/16074398" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-03-31T15:26:50+08:00" />
+<meta property="article:modified_time" content="2021-03-31T15:26:50+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1168. 水资源分配优化" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-03-31T15:26:50+08:00","datePublished":"2021-03-31T15:26:50+08:00","description":"题目描述","headline":"LeetCode 1168. 水资源分配优化","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/16074398"},"url":"https://hgnulb.github.io/blog/2021/16074398"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法最小生成树--虚拟节点">解法：最小生成树 + 虚拟节点</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1168. 水资源分配优化">LeetCode 1168. 水资源分配优化</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-03-31 15:26:50"
+                    datetime="2021-03-31T15:26:50+08:00"
+            >
+                2021-03-31
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2710 字 · 英文 115 词 · 代码 134 行"
+            aria-label="预计阅读时间约 12 分钟，正文 2710 字 · 英文 115 词 · 代码 134 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 12 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    8 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9733506750/" title="商汤">
+        商汤
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7037379732/" title="堆（优先队列）">
+        堆（优先队列）
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5789791753/" title="图">
+        图
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5427091558/" title="并查集">
+        并查集
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2091949959/" title="最小生成树">
+        最小生成树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0099671564/" title="Boruvka 算法">
+        Boruvka 算法
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3899633374/" title="Kruskal 算法">
+        Kruskal 算法
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4641449051/" title="Prim 算法">
+        Prim 算法
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法最小生成树--虚拟节点">解法：最小生成树 + 虚拟节点</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/optimize-water-distribution-in-a-village/">1168. 水资源分配优化</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>村里有 <code class="language-plaintext highlighter-rouge">n</code> 座房子（编号 1 到 <code class="language-plaintext highlighter-rouge">n</code>），要让每座房子都有水。有两种花钱的方式：在第 <code class="language-plaintext highlighter-rouge">i</code> 座房子处打一口井，花费 <code class="language-plaintext highlighter-rouge">wells[i-1]</code>；或者在两座房子之间铺一条管道，花费由 <code class="language-plaintext highlighter-rouge">pipes</code> 给出，管道可以把水从一座已有水的房子引到另一座。求让所有房子都有水的最小总花费。</p>
+
+  <p>「有水」的传递性是理解本题的关键：一座房子有水，可能因为它自己有井，也可能因为它通过管道（可以经过若干中转）连到了某座有井的房子。所以最终的付费方案里，每一个「连通块」内必须至少有一口井，块内其余房子靠管道相连。</p>
+
+  <p>这就暴露出难点：<strong>打井和铺管道是两种性质完全不同的花费</strong>——前者作用在单个点上，后者作用在一条边上。如果分开考虑，就要枚举「哪些房子打井」再对每个方案求连通代价，组合爆炸。</p>
+
+  <p>再看约束：<code class="language-plaintext highlighter-rouge">n</code> 上限 $10^4$，<code class="language-plaintext highlighter-rouge">pipes</code> 长度上限 $10^4$。这个规模允许 $O(m \log m)$ 的排序型算法，但不允许对打井方案做任何形式的枚举。同时「所有点连通、总代价最小」这几个字，配合「图 + 边权」的输入形式，已经把最小生成树的味道摆得很明显了——缺的只是把打井也变成一条边。</p>
+
+  <p>边界：<code class="language-plaintext highlighter-rouge">pipes</code> 可能为空，此时每座房子只能各自打井，答案是所有 <code class="language-plaintext highlighter-rouge">wells</code> 之和；同一对房子之间可能给出多条管道（重复边），也可能存在自环式的冗余输入，算法必须能容忍；<code class="language-plaintext highlighter-rouge">pipes</code> 给出的图不保证连通。</p>
+</blockquote>
+
+<h2 id="解法最小生成树--虚拟节点">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91--%E8%99%9A%E6%8B%9F%E8%8A%82%E7%82%B9" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：最小生成树 + 虚拟节点</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先看暴力：枚举打井房屋的子集，剩下的房子必须通过管道连到某个有井的房子上，再对每种子集求最小连通代价。子集数 $2^n$，$n = 10^4$ 时完全不可行。瓶颈在于<strong>把「打井」和「铺管」当成了两类互不相干的决策</strong>，于是必须先定一类再算另一类。</p>
+
+  <p>关键观察是把两者统一：<strong>打井，本质上是「从水源引一条水管到这座房子」</strong>。既然如此，就凭空造一个编号为 0 的<strong>虚拟节点</strong>代表「水源 / 地下水」，把「在房子 <code class="language-plaintext highlighter-rouge">i</code> 打井、花费 <code class="language-plaintext highlighter-rouge">wells[i-1]</code>」重写成一条边：</p>
+
+\[(0,\ i,\ wells[i-1])\]
+
+  <p>这一步之后，所有花费都变成了边权，图上有 <code class="language-plaintext highlighter-rouge">n + 1</code> 个点（0 号加上 <code class="language-plaintext highlighter-rouge">n</code> 座房子）、<code class="language-plaintext highlighter-rouge">n + m</code> 条边（<code class="language-plaintext highlighter-rouge">n</code> 条虚拟井边加上 <code class="language-plaintext highlighter-rouge">m</code> 条管道边）。</p>
+
+  <p>现在原问题等价于什么？「每座房子都有水」等价于「每座房子都能沿着已付费的边连到 0 号节点」，也就是<strong>新图上所有点连通</strong>；「总花费最小」就是<strong>边权和最小</strong>。这正是最小生成树的定义。</p>
+
+  <p>这个等价要双向说清楚。任何合法的供水方案，对应新图上一个连通所有点的边子集（每个原连通块里的那口井对应一条连到 0 的边）；反过来，新图上任何连通所有点的边子集，把连到 0 的边解读为打井、其余解读为铺管，就是一个合法方案且花费相同。既然二者一一对应且代价相等，最小生成树的权和就是答案。</p>
+
+  <p>剩下的就是求 MST。选 Kruskal：把显式边集按权升序排序，依次用并查集合并两端。合并成功说明它是当前连接两个连通块的最小候选边，依据切割性质可以安全选取；合并失败说明只会成环，跳过。</p>
+
+  <p>不变量是：<strong>任意时刻，并查集中的每个集合恰好对应一个已经内部连通、且所有内部连边都已计费的点集。</strong> 循环结束时所有点归入同一集合，<code class="language-plaintext highlighter-rouge">cost</code> 即为答案。</p>
+
+  <p>并查集用「路径压缩（这里是路径减半 <code class="language-plaintext highlighter-rouge">parent[x] = parent[parent[x]]</code>）+ 按大小合并」两个优化，让每次操作近乎常数时间。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>构造虚拟井边</strong>：对 <code class="language-plaintext highlighter-rouge">i</code> 从 1 到 <code class="language-plaintext highlighter-rouge">n</code>，加入边 <code class="language-plaintext highlighter-rouge">{0, i, wells[i-1]}</code>。注意下标的错位——房子编号从 1 开始而 <code class="language-plaintext highlighter-rouge">wells</code> 数组从 0 开始，这里的 <code class="language-plaintext highlighter-rouge">i - 1</code> 写错就会整体错一位，代价全部张冠李戴。</li>
+    <li>
+<strong>并入管道边</strong>：<code class="language-plaintext highlighter-rouge">pipes</code> 的每一项 <code class="language-plaintext highlighter-rouge">[u, v, w]</code> 直接作为一条边。管道是无向的，Kruskal 天然按无向处理，不需要正反各存一条。</li>
+    <li>
+<strong>按权升序排序</strong>：<code class="language-plaintext highlighter-rouge">Comparator.comparingInt(a -&gt; a[2])</code>。排序是 Kruskal 的前提，贪心「每次取当前最小的可用边」正确性来自切割性质。</li>
+    <li>
+<strong>并查集开 <code class="language-plaintext highlighter-rouge">n + 1</code> 个位置</strong>：编号 0 到 <code class="language-plaintext highlighter-rouge">n</code>。开成 <code class="language-plaintext highlighter-rouge">n</code> 会让虚拟节点或最后一座房子越界，这是虚拟节点法最典型的低级错误。</li>
+    <li>
+<strong>顺序扫边并合并</strong>：<code class="language-plaintext highlighter-rouge">if (uf.union(e[0], e[1])) cost += e[2];</code>。把「是否成功合并」直接作为「是否计费」的依据，是 Kruskal 最干净的写法——它同时完成了成环判定与去重（重复边的第二条必然合并失败），所以输入里的平行边不需要预处理。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">find</code> 用路径减半</strong>：<code class="language-plaintext highlighter-rouge">parent[x] = parent[parent[x]]</code> 在循环里就地把路径压扁一半，写法比递归的完全路径压缩短且没有栈开销。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">union</code> 按大小合并</strong>：把小树挂到大树下，避免退化成链。与路径压缩配合后单次操作近似 $O(\alpha)$。</li>
+    <li>
+<strong>累计恰好 <code class="language-plaintext highlighter-rouge">n</code> 次成功合并</strong>：新图有 <code class="language-plaintext highlighter-rouge">n + 1</code> 个点，生成树恰有 <code class="language-plaintext highlighter-rouge">n</code> 条边；达到该数量即可停止。虚拟井边保证新图一定连通。</li>
+  </ul>
+
+  <p>以官方样例 <code class="language-plaintext highlighter-rouge">n = 3</code>、<code class="language-plaintext highlighter-rouge">wells = [1, 2, 2]</code>、<code class="language-plaintext highlighter-rouge">pipes = [[1,2,1],[2,3,1]]</code> 走一遍（答案 3）：</p>
+
+  <p>建图后的边集为：井边 <code class="language-plaintext highlighter-rouge">(0,1,1)</code>、<code class="language-plaintext highlighter-rouge">(0,2,2)</code>、<code class="language-plaintext highlighter-rouge">(0,3,2)</code>；管道边 <code class="language-plaintext highlighter-rouge">(1,2,1)</code>、<code class="language-plaintext highlighter-rouge">(2,3,1)</code>。</p>
+
+  <p>排序后（同权任意序）：<code class="language-plaintext highlighter-rouge">(0,1,1)</code>、<code class="language-plaintext highlighter-rouge">(1,2,1)</code>、<code class="language-plaintext highlighter-rouge">(2,3,1)</code>、<code class="language-plaintext highlighter-rouge">(0,2,2)</code>、<code class="language-plaintext highlighter-rouge">(0,3,2)</code>。</p>
+
+  <p>取 <code class="language-plaintext highlighter-rouge">(0,1,1)</code>：0 与 1 不同集合，合并成功，<code class="language-plaintext highlighter-rouge">cost = 1</code>。含义是在 1 号房子打井。<br>
+取 <code class="language-plaintext highlighter-rouge">(1,2,1)</code>：1 与 2 不同集合，合并成功，<code class="language-plaintext highlighter-rouge">cost = 2</code>。含义是从 1 号铺管道到 2 号。<br>
+取 <code class="language-plaintext highlighter-rouge">(2,3,1)</code>：合并成功，<code class="language-plaintext highlighter-rouge">cost = 3</code>、<code class="language-plaintext highlighter-rouge">used = n</code>，所有 <code class="language-plaintext highlighter-rouge">n+1</code> 个点已连通，直接停止；剩余两条井边若继续扫描都会成环。</p>
+
+  <p>返回 3，对应方案「在 1 号打井（1 元）+ 铺 1-2（1 元）+ 铺 2-3（1 元）」。</p>
+
+  <p>再看一个 <code class="language-plaintext highlighter-rouge">pipes</code> 为空的例子：<code class="language-plaintext highlighter-rouge">n = 2</code>、<code class="language-plaintext highlighter-rouge">wells = [1, 1]</code>、<code class="language-plaintext highlighter-rouge">pipes = []</code>。边集只有 <code class="language-plaintext highlighter-rouge">(0,1,1)</code> 与 <code class="language-plaintext highlighter-rouge">(0,2,1)</code>，两条都合并成功，<code class="language-plaintext highlighter-rouge">cost = 2</code>——每座房子各打一口井，符合直觉，主逻辑天然覆盖，不需要为「无管道」写任何特判。</p>
+
+  <p>最后看为什么不能先在原管道图里求 MST，再给每个连通块补最便宜的井：这种顺序会强迫原图的整个连通块都铺管。例如 <code class="language-plaintext highlighter-rouge">wells = [1,2,2]</code>、两条管道费用都为 5 时，它会花 <code class="language-plaintext highlighter-rouge">10 + 1 = 11</code>；最优却是三座房子分别打井，只花 5。虚拟节点把两类费用放进同一次排序，才能做全局权衡。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Collections</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Comparator</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">minCostToSupplyWater</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">wells</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">pipes</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">edges</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="c1">// 打井 = 从虚拟水源 0 引一条边到该房子。</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">edges</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="mi">0</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">wells</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]});</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">p</span> <span class="o">:</span> <span class="n">pipes</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">edges</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">p</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">p</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span> <span class="n">p</span><span class="o">[</span><span class="mi">2</span><span class="o">]});</span>
+        <span class="o">}</span>
+
+        <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">edges</span><span class="o">,</span> <span class="nc">Comparator</span><span class="o">.</span><span class="na">comparingInt</span><span class="o">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">[</span><span class="mi">2</span><span class="o">]));</span>
+
+        <span class="nc">UnionFind</span> <span class="n">uf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">UnionFind</span><span class="o">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">cost</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">used</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">e</span> <span class="o">:</span> <span class="n">edges</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 合并成功才计费：失败说明两端已连通，这条边只会成环。</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">uf</span><span class="o">.</span><span class="na">union</span><span class="o">(</span><span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">]))</span> <span class="o">{</span>
+                <span class="n">cost</span> <span class="o">+=</span> <span class="n">e</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(++</span><span class="n">used</span> <span class="o">==</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">cost</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">UnionFind</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">parent</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">size</span><span class="o">;</span>
+
+        <span class="nc">UnionFind</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">parent</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+                <span class="n">size</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="nf">find</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">x</span> <span class="o">!=</span> <span class="n">parent</span><span class="o">[</span><span class="n">x</span><span class="o">])</span> <span class="o">{</span>
+                <span class="c1">// 路径减半，就地把查找路径压扁。</span>
+                <span class="n">parent</span><span class="o">[</span><span class="n">x</span><span class="o">]</span> <span class="o">=</span> <span class="n">parent</span><span class="o">[</span><span class="n">parent</span><span class="o">[</span><span class="n">x</span><span class="o">]];</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">parent</span><span class="o">[</span><span class="n">x</span><span class="o">];</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">x</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">boolean</span> <span class="nf">union</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">ra</span> <span class="o">=</span> <span class="n">find</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">rb</span> <span class="o">=</span> <span class="n">find</span><span class="o">(</span><span class="n">b</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">ra</span> <span class="o">==</span> <span class="n">rb</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="c1">// 按大小合并，小树挂到大树下。</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">size</span><span class="o">[</span><span class="n">ra</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">[</span><span class="n">rb</span><span class="o">])</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">ra</span><span class="o">;</span>
+                <span class="n">ra</span> <span class="o">=</span> <span class="n">rb</span><span class="o">;</span>
+                <span class="n">rb</span> <span class="o">=</span> <span class="n">t</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">parent</span><span class="o">[</span><span class="n">rb</span><span class="o">]</span> <span class="o">=</span> <span class="n">ra</span><span class="o">;</span>
+            <span class="n">size</span><span class="o">[</span><span class="n">ra</span><span class="o">]</span> <span class="o">+=</span> <span class="n">size</span><span class="o">[</span><span class="n">rb</span><span class="o">];</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="s">"sort"</span>
+
+<span class="k">type</span> <span class="n">Edge</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">u</span> <span class="kt">int</span>
+	<span class="n">v</span> <span class="kt">int</span>
+	<span class="n">w</span> <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">UnionFind</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">parent</span> <span class="p">[]</span><span class="kt">int</span>
+	<span class="n">size</span>   <span class="p">[]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">newUnionFind</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">UnionFind</span> <span class="p">{</span>
+	<span class="n">parent</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="n">size</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">parent</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+		<span class="n">size</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">UnionFind</span><span class="p">{</span><span class="n">parent</span><span class="o">:</span> <span class="n">parent</span><span class="p">,</span> <span class="n">size</span><span class="o">:</span> <span class="n">size</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">uf</span> <span class="o">*</span><span class="n">UnionFind</span><span class="p">)</span> <span class="n">find</span><span class="p">(</span><span class="n">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="n">x</span> <span class="o">!=</span> <span class="n">uf</span><span class="o">.</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="p">{</span>
+		<span class="c">// 路径减半，就地把查找路径压扁。</span>
+		<span class="n">uf</span><span class="o">.</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">parent</span><span class="p">[</span><span class="n">uf</span><span class="o">.</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]]</span>
+		<span class="n">x</span> <span class="o">=</span> <span class="n">uf</span><span class="o">.</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">x</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">uf</span> <span class="o">*</span><span class="n">UnionFind</span><span class="p">)</span> <span class="n">union</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">ra</span> <span class="o">:=</span> <span class="n">uf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+	<span class="n">rb</span> <span class="o">:=</span> <span class="n">uf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">ra</span> <span class="o">==</span> <span class="n">rb</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">false</span>
+	<span class="p">}</span>
+	<span class="c">// 按大小合并，小树挂到大树下。</span>
+	<span class="k">if</span> <span class="n">uf</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="n">ra</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">uf</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="n">rb</span><span class="p">]</span> <span class="p">{</span>
+		<span class="n">ra</span><span class="p">,</span> <span class="n">rb</span> <span class="o">=</span> <span class="n">rb</span><span class="p">,</span> <span class="n">ra</span>
+	<span class="p">}</span>
+	<span class="n">uf</span><span class="o">.</span><span class="n">parent</span><span class="p">[</span><span class="n">rb</span><span class="p">]</span> <span class="o">=</span> <span class="n">ra</span>
+	<span class="n">uf</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="n">ra</span><span class="p">]</span> <span class="o">+=</span> <span class="n">uf</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="n">rb</span><span class="p">]</span>
+	<span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">minCostToSupplyWater</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">wells</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">pipes</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">edges</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="n">Edge</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">pipes</span><span class="p">))</span>
+	<span class="c">// 打井 = 从虚拟水源 0 引一条边到该房子。</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">edges</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">Edge</span><span class="p">{</span><span class="n">u</span><span class="o">:</span> <span class="m">0</span><span class="p">,</span> <span class="n">v</span><span class="o">:</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span><span class="o">:</span> <span class="n">wells</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]})</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">pipes</span> <span class="p">{</span>
+		<span class="n">edges</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">Edge</span><span class="p">{</span><span class="n">u</span><span class="o">:</span> <span class="n">p</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">v</span><span class="o">:</span> <span class="n">p</span><span class="p">[</span><span class="m">1</span><span class="p">],</span> <span class="n">w</span><span class="o">:</span> <span class="n">p</span><span class="p">[</span><span class="m">2</span><span class="p">]})</span>
+	<span class="p">}</span>
+
+	<span class="n">sort</span><span class="o">.</span><span class="n">Slice</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">w</span> <span class="o">&lt;</span> <span class="n">edges</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">w</span>
+	<span class="p">})</span>
+
+	<span class="n">uf</span> <span class="o">:=</span> <span class="n">newUnionFind</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="m">1</span><span class="p">)</span>
+	<span class="n">cost</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">used</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">edges</span> <span class="p">{</span>
+		<span class="c">// 合并成功才计费：失败说明两端已连通，这条边只会成环。</span>
+		<span class="k">if</span> <span class="n">uf</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">cost</span> <span class="o">+=</span> <span class="n">e</span><span class="o">.</span><span class="n">w</span>
+			<span class="n">used</span><span class="o">++</span>
+			<span class="k">if</span> <span class="n">used</span> <span class="o">==</span> <span class="n">n</span> <span class="p">{</span>
+				<span class="k">break</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">cost</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O((n + m) \log (n + m))$，其中 $m$ 为管道数。建边 $O(n + m)$，排序主导整体开销；随后扫一遍边，每条边做常数次并查集操作，配合路径压缩与按大小合并后单次近似 $O(\alpha(n))$（反阿克曼函数，可视为常数），这部分是 $O((n+m)\alpha(n))$。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n + m)$，边集合存下全部 $n + m$ 条边，并查集的 <code class="language-plaintext highlighter-rouge">parent</code> 与 <code class="language-plaintext highlighter-rouge">size</code> 各占 $O(n)$。排序若用归并还需 $O(n+m)$ 的辅助空间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>虚拟节点（超级源点）是把「点上的花费」翻译成「边上的花费」的标准手法</strong>。一旦两类决策被统一成同一种度量，原本要枚举的组合选择就自动被同一个贪心过程完成了。看到「每个连通块里至少要选一个点付费」就该想到它。</li>
+    <li>建模完成后要主动验证等价性——「合法方案 ↔ 连通子图」且代价相等，双向都说清楚，这是面试里区分「背过模板」和「真的会建模」的地方。</li>
+    <li>Kruskal 的「合并成功才计费」一行同时完成了成环判定、去重与计费，输入里的平行边、无序边都无需预处理。</li>
+    <li>虚拟节点会让点数变成 <code class="language-plaintext highlighter-rouge">n + 1</code>，并查集必须按新的点数开空间，编号 0 留给它——这是这类题最高频的越界来源。</li>
+    <li>房屋编号从 1 起而数组从 0 起，<code class="language-plaintext highlighter-rouge">wells[i-1]</code> 的错位要写对，写错不会崩溃只会静默给出错误答案，更难排查。</li>
+    <li>并查集的两个优化（路径压缩 + 按秩/大小合并）要一起用；只用其中一个在 $10^4$ 规模下也能过，但面试中应当写全并能说出为什么。</li>
+    <li>面试视角：本题可以直接答「加超级源点后求 MST」。边集显式且规模为 $n+m$，Kruskal 最顺手；若改成稠密图，通常比较邻接矩阵版 $O(V^2)$ Prim，避免枚举、排序海量边。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：并查集开 <code class="language-plaintext highlighter-rouge">n</code> 个位置而不是 <code class="language-plaintext highlighter-rouge">n + 1</code>。用例 任意含 <code class="language-plaintext highlighter-rouge">n</code> 号房子的输入：访问 <code class="language-plaintext highlighter-rouge">parent[n]</code> 直接数组越界抛异常。</li>
+    <li>
+<strong>错误写法</strong>：井边写成 <code class="language-plaintext highlighter-rouge">{0, i, wells[i]}</code>。用例 <code class="language-plaintext highlighter-rouge">n = 3, wells = [1,2,2]</code>：每座房子拿到的是下一座房子的打井费，且 <code class="language-plaintext highlighter-rouge">wells[3]</code> 越界；即使侥幸不越界，代价也整体错位一格。</li>
+    <li>
+<strong>错误写法</strong>：忘记把井边和管道边放进<strong>同一个</strong>排序集合，而是先对管道求 MST、再给每个连通块加一口最便宜的井。用例 <code class="language-plaintext highlighter-rouge">n = 3, wells = [1,2,2], pipes = [[1,2,5],[2,3,5]]</code>：这种写法会先花 10 元铺两条管道再加 1 元打井共 11 元，而正确答案是三口井各打共 5 元——两类花费不放在一起比较就无法做全局权衡。</li>
+    <li>
+<strong>错误写法</strong>：无论 <code class="language-plaintext highlighter-rouge">union</code> 是否成功都累加边权。用例 <code class="language-plaintext highlighter-rouge">n = 3, wells = [1,2,2], pipes = [[1,2,1],[2,3,1]]</code>：五条边全部计费得 7，而正确答案是 3，多付的正是会成环的冗余边。</li>
+    <li>
+<strong>错误写法</strong>：判完 <code class="language-plaintext highlighter-rouge">find(a) != find(b)</code> 后却直接写 <code class="language-plaintext highlighter-rouge">parent[a] = b</code>。若 <code class="language-plaintext highlighter-rouge">a</code> 不是根，这会把它的子树从原集合拆开，后续连通性判断失真；必须连接两个根节点。</li>
+    <li>
+<strong>错误写法</strong>：忘记排序直接按输入顺序扫边。用例 <code class="language-plaintext highlighter-rouge">n = 3, wells = [1,2,2], pipes = [[1,2,1],[2,3,1]]</code>：先取到的可能是权为 2 的井边，贪心失去依据，结果偏大。</li>
+    <li>
+<strong>错误写法</strong>：提前停止条件写成成功合并 <code class="language-plaintext highlighter-rouge">n - 1</code> 次。新图共有 <code class="language-plaintext highlighter-rouge">n + 1</code> 个点，MST 需要 <code class="language-plaintext highlighter-rouge">n</code> 条边；少一次合并会留下一个房子未接通水源。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/connecting-cities-with-minimum-cost/">1135. 最低成本连通所有城市</a></td>
+      <td>中等</td>
+      <td>最纯粹的 Kruskal 模板，没有虚拟节点，且需判断图是否本就不连通</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/min-cost-to-connect-all-points/">1584. 连接所有点的最小费用</a></td>
+      <td>中等</td>
+      <td>边需要由坐标两两生成（稠密图），更适合 Prim，与本题的选型形成对照</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/">1489. 找到最小生成树里的关键边和伪关键边</a></td>
+      <td>困难</td>
+      <td>在 MST 之上追问每条边的必需性，要反复删边/强制加边重跑 Kruskal</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/redundant-connection/">684. 冗余连接</a></td>
+      <td>中等</td>
+      <td>只用并查集的成环判定，是本题「合并失败即成环」这一步的单独练习</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-provinces/">547. 省份数量</a></td>
+      <td>中等</td>
+      <td>纯连通块计数，帮助建立「并查集集合即连通块」的直觉</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/swim-in-rising-water/">778. 水位上升的泳池中游泳</a></td>
+      <td>困难</td>
+      <td>按边权升序并查集合并直到两点连通，是 Kruskal 思想的另一种变形</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2021/99270571" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 514. 自由之路</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/91268711" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1341. 电影评分</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/16074398">https://hgnulb.github.io/blog/2021/16074398</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 768. 最多能完成排序的块 II | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,单调栈,微软,排序,数组,栈,贪心" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 768. 最多能完成排序的块 II" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/21106593" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/21106593" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-09-19T11:41:17+08:00" />
+<meta property="article:modified_time" content="2021-09-19T11:41:17+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 768. 最多能完成排序的块 II" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-09-19T11:41:17+08:00","datePublished":"2021-09-19T11:41:17+08:00","description":"题目描述","headline":"LeetCode 768. 最多能完成排序的块 II","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/21106593"},"url":"https://hgnulb.github.io/blog/2021/21106593"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法单调栈合并块">解法：单调栈合并块</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 768. 最多能完成排序的块 II">LeetCode 768. 最多能完成排序的块 II</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-09-19 11:41:17"
+                    datetime="2021-09-19T11:41:17+08:00"
+            >
+                2021-09-19
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 4277 字 · 英文 256 词 · 代码 36 行"
+            aria-label="预计阅读时间约 12 分钟，正文 4277 字 · 英文 256 词 · 代码 36 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 12 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3320177889/" title="排序">
+        排序
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7556309699/" title="贪心">
+        贪心
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2085989135/" title="单调栈">
+        单调栈
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法单调栈合并块">解法：单调栈合并块</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/max-chunks-to-make-sorted-ii/">768. 最多能完成排序的块 II</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给定一个整数数组 <code class="language-plaintext highlighter-rouge">arr</code>，把它切成若干个<strong>连续</strong>的块，对每个块各自排序后再按原顺序拼接起来，要求拼接结果恰好等于整个数组升序排序的结果。问最多能切成多少块。</p>
+
+  <p>「最多」这个词值得先想一层：块切得越多越好，而切分点越多约束越强。所以这不是一道搜索题，而是一道判定题——每个可能的切分点是否合法，彼此其实是独立的，把所有合法切分点全部用上就得到了最大块数。这一步认识能立刻排除掉「枚举所有切法」的方向。</p>
+
+  <p>什么样的位置可以切？在下标 $i$ 与 $i+1$ 之间切一刀合法，当且仅当<strong>前缀 $[0, i]$ 里的元素恰好就是排序后数组的前 $i+1$ 个元素</strong>（作为多重集合相等）。等价的、更好用的判据是：$\max(arr[0..i]) \le \min(arr[i+1..n-1])$。因为块内可以任意重排，块与块之间不能跨越，所以只要左边的最大值不超过右边的最小值，左边排完序就正好占据了排序结果的前若干位。</p>
+
+  <p>这道题标着 II，前一问（769 题）的数组是 $0$ 到 $n-1$ 的排列，所以「前缀最大值等于下标」就是充要条件。本题去掉了排列这个限制，<strong>元素可以重复、可以任意大</strong>，那个简洁判据立刻失效。识别出「重复元素让基于下标的判定不再成立」，是本题相对于 I 的全部新增难度。</p>
+
+  <p>约束是 $1 \le n \le 2000$，$0 \le arr[i] \le 10^8$。$n^2$ 是四百万，其实也能过；但值域到 $10^8$ 说明不能按值开桶。$n$ 给得小，是允许你先写出 $O(n)$ 前后缀极值的直观解法；而真正想考的单调栈解法是一次遍历、无需额外前缀数组。</p>
+
+  <p>边界方面：数组完全有序时每个元素自成一块，答案为 $n$；完全逆序时只能是一整块，答案为 1；全部元素相同时每个元素都能自成一块，答案为 $n$——最后这条正是重复元素的典型场景，任何把相等误判为「必须合并」的实现都会在这里翻车。</p>
+</blockquote>
+
+<h2 id="解法单调栈合并块">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%8D%95%E8%B0%83%E6%A0%88%E5%90%88%E5%B9%B6%E5%9D%97" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：单调栈合并块</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>从判据出发的最直接做法是：预处理前缀最大值数组和后缀最小值数组，然后枚举每个位置 $i$，若 $preMax[i] \le sufMin[i+1]$ 就计一刀。这是正确的 $O(n)$ 解法，但它需要两次额外扫描和两个长度为 $n$ 的数组，而且必须先看到全部数据才能开始判断——是离线的。瓶颈在于：后缀最小值这个信息，本质上是在补救「我提前切了一刀，后面却冒出一个更小的数」。</p>
+
+  <p>换个角度：能不能一边扫一边维护「当前的切分方案」，遇到破坏性的元素就把已切的块<strong>合并回去</strong>？这就把离线的判定变成了在线的修正。</p>
+
+  <p>于是显式写下要维护的状态：<strong>一个栈，栈中每个元素代表一个当前已划定的块，值是该块内的最大值。栈从底到顶单调不减。</strong> 单调不减这一条是不变量，它成立的理由是：如果后一个块的最大值小于前一个块的最大值，就说明后块里存在一个比前块最大值还小的元素，它排序后必须跑到前面去，两个块就不该被切开——这样的状态在算法中会被立刻合并掉，永远不会留在栈里。</p>
+
+  <p>处理新元素 $x$ 时只有两种情形：</p>
+
+  <ul>
+    <li>
+<strong>$x \ge$ 栈顶</strong>：$x$ 不小于此前所有元素（由单调性，栈顶就是全局前缀最大值），把它单独切成一个新块是合法的，直接入栈。注意这里用的是 $\ge$ 而不是 $&gt;$，相等时也允许自成一块——因为判据只要求「左边最大值不超过右边最小值」，取等是合法的。这正是重复元素能被正确处理的关键。</li>
+    <li>
+<strong>$x &lt;$ 栈顶</strong>：$x$ 比前一个块的最大值还小，排序后它必须排到那个块的位置之前，所以这一刀不能切，$x$ 必须并入前面的块。而且不止一个块——所有最大值严格大于 $x$ 的块都得跟着并进来，因为它们之间同样无法与 $x$ 分离。合并后的新块的最大值，等于被合并的所有块最大值中的最大者，也就是最先弹出的那个栈顶（由单调性，它就是最大的）。合并完把这个值压回栈中。</li>
+  </ul>
+
+  <p>为什么合并时的循环条件是「栈顶严格大于 $x$」而不是「大于等于」：如果栈顶恰好等于 $x$，说明前面那个块的最大值就是 $x$，那么把 $x$ 放在新的一块里完全合法（左边最大值 $= x \le x =$ 右边最小值）。用 $\ge$ 会把本可以分开的块错误合并，答案偏小。这个不等号是本题与 I 的分水岭，全部重复元素的用例都压在它身上。</p>
+
+  <p>还要注意合并后<strong>不需要</strong>再和新的栈顶比较：循环退出时栈顶已经不大于 $x$，而合并后的值虽然大于 $x$，但它同样不小于当前栈顶（因为原栈单调不减，被弹出的都在更上面），压回去后单调性依然成立。</p>
+
+  <p>最后，答案就是栈的大小——栈中每个元素恰好对应一个最终的块。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>第一步，准备一个空栈，栈中存放各块的最大值。</strong> 为什么只需要存最大值而不需要存块的边界或内容：判定一刀能否切下，只依赖「左侧全部元素的最大值」和「当前元素」，块内的具体成员与算法无关。把状态压缩到一个数，是这个解法简洁的根源。</li>
+    <li><strong>第二步，顺序遍历数组，取出当前元素 $x$。</strong></li>
+    <li>
+<strong>第三步，若栈为空或 $x \ge$ 栈顶，把 $x$ 压栈作为新块。</strong> 为什么栈空时直接压：第一个元素总能自成一块。为什么用 $\ge$ 而不是 $&gt;$：相等时切开仍满足「左最大值 $\le$ 右最小值」，这是处理重复元素的核心，改成 $&gt;$ 会让全相同数组的答案退化成 1。</li>
+    <li>
+<strong>第四步，否则先弹出栈顶记为 $curMax$。</strong> 为什么第一次弹出不需要比较：能进入这个分支就说明栈顶严格大于 $x$，它必然要被合并。为什么它就是合并后的最大值的初值：栈单调不减，栈顶是当前所有块最大值中最大的。</li>
+    <li>
+<strong>第五步，继续弹栈，只要栈非空且栈顶严格大于 $x$，就把它并入并用它更新 $curMax$。</strong> 为什么条件是严格大于：栈顶等于 $x$ 时，前一块的最大值恰好是 $x$，切开合法，不该合并。为什么要用 $\max$ 更新（尽管由单调性新弹出的必然不大于 $curMax$）：写上 $\max$ 是防御性的，也让「合并后的最大值取所有被合并块的最大者」这个语义直接可读。</li>
+    <li>
+<strong>第六步，把 $curMax$ 压回栈。</strong> 为什么压的是 $curMax$ 而不是 $x$：合并后的块包含了原来那些块的全部元素，它的最大值是 $curMax$（必然大于 $x$），后续元素要与这个值比较才正确。压 $x$ 会让前缀最大值凭空变小，后面本不该切的地方被切开。</li>
+    <li>
+<strong>第七步，遍历结束返回栈的大小。</strong> 为什么栈的大小就是答案：栈中每个元素对应一个块，且这些块覆盖了全部元素、互不重叠。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">arr = [2, 3, 1, 4, 4]</code> 走一遍。排序后是 <code class="language-plaintext highlighter-rouge">[1, 2, 3, 4, 4]</code>。</p>
+
+  <p>$x = 2$：栈为空，压入。栈 = <code class="language-plaintext highlighter-rouge">[2]</code>。当前方案是一块 <code class="language-plaintext highlighter-rouge">{2}</code>。</p>
+
+  <p>$x = 3$：$3 \ge 2$，压入。栈 = <code class="language-plaintext highlighter-rouge">[2, 3]</code>。方案是 <code class="language-plaintext highlighter-rouge">{2} | {3}</code>，此刻确实合法（左边最大 2 不超过右边最小 3）。</p>
+
+  <p>$x = 1$：$1 &lt; 3$，进入合并分支。弹出栈顶 3，$curMax = 3$，栈变为 <code class="language-plaintext highlighter-rouge">[2]</code>。检查栈顶 2 是否严格大于 1——是，弹出，$curMax = \max(3, 2) = 3$，栈变为空。循环因栈空退出，压回 3。栈 = <code class="language-plaintext highlighter-rouge">[3]</code>。方案变成一整块 <code class="language-plaintext highlighter-rouge">{2, 3, 1}</code>。这一步是全题最关键的一次操作：元素 1 比前面两个块的最大值都小，排序后必须跑到最前面，所以两刀都得撤销；而合并块的最大值取 3 而不是 1，保证了后续判断使用的是正确的前缀最大值。</p>
+
+  <p>$x = 4$：$4 \ge 3$，压入。栈 = <code class="language-plaintext highlighter-rouge">[3, 4]</code>。方案是 <code class="language-plaintext highlighter-rouge">{2,3,1} | {4}</code>。</p>
+
+  <p>$x = 4$：$4 \ge 4$，压入。栈 = <code class="language-plaintext highlighter-rouge">[3, 4, 4]</code>。方案是 <code class="language-plaintext highlighter-rouge">{2,3,1} | {4} | {4}</code>。这里就是 $\ge$ 的价值——两个相等的 4 可以各自成块。若条件写成 $&gt;$，第二个 4 会走进合并分支，把两个 4 并成一块，答案变成 2。</p>
+
+  <p>返回栈大小 3。验证一下：三块分别排序得到 <code class="language-plaintext highlighter-rouge">[1,2,3]</code>、<code class="language-plaintext highlighter-rouge">[4]</code>、<code class="language-plaintext highlighter-rouge">[4]</code>，拼接为 <code class="language-plaintext highlighter-rouge">[1,2,3,4,4]</code>，正是全局排序结果，且再多切一刀都不行——<code class="language-plaintext highlighter-rouge">{2,3,1}</code> 内部任意切开都会让 1 停在错误的位置。</p>
+
+  <p>顺带看两个极端：<code class="language-plaintext highlighter-rouge">arr = [5,4,3,2,1]</code> 每个新元素都小于栈顶，每次都把栈清空后压回 5，最终栈只有一个元素，答案 1；<code class="language-plaintext highlighter-rouge">arr = [7,7,7]</code> 每个元素都满足 $x \ge$ 栈顶而入栈，答案 3。这两条正好卡住「合并逻辑」和「相等判定」两处最容易写错的地方。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxChunksToSorted</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">st</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">:</span> <span class="n">arr</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">st</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">||</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">st</span><span class="o">.</span><span class="na">peekLast</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">st</span><span class="o">.</span><span class="na">addLast</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="kt">int</span> <span class="n">curMax</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="na">pollLast</span><span class="o">();</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">st</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">st</span><span class="o">.</span><span class="na">peekLast</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">curMax</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">curMax</span><span class="o">,</span> <span class="n">st</span><span class="o">.</span><span class="na">pollLast</span><span class="o">());</span>
+            <span class="o">}</span>
+            <span class="n">st</span><span class="o">.</span><span class="na">addLast</span><span class="o">(</span><span class="n">curMax</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">st</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">maxChunksToSorted</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">st</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">x</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">arr</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span> <span class="o">||</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">st</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="p">}</span>
+
+        <span class="n">curMax</span> <span class="o">:=</span> <span class="n">st</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">st</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">x</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">st</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">curMax</span> <span class="p">{</span>
+                <span class="n">curMax</span> <span class="o">=</span> <span class="n">st</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="p">}</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">curMax</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。外层遍历每个元素一次；内层的合并循环看似嵌套，但每个元素最多入栈一次、出栈一次，所有合并操作的总次数不超过 $n$。这是均摊分析的标准结论，不能被内层 <code class="language-plaintext highlighter-rouge">while</code> 的表象误导成 $O(n^2)$。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$，栈在最坏情况（数组完全升序）下会存下全部 $n$ 个元素。相比「前缀最大值 + 后缀最小值」的写法，本解法只用一个栈而不是两个数组，且是在线的——每读入一个元素就能给出当前的块数。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>「最多切几刀」等价于「逐个判定每刀是否合法」</strong>。切分点之间互不干扰，所以不需要搜索或 DP，把所有合法切分点全用上就是最优解。遇到「最多分成几段」的题，先确认段与段之间的决策是否独立，独立就退化成判定问题。</li>
+    <li>
+<strong>块的全部有效信息可以压缩成一个最大值</strong>。判定一刀能否切下只需要「左侧最大值」和「右侧最小值」，所以栈里存一个整数就够，不必记录块的边界或成员。识别出「哪些信息对后续决策有用」并只保留它们，是把复杂状态压成简单结构的通用方法。</li>
+    <li>
+<strong>在线修正优于离线预处理</strong>。前后缀极值的写法要先看完整个数组，而单调栈是「先乐观地切，遇到反例再合并」。这种「先假设最优、被打脸时回撤」的模式，在括号匹配、任务调度、区间合并里反复出现，是单调栈的思想内核。</li>
+    <li>
+<strong>等号的位置决定了重复元素的命运</strong>。入栈用 $\ge$、合并用严格 $&gt;$，两处合起来才让「相等的元素可以各自成块」。凡是题目从「排列」放宽到「可重复」的变体（本题相对 769 题），第一件事就是逐个检查所有比较运算符的严格性。</li>
+    <li>
+<strong>合并后压回的是最大值而非当前元素</strong>。这一点关系到状态的语义完整性：栈顶必须始终代表「到目前为止的前缀最大值」，压错值会让后续所有判定基于一个偏小的基准。写单调栈时要时刻问自己「栈里存的到底是什么，它的语义在每次修改后还成立吗」。</li>
+    <li>
+<strong>面试视角</strong>：这题的标准回答路径是先给出判据 $\max(左) \le \min(右)$，再提出前后缀数组的 $O(n)$ 解法作为基线，最后给出单调栈解法并说明它是在线的、只用一个数组。面试官几乎一定会追问「和 769 题有什么区别」，答案是「769 的数组是排列，前缀最大值等于下标就能判定；本题有重复和任意值域，那个捷径失效」。另一个高频追问是「内层 while 会不会让复杂度变 $O(n^2)$」，要能用均摊论证回答：每个元素只入栈出栈各一次。能主动指出「入栈条件的 $\ge$ 和合并条件的 $&gt;$ 不能互换」，说明你真的想过重复元素，是很强的加分信号。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：入栈条件写成 <code class="language-plaintext highlighter-rouge">x &gt; st.peek()</code>（丢掉等号）</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [7, 7, 7]</code> 为例，第二个 7 会走进合并分支，把两个 7 并成一块，第三个同理，最终返回 1，而正确答案是 3。全相同数组是这个 bug 最直接的照妖镜。</li>
+    <li>
+<strong>错误写法：合并循环条件写成 <code class="language-plaintext highlighter-rouge">st.peek() &gt;= x</code>（多了等号）</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [2, 3, 2]</code> 为例，处理末尾的 2 时栈是 <code class="language-plaintext highlighter-rouge">[2, 3]</code>：正确流程弹出 3 后发现栈顶 2 不严格大于 2 便停手，压回 3 得到栈 <code class="language-plaintext highlighter-rouge">[2, 3]</code>，答案 2（对应 <code class="language-plaintext highlighter-rouge">{2} | {3,2}</code>）；多了等号会把底部的 2 也并进来，栈变成 <code class="language-plaintext highlighter-rouge">[3]</code>，返回 1。相等时前块最大值恰为 $x$，切开是合法的。</li>
+    <li>
+<strong>错误写法：合并后压回 $x$ 而不是 $curMax$</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [2, 3, 1, 2]</code> 为例，处理 1 时若压回 1，栈变成 <code class="language-plaintext highlighter-rouge">[1]</code>；接着 $x = 2 \ge 1$ 被压入，返回 2，而正确答案是 1——<code class="language-plaintext highlighter-rouge">[2,3,1,2]</code> 无论怎么切，第一块都必须包含全部元素才能让排序结果为 <code class="language-plaintext highlighter-rouge">[1,2,2,3]</code>。压回的必须是合并块的最大值。</li>
+    <li>
+<strong>错误写法：合并时只弹出一个栈顶就停止</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [2, 3, 1]</code> 为例，弹出 3 后栈是 <code class="language-plaintext highlighter-rouge">[2]</code>，若不继续检查 2 是否大于 1，会直接压回 3 得到栈 <code class="language-plaintext highlighter-rouge">[2, 3]</code>，返回 2，而正确答案是 1。所有最大值大于 $x$ 的块都必须一并合并。</li>
+    <li>
+<strong>错误写法：沿用 769 题的「前缀最大值等于下标」判定</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [1, 1]</code> 为例，前缀最大值是 1，下标 0 处 $1 \ne 0$ 判定失败，返回 1，而正确答案是 2。该判据只在数组是 $0$ 到 $n-1$ 的排列时成立。</li>
+    <li>
+<strong>错误写法：判据写成「前缀最大值 $\le$ 后缀最大值」或「前缀最小值 $\le$ 后缀最小值」</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [3, 1, 2]</code> 为例，前缀最大 3 与后缀最大 2 比较会给出错误结论。正确判据必须是「左边的<strong>最大</strong>值 $\le$ 右边的<strong>最小</strong>值」，两侧取的极值方向相反。</li>
+    <li>
+<strong>错误写法：用 <code class="language-plaintext highlighter-rouge">Stack</code> 或数组但取错栈顶方向</strong>。Java 里用 <code class="language-plaintext highlighter-rouge">ArrayDeque</code> 时若混用 <code class="language-plaintext highlighter-rouge">addLast</code> 与 <code class="language-plaintext highlighter-rouge">peekFirst</code>，实际操作的是队列两端而非同一端，栈语义完全错乱。以 <code class="language-plaintext highlighter-rouge">arr = [1, 2]</code> 为例，<code class="language-plaintext highlighter-rouge">peekFirst</code> 拿到 1、<code class="language-plaintext highlighter-rouge">addLast</code> 追加 2，看似正确；但 <code class="language-plaintext highlighter-rouge">arr = [2, 1]</code> 时会把 1 与队首 2 比较后从队尾弹出，得到不可预期的结果。入栈出栈必须固定在同一端。</li>
+    <li>
+<strong>错误写法：把答案统计成「合并操作的次数」或「入栈次数」</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [2, 3, 1, 4, 4]</code> 为例，入栈次数是 5（含合并后的压回），返回 5 而正确答案是 3。答案只能是遍历结束后栈的大小。</li>
+    <li>
+<strong>错误写法：合并时忘记更新 $curMax$，直接压回第一次弹出的栈顶之外的某个值</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [3, 5, 1]</code> 为例，弹出 5 后再弹出 3，若压回的是最后弹出的 3 而非最大的 5，栈变成 <code class="language-plaintext highlighter-rouge">[3]</code>；后续若有元素 4 会因 $4 \ge 3$ 被切成新块，而它本应并入前块。虽然本例遍历已结束不暴露，但在更长的数组上会直接算错。</li>
+    <li>
+<strong>错误写法：以为内层 <code class="language-plaintext highlighter-rouge">while</code> 会导致超时而改成每次重新扫描整个栈求最大值</strong>。以 $n = 2000$ 的逆序数组为例，重新扫描会退化成 $O(n^2)$；而原写法因为每个元素只入栈出栈一次，总代价是 $O(n)$。误判复杂度反而写出更慢的代码，是常见的过度优化。</li>
+    <li>
+<strong>错误写法：Go 里弹栈写成 <code class="language-plaintext highlighter-rouge">st = st[:len(st)-1]</code> 之前先取值、之后又用旧的 <code class="language-plaintext highlighter-rouge">len(st)</code> 索引</strong>。以任意需要连续弹出两次的输入为例，第二次读取 <code class="language-plaintext highlighter-rouge">st[len(st)-1]</code> 时若长度变量没同步刷新，会读到已被逻辑弹出的元素或越界 panic。切片截断后长度立即变化，所有基于长度的索引都要重新计算。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/max-chunks-to-make-sorted/">769. 最多能完成排序的块</a></td>
+      <td>中等</td>
+      <td>数组是 $0$ 到 $n-1$ 的排列，可用「前缀最大值等于下标」一行判定，无需栈</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/">581. 最短无序连续子数组</a></td>
+      <td>中等</td>
+      <td>求的是必须重排的最短区间，同样靠前缀最大与后缀最小定位边界</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/daily-temperatures/">739. 每日温度</a></td>
+      <td>中等</td>
+      <td>单调栈的入门形态，栈中存下标求下一个更大元素，弹栈时机与本题相反</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/largest-rectangle-in-histogram/">84. 柱状图中最大的矩形</a></td>
+      <td>困难</td>
+      <td>单调递增栈，弹栈时结算以该柱为高的矩形，训练「弹栈瞬间做计算」的手感</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/trapping-rain-water/">42. 接雨水</a></td>
+      <td>困难</td>
+      <td>单调递减栈按层结算积水，也可用双指针，是前后缀极值思路的另一应用</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/next-greater-element-i/">496. 下一个更大元素 I</a></td>
+      <td>简单</td>
+      <td>单调栈配合哈希映射回答查询，重点在两个数组之间的下标转换</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/next-greater-element-ii/">503. 下一个更大元素 II</a></td>
+      <td>中等</td>
+      <td>环形数组上的单调栈，需要遍历两轮或取模处理</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/merge-intervals/">56. 合并区间</a></td>
+      <td>中等</td>
+      <td>同样是「先分段再按需合并」，但合并依据是区间相交而非最大值比较</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2021/79773922" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 剑指 Offer 64. 求1+2+…+n</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/42894963" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 剑指 Offer 30. 包含min函数的栈</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/21106593">https://hgnulb.github.io/blog/2021/21106593</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

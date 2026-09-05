@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 244. 最短单词距离 II | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,双指针,哈希表,字符串,字节跳动,数组,设计,阿里巴巴" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 244. 最短单词距离 II" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2024/34094117" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2024/34094117" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-06-24T22:44:14+08:00" />
+<meta property="article:modified_time" content="2024-06-24T22:44:14+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 244. 最短单词距离 II" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2024-06-24T22:44:14+08:00","datePublished":"2024-06-24T22:44:14+08:00","description":"题目描述","headline":"LeetCode 244. 最短单词距离 II","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2024/34094117"},"url":"https://hgnulb.github.io/blog/2024/34094117"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法预处理位置表">解法：预处理位置表</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 244. 最短单词距离 II">LeetCode 244. 最短单词距离 II</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2024-06-24 22:44:14"
+                    datetime="2024-06-24T22:44:14+08:00"
+            >
+                2024-06-24
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2476 字 · 英文 81 词 · 代码 55 行"
+            aria-label="预计阅读时间约 8 分钟，正文 2476 字 · 英文 81 词 · 代码 55 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 8 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    7 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8699249851/" title="阿里巴巴">
+        阿里巴巴
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8294756076/" title="双指针">
+        双指针
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法预处理位置表">解法：预处理位置表</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/shortest-word-distance-ii/">244. 最短单词距离 II</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>这是一道设计题：构造函数拿到一个字符串数组，之后会被反复调用 <code class="language-plaintext highlighter-rouge">shortest(word1, word2)</code>，每次返回这两个单词在数组中出现位置的最小下标差。题目保证两个单词都存在于数组中且互不相同。</p>
+
+  <p>题面里「会被多次调用」这句话是最强的信号：它意味着评价标准不是单次查询有多快，而是「一次预处理 + 多次查询」的总代价。凡是出现这种表述，正确的反应就是把可以离线算好的东西挪到构造函数里，让查询只做最小必要的工作。</p>
+
+  <p>数组长度可达 3×10^4，查询次数同样可达 5×10^3。如果每次查询都重扫整个数组，总代价是这两者相乘，达到 1.5×10^8 级别；而如果查询只碰这两个词自己的出现位置，绝大多数查询会短得多。</p>
+
+  <p>边界包括：某个单词在数组中只出现一次；两个单词的出现位置完全交错；两个单词的出现次数极度不均衡（一个出现上万次，另一个只出现一次）。题目保证 <code class="language-plaintext highlighter-rouge">word1 != word2</code>，所以不必处理同词自比的情况。</p>
+</blockquote>
+
+<h2 id="解法预处理位置表">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E9%A2%84%E5%A4%84%E7%90%86%E4%BD%8D%E7%BD%AE%E8%A1%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：预处理位置表</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是每次查询都从头扫一遍数组，一边扫一边记录最近一次见到 <code class="language-plaintext highlighter-rouge">word1</code> 的位置和最近一次见到 <code class="language-plaintext highlighter-rouge">word2</code> 的位置，每次更新时用两者之差刷新答案。单次是 $O(n)$，但查询有几千次，总代价是 $O(nq)$，瓶颈在于每次查询都要把与本次问题无关的成千上万个单词重新读一遍。</p>
+
+  <p>观察点在于：一次查询真正用到的信息，只是 <code class="language-plaintext highlighter-rouge">word1</code> 和 <code class="language-plaintext highlighter-rouge">word2</code> 各自出现在哪些下标上，其余单词完全是噪声。而这份「单词到下标列表」的映射与查询参数无关，可以在构造时一次性算好，之后被所有查询共享。</p>
+
+  <p>更进一步的观察是，按数组顺序收集下标时，每个单词的下标列表天然是严格递增的。两个有序列表求最小差值，正是归并式双指针的经典形态：始终推进当前值较小的那个指针，因为落后的那一侧才有可能通过前进缩小差距，而领先的一侧继续前进只会让差值更大。</p>
+
+  <p>由此得到查询过程的不变量：<strong>在双指针推进的任意时刻，所有下标对 <code class="language-plaintext highlighter-rouge">(a[x], b[y])</code> 中满足 <code class="language-plaintext highlighter-rouge">x &lt; i</code> 或 <code class="language-plaintext highlighter-rouge">y &lt; j</code> 的那些，其最小差值已经被 <code class="language-plaintext highlighter-rouge">best</code> 记录过</strong>。换句话说，被跳过的配对都是可证明的非最优解，因此扫完两条列表后 <code class="language-plaintext highlighter-rouge">best</code> 就是全局最小值。</p>
+
+  <p>支撑这条不变量的引理是：若当前 <code class="language-plaintext highlighter-rouge">a[i] &lt; b[j]</code>，那么对任意 <code class="language-plaintext highlighter-rouge">y &gt;= j</code> 都有 <code class="language-plaintext highlighter-rouge">b[y] &gt;= b[j] &gt; a[i]</code>，于是 <code class="language-plaintext highlighter-rouge">b[y] - a[i] &gt;= b[j] - a[i]</code>，说明 <code class="language-plaintext highlighter-rouge">a[i]</code> 与 <code class="language-plaintext highlighter-rouge">b</code> 中后续所有元素的配对都不可能优于当前刚算过的这一对，<code class="language-plaintext highlighter-rouge">a[i]</code> 可以安全退休。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>在构造函数里遍历一次数组，把每个单词映射到它出现的下标列表上。之所以放在构造函数而不是查询里，是因为这份映射与查询参数无关，摊到多次查询上，预处理成本被完全稀释。</li>
+    <li>收集下标时按数组的自然顺序追加。之所以不需要额外排序，是因为遍历本身就是按下标递增的，追加得到的列表天然有序，这一点是后续双指针成立的前提。</li>
+    <li>查询时先取出两个单词各自的下标列表 <code class="language-plaintext highlighter-rouge">a</code> 和 <code class="language-plaintext highlighter-rouge">b</code>。之所以可以不判空，是因为题目保证两个词都在数组中出现过，列表必然非空。</li>
+    <li>初始化双指针 <code class="language-plaintext highlighter-rouge">i = j = 0</code> 和答案 <code class="language-plaintext highlighter-rouge">best</code> 为一个足够大的值。之所以初值取极大，是因为答案是取最小值的过程，任何真实差值都必须能把它压下去。</li>
+    <li>循环条件是两个指针都未越界。之所以是「与」而不是「或」，是因为任何一条列表走完后，剩下那条的元素都只会离对方越来越远，继续比较不可能产生更小的差值。</li>
+    <li>每轮先用 <code class="language-plaintext highlighter-rouge">abs(a[i] - b[j])</code> 更新 <code class="language-plaintext highlighter-rouge">best</code>，再推进值较小的那个指针。之所以必须先更新后推进，是因为当前这一对正是「较小值所能达到的最优配对」，一旦先推进就永远错过了它。</li>
+    <li>推进规则是 <code class="language-plaintext highlighter-rouge">a[i] &lt; b[j]</code> 时动 <code class="language-plaintext highlighter-rouge">i</code>，否则动 <code class="language-plaintext highlighter-rouge">j</code>。之所以不能两个一起动，是因为那会跳过潜在的最优配对；之所以相等时动谁都行，是因为题目保证两词不同，同一下标不会同时属于两条列表，<code class="language-plaintext highlighter-rouge">a[i] == b[j]</code> 实际不会发生。</li>
+    <li>循环结束后返回 <code class="language-plaintext highlighter-rouge">best</code>。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">wordsDict = ["practice", "makes", "perfect", "coding", "makes"]</code> 走一遍。构造后位置表是 <code class="language-plaintext highlighter-rouge">practice -&gt; [0]</code>，<code class="language-plaintext highlighter-rouge">makes -&gt; [1, 4]</code>，<code class="language-plaintext highlighter-rouge">perfect -&gt; [2]</code>，<code class="language-plaintext highlighter-rouge">coding -&gt; [3]</code>。</p>
+
+  <p>查询 <code class="language-plaintext highlighter-rouge">shortest("coding", "practice")</code>：<code class="language-plaintext highlighter-rouge">a = [3]</code>，<code class="language-plaintext highlighter-rouge">b = [0]</code>，<code class="language-plaintext highlighter-rouge">i = j = 0</code>，<code class="language-plaintext highlighter-rouge">best = |3 - 0| = 3</code>；<code class="language-plaintext highlighter-rouge">a[0] = 3</code> 不小于 <code class="language-plaintext highlighter-rouge">b[0] = 0</code>，推进 <code class="language-plaintext highlighter-rouge">j</code> 到 1，越界，循环结束，返回 3。</p>
+
+  <p>查询 <code class="language-plaintext highlighter-rouge">shortest("makes", "coding")</code>：<code class="language-plaintext highlighter-rouge">a = [1, 4]</code>，<code class="language-plaintext highlighter-rouge">b = [3]</code>。第一轮 <code class="language-plaintext highlighter-rouge">best = |1 - 3| = 2</code>；<code class="language-plaintext highlighter-rouge">a[0] = 1 &lt; b[0] = 3</code>，推进 <code class="language-plaintext highlighter-rouge">i</code> 到 1。第二轮 <code class="language-plaintext highlighter-rouge">best = min(2, |4 - 3|) = 1</code>；<code class="language-plaintext highlighter-rouge">a[1] = 4</code> 不小于 3，推进 <code class="language-plaintext highlighter-rouge">j</code> 到 1 越界，循环结束，返回 1。注意如果第一轮推进的是 <code class="language-plaintext highlighter-rouge">j</code>，就会直接跳出循环并错误返回 2，这正说明「推进较小值」这条规则的必要性。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">WordDistance</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">pos</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="nf">WordDistance</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">wordsDict</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">wordsDict</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">pos</span><span class="o">.</span><span class="na">computeIfAbsent</span><span class="o">(</span><span class="n">wordsDict</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">k</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;()).</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">shortest</span><span class="o">(</span><span class="nc">String</span> <span class="n">word1</span><span class="o">,</span> <span class="nc">String</span> <span class="n">word2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">word1</span><span class="o">);</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">word2</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">best</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">;</span>
+
+        <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">b</span><span class="o">.</span><span class="na">size</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">best</span><span class="o">,</span> <span class="nc">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="n">b</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">)));</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">&lt;</span> <span class="n">b</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">i</span><span class="o">++;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">j</span><span class="o">++;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">best</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">WordDistance</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">pos</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">][]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">(</span><span class="n">wordsDict</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="n">WordDistance</span> <span class="p">{</span>
+    <span class="n">pos</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">][]</span><span class="kt">int</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">wordsDict</span> <span class="p">{</span>
+        <span class="n">pos</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">w</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">WordDistance</span><span class="p">{</span><span class="n">pos</span><span class="o">:</span> <span class="n">pos</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">w</span> <span class="o">*</span><span class="n">WordDistance</span><span class="p">)</span> <span class="n">Shortest</span><span class="p">(</span><span class="n">word1</span> <span class="kt">string</span><span class="p">,</span> <span class="n">word2</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">a</span> <span class="o">:=</span> <span class="n">w</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">word1</span><span class="p">]</span>
+    <span class="n">b</span> <span class="o">:=</span> <span class="n">w</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">word2</span><span class="p">]</span>
+    <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span>
+    <span class="n">best</span> <span class="o">:=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">30</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">d</span> <span class="o">:=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="o">-</span><span class="n">d</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">best</span> <span class="p">{</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">i</span><span class="o">++</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">j</span><span class="o">++</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">best</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：构造为 $O(n)$，凭据是只对数组做一次遍历，每个下标做一次哈希查找加一次列表追加；单次查询为 $O(p + q)$，其中 $p$、$q$ 分别是两个单词的出现次数，凭据是每轮循环至少推进一个指针一步，两个指针合计最多走 $p + q$ 步，且所有 $p + q$ 的上界都是 $n$。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$，凭据是位置表中所有列表的元素总数恰好等于数组长度，每个下标只被存一次；查询过程本身只用了两个指针和一个答案变量，是常数额外空间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>看到「同一份数据被多次查询」就要立刻把工作量往构造函数搬，用一次线性预处理换掉每次查询的线性扫描，这是所有设计类题目的第一反应。</li>
+    <li>按遍历顺序收集下标能天然得到有序列表，省掉一次排序。凡是「记录出现位置」的场景都可以吃到这个红利，不要习惯性补一次 sort。</li>
+    <li>两个有序序列求最小差值的标准解法是归并式双指针，核心论证是「推进较小值」的支配关系：领先方继续前进只会让差距更大，所以落后方才是唯一有改进空间的一侧。</li>
+    <li>循环里必须先结算当前配对再移动指针，顺序颠倒会漏掉恰好是最优解的那一对，这在所有双指针求极值的题里都是同一个坑。</li>
+    <li>面试视角：面试官通常会先让你写出单次 $O(n)$ 的扫描版（也就是本题的第一问），然后加上「会被调用很多次」这句话看你会不会主动改设计。答题时要显式说出「预处理成本被多次查询摊薄」这层权衡，并能回答追问「如果两个词出现次数悬殊，能否更快」——此时可以提出在长列表上对短列表的每个下标做二分，把单次查询降到 $O(\min(p,q) \log \max(p,q))$。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>每次查询都重新遍历原数组：用例数组长 3×10^4、查询 5×10^3 次，总操作量 1.5×10^8，在多次调用的判题下超时，而预处理版只碰两个词自己的下标。</li>
+    <li>循环里先推进指针再计算差值：用例 <code class="language-plaintext highlighter-rouge">a = [1, 4]</code>、<code class="language-plaintext highlighter-rouge">b = [3]</code>，第一轮直接推进 <code class="language-plaintext highlighter-rouge">i</code> 而不结算，<code class="language-plaintext highlighter-rouge">|1 - 3| = 2</code> 被跳过；若最优解恰好在首对上（如 <code class="language-plaintext highlighter-rouge">a = [0]</code>、<code class="language-plaintext highlighter-rouge">b = [1]</code>），会返回初始极大值。</li>
+    <li>推进规则写反成「推进较大值的指针」：用例 <code class="language-plaintext highlighter-rouge">a = [1, 4]</code>、<code class="language-plaintext highlighter-rouge">b = [3]</code>，第一轮推进 <code class="language-plaintext highlighter-rouge">j</code> 到越界，循环立即结束，返回 2，而正确答案是 1。</li>
+    <li>循环条件写成 <code class="language-plaintext highlighter-rouge">i &lt; a.size() || j &lt; b.size()</code>：用例 <code class="language-plaintext highlighter-rouge">a = [3]</code>、<code class="language-plaintext highlighter-rouge">b = [0]</code>，<code class="language-plaintext highlighter-rouge">j</code> 推到 1 后仍进入循环体，访问 <code class="language-plaintext highlighter-rouge">b.get(1)</code> 抛出下标越界异常。</li>
+    <li>每轮同时推进两个指针：用例 <code class="language-plaintext highlighter-rouge">a = [0, 5]</code>、<code class="language-plaintext highlighter-rouge">b = [4]</code>，第一轮算出 4 后 <code class="language-plaintext highlighter-rouge">i</code> 和 <code class="language-plaintext highlighter-rouge">j</code> 一起走，<code class="language-plaintext highlighter-rouge">j</code> 越界退出，漏掉 <code class="language-plaintext highlighter-rouge">|5 - 4| = 1</code>，返回 4 而非 1。</li>
+    <li>用 <code class="language-plaintext highlighter-rouge">int</code> 相减求绝对值时不做 <code class="language-plaintext highlighter-rouge">Math.abs</code>，直接写 <code class="language-plaintext highlighter-rouge">b.get(j) - a.get(i)</code>：用例 <code class="language-plaintext highlighter-rouge">a = [5]</code>、<code class="language-plaintext highlighter-rouge">b = [0]</code>，得到 -5，<code class="language-plaintext highlighter-rouge">Math.min</code> 之后 <code class="language-plaintext highlighter-rouge">best</code> 变成负数，返回 -5。</li>
+    <li>在构造函数里用 <code class="language-plaintext highlighter-rouge">pos.put(word, list)</code> 而不是 <code class="language-plaintext highlighter-rouge">computeIfAbsent</code>，每次遇到同一个词都新建列表：用例 <code class="language-plaintext highlighter-rouge">["makes", "coding", "makes"]</code>，<code class="language-plaintext highlighter-rouge">makes</code> 的列表被覆盖成只剩 <code class="language-plaintext highlighter-rouge">[2]</code>，查询 <code class="language-plaintext highlighter-rouge">shortest("makes", "coding")</code> 返回 1，而正确答案是 1 恰好蒙对，但换成 <code class="language-plaintext highlighter-rouge">["makes", "a", "b", "coding"]</code> 加上后续重复就会直接丢失更近的那次出现。</li>
+    <li>预处理时存的是「最近一次出现的下标」这一个整数而不是完整列表：用例 <code class="language-plaintext highlighter-rouge">["a", "b", "a"]</code> 查询 <code class="language-plaintext highlighter-rouge">shortest("a", "b")</code>，只记住 <code class="language-plaintext highlighter-rouge">a -&gt; 2</code>，算出 1，看似正确，但 <code class="language-plaintext highlighter-rouge">["a", "x", "x", "b", "a"]</code> 只记住 <code class="language-plaintext highlighter-rouge">a -&gt; 4</code> 会给出 1，而真正的最短是 <code class="language-plaintext highlighter-rouge">|4 - 3| = 1</code>，一旦查询顺序或数据换成 <code class="language-plaintext highlighter-rouge">["a", "b", "x", "x", "a"]</code> 就会错过 <code class="language-plaintext highlighter-rouge">|0 - 1| = 1</code>。</li>
+    <li>Go 里把 <code class="language-plaintext highlighter-rouge">best</code> 初始化为 0：用例任意输入，<code class="language-plaintext highlighter-rouge">d &lt; best</code> 永远不成立，函数恒返回 0。</li>
+    <li>Go 里对 <code class="language-plaintext highlighter-rouge">w.pos[word1]</code> 取值后未意识到不存在时返回的是 nil 切片：若题目不保证单词存在，<code class="language-plaintext highlighter-rouge">len(nil) == 0</code> 会让循环一次都不执行，返回哨兵值 <code class="language-plaintext highlighter-rouge">1 &lt;&lt; 30</code> 而不是报错，需要按题意决定是否显式处理。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/merge-sorted-array/">88. 合并两个有序数组</a></td>
+      <td>简单</td>
+      <td>同样是两条有序序列的归并推进，但要原地从后往前写以避免覆盖</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/intersection-of-two-arrays-ii/">350. 两个数组的交集 II</a></td>
+      <td>简单</td>
+      <td>双指针目标从求最小差值变为收集相等元素，需处理重复计数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/intersection-of-two-arrays/">349. 两个数组的交集</a></td>
+      <td>简单</td>
+      <td>结果要求去重，推进时需跳过与上一个相同的元素</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/interval-list-intersections/">986. 区间列表的交集</a></td>
+      <td>中等</td>
+      <td>元素从单点升级为区间，推进依据变成右端点谁先结束</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/merge-two-sorted-lists/">21. 合并两个有序链表</a></td>
+      <td>简单</td>
+      <td>同一套归并逻辑落在链表上，考察指针接续与哨兵头节点</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2024/37121386" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 631. 设计 Excel 求和公式</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2024/95391996" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 补充题 14. 阿拉伯数字转中文数字</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2024/34094117">https://hgnulb.github.io/blog/2024/34094117</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

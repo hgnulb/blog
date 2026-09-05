@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 745. 前缀和后缀搜索 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,哈希表,字典树,字符串,字节跳动,微软,拼多多,数组,设计" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 745. 前缀和后缀搜索" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2023/16942092" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2023/16942092" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-01-17T21:01:16+08:00" />
+<meta property="article:modified_time" content="2023-01-17T21:01:16+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 745. 前缀和后缀搜索" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2023-01-17T21:01:16+08:00","datePublished":"2023-01-17T21:01:16+08:00","description":"题目描述","headline":"LeetCode 745. 前缀和后缀搜索","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2023/16942092"},"url":"https://hgnulb.github.io/blog/2023/16942092"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法预计算所有前后缀组合到哈希表">解法：预计算所有前后缀组合到哈希表</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 745. 前缀和后缀搜索">LeetCode 745. 前缀和后缀搜索</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2023-01-17 21:01:16"
+                    datetime="2023-01-17T21:01:16+08:00"
+            >
+                2023-01-17
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3656 字 · 英文 206 词 · 代码 44 行"
+            aria-label="预计阅读时间约 11 分钟，正文 3656 字 · 英文 206 词 · 代码 44 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 11 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    8 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7041841112/" title="拼多多">
+        拼多多
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1523889636/" title="字典树">
+        字典树
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法预计算所有前后缀组合到哈希表">解法：预计算所有前后缀组合到哈希表</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/prefix-and-suffix-search/">745. 前缀和后缀搜索</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>设计一个 <code class="language-plaintext highlighter-rouge">WordFilter</code>，构造时接收一个单词数组。之后会被反复调用 <code class="language-plaintext highlighter-rouge">f(pref, suff)</code>，返回<strong>同时</strong>以 <code class="language-plaintext highlighter-rouge">pref</code> 为前缀、以 <code class="language-plaintext highlighter-rouge">suff</code> 为后缀的那个单词的下标；有多个满足时返回<strong>最大</strong>的下标，一个都没有则返回 -1。</p>
+
+  <p>要什么：这是一道设计题，衡量标准不是单次运行的总耗时，而是<strong>构造与查询之间的代价分配</strong>。查询会被调用上万次，所以哪怕构造慢一些，也应当把查询压到尽可能低；这正是「预处理换查询」的典型场景。</p>
+
+  <p>「返回最大下标」这条要求看起来是个小细节，实则决定了数据结构的写法：如果用「键 → 下标」的映射，只要按下标<strong>从小到大</strong>的顺序写入，后写的自然覆盖先写的，最终留下的就是最大下标，一行额外代码都不用写。反过来若倒序遍历，就必须加「已存在则跳过」的判断。</p>
+
+  <p>约束透露的信号非常关键：单词数量在万级，但<strong>每个单词的长度不超过 10</strong>。长度这个上限小得离谱，意味着一个单词的所有前缀只有 $L + 1$ 个、所有后缀也只有 $L + 1$ 个，两两组合不过 $(L+1)^2 \le 121$ 种。「某个维度的规模被压到常数」几乎总是在暗示可以<strong>枚举该维度的全部可能</strong>。于是构造期把每个单词的全部 $(前缀, 后缀)$ 组合都登记一遍，总量约 $15000 \times 121 \approx 1.8 \times 10^6$，完全可以承受，而查询就退化成一次哈希命中。</p>
+
+  <p>反过来看为什么朴素做法不行：每次查询遍历所有单词、逐个用 <code class="language-plaintext highlighter-rouge">startsWith</code> 与 <code class="language-plaintext highlighter-rouge">endsWith</code> 检查，单次 $O(n \cdot L)$，上万次查询就是 $10^8$ 级别的字符比较，稳定超时。</p>
+
+  <p>边界：<code class="language-plaintext highlighter-rouge">pref</code> 或 <code class="language-plaintext highlighter-rouge">suff</code> 可能等于整个单词；两者也可能在单词上<strong>重叠</strong>（例如单词 <code class="language-plaintext highlighter-rouge">"a"</code>，前缀 <code class="language-plaintext highlighter-rouge">"a"</code> 与后缀 <code class="language-plaintext highlighter-rouge">"a"</code> 指向同一个字符），题面允许这种情况，所以不能写「前缀长度加后缀长度不得超过单词长度」这类校验；不同单词可能重复出现，此时最大下标那个胜出；查询的前后缀组合可能在任何单词中都不存在，必须返回 -1 而不是抛异常。</p>
+</blockquote>
+
+<h2 id="解法预计算所有前后缀组合到哈希表">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E9%A2%84%E8%AE%A1%E7%AE%97%E6%89%80%E6%9C%89%E5%89%8D%E5%90%8E%E7%BC%80%E7%BB%84%E5%90%88%E5%88%B0%E5%93%88%E5%B8%8C%E8%A1%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：预计算所有前后缀组合到哈希表</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先看暴力：<code class="language-plaintext highlighter-rouge">f(pref, suff)</code> 时从后往前扫描 <code class="language-plaintext highlighter-rouge">words</code>，第一个同时满足前缀与后缀条件的下标就是答案。单次查询 $O(n \cdot L)$，构造 $O(1)$。问题在于查询次数与单词数都在万级，乘起来就爆了。瓶颈是<strong>每次查询都重新做一遍全量匹配，而单词集合在构造后根本不会变</strong>——重复劳动完全可以被预处理吃掉。</p>
+
+  <p>那能不能只预处理一半？比如建一棵前缀树，查询时先用 <code class="language-plaintext highlighter-rouge">pref</code> 定位到子树、拿到所有以它开头的单词下标集合，再在集合里逐个验后缀。这确实能加速，但在极端数据下（例如所有单词都以同一个字符开头）集合大小仍是 $O(n)$，最坏没有改善。问题的根子在于<strong>前缀和后缀是两个独立的筛选维度，只按一个维度建索引，另一个维度就只能线性过滤</strong>。</p>
+
+  <p>既然如此，就把两个维度<strong>合成一个键</strong>来建索引。注意到单词长度 $L \le 10$，一个单词的前缀共 $L + 1$ 个（含空串）、后缀也共 $L + 1$ 个，组合数 $(L+1)^2$ 是个不超过 121 的常数。于是在构造期把每个单词的全部组合都算出来，存进哈希表：</p>
+
+\[\text{weight}[\ prefix + \texttt{"\#"} + suffix\ ] = \text{该单词的下标}\]
+
+  <p>查询时把 <code class="language-plaintext highlighter-rouge">pref</code> 与 <code class="language-plaintext highlighter-rouge">suff</code> 按同样规则拼成键，一次哈希查找即可，$O(P + S)$（拼接与哈希的代价按字符串长度算，而长度不超过 10，实际就是常数）。</p>
+
+  <p>两个设计细节必须说清。</p>
+
+  <p>其一是<strong>分隔符 <code class="language-plaintext highlighter-rouge">#</code> 不可省略</strong>。若直接拼成 <code class="language-plaintext highlighter-rouge">prefix + suffix</code>，会产生歧义：单词 <code class="language-plaintext highlighter-rouge">"ab"</code> 的「前缀 <code class="language-plaintext highlighter-rouge">"a"</code> + 后缀 <code class="language-plaintext highlighter-rouge">"b"</code>」和「前缀 <code class="language-plaintext highlighter-rouge">"ab"</code> + 后缀 空串」都拼成 <code class="language-plaintext highlighter-rouge">"ab"</code>，两条不同的语义撞进同一个键。插入一个不会出现在单词字符集里的分隔符（题面保证单词只含小写字母，<code class="language-plaintext highlighter-rouge">#</code> 安全），就能保证 $(prefix, suffix)$ 与键一一对应。</p>
+
+  <p>其二是<strong>遍历顺序承担了「取最大下标」的职责</strong>。外层 <code class="language-plaintext highlighter-rouge">i</code> 从 0 递增到 <code class="language-plaintext highlighter-rouge">n - 1</code>，同一个键被多个单词命中时，后写入的下标更大，<code class="language-plaintext highlighter-rouge">put</code> 直接覆盖，循环结束后表中留下的必然是最大下标。这里的不变量是：<strong>处理完第 <code class="language-plaintext highlighter-rouge">i</code> 个单词后，对任意键 <code class="language-plaintext highlighter-rouge">k</code>，<code class="language-plaintext highlighter-rouge">weight[k]</code> 等于所有下标不超过 <code class="language-plaintext highlighter-rouge">i</code> 且能产生键 <code class="language-plaintext highlighter-rouge">k</code> 的单词中最大的那个下标</strong>。</p>
+
+  <p>这是一次彻底的「构造期换查询期」交易：构造从 $O(1)$ 涨到 $O(n L^2)$（还要乘上字符串拼接的 $O(L)$），换来查询从 $O(nL)$ 降到常数。在「构造一次、查询上万次」的场景下，这笔交易极其划算。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>用一个 <code class="language-plaintext highlighter-rouge">Map&lt;String, Integer&gt; weight</code> 作为唯一的成员状态</strong>。为什么只需要一张表：查询的全部信息都被编码进了键，不需要保留原始的 <code class="language-plaintext highlighter-rouge">words</code> 数组，也不需要任何辅助索引。</li>
+    <li>
+<strong>构造函数外层 <code class="language-plaintext highlighter-rouge">i</code> 从 0 递增遍历 <code class="language-plaintext highlighter-rouge">words</code></strong>。为什么必须升序：升序遍历让后写覆盖先写，自动实现「多解取最大下标」；若倒序遍历，就必须改成 <code class="language-plaintext highlighter-rouge">putIfAbsent</code> 或显式判存在，多一层出错点。</li>
+    <li>
+<strong>内层枚举前缀长度 <code class="language-plaintext highlighter-rouge">p</code> 从 0 到 <code class="language-plaintext highlighter-rouge">n</code>，取 <code class="language-plaintext highlighter-rouge">word.substring(0, p)</code></strong>。为什么上界是 <code class="language-plaintext highlighter-rouge">n</code> 而不是 <code class="language-plaintext highlighter-rouge">n - 1</code>：<code class="language-plaintext highlighter-rouge">p = n</code> 对应整个单词作为前缀，这是合法查询；漏掉它会让 <code class="language-plaintext highlighter-rouge">f("apple", "e")</code> 这类查询失败。为什么 <code class="language-plaintext highlighter-rouge">p</code> 从 0 开始：空前缀虽然在本题的查询约束下用不到，但把它一并登记不增加复杂度量级，且能让实现对「允许空前缀」的变体天然兼容。</li>
+    <li>
+<strong>再内层枚举后缀长度 <code class="language-plaintext highlighter-rouge">s</code> 从 0 到 <code class="language-plaintext highlighter-rouge">n</code>，取 <code class="language-plaintext highlighter-rouge">word.substring(n - s)</code></strong>。为什么是 <code class="language-plaintext highlighter-rouge">substring(n - s)</code> 而不是 <code class="language-plaintext highlighter-rouge">substring(s)</code>：后缀是从末尾往前数 <code class="language-plaintext highlighter-rouge">s</code> 个字符，起点应当是 <code class="language-plaintext highlighter-rouge">n - s</code>；写成 <code class="language-plaintext highlighter-rouge">substring(s)</code> 得到的是「去掉前 <code class="language-plaintext highlighter-rouge">s</code> 个字符」的结果，只有在特定长度下才碰巧相同。</li>
+    <li>
+<strong>把 <code class="language-plaintext highlighter-rouge">prefix + "#" + suffix</code> 作为键、<code class="language-plaintext highlighter-rouge">i</code> 作为值写入表中</strong>。为什么用 <code class="language-plaintext highlighter-rouge">#</code>：它不属于小写字母集合，能保证键与 $(prefix, suffix)$ 一一对应；换成任何一个可能出现在单词中的字符都会引入歧义。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">f(pref, suff)</code> 用同样规则拼键，命中返回下标，未命中返回 -1</strong>。为什么用 <code class="language-plaintext highlighter-rouge">getOrDefault</code> 而不是先 <code class="language-plaintext highlighter-rouge">containsKey</code> 再 <code class="language-plaintext highlighter-rouge">get</code>：一次哈希查找即可完成「查询 + 兜底」，少一次哈希计算，代码也更短。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">具体用例 words = ["apple", "ape"]</code> 走一遍，然后查询 <code class="language-plaintext highlighter-rouge">f("a", "e")</code> 与 <code class="language-plaintext highlighter-rouge">f("ap", "le")</code>。</p>
+
+  <p><strong>构造阶段，<code class="language-plaintext highlighter-rouge">i = 0</code>，<code class="language-plaintext highlighter-rouge">word = "apple"</code>，<code class="language-plaintext highlighter-rouge">n = 5</code></strong>。<br>
+前缀集合是 <code class="language-plaintext highlighter-rouge">""</code>、<code class="language-plaintext highlighter-rouge">"a"</code>、<code class="language-plaintext highlighter-rouge">"ap"</code>、<code class="language-plaintext highlighter-rouge">"app"</code>、<code class="language-plaintext highlighter-rouge">"appl"</code>、<code class="language-plaintext highlighter-rouge">"apple"</code> 共 6 个；后缀集合是 <code class="language-plaintext highlighter-rouge">""</code>、<code class="language-plaintext highlighter-rouge">"e"</code>、<code class="language-plaintext highlighter-rouge">"le"</code>、<code class="language-plaintext highlighter-rouge">"ple"</code>、<code class="language-plaintext highlighter-rouge">"pple"</code>、<code class="language-plaintext highlighter-rouge">"apple"</code> 共 6 个。两两组合产生 36 个键，全部映射到 0。其中我们关心的几条是：<code class="language-plaintext highlighter-rouge">"a#e" → 0</code>、<code class="language-plaintext highlighter-rouge">"ap#le" → 0</code>、<code class="language-plaintext highlighter-rouge">"apple#apple" → 0</code>。注意最后这条体现了前后缀可以完全重叠——键的语义只是「以它开头且以它结尾」，不要求两段在单词中不相交。</p>
+
+  <p><strong>构造阶段，<code class="language-plaintext highlighter-rouge">i = 1</code>，<code class="language-plaintext highlighter-rouge">word = "ape"</code>，<code class="language-plaintext highlighter-rouge">n = 3</code></strong>。<br>
+前缀是 <code class="language-plaintext highlighter-rouge">""</code>、<code class="language-plaintext highlighter-rouge">"a"</code>、<code class="language-plaintext highlighter-rouge">"ap"</code>、<code class="language-plaintext highlighter-rouge">"ape"</code>；后缀是 <code class="language-plaintext highlighter-rouge">""</code>、<code class="language-plaintext highlighter-rouge">"e"</code>、<code class="language-plaintext highlighter-rouge">"pe"</code>、<code class="language-plaintext highlighter-rouge">"ape"</code>。16 个组合全部映射到 1。这里出现了覆盖：键 <code class="language-plaintext highlighter-rouge">"a#e"</code> 之前的值是 0，现在被写成 1。这正是「升序遍历自动取最大下标」的体现——<code class="language-plaintext highlighter-rouge">"apple"</code> 和 <code class="language-plaintext highlighter-rouge">"ape"</code> 都以 <code class="language-plaintext highlighter-rouge">a</code> 开头、以 <code class="language-plaintext highlighter-rouge">e</code> 结尾，题目要求返回较大的下标 1。<br>
+而键 <code class="language-plaintext highlighter-rouge">"ap#le"</code> 不会被 <code class="language-plaintext highlighter-rouge">"ape"</code> 产生（<code class="language-plaintext highlighter-rouge">"ape"</code> 的后缀里没有 <code class="language-plaintext highlighter-rouge">"le"</code>），所以它仍保持为 0。</p>
+
+  <p><strong>查询 <code class="language-plaintext highlighter-rouge">f("a", "e")</code></strong>：拼键 <code class="language-plaintext highlighter-rouge">"a#e"</code>，表中存在，值为 1，返回 1。手工验证：<code class="language-plaintext highlighter-rouge">"apple"</code> 与 <code class="language-plaintext highlighter-rouge">"ape"</code> 都满足条件，最大下标是 1，正确。<br>
+<strong>查询 <code class="language-plaintext highlighter-rouge">f("ap", "le")</code></strong>：拼键 <code class="language-plaintext highlighter-rouge">"ap#le"</code>，表中存在，值为 0，返回 0。手工验证：只有 <code class="language-plaintext highlighter-rouge">"apple"</code> 同时以 <code class="language-plaintext highlighter-rouge">"ap"</code> 开头、以 <code class="language-plaintext highlighter-rouge">"le"</code> 结尾，正确。<br>
+<strong>查询 <code class="language-plaintext highlighter-rouge">f("b", "e")</code></strong>：拼键 <code class="language-plaintext highlighter-rouge">"b#e"</code>，表中不存在，返回 -1。正确。</p>
+
+  <p>最后看一眼分隔符为什么必要。假设去掉 <code class="language-plaintext highlighter-rouge">#</code> 直接拼接：<code class="language-plaintext highlighter-rouge">"apple"</code> 会同时产生键 <code class="language-plaintext highlighter-rouge">"a" + "pple" = "apple"</code> 与 <code class="language-plaintext highlighter-rouge">"apple" + "" = "apple"</code>，两者撞成同一个键还算无害；但 <code class="language-plaintext highlighter-rouge">"ape"</code> 会产生 <code class="language-plaintext highlighter-rouge">"ap" + "e" = "ape"</code>，而单词 <code class="language-plaintext highlighter-rouge">"ape"</code> 的「前缀 <code class="language-plaintext highlighter-rouge">"ape"</code> + 空后缀」也是 <code class="language-plaintext highlighter-rouge">"ape"</code>。更致命的是，若数组里还有单词 <code class="language-plaintext highlighter-rouge">"a"</code> 与 <code class="language-plaintext highlighter-rouge">"pe"</code>……在跨单词的场景下，一个查询 <code class="language-plaintext highlighter-rouge">f("ap", "e")</code> 拼出的 <code class="language-plaintext highlighter-rouge">"ape"</code> 可能命中一个实际上并不以 <code class="language-plaintext highlighter-rouge">"ap"</code> 开头的单词，返回错误下标。加上 <code class="language-plaintext highlighter-rouge">#</code> 之后，<code class="language-plaintext highlighter-rouge">"ap#e"</code> 与 <code class="language-plaintext highlighter-rouge">"ape#"</code> 是两个不同的键，歧义彻底消失。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">WordFilter</span> <span class="o">{</span>
+    <span class="c1">// 单词长度较小，构造期可以枚举所有前缀和后缀组合，把查询直接变成 O(1) 字典命中。</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">weight</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="nf">WordFilter</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">words</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">words</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">word</span> <span class="o">=</span> <span class="n">words</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">p</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">p</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="nc">String</span> <span class="n">prefix</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">p</span><span class="o">);</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">s</span><span class="o">++)</span> <span class="o">{</span>
+                    <span class="nc">String</span> <span class="n">suffix</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">s</span><span class="o">);</span>
+                    <span class="n">weight</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="s">"#"</span> <span class="o">+</span> <span class="n">suffix</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">f</span><span class="o">(</span><span class="nc">String</span> <span class="n">pref</span><span class="o">,</span> <span class="nc">String</span> <span class="n">suff</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">weight</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">pref</span> <span class="o">+</span> <span class="s">"#"</span> <span class="o">+</span> <span class="n">suff</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">WordFilter</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="c">// 单词长度较小，构造期可以枚举所有前缀和后缀组合，把查询直接变成 O(1) 字典命中。</span>
+    <span class="n">weight</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">(</span><span class="n">words</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="n">WordFilter</span> <span class="p">{</span>
+    <span class="n">weight</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">word</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">words</span> <span class="p">{</span>
+        <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">p</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">p</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">prefix</span> <span class="o">:=</span> <span class="n">word</span><span class="p">[</span><span class="o">:</span><span class="n">p</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">s</span><span class="o">++</span> <span class="p">{</span>
+                <span class="n">suffix</span> <span class="o">:=</span> <span class="n">word</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="n">s</span><span class="o">:</span><span class="p">]</span>
+                <span class="n">weight</span><span class="p">[</span><span class="n">prefix</span><span class="o">+</span><span class="s">"#"</span><span class="o">+</span><span class="n">suffix</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">WordFilter</span><span class="p">{</span><span class="n">weight</span><span class="o">:</span> <span class="n">weight</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">WordFilter</span><span class="p">)</span> <span class="n">F</span><span class="p">(</span><span class="n">pref</span> <span class="kt">string</span><span class="p">,</span> <span class="n">suff</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">idx</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">this</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">pref</span><span class="o">+</span><span class="s">"#"</span><span class="o">+</span><span class="n">suff</span><span class="p">];</span> <span class="n">ok</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">idx</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：构造 $O(n L^3)$，单次查询 $O(P + S)$。凭什么：构造时每个单词产生 $(L+1)^2$ 个键，每个键的拼接与哈希都要遍历一遍长度约 $2L$ 的字符串，所以是 $n \cdot L^2 \cdot L$；代入 $L \le 10$、$n \le 1.5 \times 10^4$，约 $1.8 \times 10^7$ 次字符操作，构造期一次性付清。查询只做一次拼接与一次哈希查找，长度是查询串长之和，因为 $L \le 10$ 所以实际就是常数。相比暴力查询的 $O(nL)$，把上万次查询的总代价从 $10^8$ 压到了 $10^4$ 级。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n L^3)$。凭什么：哈希表里存了约 $n (L+1)^2$ 个键，每个键的长度约 $2L + 1$ 个字符，字符总量即为 $n L^3$；代入上界约 $1.8 \times 10^6$ 个键、$3 \times 10^7$ 个字符，是这个解法明确付出的代价。<strong>这是一次纯粹的空间换时间</strong>，若内存受限就必须改用双向字典树等更紧凑的结构。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>「构造一次、查询很多次」的设计题，要主动把代价前移到构造期</strong>。判断标准是查询次数与数据规模的乘积——一旦它超过预处理的总量，预处理就是划算的。这条原则贯穿前缀和、稀疏表、字典树等一系列结构。</li>
+    <li>
+<strong>某个维度的上界小到可以枚举时，就直接枚举它</strong>。这里 $L \le 10$ 让 $(L+1)^2$ 退化成常数，于是「两个独立的筛选维度」被合并成「一个可枚举的复合键」。看到题面给出一个异常小的上界，第一反应应该是「它是不是在暗示我可以暴力展开这一维」。</li>
+    <li>
+<strong>复合键必须用不属于原字符集的分隔符</strong>。<code class="language-plaintext highlighter-rouge">prefix + "#" + suffix</code> 与直接拼接的区别不是风格，而是正确性：没有分隔符时不同的 $(前缀, 后缀)$ 对会撞成同一个键。这个坑在「二维状态压成字符串键」的场景里普遍存在。</li>
+    <li>
+<strong>让遍历顺序替你实现「取最大/最小」的要求</strong>。升序遍历 + 覆盖写入，天然得到最大下标；这比先收集全部候选再取极值更短、更快，也更不容易漏。反过来若必须倒序，就要换成 <code class="language-plaintext highlighter-rouge">putIfAbsent</code> 语义。</li>
+    <li>
+<strong>后缀的截取起点是 <code class="language-plaintext highlighter-rouge">n - s</code> 而不是 <code class="language-plaintext highlighter-rouge">s</code></strong>，这是字符串题里最常见的一位之差；把「取长度为 <code class="language-plaintext highlighter-rouge">s</code> 的后缀」在心里翻译成「从倒数第 <code class="language-plaintext highlighter-rouge">s</code> 个字符开始到结尾」，就不会写反。</li>
+    <li>
+<strong>面试视角</strong>：这题面试官通常会先让你说清「为什么不能每次查询都扫一遍」，再问「构造期 $1.8 \times 10^6$ 个键的内存开销能接受吗，有没有更省的做法」。标准的进阶答案是<strong>把后缀与前缀拼成一个串再建字典树</strong>：对单词 <code class="language-plaintext highlighter-rouge">w</code>，把所有形如 <code class="language-plaintext highlighter-rouge">w的某个后缀 + "#" + w</code> 的串（共 $L + 1$ 个）插入一棵 Trie 并在路径上记录最大下标，查询时搜索 <code class="language-plaintext highlighter-rouge">suff + "#" + pref</code>。这样键数从 $O(nL^2)$ 降到 $O(nL)$，且 Trie 共享前缀进一步省空间。能主动给出「哈希暴力展开」与「Trie 合并串」两条路线并比较它们的时空取舍，是这道困难题该有的答法。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：键直接拼成 <code class="language-plaintext highlighter-rouge">pref + suff</code>，不加分隔符</strong> → 用例 <code class="language-plaintext highlighter-rouge">words = ["ab"]</code>，构造时「前缀 <code class="language-plaintext highlighter-rouge">"a"</code> + 后缀 <code class="language-plaintext highlighter-rouge">"b"</code>」与「前缀 <code class="language-plaintext highlighter-rouge">"ab"</code> + 空后缀」都产生键 <code class="language-plaintext highlighter-rouge">"ab"</code>；查询 <code class="language-plaintext highlighter-rouge">f("ab", "b")</code> 拼出 <code class="language-plaintext highlighter-rouge">"abb"</code> 未命中返回 -1 尚且正确，但查询 <code class="language-plaintext highlighter-rouge">f("a", "b")</code> 与 <code class="language-plaintext highlighter-rouge">f("ab", "")</code> 无法区分，在多单词场景下会返回不属于该前缀的单词下标。</li>
+    <li>
+<strong>错误写法：外层 <code class="language-plaintext highlighter-rouge">i</code> 倒序遍历 <code class="language-plaintext highlighter-rouge">words</code> 且仍用 <code class="language-plaintext highlighter-rouge">put</code> 覆盖</strong> → 用例 <code class="language-plaintext highlighter-rouge">words = ["apple","ape"]</code>，键 <code class="language-plaintext highlighter-rouge">"a#e"</code> 先被写成 1、再被写成 0，查询 <code class="language-plaintext highlighter-rouge">f("a","e")</code> 返回 0；题目要求返回最大下标 1。倒序遍历必须配 <code class="language-plaintext highlighter-rouge">putIfAbsent</code>。</li>
+    <li>
+<strong>错误写法：前缀枚举写成 <code class="language-plaintext highlighter-rouge">for (int p = 1; p &lt; n; p++)</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">words = ["apple"]</code>，<code class="language-plaintext highlighter-rouge">p = n</code> 被漏掉，查询 <code class="language-plaintext highlighter-rouge">f("apple", "e")</code> 拼出的键从未被登记，返回 -1；正确答案是 0。整词作为前缀是合法查询。</li>
+    <li>
+<strong>错误写法：后缀写成 <code class="language-plaintext highlighter-rouge">word.substring(s)</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">words = ["apple"]</code>，<code class="language-plaintext highlighter-rouge">s = 2</code> 时得到 <code class="language-plaintext highlighter-rouge">"ple"</code>（去掉前两个字符）而不是期望的后缀 <code class="language-plaintext highlighter-rouge">"le"</code>，键表整体错乱；查询 <code class="language-plaintext highlighter-rouge">f("ap", "le")</code> 返回 -1，正确答案是 0。</li>
+    <li>
+<strong>错误写法：认为前缀与后缀不能重叠，于是加上 <code class="language-plaintext highlighter-rouge">if (p + s &gt; n) continue;</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">words = ["a"]</code>，查询 <code class="language-plaintext highlighter-rouge">f("a", "a")</code> 中 <code class="language-plaintext highlighter-rouge">p = s = 1</code>、<code class="language-plaintext highlighter-rouge">n = 1</code>，被这个判断跳过，返回 -1；题面允许前后缀指向同一段字符，正确答案是 0。</li>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">f</code> 里先 <code class="language-plaintext highlighter-rouge">containsKey</code> 再 <code class="language-plaintext highlighter-rouge">get</code>，但两次拼接了不同的键（比如一次带 <code class="language-plaintext highlighter-rouge">#</code> 一次不带）</strong> → 任意用例下 <code class="language-plaintext highlighter-rouge">containsKey</code> 恒为假，永远返回 -1。用 <code class="language-plaintext highlighter-rouge">getOrDefault</code> 一次搞定可以从结构上杜绝这类不一致。</li>
+    <li>
+<strong>错误写法：保留 <code class="language-plaintext highlighter-rouge">words</code> 数组，查询时先哈希命中再回头验证 <code class="language-plaintext highlighter-rouge">words[idx].startsWith(pref)</code></strong> → 逻辑上无害但多此一举，并且一旦验证条件写反（比如用 <code class="language-plaintext highlighter-rouge">endsWith</code> 验前缀）就会把正确答案否掉；键已经保证了语义，不需要二次校验。</li>
+    <li>
+<strong>错误写法：构造时用 <code class="language-plaintext highlighter-rouge">Map&lt;String, List&lt;Integer&gt;&gt;</code> 收集所有下标，查询时取列表最大值</strong> → 用例 <code class="language-plaintext highlighter-rouge">words</code> 中有一万个相同单词时，同一个键挂着一万个下标，内存翻倍且查询退化成 $O(n)$；只保留最大值就够了，历史下标没有任何用处。</li>
+    <li>
+<strong>错误写法：Go 中把 <code class="language-plaintext highlighter-rouge">Constructor</code> 的返回值写成 <code class="language-plaintext highlighter-rouge">WordFilter</code> 但方法用值接收者 <code class="language-plaintext highlighter-rouge">func (this WordFilter) F(...)</code></strong> → 本题因为 map 是引用类型而侥幸能过，但一旦结构体里加入标量字段，方法内的修改就作用在副本上；设计类题目应统一用指针接收者。</li>
+    <li>
+<strong>错误写法：分隔符选了小写字母（如 <code class="language-plaintext highlighter-rouge">"z"</code>）</strong> → 用例 <code class="language-plaintext highlighter-rouge">words = ["az"]</code>，「前缀 <code class="language-plaintext highlighter-rouge">"a"</code> + 后缀 <code class="language-plaintext highlighter-rouge">"z"</code>」拼成 <code class="language-plaintext highlighter-rouge">"azz"</code>，而「前缀 <code class="language-plaintext highlighter-rouge">"az"</code> + 空后缀」拼成 <code class="language-plaintext highlighter-rouge">"azz"</code>，两条语义再次相撞；分隔符必须取自单词字符集之外。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/implement-trie-prefix-tree/">208. 实现 Trie (前缀树)</a></td>
+      <td>中等</td>
+      <td>只按前缀一个维度建索引，是本题进阶解法所依赖的基础结构</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-add-and-search-words-data-structure/">211. 添加与搜索单词 - 数据结构设计</a></td>
+      <td>中等</td>
+      <td>查询串含通配符 <code class="language-plaintext highlighter-rouge">.</code>，无法预枚举，只能在 Trie 上做带回溯的 DFS</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/search-suggestions-system/">1268. 搜索推荐系统</a></td>
+      <td>中等</td>
+      <td>同为前缀查询的设计题，但要返回字典序最小的三个候选，需在 Trie 节点上维护有序表</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/replace-words/">648. 单词替换</a></td>
+      <td>中等</td>
+      <td>求每个词的最短匹配前缀，考的是在 Trie 上「一遇到词尾就停」的贪心</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/map-sum-pairs/">677. 键值映射</a></td>
+      <td>中等</td>
+      <td>前缀查询要返回权值之和而非下标，更新时需沿路径回溯修正差值</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-word-in-dictionary/">720. 词典中最长的单词</a></td>
+      <td>中等</td>
+      <td>要求路径上每个前缀都是完整单词，考的是在 Trie 上做条件受限的深搜</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-common-prefix/">14. 最长公共前缀</a></td>
+      <td>简单</td>
+      <td>一次性求全体单词的公共前缀，纵向扫描即可，不需要任何索引结构</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2023/87069403" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 剑指 Offer 47. 礼物的最大价值</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2023/89301875" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1124. 表现良好的最长时间段</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2023/16942092">https://hgnulb.github.io/blog/2023/16942092</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

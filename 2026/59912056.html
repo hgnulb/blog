@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode LCR 064. 实现一个魔法字典 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,LCR,哈希表,字典树,字符串,深度优先搜索,设计" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode LCR 064. 实现一个魔法字典" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/59912056" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/59912056" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-29T01:59:06+08:00" />
+<meta property="article:modified_time" content="2026-03-29T01:59:06+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode LCR 064. 实现一个魔法字典" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-03-29T01:59:06+08:00","datePublished":"2026-03-29T01:59:06+08:00","description":"题目描述","headline":"LeetCode LCR 064. 实现一个魔法字典","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/59912056"},"url":"https://hgnulb.github.io/blog/2026/59912056"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希表统计状态">解法：哈希表统计状态</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode LCR 064. 实现一个魔法字典">LeetCode LCR 064. 实现一个魔法字典</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-03-29 01:59:06"
+                    datetime="2026-03-29T01:59:06+08:00"
+            >
+                2026-03-29
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2539 字 · 英文 93 词 · 代码 69 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2539 字 · 英文 93 词 · 代码 69 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3007053882/" title="119 经典题变种挑战">
+        119 经典题变种挑战
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3355311990/" title="剑指 Offer">
+        剑指 Offer
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7450658006/" title="剑指 Offer（专项突击版）">
+        剑指 Offer（专项突击版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6142931175/" title="LCR">
+        LCR
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1523889636/" title="字典树">
+        字典树
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希表统计状态">解法：哈希表统计状态</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/US1pGT/">LCR 064. 实现一个魔法字典</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>设计一个字典结构，先用一批互不相同的单词建好词库，之后反复回答同一个问题：能否把查询串中<strong>恰好一个</strong>字符换成另一个不同的字符，使它变成词库中的某个单词。</p>
+
+  <p>「恰好一个」是全部难点所在。它同时排除了两种情况：改动零个字符（查询串本身就在词库里，不算）和改动两个及以上。翻译成度量就是——存在一个词库单词，与查询串的汉明距离<strong>正好等于 1</strong>。距离为 0 不行，距离大于 1 也不行。</p>
+
+  <p>汉明距离这个说法本身还隐含了长度必须相同：只能替换字符，不能增删，所以长度不等的单词直接出局，不必比较。这一条把候选集合先按长度切了一刀。</p>
+
+  <p>约束里单词数与查询次数都在 100 到 $10^2$ 量级，单词长度不超过 100，字符集是小写字母。规模很小，说明可以为每个单词预处理出若干「变形」并全部存下来，用空间换查询时间，不必担心爆内存。</p>
+
+  <p>边界上要注意三处：查询串本身就在词库里时，如果没有第二个只差一位的单词，必须返回假；词库中可能存在两个只差一位的单词，此时用其中一个去查会命中另一个；查询串的长度可能与词库中任何单词都不同，此时必然返回假。</p>
+</blockquote>
+
+<h2 id="解法哈希表统计状态">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%93%88%E5%B8%8C%E8%A1%A8%E7%BB%9F%E8%AE%A1%E7%8A%B6%E6%80%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：哈希表统计状态</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是每次查询都遍历整个词库，对每个等长单词逐位比较、统计不同字符的个数，看是否恰好为 1。单次查询 $O(N \cdot L)$，总代价 $O(Q \cdot N \cdot L)$。规模内能过，但没有把「建库」这个免费的预处理阶段利用起来。</p>
+
+  <p>瓶颈在于每次查询都要把词库整个扫一遍，而绝大多数单词甚至第一个字符就已经注定不匹配，比较的开销全部浪费。更本质的问题是：「差一位」这种关系无法用整串哈希直接查，因为整串一旦改动，哈希键就完全变了。</p>
+
+  <p>观察的切入点是把「差一位」显式化。若单词 <code class="language-plaintext highlighter-rouge">w</code> 与查询串 <code class="language-plaintext highlighter-rouge">s</code> 恰好在第 <code class="language-plaintext highlighter-rouge">i</code> 位不同，那么把两者的第 <code class="language-plaintext highlighter-rouge">i</code> 位都换成同一个占位符 <code class="language-plaintext highlighter-rouge">*</code> 之后，它们会变成<strong>完全相同</strong>的字符串。于是「存在差一位的单词」就等价于「存在某个位置 <code class="language-plaintext highlighter-rouge">i</code>，使得 <code class="language-plaintext highlighter-rouge">s</code> 的 <code class="language-plaintext highlighter-rouge">i</code> 位掩码形式出现在词库的掩码集合里」——一个可以用哈希精确匹配的问题。</p>
+
+  <p>由此定下状态定义：<code class="language-plaintext highlighter-rouge">counter[p]</code> 表示词库中有多少个单词能生成掩码 <code class="language-plaintext highlighter-rouge">p</code>；另用集合 <code class="language-plaintext highlighter-rouge">words</code> 记录词库原串。建库时对每个单词生成 $L$ 个掩码（依次把每一位换成 <code class="language-plaintext highlighter-rouge">*</code>），把计数累加上去。</p>
+
+  <p>查询时对 <code class="language-plaintext highlighter-rouge">s</code> 同样生成 $L$ 个掩码，逐个去查 <code class="language-plaintext highlighter-rouge">counter</code>。这里必须处理「距离为 0 不算」：若某掩码的计数为 1，命中的那个单词有可能就是 <code class="language-plaintext highlighter-rouge">s</code> 自己（当 <code class="language-plaintext highlighter-rouge">s</code> 恰在词库中时），此时距离是 0 不能算数；但只要计数大于 1，就一定存在除 <code class="language-plaintext highlighter-rouge">s</code> 之外的第二个单词共享这个掩码，距离必为 1。</p>
+
+  <p>于是判定条件收敛成两条：<code class="language-plaintext highlighter-rouge">counter[p] &gt; 1</code>，或者 <code class="language-plaintext highlighter-rouge">counter[p] == 1 且 s 本身不在词库中</code>。任一掩码满足即返回真，全部落空返回假。这个条件维持的不变量是：<strong>只在能确认「命中的单词不是 <code class="language-plaintext highlighter-rouge">s</code> 自己」时才判定成功</strong>。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>建库时同时维护两张表：原串集合 <code class="language-plaintext highlighter-rouge">words</code> 与掩码计数表 <code class="language-plaintext highlighter-rouge">counter</code>。原串集合是后面排除「距离为 0」的唯一依据，不能省。</li>
+    <li>对每个单词，逐位把该位替换成 <code class="language-plaintext highlighter-rouge">*</code> 生成掩码，<code class="language-plaintext highlighter-rouge">counter</code> 对应项加一。用 <code class="language-plaintext highlighter-rouge">*</code> 而不是某个字母做占位符，是因为它不属于小写字母集，绝不会与真实字符混淆造成误匹配。</li>
+    <li>掩码要对每一位都生成，共 $L$ 个。少生成一位，那一位上的差异就永远查不出来。</li>
+    <li>查询时用同一套规则给 <code class="language-plaintext highlighter-rouge">s</code> 生成 $L$ 个掩码，逐个查 <code class="language-plaintext highlighter-rouge">counter</code>。生成规则必须与建库时完全一致，占位符不同就全盘失配。</li>
+    <li>判定用 <code class="language-plaintext highlighter-rouge">counter[p] &gt; 1 || (counter[p] == 1 &amp;&amp; !words.contains(s))</code>。前半条覆盖「至少两个单词共享该掩码，其中必有一个不是 <code class="language-plaintext highlighter-rouge">s</code>」；后半条覆盖「只有一个单词共享该掩码，且 <code class="language-plaintext highlighter-rouge">s</code> 不在词库中，那么它必然不是 <code class="language-plaintext highlighter-rouge">s</code>」。</li>
+    <li>任一掩码判定成功就立刻返回真；全部掩码检查完仍未成功则返回假。长度不匹配的情况不需要特判，因为长度不同的单词生成的掩码长度也不同，天然不会碰撞。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">buildDict(["hello", "leetcode"])</code> 后依次查询 <code class="language-plaintext highlighter-rouge">"hello"</code>、<code class="language-plaintext highlighter-rouge">"hhllo"</code>、<code class="language-plaintext highlighter-rouge">"hell"</code>、<code class="language-plaintext highlighter-rouge">"leetcoded"</code> 走一遍</strong>：建库时 <code class="language-plaintext highlighter-rouge">"hello"</code> 生成 <code class="language-plaintext highlighter-rouge">*ello</code>、<code class="language-plaintext highlighter-rouge">h*llo</code>、<code class="language-plaintext highlighter-rouge">he*lo</code>、<code class="language-plaintext highlighter-rouge">hel*o</code>、<code class="language-plaintext highlighter-rouge">hell*</code> 五个掩码，各计数 1；<code class="language-plaintext highlighter-rouge">"leetcode"</code> 生成八个掩码，各计数 1；<code class="language-plaintext highlighter-rouge">words = {"hello", "leetcode"}</code>。查询 <code class="language-plaintext highlighter-rouge">"hello"</code>：它的五个掩码与建库时完全一致，每个计数都是 1，而 <code class="language-plaintext highlighter-rouge">words</code> 里确实有 <code class="language-plaintext highlighter-rouge">"hello"</code>，所以 <code class="language-plaintext highlighter-rouge">counter == 1 &amp;&amp; !contains</code> 不成立、<code class="language-plaintext highlighter-rouge">counter &gt; 1</code> 也不成立，五个掩码全部落空，返回 <code class="language-plaintext highlighter-rouge">false</code>——正确，因为这是距离 0。查询 <code class="language-plaintext highlighter-rouge">"hhllo"</code>：掩码 <code class="language-plaintext highlighter-rouge">*hllo</code> 计数 0 跳过；掩码 <code class="language-plaintext highlighter-rouge">h*llo</code> 计数为 1，且 <code class="language-plaintext highlighter-rouge">"hhllo"</code> 不在 <code class="language-plaintext highlighter-rouge">words</code> 中，条件成立，立即返回 <code class="language-plaintext highlighter-rouge">true</code>——命中的正是 <code class="language-plaintext highlighter-rouge">"hello"</code>，距离 1。查询 <code class="language-plaintext highlighter-rouge">"hell"</code>：长度 4，生成的四个掩码长度都是 4，而词库掩码长度分别是 5 和 8，计数全为 0，返回 <code class="language-plaintext highlighter-rouge">false</code>。查询 <code class="language-plaintext highlighter-rouge">"leetcoded"</code>：长度 9，同理全部落空，返回 <code class="language-plaintext highlighter-rouge">false</code>。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">MagicDictionary</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">words</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">counter</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">MagicDictionary</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">buildDict</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">dictionary</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">word</span> <span class="o">:</span> <span class="n">dictionary</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">words</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">word</span><span class="o">);</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">p</span> <span class="o">:</span> <span class="n">patterns</span><span class="o">(</span><span class="n">word</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">counter</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">p</span><span class="o">,</span> <span class="n">counter</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">p</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">search</span><span class="o">(</span><span class="nc">String</span> <span class="n">searchWord</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">p</span> <span class="o">:</span> <span class="n">patterns</span><span class="o">(</span><span class="n">searchWord</span><span class="o">))</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="n">counter</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">p</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cnt</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">||</span> <span class="o">(</span><span class="n">cnt</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">words</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">searchWord</span><span class="o">)))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">patterns</span><span class="o">(</span><span class="nc">String</span> <span class="n">word</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="kt">char</span><span class="o">[]</span> <span class="n">chars</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">chars</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">chars</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="n">chars</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="sc">'*'</span><span class="o">;</span>
+            <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">String</span><span class="o">(</span><span class="n">chars</span><span class="o">));</span>
+            <span class="n">chars</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">MagicDictionary</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">words</span>   <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span>
+    <span class="n">counter</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">MagicDictionary</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">MagicDictionary</span><span class="p">{</span>
+        <span class="n">words</span><span class="o">:</span>   <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">),</span>
+        <span class="n">counter</span><span class="o">:</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">),</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">MagicDictionary</span><span class="p">)</span> <span class="n">BuildDict</span><span class="p">(</span><span class="n">dictionary</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">word</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">dictionary</span> <span class="p">{</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">patterns</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">this</span><span class="o">.</span><span class="n">counter</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">++</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">MagicDictionary</span><span class="p">)</span> <span class="n">Search</span><span class="p">(</span><span class="n">searchWord</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">patterns</span><span class="p">(</span><span class="n">searchWord</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">this</span><span class="o">.</span><span class="n">counter</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">&gt;</span> <span class="m">1</span> <span class="o">||</span> <span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">counter</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">==</span> <span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">this</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">searchWord</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="no">true</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="no">false</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">patterns</span><span class="p">(</span><span class="n">word</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="n">res</span> <span class="p">[]</span><span class="kt">string</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">word</span><span class="p">[</span><span class="o">:</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="s">"*"</span><span class="o">+</span><span class="n">word</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="o">:</span><span class="p">])</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：建库 $O(N \cdot L^2)$，每个单词生成 $L$ 个掩码、每个掩码的构造与哈希各需 $O(L)$；单次查询 $O(L^2)$，同样是 $L$ 个掩码乘以每个掩码 $O(L)$ 的构造与查表开销，与词库规模无关。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(N \cdot L^2)$，掩码计数表里存了 $N \cdot L$ 个长度为 $L$ 的字符串，原串集合的 $O(N \cdot L)$ 相比之下可以忽略。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「恰好差一位」无法用整串哈希直接查，但把差异位统一抹成占位符后，模糊匹配就被转化成了精确匹配。这个「掩码归一化」技巧在处理容错匹配、近似去重时都能复用。</li>
+    <li>占位符必须选在字符集之外。用小写字母当占位符会与真实字符撞车，制造出根本不存在的匹配。</li>
+    <li>用计数而不是布尔标记，是为了区分「只有查询串自己」和「还有别人」。当判定需要排除自身时，计数比存在性多携带的那一点信息正是关键。</li>
+    <li>建库阶段付出的额外空间换来了与词库规模无关的查询时间，这是典型的设计类题目取舍：查询次数多时优先压查询复杂度。</li>
+    <li>长度不等的单词无需特判，因为掩码长度不同天然不碰撞。让数据结构自己承担过滤，比手写一堆前置判断更不容易出错。</li>
+    <li>面试视角：主动点明「距离必须恰好为 1」这个陷阱，并说明你是用 <code class="language-plaintext highlighter-rouge">counter &gt; 1</code> 与 <code class="language-plaintext highlighter-rouge">words</code> 集合两条件配合排除自身的，这一句往往就是这题的得分点。</li>
+    <li>面试视角：常见追问是「如果允许改动最多 $k$ 位怎么办」。此时掩码方案的组合数会膨胀到 $O(L^k)$ 不再划算，应改用 Trie 上带剩余修改次数的深度优先搜索，把状态从字符串换成「节点 + 剩余次数」。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：判定条件写成 <code class="language-plaintext highlighter-rouge">counter[p] &gt;= 1</code> 就返回真。用例 <code class="language-plaintext highlighter-rouge">buildDict(["hello"])</code> 后 <code class="language-plaintext highlighter-rouge">search("hello")</code> → 掩码 <code class="language-plaintext highlighter-rouge">h*llo</code> 计数为 1 于是返回 <code class="language-plaintext highlighter-rouge">true</code>，正确答案是 <code class="language-plaintext highlighter-rouge">false</code>，这是距离 0 不是距离 1。</li>
+    <li>
+<strong>错误写法</strong>：只用集合记录掩码是否出现，不记计数。用例 <code class="language-plaintext highlighter-rouge">buildDict(["hello", "hallo"])</code> 后 <code class="language-plaintext highlighter-rouge">search("hello")</code> → 掩码 <code class="language-plaintext highlighter-rouge">h*llo</code> 只知道「出现过」，无法判断出现的是不是 <code class="language-plaintext highlighter-rouge">"hello"</code> 自己，若据此排除则返回 <code class="language-plaintext highlighter-rouge">false</code>，正确答案是 <code class="language-plaintext highlighter-rouge">true</code>（可以变成 <code class="language-plaintext highlighter-rouge">"hallo"</code>）。</li>
+    <li>
+<strong>错误写法</strong>：占位符用小写字母，比如统一换成 <code class="language-plaintext highlighter-rouge">'a'</code>。用例 <code class="language-plaintext highlighter-rouge">buildDict(["hallo"])</code> 后 <code class="language-plaintext highlighter-rouge">search("hello")</code> → 查询串的掩码 <code class="language-plaintext highlighter-rouge">hallo</code> 与词库单词原串 <code class="language-plaintext highlighter-rouge">"hallo"</code> 撞成同一个键，本来只该是掩码层面的匹配被真实字符污染，在含 <code class="language-plaintext highlighter-rouge">'a'</code> 的数据上会造出虚假命中。</li>
+    <li>
+<strong>错误写法</strong>：生成掩码时漏掉首位或末位。用例 <code class="language-plaintext highlighter-rouge">buildDict(["hello"])</code> 后 <code class="language-plaintext highlighter-rouge">search("aello")</code> → 差异在第 0 位，若掩码从下标 1 开始生成则查不到，返回 <code class="language-plaintext highlighter-rouge">false</code>，正确答案是 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+    <li>
+<strong>错误写法</strong>：Java 版在 <code class="language-plaintext highlighter-rouge">patterns</code> 中改完 <code class="language-plaintext highlighter-rouge">chars[i]</code> 后忘记还原。用例 <code class="language-plaintext highlighter-rouge">buildDict(["hello"])</code> → 第二个掩码变成 <code class="language-plaintext highlighter-rouge">**llo</code>、第三个变成 <code class="language-plaintext highlighter-rouge">***lo</code>，掩码表整体错乱，此后所有查询结果都不可信。</li>
+    <li>
+<strong>错误写法</strong>：建库与查询使用不同的占位符（比如建库用 <code class="language-plaintext highlighter-rouge">*</code>、查询用 <code class="language-plaintext highlighter-rouge">.</code>）。用例 <code class="language-plaintext highlighter-rouge">buildDict(["hello"])</code> 后 <code class="language-plaintext highlighter-rouge">search("hhllo")</code> → 两套键完全不相交，计数恒为 0，返回 <code class="language-plaintext highlighter-rouge">false</code>，正确答案是 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+    <li>
+<strong>错误写法</strong>：先特判「查询串在词库中就直接返回 <code class="language-plaintext highlighter-rouge">false</code>」。用例 <code class="language-plaintext highlighter-rouge">buildDict(["hello", "hallo"])</code> 后 <code class="language-plaintext highlighter-rouge">search("hello")</code> → 直接返回 <code class="language-plaintext highlighter-rouge">false</code>，但 <code class="language-plaintext highlighter-rouge">"hello"</code> 改一位可以变成 <code class="language-plaintext highlighter-rouge">"hallo"</code>，正确答案是 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">search</code> 中对每个掩码都累加匹配数、最后统一判断。用例 <code class="language-plaintext highlighter-rouge">buildDict(["hello", "hallo"])</code> 后 <code class="language-plaintext highlighter-rouge">search("hxllo")</code> → 掩码 <code class="language-plaintext highlighter-rouge">h*llo</code> 计数为 2，如果把它理解成「有两种改法」而要求恰好一种，就会误判为 <code class="language-plaintext highlighter-rouge">false</code>，正确答案是 <code class="language-plaintext highlighter-rouge">true</code>，题目只要求存在一种改法。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/implement-magic-dictionary/">676. 实现一个魔法字典</a></td>
+      <td>中等</td>
+      <td>与本题同题，可用来对照掩码哈希与 Trie 带容错搜索两种实现</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-add-and-search-words-data-structure/">211. 添加与搜索单词 - 数据结构设计</a></td>
+      <td>中等</td>
+      <td>通配符位置由查询串显式给出，无需自己枚举差异位</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/implement-trie-prefix-tree/">208. 实现 Trie (前缀树)</a></td>
+      <td>中等</td>
+      <td>只做精确与前缀查询，不涉及容错，是本题的结构基础</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-word-in-dictionary/">720. 词典中最长的单词</a></td>
+      <td>中等</td>
+      <td>判定沿整条路径累积，考察的是逐字符可达性而非单点差异</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/replace-words/">648. 单词替换</a></td>
+      <td>中等</td>
+      <td>匹配锚定在前缀且要取最短，靠首次命中提前退出而非计数排除</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/search-suggestions-system/">1268. 搜索推荐系统</a></td>
+      <td>中等</td>
+      <td>返回值从布尔变成候选列表，需要在节点上维护有序结果集</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/prefix-and-suffix-search/">745. 前缀和后缀搜索</a></td>
+      <td>困难</td>
+      <td>同样靠构造复合键把双端约束压成一次哈希查询，键的设计更复杂</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/48550215" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode LCR 063. 单词替换</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/75614397" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode LCR 065. 单词的压缩编码</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/59912056">https://hgnulb.github.io/blog/2026/59912056</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

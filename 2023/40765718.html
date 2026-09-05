@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 751. IP 到 CIDR | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,位运算,字符串,字节跳动,网易" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 751. IP 到 CIDR" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2023/40765718" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2023/40765718" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-12-17T00:39:08+08:00" />
+<meta property="article:modified_time" content="2023-12-17T00:39:08+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 751. IP 到 CIDR" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2023-12-17T00:39:08+08:00","datePublished":"2023-12-17T00:39:08+08:00","description":"题目描述","headline":"LeetCode 751. IP 到 CIDR","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2023/40765718"},"url":"https://hgnulb.github.io/blog/2023/40765718"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法贪心分块">解法：贪心分块</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 751. IP 到 CIDR">LeetCode 751. IP 到 CIDR</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2023-12-17 00:39:08"
+                    datetime="2023-12-17T00:39:08+08:00"
+            >
+                2023-12-17
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2868 字 · 英文 180 词 · 代码 75 行"
+            aria-label="预计阅读时间约 10 分钟，正文 2868 字 · 英文 180 词 · 代码 75 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 10 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5894224607/" title="网易">
+        网易
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2535886171/" title="位运算">
+        位运算
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法贪心分块">解法：贪心分块</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/ip-to-cidr/">751. IP 到 CIDR</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个起始 IPv4 地址 <code class="language-plaintext highlighter-rouge">ip</code> 和一个正整数 <code class="language-plaintext highlighter-rouge">n</code>，要求用尽可能少的 CIDR 块，恰好覆盖从 <code class="language-plaintext highlighter-rouge">ip</code> 开始的连续 <code class="language-plaintext highlighter-rouge">n</code> 个 IP 地址，一个不多一个不少。CIDR 块写成 <code class="language-plaintext highlighter-rouge">a.b.c.d/k</code> 的形式，它表示「前 <code class="language-plaintext highlighter-rouge">k</code> 位固定、后 $32 - k$ 位任意」的一整段地址，因此一个块恰好包含 $2^{32-k}$ 个连续地址。</p>
+
+  <p>这个定义里藏着两条硬约束，它们决定了整道题的形状。第一，<strong>块的大小必须是 $2$ 的幂</strong>——不存在覆盖 $3$ 个地址的 CIDR 块。第二，<strong>块的起始地址必须按块大小对齐</strong>：一个大小为 $2^t$ 的块，其起点的低 $t$ 位必须全是 $0$，否则「前 $32-t$ 位固定」这个描述就框不住这段地址。这两条合起来意味着我们不能随便切，切法受到起点二进制形态的强约束。</p>
+
+  <p>题目要求「块数最少」，且不允许覆盖超出 <code class="language-plaintext highlighter-rouge">n</code> 个的额外地址。这就排除了「直接找一个足够大的块把 n 个地址包进去」的偷懒解法。</p>
+
+  <p>另一个信号是：IPv4 是 $32$ 位，最大地址是 $2^{32} - 1$，超过 <code class="language-plaintext highlighter-rouge">int</code> 的正数范围。所以内部表示必须用 $64$ 位整数（Java 的 <code class="language-plaintext highlighter-rouge">long</code>、Go 的 <code class="language-plaintext highlighter-rouge">int64</code>），否则在 <code class="language-plaintext highlighter-rouge">255.255.255.255</code> 附近会溢出成负数。</p>
+
+  <p>边界上要覆盖：起点是 <code class="language-plaintext highlighter-rouge">0.0.0.0</code>（低位全零，<code class="language-plaintext highlighter-rouge">start &amp; -start</code> 会得到 $0$，需要特判）；<code class="language-plaintext highlighter-rouge">n = 1</code>（每块只能是 <code class="language-plaintext highlighter-rouge">/32</code>）；起点已经高度对齐但 <code class="language-plaintext highlighter-rouge">n</code> 很小（块要被 <code class="language-plaintext highlighter-rouge">n</code> 反向压缩）；<code class="language-plaintext highlighter-rouge">n</code> 恰好是 $2$ 的幂且起点对齐（一块就够）；跨越 <code class="language-plaintext highlighter-rouge">x.x.x.255</code> 到 <code class="language-plaintext highlighter-rouge">x.x.(x+1).0</code> 的进位。题目保证不会越过 $2^{32}$ 的边界，所以不用担心地址回绕。</p>
+</blockquote>
+
+<h2 id="解法贪心分块">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E8%B4%AA%E5%BF%83%E5%88%86%E5%9D%97" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：贪心分块</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先想一个最朴素的做法：把 <code class="language-plaintext highlighter-rouge">n</code> 个地址一个一个地输出成 <code class="language-plaintext highlighter-rouge">/32</code> 块。这显然满足「恰好覆盖」，但块数是 <code class="language-plaintext highlighter-rouge">n</code>，远不是最少。</p>
+
+  <p>再想一个稍聪明的做法：把 <code class="language-plaintext highlighter-rouge">n</code> 二进制分解，比如 <code class="language-plaintext highlighter-rouge">n = 5 = 4 + 1</code>，就切成一个 $4$ 大小的块和一个 $1$ 大小的块。问题在于——大小为 $4$ 的块要求起点低两位为 $0$，如果起点是 <code class="language-plaintext highlighter-rouge">255.0.0.7</code>（低三位是 <code class="language-plaintext highlighter-rouge">111</code>），这个块根本不合法。所以瓶颈在于：<strong>块大小不仅受 <code class="language-plaintext highlighter-rouge">n</code> 限制，还受起点对齐程度限制，两者必须同时满足</strong>。</p>
+
+  <p>关键观察：在任意时刻，以当前 <code class="language-plaintext highlighter-rouge">start</code> 为起点能开出的<strong>最大合法块</strong>，其大小由两个上界共同决定。上界一是<strong>对齐上界</strong>：<code class="language-plaintext highlighter-rouge">start</code> 的二进制里最低位的那个 $1$ 所代表的权值，即 <code class="language-plaintext highlighter-rouge">lowbit = start &amp; -start</code>——因为大小为 $2^t$ 的块要求 <code class="language-plaintext highlighter-rouge">start</code> 的低 $t$ 位全零，所以 $t$ 最多等于 <code class="language-plaintext highlighter-rouge">start</code> 末尾连续零的个数，对应的块大小恰好就是 <code class="language-plaintext highlighter-rouge">lowbit</code>。上界二是<strong>剩余量上界</strong>：块不能超过还没覆盖的地址数 <code class="language-plaintext highlighter-rouge">n</code>，否则会多覆盖。取两者的较小值，就是这一步能开的最大块。</p>
+
+  <p>为什么贪心地每次都取最大块是最优的？因为每个 CIDR 块的大小都是 $2$ 的幂，且必须对齐。假设某一步不取最大块而取了一个更小的 $2^{t'}$（$t' &lt; t$），那么覆盖完这一小块之后新的起点 <code class="language-plaintext highlighter-rouge">start + 2^{t'}</code> 的末尾零个数恰好变成 $t'$，后续能开的块只会更小或相等，总块数不可能减少。换句话说，<strong>取最大块不会让后续变差</strong>，这就是交换论证意义下的贪心正确性。</p>
+
+  <p>于是维护的不变量是：<strong>每一轮循环开始时，<code class="language-plaintext highlighter-rouge">start</code> 是「还未被覆盖的第一个地址」，<code class="language-plaintext highlighter-rouge">n</code> 是「还需覆盖的地址个数」，且已输出的所有块恰好无缝无重地覆盖了从原始起点到 <code class="language-plaintext highlighter-rouge">start - 1</code> 的全部地址</strong>。每轮取 <code class="language-plaintext highlighter-rouge">size = min(lowbit(start), 最大不超过 n 的 2 的幂)</code>，输出对应块后令 <code class="language-plaintext highlighter-rouge">start += size</code>、<code class="language-plaintext highlighter-rouge">n -= size</code>，不变量得以保持；<code class="language-plaintext highlighter-rouge">n</code> 降到 $0$ 时循环结束，覆盖恰好完成。</p>
+
+  <p>把块大小换算成前缀长度也很直接：块大小为 $2^t$ 对应前缀 <code class="language-plaintext highlighter-rouge">k = 32 - t</code>，而 $t$ 就是 <code class="language-plaintext highlighter-rouge">size</code> 的末尾零个数，用 <code class="language-plaintext highlighter-rouge">numberOfTrailingZeros</code> 一步得到。</p>
+
+  <p>两个实现细节值得单独点明。其一，<code class="language-plaintext highlighter-rouge">start == 0</code> 时 <code class="language-plaintext highlighter-rouge">start &amp; -start</code> 结果是 $0$，代表「任意对齐都可以」，此时把 <code class="language-plaintext highlighter-rouge">lowbit</code> 置成 $2^{32}$（超过任何合法 <code class="language-plaintext highlighter-rouge">n</code> 的上界），交给后面的收缩循环去压到不超过 <code class="language-plaintext highlighter-rouge">n</code> 即可，不需要写第二套分支。其二，「压到不超过 <code class="language-plaintext highlighter-rouge">n</code>」用 <code class="language-plaintext highlighter-rouge">while (lowbit &gt; n) lowbit &gt;&gt;= 1</code> 反复右移，而不是去算 <code class="language-plaintext highlighter-rouge">n</code> 的最高位——右移写法既处理了 <code class="language-plaintext highlighter-rouge">lowbit</code> 过大的情况，又天然保证结果仍是 $2$ 的幂，代码只有一行。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+      <p>写 <code class="language-plaintext highlighter-rouge">ipToLong</code>：按 <code class="language-plaintext highlighter-rouge">.</code> 切成四段，用 <code class="language-plaintext highlighter-rouge">num = num * 256 + part</code> 依次拼成一个 $64$ 位整数。理由：把点分十进制转成单一整数后，「连续的 <code class="language-plaintext highlighter-rouge">n</code> 个地址」就等价于「连续的 <code class="language-plaintext highlighter-rouge">n</code> 个整数」，所有对齐判断都能用位运算表达；用 <code class="language-plaintext highlighter-rouge">long</code> 而不是 <code class="language-plaintext highlighter-rouge">int</code> 是因为 $2^{32}-1$ 超出 <code class="language-plaintext highlighter-rouge">int</code> 正数范围，且 <code class="language-plaintext highlighter-rouge">start += size</code> 之后可能触及 $2^{32}$。</p>
+    </li>
+    <li>
+      <p>写 <code class="language-plaintext highlighter-rouge">longToIp</code>：依次右移 $24$、$16$、$8$、$0$ 位后与 $255$ 相与，拼成四段。理由：与 $255$ 相与能截出恰好一个字节，避免高位残留污染。</p>
+    </li>
+    <li>
+      <p>主循环条件是 <code class="language-plaintext highlighter-rouge">n &gt; 0</code>。理由：<code class="language-plaintext highlighter-rouge">n</code> 表示尚未覆盖的地址数，它归零即代表任务完成，比用块数或起点做条件都更直接。</p>
+    </li>
+    <li>
+      <p>每轮先算 <code class="language-plaintext highlighter-rouge">long lowbit = start &amp; -start</code>。理由：这是取最低位 $1$ 的标准写法，它的值恰好等于「<code class="language-plaintext highlighter-rouge">start</code> 能对齐的最大块大小」；补码下 <code class="language-plaintext highlighter-rouge">-start</code> 是按位取反加一，与原数相与只留最低位的 $1$。</p>
+    </li>
+    <li>
+      <p>若 <code class="language-plaintext highlighter-rouge">lowbit == 0</code> 则置为 <code class="language-plaintext highlighter-rouge">1L &lt;&lt; 32</code>。理由：只有 <code class="language-plaintext highlighter-rouge">start == 0</code> 时低位全零，此时对齐没有任何限制；给一个大于任何合法 <code class="language-plaintext highlighter-rouge">n</code> 的哨兵值，让后面的收缩循环统一处理，避免写额外分支。注意必须写 <code class="language-plaintext highlighter-rouge">1L</code> 而不是 <code class="language-plaintext highlighter-rouge">1</code>，否则 <code class="language-plaintext highlighter-rouge">int</code> 左移 $32$ 位在 Java 里等于左移 $0$ 位，结果是 $1$。</p>
+    </li>
+    <li>
+      <p>用 <code class="language-plaintext highlighter-rouge">while (lowbit &gt; n) lowbit &gt;&gt;= 1</code> 把块压到不超过剩余量。理由：右移一位就是块大小减半，始终保持 $2$ 的幂；由于 <code class="language-plaintext highlighter-rouge">n &gt;= 1</code>，循环必然在 <code class="language-plaintext highlighter-rouge">lowbit</code> 降到 $1$ 之前停止，不会死循环。</p>
+    </li>
+    <li>
+      <p>计算 <code class="language-plaintext highlighter-rouge">prefix = 32 - numberOfTrailingZeros(lowbit)</code>，把 <code class="language-plaintext highlighter-rouge">longToIp(start) + "/" + prefix</code> 加入结果。理由：块大小 $2^t$ 与前缀长度 $32 - t$ 一一对应，而 $t$ 就是末尾零的个数；这一步是「大小」到「CIDR 记法」的翻译。</p>
+    </li>
+    <li>
+      <p>执行 <code class="language-plaintext highlighter-rouge">start += lowbit</code>、<code class="language-plaintext highlighter-rouge">n -= lowbit</code> 后进入下一轮。理由：这两句同步推进不变量的两半——起点跳到刚覆盖区间之后，剩余量扣掉刚覆盖的数量；两者必须用同一个 <code class="language-plaintext highlighter-rouge">lowbit</code>，任何一边用错值都会导致漏覆盖或重复覆盖。</p>
+    </li>
+    <li>
+      <p>以 <code class="language-plaintext highlighter-rouge">ip = "255.0.0.7"</code>、<code class="language-plaintext highlighter-rouge">n = 10</code> 走一遍。转成整数 <code class="language-plaintext highlighter-rouge">start = 255 * 2^{24} + 7 = 4278190087</code>，二进制末尾是 <code class="language-plaintext highlighter-rouge">...0111</code>。第一轮：<code class="language-plaintext highlighter-rouge">lowbit = start &amp; -start = 1</code>（末尾是 $1$，完全不对齐），$1 \le 10$ 不需收缩，<code class="language-plaintext highlighter-rouge">prefix = 32 - 0 = 32</code>，输出 <code class="language-plaintext highlighter-rouge">255.0.0.7/32</code>；<code class="language-plaintext highlighter-rouge">start</code> 变 <code class="language-plaintext highlighter-rouge">4278190088</code>（即 <code class="language-plaintext highlighter-rouge">255.0.0.8</code>），<code class="language-plaintext highlighter-rouge">n</code> 变 $9$。第二轮：<code class="language-plaintext highlighter-rouge">start</code> 末尾三位是 <code class="language-plaintext highlighter-rouge">000</code>，<code class="language-plaintext highlighter-rouge">lowbit = 8</code>，$8 \le 9$，<code class="language-plaintext highlighter-rouge">prefix = 32 - 3 = 29</code>，输出 <code class="language-plaintext highlighter-rouge">255.0.0.8/29</code>（覆盖 <code class="language-plaintext highlighter-rouge">.8</code> 到 <code class="language-plaintext highlighter-rouge">.15</code> 共 $8$ 个）；<code class="language-plaintext highlighter-rouge">start</code> 变 <code class="language-plaintext highlighter-rouge">255.0.0.16</code>，<code class="language-plaintext highlighter-rouge">n</code> 变 $1$。第三轮：<code class="language-plaintext highlighter-rouge">start</code> 末尾四位是 <code class="language-plaintext highlighter-rouge">0000</code>，<code class="language-plaintext highlighter-rouge">lowbit = 16</code>，但 $16 &gt; 1$，收缩循环把它右移四次降到 $1$，<code class="language-plaintext highlighter-rouge">prefix = 32</code>，输出 <code class="language-plaintext highlighter-rouge">255.0.0.16/32</code>；<code class="language-plaintext highlighter-rouge">n</code> 变 $0$，循环结束。结果是 <code class="language-plaintext highlighter-rouge">["255.0.0.7/32", "255.0.0.8/29", "255.0.0.16/32"]</code>，三块共覆盖 $1 + 8 + 1 = 10$ 个地址，与期望一致——注意第一轮被对齐卡住只能取 $1$，第三轮被剩余量卡住也只能取 $1$，两个上界各生效了一次。</p>
+    </li>
+  </ul>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">ipToCIDR</span><span class="o">(</span><span class="nc">String</span> <span class="n">ip</span><span class="o">,</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="kt">long</span> <span class="n">start</span> <span class="o">=</span> <span class="n">ipToLong</span><span class="o">(</span><span class="n">ip</span><span class="o">);</span>
+
+        <span class="k">while</span> <span class="o">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">long</span> <span class="n">lowbit</span> <span class="o">=</span> <span class="n">start</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">start</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">lowbit</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">lowbit</span> <span class="o">=</span> <span class="mi">1L</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">while</span> <span class="o">(</span><span class="n">lowbit</span> <span class="o">&gt;</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">lowbit</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="kt">int</span> <span class="n">prefix</span> <span class="o">=</span> <span class="mi">32</span> <span class="o">-</span> <span class="nc">Long</span><span class="o">.</span><span class="na">numberOfTrailingZeros</span><span class="o">(</span><span class="n">lowbit</span><span class="o">);</span>
+            <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">longToIp</span><span class="o">(</span><span class="n">start</span><span class="o">)</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">prefix</span><span class="o">);</span>
+            <span class="n">start</span> <span class="o">+=</span> <span class="n">lowbit</span><span class="o">;</span>
+            <span class="n">n</span> <span class="o">-=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">lowbit</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">long</span> <span class="nf">ipToLong</span><span class="o">(</span><span class="nc">String</span> <span class="n">ip</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">String</span><span class="o">[]</span> <span class="n">parts</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">"\\."</span><span class="o">);</span>
+        <span class="kt">long</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">part</span> <span class="o">:</span> <span class="n">parts</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="n">num</span> <span class="o">*</span> <span class="mi">256</span> <span class="o">+</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">part</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">num</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="nf">longToIp</span><span class="o">(</span><span class="kt">long</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">((</span><span class="n">num</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span><span class="o">)</span> <span class="o">&amp;</span> <span class="mi">255</span><span class="o">)</span> <span class="o">+</span> <span class="s">"."</span> <span class="o">+</span> <span class="o">((</span><span class="n">num</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="o">)</span> <span class="o">&amp;</span> <span class="mi">255</span><span class="o">)</span> <span class="o">+</span> <span class="s">"."</span> <span class="o">+</span> <span class="o">((</span><span class="n">num</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="o">)</span> <span class="o">&amp;</span> <span class="mi">255</span><span class="o">)</span> <span class="o">+</span> <span class="s">"."</span> <span class="o">+</span> <span class="o">(</span><span class="n">num</span> <span class="o">&amp;</span> <span class="mi">255</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">ipToCIDR</span><span class="p">(</span><span class="n">ip</span> <span class="kt">string</span><span class="p">,</span> <span class="n">n</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+    <span class="n">res</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">:=</span> <span class="n">ipToLong</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="n">lowbit</span> <span class="o">:=</span> <span class="n">start</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">start</span>
+        <span class="k">if</span> <span class="n">lowbit</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="n">lowbit</span> <span class="o">=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">32</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">lowbit</span> <span class="o">&gt;</span> <span class="kt">int64</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">lowbit</span> <span class="o">&gt;&gt;=</span> <span class="m">1</span>
+        <span class="p">}</span>
+
+        <span class="n">prefix</span> <span class="o">:=</span> <span class="m">32</span> <span class="o">-</span> <span class="n">bits</span><span class="o">.</span><span class="n">TrailingZeros64</span><span class="p">(</span><span class="kt">uint64</span><span class="p">(</span><span class="n">lowbit</span><span class="p">))</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">longToIp</span><span class="p">(</span><span class="n">start</span><span class="p">)</span><span class="o">+</span><span class="s">"/"</span><span class="o">+</span><span class="n">itoa</span><span class="p">(</span><span class="n">prefix</span><span class="p">))</span>
+        <span class="n">start</span> <span class="o">+=</span> <span class="n">lowbit</span>
+        <span class="n">n</span> <span class="o">-=</span> <span class="kt">int</span><span class="p">(</span><span class="n">lowbit</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">ipToLong</span><span class="p">(</span><span class="n">ip</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int64</span> <span class="p">{</span>
+    <span class="n">parts</span> <span class="o">:=</span> <span class="n">strings</span><span class="o">.</span><span class="n">Split</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="s">"."</span><span class="p">)</span>
+    <span class="k">var</span> <span class="n">num</span> <span class="kt">int64</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">part</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">parts</span> <span class="p">{</span>
+        <span class="n">val</span><span class="p">,</span> <span class="n">_</span> <span class="o">:=</span> <span class="n">strconv</span><span class="o">.</span><span class="n">Atoi</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="n">num</span><span class="o">*</span><span class="m">256</span> <span class="o">+</span> <span class="kt">int64</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">num</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">longToIp</span><span class="p">(</span><span class="n">num</span> <span class="kt">int64</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">itoa</span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="n">num</span><span class="o">&gt;&gt;</span><span class="m">24</span><span class="o">&amp;</span><span class="m">255</span><span class="p">))</span> <span class="o">+</span> <span class="s">"."</span> <span class="o">+</span> <span class="n">itoa</span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="n">num</span><span class="o">&gt;&gt;</span><span class="m">16</span><span class="o">&amp;</span><span class="m">255</span><span class="p">))</span> <span class="o">+</span> <span class="s">"."</span> <span class="o">+</span> <span class="n">itoa</span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="n">num</span><span class="o">&gt;&gt;</span><span class="m">8</span><span class="o">&amp;</span><span class="m">255</span><span class="p">))</span> <span class="o">+</span> <span class="s">"."</span> <span class="o">+</span> <span class="n">itoa</span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="n">num</span><span class="o">&amp;</span><span class="m">255</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">itoa</span><span class="p">(</span><span class="n">v</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s">"0"</span>
+    <span class="p">}</span>
+
+    <span class="n">buf</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="kt">byte</span><span class="p">(</span><span class="sc">'0'</span><span class="o">+</span><span class="n">v</span><span class="o">%</span><span class="m">10</span><span class="p">))</span>
+        <span class="n">v</span> <span class="o">/=</span> <span class="m">10</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">;</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+        <span class="n">buf</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">buf</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">buf</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">buf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="kt">string</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(k \cdot 32)$，其中 $k$ 是输出的块数。每轮循环内部的 <code class="language-plaintext highlighter-rouge">lowbit</code> 计算和前缀换算都是常数时间，只有收缩循环最多右移 $32$ 次；而块数 $k$ 本身是 $O(\log n)$ 级别——因为每次要么被对齐卡住（此后起点的对齐度严格提升），要么被剩余量卡住（此后剩余量至少减半），两类情形各自最多发生约 $32$ 次，所以 $k \le 64$。整体可视为常数级的小循环。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(k)$，只有结果列表随块数增长，其余变量都是标量；字符串转换过程中产生的临时对象也是常数个。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>遇到「必须按 $2$ 的幂对齐切分」的问题，先把对象转成整数，然后用 <code class="language-plaintext highlighter-rouge">x &amp; -x</code> 提取最低位 $1$——它的物理含义正是「这个位置最大能对齐多大的块」。这个技巧在内存分配器的伙伴系统、树状数组的区间跳跃、位图分段里是同一件事。</li>
+    <li>贪心的正确性要用「取最大不会让后续变差」来论证，而不是凭直觉。本题的论证核心是：少取一步会让新起点的对齐度反而降低，后续块只会更碎，所以贪心不劣。面试时能说出这一句，比写对代码更重要。</li>
+    <li>当一个量同时受多个上界约束时，写成「先取其中一个上界，再逐步收缩到满足其余上界」往往比一次性算出最小值更简洁。本题的 <code class="language-plaintext highlighter-rouge">lowbit</code> 先按对齐取值、再用 <code class="language-plaintext highlighter-rouge">while</code> 压到不超过 <code class="language-plaintext highlighter-rouge">n</code>，两个约束用两行代码分别表达，互不纠缠。</li>
+    <li>IPv4 必须用 $64$ 位整数承载。$2^{32}-1$ 超出 <code class="language-plaintext highlighter-rouge">int</code> 正数范围，且哨兵值 <code class="language-plaintext highlighter-rouge">1L &lt;&lt; 32</code> 也需要 <code class="language-plaintext highlighter-rouge">long</code>；这类「位宽刚好差一位」的坑在网络、时间戳、哈希题里反复出现。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">0</code> 的 <code class="language-plaintext highlighter-rouge">lowbit</code> 是 $0$，必须特判。凡是用 <code class="language-plaintext highlighter-rouge">x &amp; -x</code> 的代码都要先问一句「x 可能为 0 吗」，本题的 <code class="language-plaintext highlighter-rouge">0.0.0.0</code> 就是专门用来卡这一点的。</li>
+    <li>面试视角：字节和网易考这题看的是<strong>能否把网络协议的规则准确翻译成位运算</strong>。理想的作答顺序是先解释 CIDR 块「大小是 2 的幂 + 起点必须对齐」这两条约束，再指出「每步取 min(对齐上界, 剩余量上界)」，最后才写代码。写完主动举 <code class="language-plaintext highlighter-rouge">255.0.0.7</code> 这种低位不齐的用例走一遍，能证明你理解了对齐约束而不是死记 <code class="language-plaintext highlighter-rouge">lowbit</code> 模板。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>错误写法：用 <code class="language-plaintext highlighter-rouge">int</code> 存 IP 整数 → 用例 <code class="language-plaintext highlighter-rouge">ip = "255.255.255.255"</code>，<code class="language-plaintext highlighter-rouge">n = 1</code> → 转换结果 $4294967295$ 溢出成 $-1$，<code class="language-plaintext highlighter-rouge">start &amp; -start</code> 得到 $1$ 虽然侥幸对，但 <code class="language-plaintext highlighter-rouge">longToIp</code> 里右移会做符号扩展，输出变成负数段；必须用 <code class="language-plaintext highlighter-rouge">long</code> / <code class="language-plaintext highlighter-rouge">int64</code>。</li>
+    <li>错误写法：<code class="language-plaintext highlighter-rouge">lowbit == 0</code> 时不特判 → 用例 <code class="language-plaintext highlighter-rouge">ip = "0.0.0.0"</code>，<code class="language-plaintext highlighter-rouge">n = 5</code> → <code class="language-plaintext highlighter-rouge">lowbit</code> 恒为 $0$，收缩循环 <code class="language-plaintext highlighter-rouge">while (0 &gt; 5)</code> 不执行，<code class="language-plaintext highlighter-rouge">prefix</code> 算成 $32 - 64$ 之类的非法值，且 <code class="language-plaintext highlighter-rouge">start += 0</code>、<code class="language-plaintext highlighter-rouge">n -= 0</code> 导致死循环。</li>
+    <li>错误写法：哨兵写成 <code class="language-plaintext highlighter-rouge">lowbit = 1 &lt;&lt; 32</code>（Java 中 <code class="language-plaintext highlighter-rouge">int</code> 字面量）→ 用例 <code class="language-plaintext highlighter-rouge">ip = "0.0.0.0"</code>，<code class="language-plaintext highlighter-rouge">n = 5</code> → Java 对 <code class="language-plaintext highlighter-rouge">int</code> 移位只取低 $5$ 位，<code class="language-plaintext highlighter-rouge">1 &lt;&lt; 32</code> 等于 $1$，块被限制成 $1$，输出 $5$ 个 <code class="language-plaintext highlighter-rouge">/32</code> 块而不是最优的 <code class="language-plaintext highlighter-rouge">0.0.0.0/30</code> 加 <code class="language-plaintext highlighter-rouge">0.0.0.4/32</code>，块数不是最少。</li>
+    <li>错误写法：只按 <code class="language-plaintext highlighter-rouge">n</code> 的二进制分解切块，不考虑起点对齐 → 用例 <code class="language-plaintext highlighter-rouge">ip = "255.0.0.7"</code>，<code class="language-plaintext highlighter-rouge">n = 10</code> → 会输出 <code class="language-plaintext highlighter-rouge">255.0.0.7/28</code> 这样的块，但 <code class="language-plaintext highlighter-rouge">.7</code> 的低四位不是 $0$，该 CIDR 实际覆盖的是 <code class="language-plaintext highlighter-rouge">.0</code> 到 <code class="language-plaintext highlighter-rouge">.15</code>，越界覆盖了起点之前的地址，结果非法。</li>
+    <li>错误写法：只按起点对齐取块，不用 <code class="language-plaintext highlighter-rouge">n</code> 收缩 → 用例 <code class="language-plaintext highlighter-rouge">ip = "255.0.0.8"</code>，<code class="language-plaintext highlighter-rouge">n = 1</code> → <code class="language-plaintext highlighter-rouge">lowbit = 8</code>，直接输出 <code class="language-plaintext highlighter-rouge">255.0.0.8/29</code> 覆盖了 $8$ 个地址，比要求的 $1$ 个多覆盖 $7$ 个，答案错误。</li>
+    <li>错误写法：收缩用 <code class="language-plaintext highlighter-rouge">lowbit = Math.min(lowbit, n)</code> 而不是右移 → 用例 <code class="language-plaintext highlighter-rouge">n = 5</code>，<code class="language-plaintext highlighter-rouge">lowbit = 8</code> → 得到 <code class="language-plaintext highlighter-rouge">lowbit = 5</code>，但 $5$ 不是 $2$ 的幂，<code class="language-plaintext highlighter-rouge">numberOfTrailingZeros(5) = 0</code>，<code class="language-plaintext highlighter-rouge">prefix</code> 算成 $32$，输出的块只覆盖 $1$ 个地址却把 <code class="language-plaintext highlighter-rouge">n</code> 减了 $5$，覆盖出现缺口。</li>
+    <li>错误写法：前缀写成 <code class="language-plaintext highlighter-rouge">prefix = numberOfTrailingZeros(lowbit)</code> 而漏掉 <code class="language-plaintext highlighter-rouge">32 -</code> → 用例 块大小 $8$ → 输出 <code class="language-plaintext highlighter-rouge">/3</code> 而不是 <code class="language-plaintext highlighter-rouge">/29</code>，<code class="language-plaintext highlighter-rouge">/3</code> 代表 $2^{29}$ 个地址，覆盖范围严重超标。</li>
+    <li>错误写法：更新时写成 <code class="language-plaintext highlighter-rouge">start += lowbit</code> 但 <code class="language-plaintext highlighter-rouge">n--</code> → 用例 <code class="language-plaintext highlighter-rouge">ip = "255.0.0.8"</code>，<code class="language-plaintext highlighter-rouge">n = 8</code> → 起点一次跳 $8$ 个但计数只减 $1$，循环要跑 $8$ 轮，输出 $8$ 个块且总覆盖范围远超 $8$ 个地址。</li>
+    <li>错误写法：<code class="language-plaintext highlighter-rouge">longToIp</code> 里忘记与 $255$ 相与，直接写 <code class="language-plaintext highlighter-rouge">num &gt;&gt; 24</code> 等 → 用例 <code class="language-plaintext highlighter-rouge">ip = "1.2.3.4"</code> → 第二段算成 <code class="language-plaintext highlighter-rouge">num &gt;&gt; 16</code> 的完整值（含最高字节），得到 $258$ 这样的非法段值。</li>
+    <li>错误写法：<code class="language-plaintext highlighter-rouge">ipToLong</code> 用 <code class="language-plaintext highlighter-rouge">split(".")</code> 而不是 <code class="language-plaintext highlighter-rouge">split("\\.")</code> → 用例 任意 IP → Java 的 <code class="language-plaintext highlighter-rouge">split</code> 接收正则，<code class="language-plaintext highlighter-rouge">.</code> 匹配任意字符，切出全是空串的数组，解析直接抛异常。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/bitwise-and-of-numbers-range/">201. 数字范围按位与</a></td>
+      <td>中等</td>
+      <td>同样围绕「区间与二进制前缀的关系」，求的是公共前缀而非切分区间</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/power-of-two/">231. 2 的幂</a></td>
+      <td>简单</td>
+      <td>
+<code class="language-plaintext highlighter-rouge">x &amp; -x == x</code> 的最小应用，是理解 lowbit 语义的入门题</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/restore-ip-addresses/">93. 复原 IP 地址</a></td>
+      <td>中等</td>
+      <td>同为 IP 格式处理，但考点是回溯枚举分段位置与前导零校验</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/validate-ip-address/">468. 验证IP地址</a></td>
+      <td>中等</td>
+      <td>纯字符串校验，要同时处理 IPv4 与 IPv6 的格式规则，无位运算</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/reverse-bits/">190. 颠倒二进制位</a></td>
+      <td>简单</td>
+      <td>同样在 $32$ 位无符号语义下操作，考察 Java 中有符号右移带来的陷阱</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2023/38555724" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 461. 汉明距离</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2023/99571062" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1048. 最长字符串链</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2023/40765718">https://hgnulb.github.io/blog/2023/40765718</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

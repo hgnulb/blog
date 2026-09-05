@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 432. 全 O(1) 的数据结构 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,双向链表,哈希表,字节跳动,设计,链表" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 432. 全 O(1) 的数据结构" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/41930761" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/41930761" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-08-23T09:20:52+08:00" />
+<meta property="article:modified_time" content="2022-08-23T09:20:52+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 432. 全 O(1) 的数据结构" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-08-23T09:20:52+08:00","datePublished":"2022-08-23T09:20:52+08:00","description":"题目描述","headline":"LeetCode 432. 全 O(1) 的数据结构","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/41930761"},"url":"https://hgnulb.github.io/blog/2022/41930761"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法双向链表--哈希表">解法：双向链表 + 哈希表</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 432. 全 O(1) 的数据结构">LeetCode 432. 全 O(1) 的数据结构</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-08-23 09:20:52"
+                    datetime="2022-08-23T09:20:52+08:00"
+            >
+                2022-08-23
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2485 字 · 英文 119 词 · 代码 211 行"
+            aria-label="预计阅读时间约 14 分钟，正文 2485 字 · 英文 119 词 · 代码 211 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 14 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6005735281/" title="链表">
+        链表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0407173734/" title="双向链表">
+        双向链表
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法双向链表--哈希表">解法：双向链表 + 哈希表</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/all-oone-data-structure/">432. 全 O(1) 的数据结构</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>要维护一批字符串各自的出现次数，并支持四种操作：给某个字符串的计数加一、减一，以及随时报出当前计数最大和计数最小的任意一个字符串。</p>
+
+  <p>约束里最刺眼的一条是「每个操作平均时间复杂度 $O(1)$」。这句话直接否掉了任何需要在操作时扫描全部 key、或者依赖比较排序结构的做法，逼着我们把「谁最大、谁最小」这件事变成可以直接读出来的常量级查询。</p>
+
+  <p>边界有几处要留意：<code class="language-plaintext highlighter-rouge">dec</code> 作用在计数为 $1$ 的 key 上时，这个 key 应当彻底消失，而不是留下一个计数为 $0$ 的残留；题目保证 <code class="language-plaintext highlighter-rouge">dec</code> 只会作用在已存在的 key 上，但实现上多一层判空更稳；当结构为空时，<code class="language-plaintext highlighter-rouge">getMaxKey</code> 与 <code class="language-plaintext highlighter-rouge">getMinKey</code> 都返回空字符串；同一个计数可能被很多 key 共享，所以「计数最大的 key」不唯一，返回其中任意一个都算对。</p>
+</blockquote>
+
+<h2 id="解法双向链表--哈希表">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8--%E5%93%88%E5%B8%8C%E8%A1%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：双向链表 + 哈希表</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最直接的写法是一张 <code class="language-plaintext highlighter-rouge">key -&gt; count</code> 的哈希表。<code class="language-plaintext highlighter-rouge">inc</code> 和 <code class="language-plaintext highlighter-rouge">dec</code> 确实是 $O(1)$，但 <code class="language-plaintext highlighter-rouge">getMaxKey</code> 只能遍历整张表挑出最大计数，退化成 $O(n)$。换成有序结构（如平衡树按计数排序）能让查询变成 $O(\log n)$，仍然够不到题目要的 $O(1)$。</p>
+
+  <p>瓶颈在于「按计数排序」这件事被当成了一个每次都要重新求解的通用问题。但这里的修改极其温和：一次 <code class="language-plaintext highlighter-rouge">inc</code> 只把某个 key 的计数从 $c$ 变成 $c+1$，一次 <code class="language-plaintext highlighter-rouge">dec</code> 只把它从 $c$ 变成 $c-1$。也就是说，元素在「按计数排好的序列」里每次至多挪动一格。既然只挪一格，就没必要重新排序，顺着指针走一步就够了。</p>
+
+  <p>由此得到的组织方式是：把计数相同的 key 打包成一个「桶」，桶按计数从小到大用双向链表串起来。整个结构维持两条不变量。其一，链表从 <code class="language-plaintext highlighter-rouge">head</code> 到 <code class="language-plaintext highlighter-rouge">tail</code> 的方向上，桶的计数严格递增，且链表中不存在 keys 为空的桶——因此 <code class="language-plaintext highlighter-rouge">head.next</code> 永远是当前最小计数的桶，<code class="language-plaintext highlighter-rouge">tail.prev</code> 永远是当前最大计数的桶，两个查询各取一个元素即可。其二，哈希表 <code class="language-plaintext highlighter-rouge">nodes</code> 中 <code class="language-plaintext highlighter-rouge">key</code> 到桶的映射始终指向那个真正包含该 key 的桶，于是从任意 key 出发都能在 $O(1)$ 内定位它在链表中的位置，再顺着 <code class="language-plaintext highlighter-rouge">prev</code> / <code class="language-plaintext highlighter-rouge">next</code> 走一格完成搬迁。</p>
+
+  <p>桶内用集合而不是链表存 key，是为了让「从旧桶删除某个 key」也保持 $O(1)$。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>建立带哨兵的双向链表：<code class="language-plaintext highlighter-rouge">head</code> 和 <code class="language-plaintext highlighter-rouge">tail</code> 两个空桶首尾相接。有了哨兵，插入和删除就不必区分「链表为空」「插在头部」「插在尾部」这些情况，所有指针操作都能统一成四行赋值。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">inc(key)</code> 时先查 <code class="language-plaintext highlighter-rouge">nodes</code>。若 key 不存在，它的目标计数是 $1$，目标位置只可能是链表最前端：看 <code class="language-plaintext highlighter-rouge">head.next</code> 是不是一个计数为 $1$ 的真实桶，是就直接塞进去，否则新建一个计数为 $1$ 的桶插在 <code class="language-plaintext highlighter-rouge">head</code> 之后。之所以只需要检查 <code class="language-plaintext highlighter-rouge">head.next</code> 而不用查找，是因为不变量保证计数为 $1$ 的桶若存在，必定就在最前面。</li>
+    <li>若 key 已存在，取出它当前所在的桶 <code class="language-plaintext highlighter-rouge">cur</code>，目标计数是 <code class="language-plaintext highlighter-rouge">cur.count + 1</code>。由于链表计数严格递增，计数为该值的桶如果存在，必定就是 <code class="language-plaintext highlighter-rouge">cur.next</code>。于是检查 <code class="language-plaintext highlighter-rouge">cur.next</code>：计数匹配就并入，否则新建一个桶插在 <code class="language-plaintext highlighter-rouge">cur</code> 之后。这一步是「只挪一格」这个观察的直接兑现。</li>
+    <li>搬迁完成后，从 <code class="language-plaintext highlighter-rouge">cur</code> 的集合里删掉 key；如果 <code class="language-plaintext highlighter-rouge">cur</code> 变空就把它从链表摘掉。必须删空桶，否则「链表首尾即最值」这条不变量立刻失效——一个残留的空桶会让 <code class="language-plaintext highlighter-rouge">getMinKey</code> 取到不存在的元素。注意顺序：先把 key 加进新桶并更新 <code class="language-plaintext highlighter-rouge">nodes</code>，再从旧桶删除，这样即使新旧桶是同一个引用也不会误删。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">dec(key)</code> 对称处理，只是多了一个终止情况：当 <code class="language-plaintext highlighter-rouge">cur.count == 1</code> 时，减一后计数归零，这个 key 应当整体消失，所以从桶集合和 <code class="language-plaintext highlighter-rouge">nodes</code> 里同时删除，而不是搬到某个「计数为 $0$」的桶里。其余情况看 <code class="language-plaintext highlighter-rouge">cur.prev</code> 是否是计数为 <code class="language-plaintext highlighter-rouge">cur.count - 1</code> 的真实桶，是则并入，否则新建桶插在 <code class="language-plaintext highlighter-rouge">cur.prev</code> 之后。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">getMaxKey</code> 判断 <code class="language-plaintext highlighter-rouge">tail.prev == head</code>（链表为空）后返回 <code class="language-plaintext highlighter-rouge">tail.prev</code> 桶中任意一个 key；<code class="language-plaintext highlighter-rouge">getMinKey</code> 判断 <code class="language-plaintext highlighter-rouge">head.next == tail</code> 后返回 <code class="language-plaintext highlighter-rouge">head.next</code> 桶中任意一个 key。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">inc("hello")</code>、<code class="language-plaintext highlighter-rouge">inc("hello")</code>、<code class="language-plaintext highlighter-rouge">getMaxKey</code>、<code class="language-plaintext highlighter-rouge">getMinKey</code>、<code class="language-plaintext highlighter-rouge">inc("leet")</code>、<code class="language-plaintext highlighter-rouge">getMaxKey</code>、<code class="language-plaintext highlighter-rouge">getMinKey</code> 走一遍</strong>：初始链表是 <code class="language-plaintext highlighter-rouge">head &lt;-&gt; tail</code>，<code class="language-plaintext highlighter-rouge">nodes</code> 为空。第一次 <code class="language-plaintext highlighter-rouge">inc("hello")</code>，key 不在 <code class="language-plaintext highlighter-rouge">nodes</code> 中，<code class="language-plaintext highlighter-rouge">head.next</code> 就是 <code class="language-plaintext highlighter-rouge">tail</code>，不是真实桶，于是新建桶 $B_1$（计数 $1$，keys 为 <code class="language-plaintext highlighter-rouge">{hello}</code>）插在 <code class="language-plaintext highlighter-rouge">head</code> 之后，链表变成 <code class="language-plaintext highlighter-rouge">head &lt;-&gt; B1(1:{hello}) &lt;-&gt; tail</code>，<code class="language-plaintext highlighter-rouge">nodes = {hello -&gt; B1}</code>。第二次 <code class="language-plaintext highlighter-rouge">inc("hello")</code>，key 已存在，<code class="language-plaintext highlighter-rouge">cur = B1</code>，目标计数 $2$，<code class="language-plaintext highlighter-rouge">cur.next</code> 是 <code class="language-plaintext highlighter-rouge">tail</code> 不匹配，于是新建桶 $B_2$（计数 $2$，keys 为 <code class="language-plaintext highlighter-rouge">{hello}</code>）插在 $B_1$ 之后并更新 <code class="language-plaintext highlighter-rouge">nodes = {hello -&gt; B2}</code>；随后从 $B_1$ 删除 <code class="language-plaintext highlighter-rouge">hello</code>，$B_1$ 变空被摘除，链表成为 <code class="language-plaintext highlighter-rouge">head &lt;-&gt; B2(2:{hello}) &lt;-&gt; tail</code>。此时 <code class="language-plaintext highlighter-rouge">getMaxKey</code> 取 <code class="language-plaintext highlighter-rouge">tail.prev = B2</code>，返回 <code class="language-plaintext highlighter-rouge">"hello"</code>；<code class="language-plaintext highlighter-rouge">getMinKey</code> 取 <code class="language-plaintext highlighter-rouge">head.next = B2</code>，同样返回 <code class="language-plaintext highlighter-rouge">"hello"</code>。接着 <code class="language-plaintext highlighter-rouge">inc("leet")</code>，key 不在 <code class="language-plaintext highlighter-rouge">nodes</code> 中，检查 <code class="language-plaintext highlighter-rouge">head.next = B2</code>，它是真实桶但计数为 $2$ 而非 $1$，于是新建桶 $B_3$（计数 $1$，keys 为 <code class="language-plaintext highlighter-rouge">{leet}</code>）插在 <code class="language-plaintext highlighter-rouge">head</code> 之后，链表成为 <code class="language-plaintext highlighter-rouge">head &lt;-&gt; B3(1:{leet}) &lt;-&gt; B2(2:{hello}) &lt;-&gt; tail</code>，<code class="language-plaintext highlighter-rouge">nodes = {hello -&gt; B2, leet -&gt; B3}</code>。最后 <code class="language-plaintext highlighter-rouge">getMaxKey</code> 取 <code class="language-plaintext highlighter-rouge">tail.prev = B2</code>，返回 <code class="language-plaintext highlighter-rouge">"hello"</code>；<code class="language-plaintext highlighter-rouge">getMinKey</code> 取 <code class="language-plaintext highlighter-rouge">head.next = B3</code>，返回 <code class="language-plaintext highlighter-rouge">"leet"</code>。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// key -&gt; bucket 的哈希表用于 O(1) 找到 key 所在桶。</span>
+<span class="kd">class</span> <span class="nc">AllOne</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Bucket</span> <span class="n">head</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Bucket</span> <span class="n">tail</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Bucket</span><span class="o">&gt;</span> <span class="n">nodes</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">AllOne</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Bucket</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="n">tail</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Bucket</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="n">head</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">tail</span><span class="o">;</span>
+        <span class="n">tail</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">inc</span><span class="o">(</span><span class="nc">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">nodes</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">key</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nc">Bucket</span> <span class="n">first</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">first</span> <span class="o">!=</span> <span class="n">tail</span> <span class="o">&amp;&amp;</span> <span class="n">first</span><span class="o">.</span><span class="na">count</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">first</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+                <span class="n">nodes</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">first</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="nc">Bucket</span> <span class="n">bucket</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Bucket</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+                <span class="n">bucket</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+                <span class="n">insertAfter</span><span class="o">(</span><span class="n">head</span><span class="o">,</span> <span class="n">bucket</span><span class="o">);</span>
+                <span class="n">nodes</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">bucket</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nc">Bucket</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="nc">Bucket</span> <span class="n">next</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">nextCount</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">count</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">next</span> <span class="o">!=</span> <span class="n">tail</span> <span class="o">&amp;&amp;</span> <span class="n">next</span><span class="o">.</span><span class="na">count</span> <span class="o">==</span> <span class="n">nextCount</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">next</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">next</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">Bucket</span> <span class="n">bucket</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Bucket</span><span class="o">(</span><span class="n">nextCount</span><span class="o">);</span>
+            <span class="n">bucket</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="n">insertAfter</span><span class="o">(</span><span class="n">cur</span><span class="o">,</span> <span class="n">bucket</span><span class="o">);</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">bucket</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="n">cur</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">cur</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">remove</span><span class="o">(</span><span class="n">cur</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">dec</span><span class="o">(</span><span class="nc">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Bucket</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">cur</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">cur</span><span class="o">.</span><span class="na">count</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">cur</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cur</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">remove</span><span class="o">(</span><span class="n">cur</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nc">Bucket</span> <span class="n">prev</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">prev</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">prevCount</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">count</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">prev</span> <span class="o">!=</span> <span class="n">head</span> <span class="o">&amp;&amp;</span> <span class="n">prev</span><span class="o">.</span><span class="na">count</span> <span class="o">==</span> <span class="n">prevCount</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">prev</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">prev</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">Bucket</span> <span class="n">bucket</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Bucket</span><span class="o">(</span><span class="n">prevCount</span><span class="o">);</span>
+            <span class="n">bucket</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="n">insertAfter</span><span class="o">(</span><span class="n">prev</span><span class="o">,</span> <span class="n">bucket</span><span class="o">);</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">bucket</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="n">cur</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">cur</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">remove</span><span class="o">(</span><span class="n">cur</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getMaxKey</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">tail</span><span class="o">.</span><span class="na">prev</span> <span class="o">==</span> <span class="n">head</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="s">""</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">tail</span><span class="o">.</span><span class="na">prev</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">iterator</span><span class="o">().</span><span class="na">next</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getMinKey</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">head</span><span class="o">.</span><span class="na">next</span> <span class="o">==</span> <span class="n">tail</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="s">""</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">keys</span><span class="o">.</span><span class="na">iterator</span><span class="o">().</span><span class="na">next</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">insertAfter</span><span class="o">(</span><span class="nc">Bucket</span> <span class="n">node</span><span class="o">,</span> <span class="nc">Bucket</span> <span class="n">add</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">add</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">node</span><span class="o">;</span>
+        <span class="n">add</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">add</span><span class="o">;</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">add</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="nc">Bucket</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">prev</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">prev</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Bucket</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">count</span><span class="o">;</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">keys</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">Bucket</span> <span class="n">prev</span><span class="o">;</span>
+        <span class="nc">Bucket</span> <span class="n">next</span><span class="o">;</span>
+
+        <span class="nc">Bucket</span><span class="o">(</span><span class="kt">int</span> <span class="n">count</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">count</span> <span class="o">=</span> <span class="n">count</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// key -&gt; bucket 的哈希表用于 O(1) 找到 key 所在桶。</span>
+<span class="k">type</span> <span class="n">Bucket</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">count</span> <span class="kt">int</span>
+    <span class="n">keys</span>  <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">struct</span><span class="p">{}</span>
+    <span class="n">prev</span>  <span class="o">*</span><span class="n">Bucket</span>
+    <span class="n">next</span>  <span class="o">*</span><span class="n">Bucket</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">AllOne</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">head</span>  <span class="o">*</span><span class="n">Bucket</span>
+    <span class="n">tail</span>  <span class="o">*</span><span class="n">Bucket</span>
+    <span class="n">nodes</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="o">*</span><span class="n">Bucket</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">AllOne</span> <span class="p">{</span>
+    <span class="n">head</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">Bucket</span><span class="p">{</span><span class="n">count</span><span class="o">:</span> <span class="m">0</span><span class="p">,</span> <span class="n">keys</span><span class="o">:</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">struct</span><span class="p">{})}</span>
+    <span class="n">tail</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">Bucket</span><span class="p">{</span><span class="n">count</span><span class="o">:</span> <span class="m">0</span><span class="p">,</span> <span class="n">keys</span><span class="o">:</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">struct</span><span class="p">{})}</span>
+    <span class="n">head</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">tail</span>
+    <span class="n">tail</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">head</span>
+
+    <span class="k">return</span> <span class="n">AllOne</span><span class="p">{</span><span class="n">head</span><span class="o">:</span> <span class="n">head</span><span class="p">,</span> <span class="n">tail</span><span class="o">:</span> <span class="n">tail</span><span class="p">,</span> <span class="n">nodes</span><span class="o">:</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="o">*</span><span class="n">Bucket</span><span class="p">)}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span><span class="n">AllOne</span><span class="p">)</span> <span class="n">Inc</span><span class="p">(</span><span class="n">key</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">a</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">];</span> <span class="o">!</span><span class="n">ok</span> <span class="p">{</span>
+        <span class="n">first</span> <span class="o">:=</span> <span class="n">a</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">next</span>
+        <span class="k">if</span> <span class="n">first</span> <span class="o">!=</span> <span class="n">a</span><span class="o">.</span><span class="n">tail</span> <span class="o">&amp;&amp;</span> <span class="n">first</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+            <span class="n">first</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="k">struct</span><span class="p">{}{}</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">first</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">bucket</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">Bucket</span><span class="p">{</span><span class="n">count</span><span class="o">:</span> <span class="m">1</span><span class="p">,</span> <span class="n">keys</span><span class="o">:</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">struct</span><span class="p">{})}</span>
+            <span class="n">bucket</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="k">struct</span><span class="p">{}{}</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">insertAfter</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">head</span><span class="p">,</span> <span class="n">bucket</span><span class="p">)</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">bucket</span>
+        <span class="p">}</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+
+    <span class="n">cur</span> <span class="o">:=</span> <span class="n">a</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="n">next</span> <span class="o">:=</span> <span class="n">cur</span><span class="o">.</span><span class="n">next</span>
+    <span class="n">nextCount</span> <span class="o">:=</span> <span class="n">cur</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="m">1</span>
+
+    <span class="k">if</span> <span class="n">next</span> <span class="o">!=</span> <span class="n">a</span><span class="o">.</span><span class="n">tail</span> <span class="o">&amp;&amp;</span> <span class="n">next</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="n">nextCount</span> <span class="p">{</span>
+        <span class="n">next</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="k">struct</span><span class="p">{}{}</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">next</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">bucket</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">Bucket</span><span class="p">{</span><span class="n">count</span><span class="o">:</span> <span class="n">nextCount</span><span class="p">,</span> <span class="n">keys</span><span class="o">:</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">struct</span><span class="p">{})}</span>
+        <span class="n">bucket</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="k">struct</span><span class="p">{}{}</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">insertAfter</span><span class="p">(</span><span class="n">cur</span><span class="p">,</span> <span class="n">bucket</span><span class="p">)</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">bucket</span>
+    <span class="p">}</span>
+
+    <span class="nb">delete</span><span class="p">(</span><span class="n">cur</span><span class="o">.</span><span class="n">keys</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cur</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span><span class="n">AllOne</span><span class="p">)</span> <span class="n">Dec</span><span class="p">(</span><span class="n">key</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">cur</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">a</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="k">if</span> <span class="o">!</span><span class="n">ok</span> <span class="p">{</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">cur</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+        <span class="nb">delete</span><span class="p">(</span><span class="n">cur</span><span class="o">.</span><span class="n">keys</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="nb">delete</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cur</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+
+    <span class="n">prev</span> <span class="o">:=</span> <span class="n">cur</span><span class="o">.</span><span class="n">prev</span>
+    <span class="n">prevCount</span> <span class="o">:=</span> <span class="n">cur</span><span class="o">.</span><span class="n">count</span> <span class="o">-</span> <span class="m">1</span>
+
+    <span class="k">if</span> <span class="n">prev</span> <span class="o">!=</span> <span class="n">a</span><span class="o">.</span><span class="n">head</span> <span class="o">&amp;&amp;</span> <span class="n">prev</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="n">prevCount</span> <span class="p">{</span>
+        <span class="n">prev</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="k">struct</span><span class="p">{}{}</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">prev</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">bucket</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">Bucket</span><span class="p">{</span><span class="n">count</span><span class="o">:</span> <span class="n">prevCount</span><span class="p">,</span> <span class="n">keys</span><span class="o">:</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">struct</span><span class="p">{})}</span>
+        <span class="n">bucket</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="k">struct</span><span class="p">{}{}</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">insertAfter</span><span class="p">(</span><span class="n">prev</span><span class="p">,</span> <span class="n">bucket</span><span class="p">)</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">bucket</span>
+    <span class="p">}</span>
+
+    <span class="nb">delete</span><span class="p">(</span><span class="n">cur</span><span class="o">.</span><span class="n">keys</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cur</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span><span class="n">AllOne</span><span class="p">)</span> <span class="n">GetMaxKey</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">tail</span><span class="o">.</span><span class="n">prev</span> <span class="o">==</span> <span class="n">a</span><span class="o">.</span><span class="n">head</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s">""</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">a</span><span class="o">.</span><span class="n">tail</span><span class="o">.</span><span class="n">prev</span><span class="o">.</span><span class="n">keys</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">k</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="s">""</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span><span class="n">AllOne</span><span class="p">)</span> <span class="n">GetMinKey</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">next</span> <span class="o">==</span> <span class="n">a</span><span class="o">.</span><span class="n">tail</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s">""</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">a</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">keys</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">k</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="s">""</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span><span class="n">AllOne</span><span class="p">)</span> <span class="n">insertAfter</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">Bucket</span><span class="p">,</span> <span class="n">add</span> <span class="o">*</span><span class="n">Bucket</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">add</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span>
+    <span class="n">add</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">next</span>
+    <span class="n">node</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">add</span>
+    <span class="n">node</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">add</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span><span class="n">AllOne</span><span class="p">)</span> <span class="n">remove</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">Bucket</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">node</span><span class="o">.</span><span class="n">prev</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">next</span>
+    <span class="n">node</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">prev</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：四个操作均为 $O(1)$。定位 key 靠哈希表一次查询；搬迁只看相邻的一个桶，指针改动是常数条；插入与摘除桶各是四次指针赋值；取最值直接读哨兵的邻居。全程没有任何与 $n$ 相关的遍历。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$，$n$ 为当前存活的不同 key 数量。哈希表存 $n$ 条映射；桶的个数不会超过不同计数的种类数，而不同计数种类数不超过 $n$，因此链表规模同样是 $O(n)$；所有桶集合中的 key 总数恰为 $n$。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>当一个查询要求 $O(1)$ 而朴素做法是 $O(n)$ 扫描时，思路应当从「怎么更快地找」转向「怎么让答案一直待在固定位置」。这里就是把最值钉死在链表首尾。</li>
+    <li>修改的局部性是设计的关键前提。计数每次只变化 $1$，元素在有序序列里至多挪一格，这才让「顺指针走一步」取代了重新排序。若题目改成一次加任意值，这套结构就不成立了。</li>
+    <li>相同状态的元素合并成桶，桶之间有序、桶内无序，是一类高频设计模式。判断依据是：题目只关心「某个状态的代表元」，不关心同状态元素之间的次序。</li>
+    <li>不变量必须在每次操作后立即恢复。「链表中无空桶」这条如果偷懒不维护，首尾即最值的结论马上崩塌，而且错误会延后很久才暴露。</li>
+    <li>面试视角：这题的考点不是想出结构，而是把指针操作写干净。哨兵节点、先插新桶再删旧 key 的顺序、<code class="language-plaintext highlighter-rouge">dec</code> 归零的特判，是面试官会逐个盯的地方。写完主动说清两条不变量并挑一两个操作口述验证，比闷头写完更能体现设计能力。</li>
+    <li>面试视角：能顺势对比 LRU 与 LFU 的结构选择会加分——三者都是「哈希表定位 + 链表维序」，区别只在链表上排的是时间、频次还是计数。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">inc</code> 时先从旧桶删除 key 再加入新桶 → 当新桶恰好就是旧桶（某些变体实现里会出现自环判断）或删除后旧桶被提前摘除导致 <code class="language-plaintext highlighter-rouge">insertAfter</code> 拿到已脱链的节点时，链表结构被破坏，后续 <code class="language-plaintext highlighter-rouge">getMinKey</code> 读到游离节点。</li>
+    <li>
+<strong>错误写法</strong>：搬迁后忘记检查旧桶是否为空并摘除 → 执行 <code class="language-plaintext highlighter-rouge">inc("a")</code>、<code class="language-plaintext highlighter-rouge">inc("a")</code> 后链表里残留一个计数为 $1$ 的空桶，<code class="language-plaintext highlighter-rouge">getMinKey</code> 从空集合取元素，抛异常或返回错误的空串。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">dec</code> 在 <code class="language-plaintext highlighter-rouge">count == 1</code> 时新建一个计数为 $0$ 的桶 → 执行 <code class="language-plaintext highlighter-rouge">inc("a")</code>、<code class="language-plaintext highlighter-rouge">dec("a")</code>、<code class="language-plaintext highlighter-rouge">getMinKey</code> 时链表里挂着计数为 $0$ 的桶，返回 <code class="language-plaintext highlighter-rouge">"a"</code>，而正确答案是空字符串。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">getMaxKey</code> / <code class="language-plaintext highlighter-rouge">getMinKey</code> 不判断链表为空 → 结构为空时 <code class="language-plaintext highlighter-rouge">tail.prev</code> 是哨兵 <code class="language-plaintext highlighter-rouge">head</code>，从它的空集合取元素直接崩溃，正确行为是返回 <code class="language-plaintext highlighter-rouge">""</code>。</li>
+    <li>
+<strong>错误写法</strong>：检查相邻桶时只比较计数、不排除哨兵 → <code class="language-plaintext highlighter-rouge">head</code> 与 <code class="language-plaintext highlighter-rouge">tail</code> 的 <code class="language-plaintext highlighter-rouge">count</code> 字段是 $0$，当某个桶计数为 $1$ 且执行 <code class="language-plaintext highlighter-rouge">dec</code> 时，<code class="language-plaintext highlighter-rouge">prev</code> 恰是 <code class="language-plaintext highlighter-rouge">head</code> 且 <code class="language-plaintext highlighter-rouge">count</code> 匹配 $0$，key 会被塞进哨兵桶，整个结构污染。</li>
+    <li>
+<strong>错误写法</strong>：桶内用链表或数组存 key → 从旧桶删除某个 key 需要线性查找，单次操作退化成 $O(n)$，正好违背题目唯一的硬约束。</li>
+    <li>
+<strong>错误写法</strong>：搬迁后忘记更新 <code class="language-plaintext highlighter-rouge">nodes</code> 中 key 指向的新桶 → 下一次对同一个 key 的 <code class="language-plaintext highlighter-rouge">inc</code> 会从旧桶（可能已被摘除）出发，计数从此停止增长且链表逐渐脱节。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">dec</code> 一个不存在的 key 时不做判空直接解引用 → 空指针崩溃；虽然题目声明不会这样调用，但多写一行判空是零成本的防御。</li>
+    <li>
+<strong>错误写法</strong>：新 key 的 <code class="language-plaintext highlighter-rouge">inc</code> 直接无条件新建计数为 $1$ 的桶插在 <code class="language-plaintext highlighter-rouge">head</code> 之后 → 依次 <code class="language-plaintext highlighter-rouge">inc("a")</code>、<code class="language-plaintext highlighter-rouge">inc("b")</code> 会产生两个计数都为 $1$ 的桶，破坏「计数严格递增」的不变量，之后 <code class="language-plaintext highlighter-rouge">dec</code> 时相邻桶的匹配判断开始失灵。</li>
+    <li>
+<strong>错误写法</strong>：用一张 <code class="language-plaintext highlighter-rouge">count -&gt; 桶</code> 的哈希表替代链表来找相邻桶 → 找相邻桶本身是 $O(1)$ 了，但 <code class="language-plaintext highlighter-rouge">getMaxKey</code> 需要知道当前最大计数是多少，仍然得维护有序信息，绕回原点。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lfu-cache/">460. LFU 缓存</a></td>
+      <td>困难</td>
+      <td>同样按频次分桶，但需额外在桶内维护时间顺序以打破平局</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lru-cache/">146. LRU 缓存</a></td>
+      <td>中等</td>
+      <td>链表上排的是访问时间而非计数，只需把节点整体挪到头部</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-frequency-stack/">895. 最大频率栈</a></td>
+      <td>困难</td>
+      <td>按频次分组但用栈保序，弹出后频次回落，无需删除中间元素</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/insert-delete-getrandom-o1/">380. O(1) 时间插入、删除和获取随机元素</a></td>
+      <td>中等</td>
+      <td>常数级随机访问靠数组换位实现，与桶链表是另一条思路</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/min-stack/">155. 最小栈</a></td>
+      <td>中等</td>
+      <td>最值查询受限于栈的后进先出，可用辅助栈同步记录而非排序结构</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/80659006" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 剑指 Offer 46. 把数字翻译成字符串</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/59322178" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1212. 查询球队积分</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/41930761">https://hgnulb.github.io/blog/2022/41930761</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

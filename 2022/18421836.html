@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 785. 判断二分图 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,二分图,图,图的着色,字节跳动,并查集,广度优先搜索,微软,深度优先搜索" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 785. 判断二分图" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/18421836" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/18421836" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-07-17T15:59:06+08:00" />
+<meta property="article:modified_time" content="2022-07-17T15:59:06+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 785. 判断二分图" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-07-17T15:59:06+08:00","datePublished":"2022-07-17T15:59:06+08:00","description":"题目描述","headline":"LeetCode 785. 判断二分图","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/18421836"},"url":"https://hgnulb.github.io/blog/2022/18421836"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法bfs-染色">解法：BFS 染色</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 785. 判断二分图">LeetCode 785. 判断二分图</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-07-17 15:59:06"
+                    datetime="2022-07-17T15:59:06+08:00"
+            >
+                2022-07-17
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2395 字 · 英文 33 词 · 代码 49 行"
+            aria-label="预计阅读时间约 8 分钟，正文 2395 字 · 英文 33 词 · 代码 49 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 8 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    8 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/1587990752/" title="5-10">
+        5-10
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5789791753/" title="图">
+        图
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5427091558/" title="并查集">
+        并查集
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0741302195/" title="图的着色">
+        图的着色
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7735600590/" title="二分图">
+        二分图
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法bfs-染色">解法：BFS 染色</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/is-graph-bipartite/">785. 判断二分图</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>输入是一张无向图的邻接表 <code class="language-plaintext highlighter-rouge">graph</code>，<code class="language-plaintext highlighter-rouge">graph[u]</code> 列出了和 <code class="language-plaintext highlighter-rouge">u</code> 相连的所有点。要判断能不能把所有节点划进两个集合，使得每条边的两个端点分属不同集合。</p>
+
+  <p>「分成两组，边只跨组不组内」这句话换个说法就是：给每个点涂上两种颜色之一，任意一条边的两端颜色必须不同。判定问题于是变成了「这张图能不能用两种颜色正确着色」。</p>
+
+  <p>约束信号有几处必须抓住。第一，图不保证连通，<code class="language-plaintext highlighter-rouge">graph</code> 里可能有好几团互相独立的点，只从 <code class="language-plaintext highlighter-rouge">0</code> 号点出发会漏掉其他团。第二，题目保证无自环、无重边，所以不必担心 <code class="language-plaintext highlighter-rouge">u</code> 自己连自己这种必然失败的情形。第三，邻接表是对称存储的，<code class="language-plaintext highlighter-rouge">v</code> 在 <code class="language-plaintext highlighter-rouge">graph[u]</code> 里就意味着 <code class="language-plaintext highlighter-rouge">u</code> 也在 <code class="language-plaintext highlighter-rouge">graph[v]</code> 里，同一条边会被两端各看到一次。</p>
+
+  <p>边界上要留意：孤立点（邻接表为空，任意涂色都合法）、整张图没有边（一定是二分图）、以及包含奇数长度环的情形（一定不是二分图）。</p>
+</blockquote>
+
+<h2 id="解法bfs-染色">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95bfs-%E6%9F%93%E8%89%B2" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：BFS 染色</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是枚举每个点归到哪一组，$2^n$ 种划分逐一检查所有边是否合法。<code class="language-plaintext highlighter-rouge">n</code> 到 <code class="language-plaintext highlighter-rouge">100</code> 时这条路完全走不通。</p>
+
+  <p>瓶颈在于这些划分之间存在大量强制关系被浪费了：一旦某个点的颜色定下来，与它相邻的点的颜色就完全没有自由度，必须取相反色；再往外传播，整个连通块的着色方案就被这一个点锁死了。换句话说，一个连通块最多只有两种可能的着色（互为颜色翻转），而这两种在合法性上完全等价。自由度从 $2^n$ 塌缩到了「每个连通块任选一个起点随便涂一种色」。</p>
+
+  <p>观察到这一点，做法就固定下来：从每个还没涂色的点出发，把它涂成 <code class="language-plaintext highlighter-rouge">1</code>，然后沿着边把「相反色」逐层传播出去。传播过程中每遇到一条边，都要检查两端是否真的异色；只要有一条边的两端同色，说明这个连通块的着色被逼出了矛盾，而前面已经论证了着色方案本质唯一，所以矛盾不可调和，整张图不是二分图。</p>
+
+  <p>用 <code class="language-plaintext highlighter-rouge">color[i]</code> 表示节点颜色：<code class="language-plaintext highlighter-rouge">0</code> 表示还没涂，<code class="language-plaintext highlighter-rouge">1</code> 和 <code class="language-plaintext highlighter-rouge">-1</code> 表示两种颜色。选这套编码是因为取相反色可以直接写成 <code class="language-plaintext highlighter-rouge">-color[u]</code>，比布尔数组再配一个 <code class="language-plaintext highlighter-rouge">visited</code> 数组省一半状态。</p>
+
+  <p>显式的不变量是：任意时刻，所有 <code class="language-plaintext highlighter-rouge">color</code> 非 <code class="language-plaintext highlighter-rouge">0</code> 的节点之间，凡是已经被检查过的边，两端颜色都不同；并且同一个连通块内已涂色的点，其颜色关系由起点唯一确定。BFS 结束时每条边都恰好被两端各检查过一次，不变量就升级成了完整的二分图证明。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>开一个长度为 <code class="language-plaintext highlighter-rouge">n</code> 的 <code class="language-plaintext highlighter-rouge">color</code> 数组并全部置 <code class="language-plaintext highlighter-rouge">0</code>。这个数组同时承担「访问标记」和「颜色记录」两个职责，用 <code class="language-plaintext highlighter-rouge">0</code> 表示未访问可以省掉单独的 <code class="language-plaintext highlighter-rouge">visited</code>。</li>
+    <li>外层从 <code class="language-plaintext highlighter-rouge">0</code> 到 <code class="language-plaintext highlighter-rouge">n - 1</code> 遍历所有节点，跳过已经涂过色的。这一层循环存在的唯一理由就是图可能不连通，少了它会漏掉除起点所在块以外的全部连通块。</li>
+    <li>遇到未涂色的点就把它当作新连通块的起点，涂成 <code class="language-plaintext highlighter-rouge">1</code> 并推进队列。起点涂什么颜色无所谓，因为整块颜色翻转不影响合法性。</li>
+    <li>队列非空时弹出一个点 <code class="language-plaintext highlighter-rouge">node</code>，遍历 <code class="language-plaintext highlighter-rouge">graph[node]</code> 里的每个邻居 <code class="language-plaintext highlighter-rouge">next</code>。</li>
+    <li>若 <code class="language-plaintext highlighter-rouge">color[next] == 0</code>，把它涂成 <code class="language-plaintext highlighter-rouge">-color[node]</code> 并入队。涂色和入队必须一起做，否则同一个点可能被多次推进队列。</li>
+    <li>若 <code class="language-plaintext highlighter-rouge">color[next] != 0</code> 且等于 <code class="language-plaintext highlighter-rouge">color[node]</code>，立刻返回 <code class="language-plaintext highlighter-rouge">false</code>。这是唯一的失败出口，对应发现了一条同色边。</li>
+    <li>所有连通块都跑完还没返回 <code class="language-plaintext highlighter-rouge">false</code>，就返回 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">graph = [[1, 3], [0, 2], [1, 3], [0, 2]]</code> 走一遍</strong>：这是一个四元环 <code class="language-plaintext highlighter-rouge">0-1-2-3-0</code>，<code class="language-plaintext highlighter-rouge">n = 4</code>，<code class="language-plaintext highlighter-rouge">color</code> 初始为 <code class="language-plaintext highlighter-rouge">[0, 0, 0, 0]</code>。</p>
+
+  <p>外层 <code class="language-plaintext highlighter-rouge">start = 0</code>，未涂色，涂成 <code class="language-plaintext highlighter-rouge">1</code>，<code class="language-plaintext highlighter-rouge">color = [1, 0, 0, 0]</code>，队列是 <code class="language-plaintext highlighter-rouge">[0]</code>。</p>
+
+  <p>弹出 <code class="language-plaintext highlighter-rouge">0</code>，邻居是 <code class="language-plaintext highlighter-rouge">1</code> 和 <code class="language-plaintext highlighter-rouge">3</code>。<code class="language-plaintext highlighter-rouge">color[1]</code> 是 <code class="language-plaintext highlighter-rouge">0</code>，涂成 <code class="language-plaintext highlighter-rouge">-1</code> 并入队；<code class="language-plaintext highlighter-rouge">color[3]</code> 是 <code class="language-plaintext highlighter-rouge">0</code>，也涂成 <code class="language-plaintext highlighter-rouge">-1</code> 并入队。此时 <code class="language-plaintext highlighter-rouge">color = [1, -1, 0, -1]</code>，队列是 <code class="language-plaintext highlighter-rouge">[1, 3]</code>。</p>
+
+  <p>弹出 <code class="language-plaintext highlighter-rouge">1</code>，邻居是 <code class="language-plaintext highlighter-rouge">0</code> 和 <code class="language-plaintext highlighter-rouge">2</code>。<code class="language-plaintext highlighter-rouge">color[0] = 1</code> 与 <code class="language-plaintext highlighter-rouge">color[1] = -1</code> 不同，检查通过；<code class="language-plaintext highlighter-rouge">color[2]</code> 是 <code class="language-plaintext highlighter-rouge">0</code>，涂成 <code class="language-plaintext highlighter-rouge">-color[1] = 1</code> 并入队。此时 <code class="language-plaintext highlighter-rouge">color = [1, -1, 1, -1]</code>，队列是 <code class="language-plaintext highlighter-rouge">[3, 2]</code>。</p>
+
+  <p>弹出 <code class="language-plaintext highlighter-rouge">3</code>，邻居是 <code class="language-plaintext highlighter-rouge">0</code> 和 <code class="language-plaintext highlighter-rouge">2</code>。<code class="language-plaintext highlighter-rouge">color[0] = 1</code> 与 <code class="language-plaintext highlighter-rouge">color[3] = -1</code> 不同，通过；<code class="language-plaintext highlighter-rouge">color[2] = 1</code> 与 <code class="language-plaintext highlighter-rouge">-1</code> 不同，通过。队列是 <code class="language-plaintext highlighter-rouge">[2]</code>。</p>
+
+  <p>弹出 <code class="language-plaintext highlighter-rouge">2</code>，邻居是 <code class="language-plaintext highlighter-rouge">1</code> 和 <code class="language-plaintext highlighter-rouge">3</code>，颜色都是 <code class="language-plaintext highlighter-rouge">-1</code>，与 <code class="language-plaintext highlighter-rouge">color[2] = 1</code> 不同，全部通过。队列清空。</p>
+
+  <p>外层继续走 <code class="language-plaintext highlighter-rouge">start = 1、2、3</code>，它们的颜色都已非 <code class="language-plaintext highlighter-rouge">0</code>，全部跳过。最终返回 <code class="language-plaintext highlighter-rouge">true</code>，两组分别是 <code class="language-plaintext highlighter-rouge">{0, 2}</code> 和 <code class="language-plaintext highlighter-rouge">{1, 3}</code>。</p>
+
+  <p>再看失败用例 <code class="language-plaintext highlighter-rouge">graph = [[1, 2, 3], [0, 2], [0, 1, 3], [0, 2]]</code>：<code class="language-plaintext highlighter-rouge">0</code> 涂 <code class="language-plaintext highlighter-rouge">1</code>，它的三个邻居 <code class="language-plaintext highlighter-rouge">1、2、3</code> 全部涂 <code class="language-plaintext highlighter-rouge">-1</code>。弹出 <code class="language-plaintext highlighter-rouge">1</code> 时先看邻居 <code class="language-plaintext highlighter-rouge">0</code>，颜色 <code class="language-plaintext highlighter-rouge">1</code> 与 <code class="language-plaintext highlighter-rouge">-1</code> 不同没问题；再看邻居 <code class="language-plaintext highlighter-rouge">2</code>，<code class="language-plaintext highlighter-rouge">color[2] = -1</code> 恰好等于 <code class="language-plaintext highlighter-rouge">color[1] = -1</code>，边 <code class="language-plaintext highlighter-rouge">1-2</code> 两端同色，立刻返回 <code class="language-plaintext highlighter-rouge">false</code>——这条边和 <code class="language-plaintext highlighter-rouge">0-1</code>、<code class="language-plaintext highlighter-rouge">0-2</code> 一起构成了三元环，奇环注定无法二着色。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isBipartite</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">graph</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">color</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">start</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">color</span><span class="o">[</span><span class="n">start</span><span class="o">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+            <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">start</span><span class="o">);</span>
+            <span class="n">color</span><span class="o">[</span><span class="n">start</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+
+            <span class="k">while</span> <span class="o">(!</span><span class="n">queue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">next</span> <span class="o">:</span> <span class="n">graph</span><span class="o">[</span><span class="n">node</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">color</span><span class="o">[</span><span class="n">next</span><span class="o">]</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">color</span><span class="o">[</span><span class="n">next</span><span class="o">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">color</span><span class="o">[</span><span class="n">node</span><span class="o">];</span>
+                        <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">next</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">color</span><span class="o">[</span><span class="n">next</span><span class="o">]</span> <span class="o">==</span> <span class="n">color</span><span class="o">[</span><span class="n">node</span><span class="o">])</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">isBipartite</span><span class="p">(</span><span class="n">graph</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">color</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">start</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">start</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">color</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">!=</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="k">continue</span>
+        <span class="p">}</span>
+        <span class="n">queue</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="n">start</span><span class="p">}</span>
+        <span class="n">color</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+        <span class="k">for</span> <span class="n">head</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">head</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">);</span> <span class="n">head</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">node</span> <span class="o">:=</span> <span class="n">queue</span><span class="p">[</span><span class="n">head</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">next</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="n">color</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+                    <span class="n">color</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">color</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
+                    <span class="n">queue</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">next</span><span class="p">)</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">color</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">==</span> <span class="n">color</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="no">false</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>时间复杂度：$O(n + e)$，<code class="language-plaintext highlighter-rouge">n</code> 是节点数，<code class="language-plaintext highlighter-rouge">e</code> 是边数。每个节点最多入队一次（入队的同时就被涂色，涂过色的不会再入队），出队后遍历它的邻接表，所有邻接表长度之和是 $2e$，因此边的检查总次数是 $O(e)$；外层那趟找起点的循环额外贡献 $O(n)$。</li>
+    <li>空间复杂度：$O(n)$，<code class="language-plaintext highlighter-rouge">color</code> 数组占 <code class="language-plaintext highlighter-rouge">n</code> 格，BFS 队列在最坏情况下（某一层几乎装下整个连通块）也是 $O(n)$。邻接表是输入自带的，不计入额外空间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>判定类的图论题，先找「自由度会不会塌缩」。这题看似有 $2^n$ 种分组，但一个连通块只要定下一个点的颜色，其余全部被边强制推导出来，自由度实际只有「每个块二选一」，而这两个选择还等价。识别出这一点，指数搜索立刻变成一次遍历。</li>
+    <li>把 <code class="language-plaintext highlighter-rouge">visited</code> 和状态值合并成一个数组，是图搜索里常用的省事技巧。这里用 <code class="language-plaintext highlighter-rouge">0/1/-1</code> 三态，既省了一个数组，取相反色还能直接写成取负号。</li>
+    <li>「图可能不连通」是所有图遍历题的默认假设，除非题目明确说连通。外层那圈找未访问起点的循环应该成为肌肉记忆，而不是被用例卡住之后才补上。</li>
+    <li>冲突检查必须写在「邻居已涂色」这个分支里。只在涂色时传播、不在相遇时比对，等于只建关系不做验证，任何图都会被判成二分图。</li>
+    <li>面试视角：面试官常追问「二分图和奇环是什么关系」。标准回答是一张图是二分图当且仅当它不含奇数长度的环，染色冲突发生的位置正对应着某个奇环被闭合的那一刻。能把判定条件和图论性质对上，比只会背模板强得多。</li>
+    <li>面试视角：另一个高频追问是「能不能用并查集」。可以——把每个点拆成「本体」和「对立面」两个副本，对每条边合并 <code class="language-plaintext highlighter-rouge">u</code> 的本体与 <code class="language-plaintext highlighter-rouge">v</code> 的对立面、<code class="language-plaintext highlighter-rouge">v</code> 的本体与 <code class="language-plaintext highlighter-rouge">u</code> 的对立面，一旦某个点的本体和对立面被合进同一集合就返回 <code class="language-plaintext highlighter-rouge">false</code>。顺手提一句 DFS 版本只需把队列换成递归栈，也能显示解法之间的通用性。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：只从节点 <code class="language-plaintext highlighter-rouge">0</code> 开始 BFS，不做外层的起点扫描。用例 <code class="language-plaintext highlighter-rouge">graph = [[], [2, 3], [1, 3], [1, 2]]</code> → 节点 <code class="language-plaintext highlighter-rouge">0</code> 是孤立点，BFS 一步就结束并返回 <code class="language-plaintext highlighter-rouge">true</code>，而节点 <code class="language-plaintext highlighter-rouge">1、2、3</code> 构成三元环根本不是二分图，正确答案是 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>
+<strong>错误写法</strong>：只在邻居未涂色时传播颜色，忘了写已涂色时的同色检查。用例 <code class="language-plaintext highlighter-rouge">graph = [[1, 2, 3], [0, 2], [0, 1, 3], [0, 2]]</code> → 每个点都被顺利涂上色，没有任何分支能返回 <code class="language-plaintext highlighter-rouge">false</code>，函数返回 <code class="language-plaintext highlighter-rouge">true</code>，正确答案是 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>
+<strong>错误写法</strong>：把冲突条件写成 <code class="language-plaintext highlighter-rouge">color[next] != -color[node]</code> 却又允许 <code class="language-plaintext highlighter-rouge">color[next] == 0</code> 进入这一支。用例 <code class="language-plaintext highlighter-rouge">graph = [[1, 3], [0, 2], [1, 3], [0, 2]]</code> → 第一次遇到未涂色的邻居 <code class="language-plaintext highlighter-rouge">1</code> 时 <code class="language-plaintext highlighter-rouge">0 != -1</code> 成立，直接返回 <code class="language-plaintext highlighter-rouge">false</code>，而这张四元环图本是二分图，正确答案是 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+    <li>
+<strong>错误写法</strong>：给邻居涂色时忘了取反，写成 <code class="language-plaintext highlighter-rouge">color[next] = color[node]</code>。用例 <code class="language-plaintext highlighter-rouge">graph = [[1, 3], [0, 2], [1, 3], [0, 2]]</code> → 节点 <code class="language-plaintext highlighter-rouge">1</code> 和 <code class="language-plaintext highlighter-rouge">3</code> 都被涂成和 <code class="language-plaintext highlighter-rouge">0</code> 一样的 <code class="language-plaintext highlighter-rouge">1</code>，弹出 <code class="language-plaintext highlighter-rouge">1</code> 后检查邻居 <code class="language-plaintext highlighter-rouge">0</code> 立刻发现同色，返回 <code class="language-plaintext highlighter-rouge">false</code>，正确答案是 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">color</code> 数组的长度取成 <code class="language-plaintext highlighter-rouge">graph[0].length</code> 而不是 <code class="language-plaintext highlighter-rouge">graph.length</code>。用例 <code class="language-plaintext highlighter-rouge">graph = [[], [2, 3], [1, 3], [1, 2]]</code> → <code class="language-plaintext highlighter-rouge">graph[0]</code> 是空表，数组长度被开成 <code class="language-plaintext highlighter-rouge">0</code>，第一次访问 <code class="language-plaintext highlighter-rouge">color[0]</code> 就抛出越界。</li>
+    <li>
+<strong>错误写法</strong>：外层循环的跳过条件写成 <code class="language-plaintext highlighter-rouge">if (color[start] == 1) continue;</code>。用例 <code class="language-plaintext highlighter-rouge">graph = [[1, 3], [0, 2], [1, 3], [0, 2]]</code> → 涂成 <code class="language-plaintext highlighter-rouge">-1</code> 的节点 <code class="language-plaintext highlighter-rouge">1</code> 和 <code class="language-plaintext highlighter-rouge">3</code> 没被跳过，会被当成新起点重新涂成 <code class="language-plaintext highlighter-rouge">1</code>，与已有的 <code class="language-plaintext highlighter-rouge">-1</code> 冲突，返回 <code class="language-plaintext highlighter-rouge">false</code>，正确答案是 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+    <li>
+<strong>错误写法</strong>：把邻接表当成有向图，认为边 <code class="language-plaintext highlighter-rouge">u → v</code> 检查过就不必再从 <code class="language-plaintext highlighter-rouge">v</code> 检查回 <code class="language-plaintext highlighter-rouge">u</code>，于是遍历时跳过「已涂色」的所有邻居。这等价于删掉了冲突检查，用例 <code class="language-plaintext highlighter-rouge">graph = [[1, 2, 3], [0, 2], [0, 1, 3], [0, 2]]</code> → 返回 <code class="language-plaintext highlighter-rouge">true</code>，正确答案是 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>
+<strong>错误写法</strong>：为了写 DFS 版本而在递归里先返回 <code class="language-plaintext highlighter-rouge">true</code> 再递归下去，没有把子调用的 <code class="language-plaintext highlighter-rouge">false</code> 向上传播。用例 <code class="language-plaintext highlighter-rouge">graph = [[1, 2, 3], [0, 2], [0, 1, 3], [0, 2]]</code> → 深层发现的冲突被丢弃，最外层照样返回 <code class="language-plaintext highlighter-rouge">true</code>，正确答案是 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/possible-bipartition/">886. 可能的二分法</a></td>
+      <td>中等</td>
+      <td>图以「互相讨厌」的边对给出，需要先自己建邻接表再染色</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/vEAB3K/">LCR 106. 判断二分图</a></td>
+      <td>中等</td>
+      <td>同题的另一入口，适合用来对照 BFS 与 DFS 两种传播写法</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-provinces/">547. 省份数量</a></td>
+      <td>中等</td>
+      <td>同样要处理不连通的图，但目标是数连通块而不是验证约束</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/satisfiability-of-equality-equations/">990. 等式方程的可满足性</a></td>
+      <td>中等</td>
+      <td>相等与不等两类约束，用并查集先合并后验证，是染色的对偶思路</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/62228335" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1462. 课程表 IV</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/89929055" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 面试题 17.07. 婴儿名字</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/18421836">https://hgnulb.github.io/blog/2022/18421836</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

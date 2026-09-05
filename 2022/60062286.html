@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 688. 骑士在棋盘上的概率 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,动态规划,拼多多,猿辅导" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 688. 骑士在棋盘上的概率" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/60062286" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/60062286" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-05-10T18:49:10+08:00" />
+<meta property="article:modified_time" content="2022-05-10T18:49:10+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 688. 骑士在棋盘上的概率" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-05-10T18:49:10+08:00","datePublished":"2022-05-10T18:49:10+08:00","description":"题目描述","headline":"LeetCode 688. 骑士在棋盘上的概率","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/60062286"},"url":"https://hgnulb.github.io/blog/2022/60062286"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法动态规划状态转移">解法：动态规划状态转移</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 688. 骑士在棋盘上的概率">LeetCode 688. 骑士在棋盘上的概率</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-05-10 18:49:10"
+                    datetime="2022-05-10T18:49:10+08:00"
+            >
+                2022-05-10
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2331 字 · 英文 207 词 · 代码 75 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2331 字 · 英文 207 词 · 代码 75 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    3 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7041841112/" title="拼多多">
+        拼多多
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7733424420/" title="猿辅导">
+        猿辅导
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法动态规划状态转移">解法：动态规划状态转移</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/knight-probability-in-chessboard/">688. 骑士在棋盘上的概率</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>一个骑士站在 $n \times n$ 棋盘的指定格子上，要走恰好 k 步。每一步它在八个「日」字方向里等概率地挑一个走，哪怕这一步会踏出棋盘也照走不误；一旦踏出去就永远停在外面，不会再回来。要求的是走完 k 步之后骑士仍然留在棋盘内的概率。</p>
+
+  <p>有两点必须从题面里读准，读错了整道题都会跑偏。第一，是「恰好 k 步」而不是「最多 k 步」，中途留在盘上不算数。第二，出界不是被禁止的动作，而是一个概率为 $1/8$ 的合法分支，只不过它把这条路径判了死刑；因此每一步的八个方向都要平摊概率，不能把越界的方向剔除后在剩下的方向里重新均分。</p>
+
+  <p>约束是 $n \le 25$、$k \le 100$，格子最多六百多个，步数最多一百，两者相乘只有几万，这个体量提示我们可以把「步数」直接当成一个维度铺开算。另外 k 允许取 0，此时骑士一步没走，概率是 1，实现时不能漏掉这个入口。</p>
+</blockquote>
+
+<h2 id="解法动态规划状态转移">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%8A%B6%E6%80%81%E8%BD%AC%E7%A7%BB" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：动态规划状态转移</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最直白的做法是把所有可能的走法枚举一遍：每步八个选择，k 步就是 $8^k$ 条路径，统计其中全程不出界的比例。k 取 100 时这个数字大到没有任何意义，连一步都跑不完。</p>
+
+  <p>瓶颈在于路径条数是指数级的，但骑士实际能站的位置只有 $n^2$ 种。大量不同的路径最后落在同一个格子上，而从这个格子继续往下走的行为完全不依赖它是怎么来的——只取决于它现在在哪、还要走几步。既然历史无关，就没有必要区分路径，只需要把落在同一格子上的概率合并起来。</p>
+
+  <p>由此定义状态：<code class="language-plaintext highlighter-rouge">dp[step][i][j]</code> 表示走完 step 步后，骑士全程没有出过界且此刻正停在格子 (i, j) 的概率。这个定义里「全程没出过界」是关键，它保证了出界的概率一旦流失就再也不会回到 dp 里。初始条件是 <code class="language-plaintext highlighter-rouge">dp[0][row][column] = 1</code>，其余为 0，对应一步没走时骑士必然在起点。转移是把当前格子的概率均分给八个方向：对每个合法的 (ni, nj)，<code class="language-plaintext highlighter-rouge">dp[step][ni][nj] += dp[step-1][i][j] / 8</code>；落到界外的那部分概率不写进任何状态，自然就被丢弃了。最终答案是 <code class="language-plaintext highlighter-rouge">dp[k]</code> 这一整层所有格子的概率之和。</p>
+
+  <p>由于第 step 层只依赖第 step - 1 层，不需要把整个三维数组开出来，用两块 $n \times n$ 的矩阵滚动即可。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>开一个 $n \times n$ 的 dp 矩阵，把起点置为 1，其余为 0。这一层代表 step = 0，也就是「还没开始走」的状态，k 为 0 时直接对它求和就得到 1，边界自动成立。</li>
+    <li>外层循环 step 从 1 到 k，每轮先新建一个全零的 next 矩阵。必须写到新矩阵而不是原地累加，否则同一轮里刚被更新的格子会再次被当成起点参与本轮转移，等于让骑士在一步之内走了多次。</li>
+    <li>内层遍历所有格子，概率为 0 的格子直接跳过。这不只是性能优化，也让代码意图更清楚：只有可达状态才需要向外扩散。</li>
+    <li>对每个可达格子枚举八个方向，落在棋盘内的目标格累加 <code class="language-plaintext highlighter-rouge">dp[i][j] / 8</code>。除数固定是 8 而不是「合法方向的个数」，因为出界也是一次真实发生的选择，它带走的那 $1/8$ 概率就该消失。</li>
+    <li>一轮结束后把 next 换成新的 dp，进入下一步。</li>
+    <li>k 轮全部走完后，把 dp 矩阵所有格子求和返回。求和而不是读某一个格子，是因为题目只关心「是否还在盘上」，不关心停在哪里。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">n = 3</code>、<code class="language-plaintext highlighter-rouge">k = 2</code>、起点 (0, 0) 走一遍</strong>：初始 dp 里只有 <code class="language-plaintext highlighter-rouge">dp[0][0] = 1</code>。第一步从 (0, 0) 出发枚举八个方向，只有 (1, 2) 和 (2, 1) 落在 $3 \times 3$ 的棋盘内，其余六个方向全部出界，因此 next 里 <code class="language-plaintext highlighter-rouge">next[1][2] = 1/8</code>、<code class="language-plaintext highlighter-rouge">next[2][1] = 1/8</code>，这一层的概率总和是 $1/4$，恰好对应「第一步就出界」的概率是 $3/4$。第二步分别处理这两个格子：从 (1, 2) 出发，八个方向里只有 (2, 0) 和 (0, 0) 合法，各得到 $(1/8)/8 = 1/64$；从 (2, 1) 出发，八个方向里只有 (0, 2) 和 (0, 0) 合法，同样各得到 $1/64$。于是第二层中 (2, 0) 是 $1/64$、(0, 2) 是 $1/64$、(0, 0) 是 $1/64 + 1/64 = 2/64$。最后把整层求和得到 $4/64 = 0.0625$，与期望输出一致。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// step=0 时起点概率为 1，其余为 0。</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span><span class="o">[][]</span> <span class="no">DIRS</span> <span class="o">=</span> <span class="o">{</span>
+            <span class="o">{</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">},</span> <span class="o">{</span><span class="mi">2</span><span class="o">,</span> <span class="mi">1</span><span class="o">},</span> <span class="o">{-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">},</span> <span class="o">{-</span><span class="mi">2</span><span class="o">,</span> <span class="mi">1</span><span class="o">},</span>
+            <span class="o">{</span><span class="mi">1</span><span class="o">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">},</span> <span class="o">{</span><span class="mi">2</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">},</span> <span class="o">{-</span><span class="mi">1</span><span class="o">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">},</span> <span class="o">{-</span><span class="mi">2</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">}</span>
+    <span class="o">};</span>
+
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">knightProbability</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">,</span> <span class="kt">int</span> <span class="n">row</span><span class="o">,</span> <span class="kt">int</span> <span class="n">column</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">double</span><span class="o">[][]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">n</span><span class="o">];</span>
+        <span class="n">dp</span><span class="o">[</span><span class="n">row</span><span class="o">][</span><span class="n">column</span><span class="o">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">;</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">step</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="o">;</span> <span class="n">step</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">double</span><span class="o">[][]</span> <span class="n">next</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">n</span><span class="o">];</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">continue</span><span class="o">;</span>
+                    <span class="o">}</span>
+
+                    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">d</span> <span class="o">:</span> <span class="no">DIRS</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="kt">int</span> <span class="n">ni</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">d</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+                        <span class="kt">int</span> <span class="n">nj</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="n">d</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">ni</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">ni</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">nj</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nj</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">next</span><span class="o">[</span><span class="n">ni</span><span class="o">][</span><span class="n">nj</span><span class="o">]</span> <span class="o">+=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">/</span> <span class="mf">8.0</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="n">dp</span> <span class="o">=</span> <span class="n">next</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">double</span> <span class="n">total</span> <span class="o">=</span> <span class="mf">0.0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">];</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">total</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// step=0 时起点概率为 1，其余为 0。</span>
+<span class="k">func</span> <span class="n">knightProbability</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">,</span> <span class="n">row</span> <span class="kt">int</span><span class="p">,</span> <span class="n">column</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
+    <span class="n">dirs</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">8</span><span class="p">)</span>
+    <span class="n">dirs</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">dirs</span><span class="p">,</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">},</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="m">2</span><span class="p">,</span> <span class="m">1</span><span class="p">},</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">},</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">2</span><span class="p">,</span> <span class="m">1</span><span class="p">})</span>
+    <span class="n">dirs</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">dirs</span><span class="p">,</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="o">-</span><span class="m">2</span><span class="p">},</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="m">2</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">},</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="o">-</span><span class="m">2</span><span class="p">},</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">2</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">})</span>
+    <span class="n">dp</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">float64</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">float64</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">dp</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="m">1.0</span>
+
+    <span class="k">for</span> <span class="n">step</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">step</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="n">step</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">next</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">float64</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">float64</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+                    <span class="k">continue</span>
+                <span class="p">}</span>
+                <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">d</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">dirs</span> <span class="p">{</span>
+                    <span class="n">ni</span> <span class="o">:=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+                    <span class="n">nj</span> <span class="o">:=</span> <span class="n">j</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">ni</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">ni</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">nj</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">nj</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="p">{</span>
+                        <span class="n">next</span><span class="p">[</span><span class="n">ni</span><span class="p">][</span><span class="n">nj</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="m">8.0</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="n">next</span>
+    <span class="p">}</span>
+
+    <span class="n">total</span> <span class="o">:=</span> <span class="m">0.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">total</span> <span class="o">+=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">total</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(k \cdot n^2)$，共 k 轮，每轮遍历 $n^2$ 个格子，每个格子固定枚举 8 个方向，方向数是常数。在 $n = 25$、$k = 100$ 的上界下约为五十万次基本操作。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n^2)$，只保留当前层和下一层两块 $n \times n$ 的概率矩阵，不随 k 增长。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>判断一个随机过程能不能上 DP，看的是「未来只依赖当前状态、与到达路径无关」这条性质；本题里骑士接下来怎么走只和位置与剩余步数有关，这就是把指数级路径压成 $O(k n^2)$ 状态的全部理由。</li>
+    <li>概率型 DP 的状态定义里必须写清「全程未出界」这类隐含前提，否则转移时会不自觉地把已经死掉的路径又捡回来。</li>
+    <li>每步固定除以 8 而不是除以合法方向数，是本题最核心的语义判断：出界是一个真实发生的分支，它带走的概率就该从系统里消失。</li>
+    <li>分层转移必须写到新数组，原地累加会让同一轮内的更新互相污染；凡是「按步数分层」的 DP 都要条件反射检查这一点。</li>
+    <li>面试视角：面试官常会用「为什么不能只在合法方向里均分」来试探你有没有真的理解概率模型，这是本题最高频的追问；能一句话解释清楚，基本就通过了。</li>
+    <li>面试视角：写完滚动数组后主动补一句「三维写法更好推导、二维滚动更省内存，两者转移完全一致」，能表明你是先想清楚状态再做的优化，而不是背下来一个二维模板。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：最后返回 <code class="language-plaintext highlighter-rouge">dp[row][column]</code> 而不是整层求和：<code class="language-plaintext highlighter-rouge">n = 3</code>、<code class="language-plaintext highlighter-rouge">k = 2</code>、起点 (0, 0) → 只读到回到起点的 $2/64 = 0.03125$，而正确答案是整层之和 0.0625。</li>
+    <li>
+<strong>错误写法</strong>：把除数写成当前格子合法方向的个数：<code class="language-plaintext highlighter-rouge">n = 3</code>、<code class="language-plaintext highlighter-rouge">k = 2</code>、起点 (0, 0) → 第一步的两个合法方向各分到 $1/2$，概率永远不流失，最终返回 1。</li>
+    <li>
+<strong>错误写法</strong>：不新建 next 矩阵，直接在 dp 上原地累加：<code class="language-plaintext highlighter-rouge">n = 3</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → 本轮刚写入的格子又被当成起点再扩散一次，等价于允许骑士在一步里连走多次，返回值偏大。</li>
+    <li>
+<strong>错误写法</strong>：把 dp 初始化成全零后从 step = 1 开始填，而不是先把起点置 1：<code class="language-plaintext highlighter-rouge">k = 0</code> → 整个矩阵都是 0，返回 0，但一步没走时骑士必然在盘上，正确答案是 1。</li>
+    <li>
+<strong>错误写法</strong>：越界判断写成 <code class="language-plaintext highlighter-rouge">ni &gt; n</code> 或 <code class="language-plaintext highlighter-rouge">nj &gt; n</code>：<code class="language-plaintext highlighter-rouge">n = 3</code> 且目标落在下标 3 上 → 下标等于 n 被当成合法，直接数组越界；正确的比较是 <code class="language-plaintext highlighter-rouge">ni &gt;= n</code>。</li>
+    <li>
+<strong>错误写法</strong>：方向数组少写几项，或误用国王、车的走法：<code class="language-plaintext highlighter-rouge">n = 3</code>、<code class="language-plaintext highlighter-rouge">k = 1</code>、起点 (0, 0) → 合法落点从 2 个变成别的数量，第一步的存活概率就已经不是 $1/4$。</li>
+    <li>
+<strong>错误写法</strong>：用整型累计合法路径条数，最后再除以 $8^k$：<code class="language-plaintext highlighter-rouge">k = 100</code> → $8^{100}$ 远超 64 位整型范围，计数一路溢出，结果完全无意义；概率题应当全程用浮点直接累加。</li>
+    <li>
+<strong>错误写法</strong>：把「恰好 k 步」理解成「最多 k 步」，一旦某层概率之和不再变化就提前返回：任意 k 较大的输入 → 提前退出时留在盘上的概率远高于真实值，因为后续步数还会继续让骑士出界。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/unique-paths/">62. 不同路径</a></td>
+      <td>中等</td>
+      <td>只能右和下两个方向，求方案数，转移是两项相加</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/unique-paths-ii/">63. 不同路径 II</a></td>
+      <td>中等</td>
+      <td>在 62 上加障碍格，障碍处状态强制置零</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-path-sum/">64. 最小路径和</a></td>
+      <td>中等</td>
+      <td>同样的网格但求最小代价，转移由求和改成取最小</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/triangle/">120. 三角形最小路径和</a></td>
+      <td>中等</td>
+      <td>非矩形网格，自底向上推导能省掉边界判断</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/dungeon-game/">174. 地下城游戏</a></td>
+      <td>困难</td>
+      <td>必须倒着从终点推起，正推会因为血量下界失去最优子结构</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-falling-path-sum/">931. 下降路径最小和</a></td>
+      <td>中等</td>
+      <td>按行滚动，每格从上一行的三个相邻列转移</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-falling-path-sum-ii/">1289. 下降路径最小和 II</a></td>
+      <td>困难</td>
+      <td>禁止同列，需要预处理上一行的最小值与次小值把转移降到常数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-paths-with-max-score/">1301. 最大得分的路径数目</a></td>
+      <td>困难</td>
+      <td>同时维护最大得分与达到该得分的方案数两个 DP</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-non-negative-product-in-a-matrix/">1594. 矩阵的最大非负积</a></td>
+      <td>中等</td>
+      <td>因为有负数，必须同时维护最大积与最小积</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/2AoeFn/">LCR 098. 不同路径</a></td>
+      <td>中等</td>
+      <td>与 62 同题，可用于练习一维滚动数组写法</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/0i0mDW/">LCR 099. 最小路径和</a></td>
+      <td>中等</td>
+      <td>与 64 同题，重点是首行首列的初始化</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/IlPe0q/">LCR 100. 三角形最小路径和</a></td>
+      <td>中等</td>
+      <td>与 120 同题，练习原地修改输入的空间优化</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/li-wu-de-zui-da-jie-zhi-lcof/">剑指 Offer 47. 礼物的最大价值</a></td>
+      <td>中等</td>
+      <td>求路径最大和，可直接在原矩阵上滚动一行</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/41764540" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1566. 重复至少 K 次且长度为 M 的模式</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/60589154" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1523. 在区间范围内统计奇数数目</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/60062286">https://hgnulb.github.io/blog/2022/60062286</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

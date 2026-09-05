@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1526. 形成目标数组的子数组最少增加次数 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,动态规划,单调栈,图森,数组,栈,贪心" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1526. 形成目标数组的子数组最少增加次数" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/33418239" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/33418239" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-01-21T11:08:34+08:00" />
+<meta property="article:modified_time" content="2026-01-21T11:08:34+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1526. 形成目标数组的子数组最少增加次数" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-01-21T11:08:34+08:00","datePublished":"2026-01-21T11:08:34+08:00","description":"题目描述","headline":"LeetCode 1526. 形成目标数组的子数组最少增加次数","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/33418239"},"url":"https://hgnulb.github.io/blog/2026/33418239"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法贪心累加正向增量">解法：贪心累加正向增量</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1526. 形成目标数组的子数组最少增加次数">LeetCode 1526. 形成目标数组的子数组最少增加次数</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-01-21 11:08:34"
+                    datetime="2026-01-21T11:08:34+08:00"
+            >
+                2026-01-21
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2324 字 · 英文 88 词 · 代码 24 行"
+            aria-label="预计阅读时间约 7 分钟，正文 2324 字 · 英文 88 词 · 代码 24 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 7 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6607903677/" title="图森">
+        图森
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7556309699/" title="贪心">
+        贪心
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2085989135/" title="单调栈">
+        单调栈
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法贪心累加正向增量">解法：贪心累加正向增量</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/">1526. 形成目标数组的子数组最少增加次数</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>起点是一个与 <code class="language-plaintext highlighter-rouge">target</code> 等长的全 0 数组，每次操作可以任选一段连续区间，把区间里每个位置都加 1。问最少操作多少次能把全 0 数组变成 <code class="language-plaintext highlighter-rouge">target</code>。要的是次数这个数字，不需要还原出具体的操作方案。</p>
+
+  <p>关键约束是「每次只能加 1，且只能作用在连续区间上」。加 1 而不是加任意值，意味着某个位置的最终值 <code class="language-plaintext highlighter-rouge">target[i]</code> 恰好等于覆盖它的操作条数；连续区间则意味着一条操作在数组上占据的是一整段，不能跳着覆盖。这两点合起来把问题变成了「用最少的线段去铺满每个位置所需的层数」。</p>
+
+  <p>数组长度可以到 $10^5$，元素值到 $10^5$，所以按值一层一层模拟必然超时——真实操作次数本身就可能有 $10^5$ 量级，逐次模拟每次还要扫一段区间。规模在提示答案要用一次线性扫描直接算出来。</p>
+
+  <p>元素全是正整数（下界为 1），所以每个位置至少要被覆盖一次，不存在「某段完全不用管」的情况。</p>
+
+  <p>边界上，长度为 1 的数组答案就是它唯一的元素值；全相等的数组答案是这个公共值，因为一条覆盖全长的操作可以重复使用。</p>
+</blockquote>
+
+<h2 id="解法贪心累加正向增量">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E8%B4%AA%E5%BF%83%E7%B4%AF%E5%8A%A0%E6%AD%A3%E5%90%91%E5%A2%9E%E9%87%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：贪心累加正向增量</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最朴素的想法是模拟：每一轮找出当前还没达标的位置，取其中一段极大连续区间做一次 +1，重复到全部达标。这样操作数是对的，但轮数等于最大元素值，每轮又要扫一遍数组，复杂度到 $O(n \cdot \max)$，$10^5 \times 10^5$ 直接爆掉。</p>
+
+  <p>瓶颈在于按「层」推进：每一层都要重新扫描一次数组来划分区间，而层与层之间的区间结构其实高度重复。</p>
+
+  <p>换个角度按「列」看。把 <code class="language-plaintext highlighter-rouge">target</code> 想成一排柱子，<code class="language-plaintext highlighter-rouge">target[i]</code> 是第 <code class="language-plaintext highlighter-rouge">i</code> 根柱子的高度。每次操作是往一段连续柱子上盖一层砖，所以一条操作在纵向看就是一条水平的线段。总操作数 = 所有线段的条数 = 所有线段左端点的个数。于是问题变成：统计有多少条线段以位置 <code class="language-plaintext highlighter-rouge">i</code> 为左端点。</p>
+
+  <p>观察相邻两根柱子的高度关系。覆盖位置 <code class="language-plaintext highlighter-rouge">i</code> 的线段共有 <code class="language-plaintext highlighter-rouge">target[i]</code> 条，覆盖位置 <code class="language-plaintext highlighter-rouge">i-1</code> 的有 <code class="language-plaintext highlighter-rouge">target[i-1]</code> 条。任何一条覆盖了 <code class="language-plaintext highlighter-rouge">i-1</code> 的线段都可以顺势延伸到 <code class="language-plaintext highlighter-rouge">i</code>（因为区间连续，延长不需要额外代价），所以最多能有 <code class="language-plaintext highlighter-rouge">min(target[i-1], target[i])</code> 条线段是从左边延续过来的。剩下的 <code class="language-plaintext highlighter-rouge">target[i] - target[i-1]</code> 条（当这个差为正时）无处可借，只能新开，也就是必须以 <code class="language-plaintext highlighter-rouge">i</code> 为左端点。如果差为负或为零，说明左边的线段绰绰有余，一条新的都不用开，多出来的那些在 <code class="language-plaintext highlighter-rouge">i-1</code> 处收尾即可，不产生任何成本。</p>
+
+  <p>由此得到不变量：扫描到下标 <code class="language-plaintext highlighter-rouge">i</code> 时，累加的答案恰好等于「所有左端点落在 <code class="language-plaintext highlighter-rouge">[0, i]</code> 内的线段条数」。因为每条线段有且只有一个左端点，扫完全数组就把线段不重不漏地数了一遍。最终答案就是 <code class="language-plaintext highlighter-rouge">target[0] + Σ max(0, target[i] - target[i-1])</code>，其中 <code class="language-plaintext highlighter-rouge">target[0]</code> 相当于把左侧看作高度 0 的虚拟柱子后的首个正增量。这个值同时也是下界（每个正增量必须新开线段）和可达值（负增量处让线段自然结束即可），所以它就是最优解。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>把答案初始化为 <code class="language-plaintext highlighter-rouge">target[0]</code>。这等价于在数组左侧补一根高度为 0 的虚拟柱子，第一根柱子的全部高度都是净新增，没有任何线段能从左边延续过来。</li>
+    <li>从下标 1 开始向右扫描，逐个计算 <code class="language-plaintext highlighter-rouge">diff = target[i] - target[i-1]</code>。用差分而不是绝对高度，是因为线段能否复用完全取决于相邻两根柱子的高度落差，与绝对高度无关。</li>
+    <li>当 <code class="language-plaintext highlighter-rouge">diff &gt; 0</code> 时把它加进答案。这一部分高度左边确实供不上，必须新开 <code class="language-plaintext highlighter-rouge">diff</code> 条以 <code class="language-plaintext highlighter-rouge">i</code> 为左端点的线段，一条也不能少。</li>
+    <li>当 <code class="language-plaintext highlighter-rouge">diff &lt;= 0</code> 时什么都不做。左边的线段数量已经够用甚至有余，多余的部分在 <code class="language-plaintext highlighter-rouge">i-1</code> 处结束就行，右端点的选择是免费的，所以不贡献任何操作数。</li>
+    <li>扫描结束直接返回累加值。不需要回头修正，因为每条线段只在其左端点被计数一次，扫描过程天然完成了去重。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">target = [3, 1, 5, 4, 2]</code> 走一遍</strong>：答案初始化为 <code class="language-plaintext highlighter-rouge">target[0] = 3</code>，对应三条以下标 0 起头的线段。看下标 1，<code class="language-plaintext highlighter-rouge">diff = 1 - 3 = -2</code>，非正，不加——原本三条线段里有两条在下标 0 处就收尾，剩一条延续过来正好铺满高度 1。看下标 2，<code class="language-plaintext highlighter-rouge">diff = 5 - 1 = 4</code>，为正，答案变成 7——左边只能延续一条，还差四条，必须新开四条以下标 2 为左端点的线段。看下标 3，<code class="language-plaintext highlighter-rouge">diff = 4 - 5 = -1</code>，非正，不加——五条里让一条在下标 2 收尾，四条延续过来正好。看下标 4，<code class="language-plaintext highlighter-rouge">diff = 2 - 4 = -2</code>，非正，不加——四条里收尾两条，剩两条铺满。扫描结束返回 7。反过来验证：三条线段取 <code class="language-plaintext highlighter-rouge">[0,0]</code>、<code class="language-plaintext highlighter-rouge">[0,0]</code>、<code class="language-plaintext highlighter-rouge">[0,4]</code>，四条取 <code class="language-plaintext highlighter-rouge">[2,2]</code>、<code class="language-plaintext highlighter-rouge">[2,3]</code>、<code class="language-plaintext highlighter-rouge">[2,3]</code>、<code class="language-plaintext highlighter-rouge">[2,4]</code>，逐位累加得到 3、1、5、4、2，恰好还原出 <code class="language-plaintext highlighter-rouge">target</code>，七条确实做到了。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 当 target[i] &gt; target[i-1] 时，多出的高度只能由以 i 为左端点的操作提供。</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">minNumberOperations</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">answer</span> <span class="o">=</span> <span class="n">target</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">target</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">diff</span> <span class="o">=</span> <span class="n">target</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">-</span> <span class="n">target</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">diff</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">answer</span> <span class="o">+=</span> <span class="n">diff</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 当 target[i] &gt; target[i-1] 时，多出的高度只能由以 i 为左端点的操作提供。</span>
+<span class="k">func</span> <span class="n">minNumberOperations</span><span class="p">(</span><span class="n">target</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">answer</span> <span class="o">:=</span> <span class="n">target</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">target</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">diff</span> <span class="o">:=</span> <span class="n">target</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">target</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+		<span class="k">if</span> <span class="n">diff</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="n">answer</span> <span class="o">+=</span> <span class="n">diff</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">answer</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。数组从左到右只走一遍，每个位置做一次减法、一次比较和至多一次加法，全部是常数时间。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(1)$。只用了答案累加变量和循环下标，通过 <code class="language-plaintext highlighter-rouge">target[i-1]</code> 直接读取前一个高度，没有额外开差分数组或栈。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「区间加 1 构造目标数组」的对偶问题是「数一共用了多少条线段」，而线段与它的左端点一一对应，把计数落到左端点上就能一次扫描解决，这个转化在所有区间覆盖类题目里都通用。</li>
+    <li>差分是识别信号：一旦发现答案只跟相邻元素的落差有关、跟绝对数值无关，就应该立刻从遍历元素切换到遍历差值。本题答案正是差分数组中所有正项之和。</li>
+    <li>正增量必须新开、负增量可以免费收尾，这种「上坡收费下坡免费」的不对称性是贪心成立的根本原因，也是判断答案下界与可达性一致的依据。</li>
+    <li>首元素要当成「与虚拟 0 的落差」处理，否则整条链的起点会缺失，这是把差分思路落到代码时最常见的偏移错误。</li>
+    <li>面试视角：这题被标为困难，但代码只有五行，考的完全是能否讲清楚「为什么只数正增量就够」。面试时要把「下界」和「可达」两侧都说到——正增量处必须新开线段所以不会更少，负增量处让线段自然结束就能构造出方案所以不会更多，两边一夹答案唯一。只写公式不给证明，即使 AC 也拿不到高分。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：答案初始化为 0，循环从下标 1 开始。用例 <code class="language-plaintext highlighter-rouge">target = [3, 1, 5, 4, 2]</code> → 漏掉首根柱子的 3，返回 4，正确答案是 7。</li>
+    <li>
+<strong>错误写法</strong>：把所有相邻差的绝对值都累加进答案。用例 <code class="language-plaintext highlighter-rouge">target = [1, 3, 1]</code> → 得到 1 + 2 + 2 = 5，正确答案是 3，下坡处的线段收尾并不需要额外操作。</li>
+    <li>
+<strong>错误写法</strong>：直接返回数组最大值。用例 <code class="language-plaintext highlighter-rouge">target = [1, 5, 1, 5]</code> → 返回 5，正确答案是 9，因为两个波峰各自要独立开线段，不能共用。</li>
+    <li>
+<strong>错误写法</strong>：直接返回数组元素之和。用例 <code class="language-plaintext highlighter-rouge">target = [2, 2, 2]</code> → 返回 6，正确答案是 2，一条覆盖全长的线段重复两次即可。</li>
+    <li>
+<strong>错误写法</strong>：按值逐层模拟，每轮扫描一次数组划分连续段。用例 长度 $10^5$、元素全为 $10^5$ 的数组 → 逻辑正确但要执行 $10^{10}$ 次基本操作，直接超时。</li>
+    <li>
+<strong>错误写法</strong>：循环里写成 <code class="language-plaintext highlighter-rouge">target[i] - target[i+1]</code>，方向搞反。用例 <code class="language-plaintext highlighter-rouge">target = [1, 3]</code> → 越界访问或算出负增量，返回 1，正确答案是 3。</li>
+    <li>
+<strong>错误写法</strong>：用 <code class="language-plaintext highlighter-rouge">if (diff != 0) answer += diff</code> 而不是只收正项。用例 <code class="language-plaintext highlighter-rouge">target = [5, 1]</code> → 答案变成 5 + (-4) = 1，正确答案是 5。</li>
+    <li>
+<strong>错误写法</strong>：认为长度为 1 时要特判返回 1。用例 <code class="language-plaintext highlighter-rouge">target = [7]</code> → 返回 1，正确答案是 7，单根柱子的高度就是所需的操作次数。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/range-addition/">370. 区间加法</a></td>
+      <td>中等</td>
+      <td>本题的逆运算，给定操作列表用差分数组还原最终数组</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/corporate-flight-bookings/">1109. 航班预订统计</a></td>
+      <td>中等</td>
+      <td>差分模板题，区间加的是任意值而非固定的 1</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/car-pooling/">1094. 拼车</a></td>
+      <td>中等</td>
+      <td>差分之后还要检查前缀和是否越过容量上限，多一层可行性判定</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/candy/">135. 分发糖果</a></td>
+      <td>困难</td>
+      <td>同样靠相邻落差做贪心，但需要左右各扫一遍再取最大值</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/trapping-rain-water/">42. 接雨水</a></td>
+      <td>困难</td>
+      <td>同样把数组看成柱状图，关注的是凹陷容积而非覆盖线段数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/largest-rectangle-in-histogram/">84. 柱状图中最大的矩形</a></td>
+      <td>困难</td>
+      <td>柱状图视角配单调栈，求的是极大矩形面积</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-moves-to-equal-array-elements/">453. 最小操作次数使数组元素相等</a></td>
+      <td>中等</td>
+      <td>操作对象是「除一个外全部加一」，等价转化为全部向最小值靠拢</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/71639474" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 414. 第三大的数</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/14733410" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 109. 有序链表转换二叉搜索树</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/33418239">https://hgnulb.github.io/blog/2026/33418239</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

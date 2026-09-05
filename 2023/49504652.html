@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 594. 最长和谐子序列 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,哈希表,字节跳动,拼多多,排序,数组,滑动窗口,计数" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 594. 最长和谐子序列" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2023/49504652" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2023/49504652" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-03-22T00:00:00+08:00" />
+<meta property="article:modified_time" content="2023-03-22T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 594. 最长和谐子序列" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2023-03-22T00:00:00+08:00","datePublished":"2023-03-22T00:00:00+08:00","description":"题目描述","headline":"LeetCode 594. 最长和谐子序列","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2023/49504652"},"url":"https://hgnulb.github.io/blog/2023/49504652"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希计数枚举相邻值">解法：哈希计数枚举相邻值</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 594. 最长和谐子序列">LeetCode 594. 最长和谐子序列</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2023-03-22 00:00:00"
+                    datetime="2023-03-22T00:00:00+08:00"
+            >
+                2023-03-22
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2384 字 · 英文 117 词 · 代码 32 行 · 图片 1 张"
+            aria-label="预计阅读时间约 8 分钟，正文 2384 字 · 英文 117 词 · 代码 32 行 · 图片 1 张"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 8 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    6 个分类
+                    <span aria-hidden="true"> · </span>
+                    7 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4923693516/" title="简单">
+        简单
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3550351181/" title="需复习">
+        需复习
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7041841112/" title="拼多多">
+        拼多多
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3320177889/" title="排序">
+        排序
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5692196181/" title="滑动窗口">
+        滑动窗口
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6351116753/" title="计数">
+        计数
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希计数枚举相邻值">解法：哈希计数枚举相邻值</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/longest-harmonious-subsequence/">594. 最长和谐子序列</a></p>
+</blockquote>
+
+<p><img src="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/post-list/image-20221025224819591.png" alt="image-20221025224819591" decoding="async" loading="lazy" width="889" height="781"></p>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>题目定义「和谐数组」为<strong>最大值与最小值之差恰好等于 1</strong> 的数组，要在 <code class="language-plaintext highlighter-rouge">nums</code> 的所有子序列里找出最长的和谐子序列，返回它的长度。</p>
+</blockquote>
+
+<blockquote>
+  <p>两个词必须抠清楚。第一个是「子序列」——它只要求保持相对顺序，不要求连续，可以任意挑选下标。既然可以任意挑，原数组的顺序就完全不影响答案，剩下有意义的信息只有「每个值出现了多少次」。这一步把问题从「在序列上找区间」降级成了「在值域上做统计」。</p>
+</blockquote>
+
+<blockquote>
+  <p>第二个是「恰好等于 1」，而不是「不超过 1」。差为 0（全部相同）不算和谐，所以答案必须同时包含两种不同的值。既然极差正好是 1，这个子序列里能出现的值就只有 <code class="language-plaintext highlighter-rouge">x</code> 和 <code class="language-plaintext highlighter-rouge">x + 1</code> 两种——中间不可能塞进第三种值。而既然是子序列且顺序无关，一旦选定 <code class="language-plaintext highlighter-rouge">x</code>，最优做法必然是把 <code class="language-plaintext highlighter-rouge">x</code> 和 <code class="language-plaintext highlighter-rouge">x + 1</code> 的<strong>全部</strong>出现都收进来。</p>
+</blockquote>
+
+<blockquote>
+  <p>于是答案的形状被完全确定了：它一定形如「某个 <code class="language-plaintext highlighter-rouge">x</code> 的出现次数 + <code class="language-plaintext highlighter-rouge">x + 1</code> 的出现次数」，而且要求两者的次数<strong>都大于 0</strong>。</p>
+</blockquote>
+
+<blockquote>
+  <p>边界：数组里可能根本不存在相差 1 的两个值（例如 <code class="language-plaintext highlighter-rouge">[1, 1, 1, 1]</code>），此时不存在任何和谐子序列，答案是 0 而不是 4；数组长度可能为 1；数值范围到 $10^9$，值本身很稀疏，不能开值域数组。</p>
+</blockquote>
+
+<h2 id="解法哈希计数枚举相邻值">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%93%88%E5%B8%8C%E8%AE%A1%E6%95%B0%E6%9E%9A%E4%B8%BE%E7%9B%B8%E9%82%BB%E5%80%BC" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：哈希计数枚举相邻值</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是枚举子序列，或者退一步枚举「最小值取哪个数」再扫一遍数组统计，前者指数级不可行，后者是 $O(n^2)$。$O(n^2)$ 的瓶颈在于：为了知道值 <code class="language-plaintext highlighter-rouge">x</code> 和 <code class="language-plaintext highlighter-rouge">x + 1</code> 各出现多少次，每次都要重新扫描整个数组，而这个统计对所有 <code class="language-plaintext highlighter-rouge">x</code> 其实可以<strong>一次性算完</strong>。</p>
+</blockquote>
+
+<blockquote>
+  <p>由题意分析已经得到，答案必定等于某对相邻值的频次之和。所以只需要两样东西：一张「值 → 出现次数」的表，以及对表中每个键去查它的后继键是否存在。哈希表让这两件事都变成均摊 $O(1)$。</p>
+</blockquote>
+
+<blockquote>
+  <p>这里要显式写清楚的判定条件是：<strong>只有当 <code class="language-plaintext highlighter-rouge">count[x]</code> 和 <code class="language-plaintext highlighter-rouge">count[x + 1]</code> 同时存在（都大于 0）时，<code class="language-plaintext highlighter-rouge">count[x] + count[x + 1]</code> 才是一个合法候选</strong>。这条判定正是「极差恰好为 1」的直接翻译——少了任何一边，极差就变成 0，不再和谐。答案初始化为 0，若一个候选都没产生，返回的就是 0，这与「不存在和谐子序列」的语义天然吻合。</p>
+</blockquote>
+
+<blockquote>
+  <p>枚举方向只查 <code class="language-plaintext highlighter-rouge">x + 1</code> 不查 <code class="language-plaintext highlighter-rouge">x - 1</code>，不会遗漏：任意一对相邻值 <code class="language-plaintext highlighter-rouge">(x, x + 1)</code> 都会在枚举到较小的那个键 <code class="language-plaintext highlighter-rouge">x</code> 时被恰好检查一次。只往一个方向查还顺带避免了同一对被算两遍。</p>
+</blockquote>
+
+<blockquote>
+  <p>值域到 $10^9$，所以只能用哈希表而不能用计数数组——这是本题选择哈希而非桶计数的直接理由。另一条可行路径是先排序再用滑动窗口维持「极差 ≤ 1」的区间，但它引入了排序的对数因子，且窗口收缩与答案更新时机容易写错，不如计数法直接。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>第一遍遍历 <code class="language-plaintext highlighter-rouge">nums</code>，把每个值的出现次数记进哈希表</strong>：这一遍把「顺序」信息彻底丢掉，只留下频次。用 <code class="language-plaintext highlighter-rouge">getOrDefault(num, 0) + 1</code>（Go 里直接 <code class="language-plaintext highlighter-rouge">count[num]++</code>，零值为 0）避免对首次出现的键做特判。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">res</code> 初始化为 0</strong>：0 既是「长度」的合法下界，也是「不存在和谐子序列」时该返回的值。初始化成 <code class="language-plaintext highlighter-rouge">Integer.MIN_VALUE</code> 或 1 都会让无解用例出错。</li>
+    <li>
+<strong>第二遍遍历哈希表的键，而不是再遍历 <code class="language-plaintext highlighter-rouge">nums</code></strong>：遍历键保证每个不同的值只被考察一次。若改成遍历原数组，重复值会带来重复计算，虽不影响正确性但会退化成 $O(n)$ 次查表——在这题上无所谓，但换成需要去重的场景就会出问题。</li>
+    <li>
+<strong>对每个键 <code class="language-plaintext highlighter-rouge">num</code> 检查 <code class="language-plaintext highlighter-rouge">num + 1</code> 是否在表中</strong>：这一步是「相邻值必须同时存在」的落地。用 <code class="language-plaintext highlighter-rouge">containsKey</code> 而不是 <code class="language-plaintext highlighter-rouge">get(num + 1) != null</code> 之后再拆箱，能避免不必要的装箱开销与空指针风险。</li>
+    <li>
+<strong>存在则用 <code class="language-plaintext highlighter-rouge">count[num] + count[num + 1]</code> 更新 <code class="language-plaintext highlighter-rouge">res</code></strong>：两个频次直接相加就是这一对能凑出的最长和谐子序列长度，不需要考虑取舍——多取一个元素不会破坏极差为 1 的性质，所以全取必然最优。</li>
+    <li>
+<strong>遍历完返回 <code class="language-plaintext highlighter-rouge">res</code></strong>。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>以 <code class="language-plaintext highlighter-rouge">nums = [1, 3, 2, 2, 5, 2, 3, 7]</code> 走一遍（期望 5，对应子序列 <code class="language-plaintext highlighter-rouge">[3, 2, 2, 2, 3]</code>）。</p>
+</blockquote>
+
+<blockquote>
+  <p>第一遍统计完得到 <code class="language-plaintext highlighter-rouge">count = {1: 1, 3: 2, 2: 3, 5: 1, 7: 1}</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p>第二遍逐键考察（哈希表顺序不定，这里按值从小到大列）：键 1，查到 2 存在，候选 <code class="language-plaintext highlighter-rouge">1 + 3 = 4</code>，<code class="language-plaintext highlighter-rouge">res</code> 从 0 更新为 4，对应子序列 <code class="language-plaintext highlighter-rouge">[1, 2, 2, 2]</code>；键 2，查到 3 存在，候选 <code class="language-plaintext highlighter-rouge">3 + 2 = 5</code>，<code class="language-plaintext highlighter-rouge">res</code> 更新为 5；键 3，查 4 不存在，跳过——注意 3 和 2 这一对已经在键 2 那轮算过了，只往上查不会漏；键 5，查 6 不存在，跳过；键 7，查 8 不存在，跳过。</p>
+</blockquote>
+
+<blockquote>
+  <p>返回 <code class="language-plaintext highlighter-rouge">res = 5</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p>再看一个无解用例 <code class="language-plaintext highlighter-rouge">nums = [1, 1, 1, 1]</code>：<code class="language-plaintext highlighter-rouge">count = {1: 4}</code>，唯一的键 1 查不到 2，一个候选都没产生，返回初值 0。如果这里错误地把「同一个值出现多次」也算作和谐，就会返回 4。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// 和谐子序列的最大值与最小值差正好为 1，因此候选只能由 x 和 x + 1 两种值组成。</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">findLHS</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">count</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">count</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">num</span><span class="o">,</span> <span class="n">count</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">num</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">count</span><span class="o">.</span><span class="na">keySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">count</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">num</span> <span class="o">+</span> <span class="mi">1</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">res</span><span class="o">,</span> <span class="n">count</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">num</span><span class="o">)</span> <span class="o">+</span> <span class="n">count</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">num</span> <span class="o">+</span> <span class="mi">1</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">findLHS</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="c">// 和谐子序列的最大值与最小值差正好为 1，因此候选只能由 x 和 x + 1 两种值组成。</span>
+    <span class="n">count</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">num</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+        <span class="n">count</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">++</span>
+    <span class="p">}</span>
+
+    <span class="n">res</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">count</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">v</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">count</span><span class="p">[</span><span class="n">num</span><span class="o">+</span><span class="m">1</span><span class="p">];</span> <span class="n">ok</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">c</span><span class="o">+</span><span class="n">v</span> <span class="o">&gt;</span> <span class="n">res</span> <span class="p">{</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">v</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。凭什么：第一遍遍历数组做 <code class="language-plaintext highlighter-rouge">n</code> 次均摊 $O(1)$ 的哈希写入；第二遍遍历的是哈希表的键，键数不超过 <code class="language-plaintext highlighter-rouge">n</code>，每个键做一次均摊 $O(1)$ 的查询与常数次比较。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。凭什么：哈希表最多存放 <code class="language-plaintext highlighter-rouge">n</code> 个互不相同的键值对（数组元素全不相同时取到上界）。数值范围到 $10^9$ 而元素只有 $10^4$ 个，用哈希表而非值域数组正是为了让空间跟着元素个数走而不是跟着值域走。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>看到「子序列 + 只关心最值 / 极差」，先问自己顺序还重不重要；不重要就立刻把问题从序列问题转成频次统计问题，这一步往往直接砍掉一个数量级。</li>
+    <li>「极差恰好为 1」把候选集合压缩成了「相邻整数对」，答案的形状被约束成 <code class="language-plaintext highlighter-rouge">count[x] + count[x+1]</code>——先推出答案的形状再设计算法，比先想数据结构更可靠。</li>
+    <li>枚举成对关系时只往单一方向查（只查 <code class="language-plaintext highlighter-rouge">x + 1</code> 不查 <code class="language-plaintext highlighter-rouge">x - 1</code>），既不遗漏也不重复，是处理对称关系的通用去重技巧。</li>
+    <li>值域远大于元素个数时用哈希表而非计数数组，这个取舍要能在面试中一句话说清：空间跟着元素规模走，不跟着值域走。</li>
+    <li>无解时返回 0 由「答案初值取 0 且只在找到合法对时更新」自然保证，不需要额外的特判分支——好实现的标志是边界落进主逻辑。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>把「极差不超过 1」当成判定条件</strong>：<code class="language-plaintext highlighter-rouge">nums = [1, 1, 1, 1]</code> 会返回 4，正确答案是 0，因为全相同的数组极差为 0 不算和谐。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">res</code> 初始化为 1 或数组长度</strong>：<code class="language-plaintext highlighter-rouge">nums = [1, 1, 1, 1]</code> 会返回非零值；初值只能是 0。</li>
+    <li>
+<strong>查到 <code class="language-plaintext highlighter-rouge">num + 1</code> 不存在时仍然用 <code class="language-plaintext highlighter-rouge">count.get(num)</code> 更新答案</strong>：<code class="language-plaintext highlighter-rouge">nums = [1, 1, 1, 1]</code> 里 <code class="language-plaintext highlighter-rouge">count[1] = 4</code> 会被当成候选，返回 4。</li>
+    <li>
+<strong>既查 <code class="language-plaintext highlighter-rouge">num + 1</code> 又查 <code class="language-plaintext highlighter-rouge">num - 1</code> 且都更新</strong>：结果虽不会错，但 <code class="language-plaintext highlighter-rouge">nums = [1, 2]</code> 这类用例会把同一对算两遍；一旦有人顺手把两次结果相加就会返回 4 而不是 2。</li>
+    <li>
+<strong>用 <code class="language-plaintext highlighter-rouge">count.get(num + 1)</code> 直接参与运算而不先判存在</strong>：Java 里返回 <code class="language-plaintext highlighter-rouge">null</code> 拆箱抛空指针异常，<code class="language-plaintext highlighter-rouge">nums = [1, 3]</code> 立刻崩溃；Go 里返回零值 0，会把 <code class="language-plaintext highlighter-rouge">[1, 3]</code> 算成候选 <code class="language-plaintext highlighter-rouge">1 + 0 = 1</code>，返回 1 而不是 0。</li>
+    <li>
+<strong>第二遍遍历原数组而不是哈希表的键，并把每次命中都累加而非取最大</strong>：<code class="language-plaintext highlighter-rouge">nums = [1, 2, 2]</code> 会把键 1 的候选重复计入，得到远大于 3 的值。</li>
+    <li>
+<strong>误以为子序列必须连续，改用原地滑动窗口而不排序</strong>：<code class="language-plaintext highlighter-rouge">nums = [1, 3, 2, 2, 5, 2, 3, 7]</code> 里合法元素被 5 和 7 隔断，会返回 3 之类的偏小值，正确答案是 5。</li>
+    <li>
+<strong>改用数组计数且直接以数值作下标</strong>：<code class="language-plaintext highlighter-rouge">nums = [1000000000]</code> 会申请十亿长度的数组，直接内存溢出——这正是值域到 $10^9$ 时必须用哈希表的原因。</li>
+    <li>
+<strong>排序滑窗版把更新时机放在差值 ≤ 1 时</strong>：<code class="language-plaintext highlighter-rouge">nums = [1, 1, 1]</code> 窗口铺满整个数组、差值为 0 也被计入，返回 3 而不是 0。</li>
+    <li>
+<strong>排序滑窗版收缩时用 <code class="language-plaintext highlighter-rouge">if</code> 而非 <code class="language-plaintext highlighter-rouge">while</code></strong>：<code class="language-plaintext highlighter-rouge">nums = [1, 1, 5, 5]</code> 右指针从 1 跳到 5 时一次收缩不足以让差值回到 1 以内，窗口非法却仍参与答案更新。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-consecutive-sequence/">128. 最长连续序列</a></td>
+      <td>中等</td>
+      <td>同样在值域上找相邻整数，但要串起任意长的连续段，需从段首启动才能保证线性</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/two-sum/">1. 两数之和</a></td>
+      <td>简单</td>
+      <td>边遍历边查表，查的是「配对值是否已出现」而非频次，且需返回下标而非长度</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/top-k-frequent-elements/">347. 前 K 个高频元素</a></td>
+      <td>中等</td>
+      <td>统计频次后要按频次排序取前 K，需配合堆或桶排序，而非只查相邻键</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/contains-duplicate-ii/">219. 存在重复元素 II</a></td>
+      <td>简单</td>
+      <td>哈希表存的是下标而非次数，判定条件涉及位置距离，顺序信息不能丢</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/set-mismatch/">645. 错误的集合</a></td>
+      <td>简单</td>
+      <td>值域恰好是 <code class="language-plaintext highlighter-rouge">1..n</code>，可以用原地负号标记把空间压到 $O(1)$，不必开哈希表</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-absolute-difference/">1200. 最小绝对差</a></td>
+      <td>简单</td>
+      <td>差值不固定为 1 而是要先求出最小差，必须排序后比较相邻元素</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/intersection-of-two-arrays-ii/">350. 两个数组的交集 II</a></td>
+      <td>简单</td>
+      <td>频次统计用于两数组求交，取的是两边计数的较小值而非求和</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/ransom-note/">383. 赎金信</a></td>
+      <td>简单</td>
+      <td>频次统计用于逐项做「够不够」的比较，字符集有限时可退化为定长数组</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2023/29648686" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 173. 二叉搜索树迭代器</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2023/73576461" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1172. 餐盘栈</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2023/49504652">https://hgnulb.github.io/blog/2023/49504652</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

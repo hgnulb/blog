@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 388. 文件的最长绝对路径 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,字符串,字节跳动,栈,深度优先搜索,百度" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 388. 文件的最长绝对路径" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2024/66430550" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2024/66430550" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-09-10T00:54:38+08:00" />
+<meta property="article:modified_time" content="2024-09-10T00:54:38+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 388. 文件的最长绝对路径" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2024-09-10T00:54:38+08:00","datePublished":"2024-09-10T00:54:38+08:00","description":"题目描述","headline":"LeetCode 388. 文件的最长绝对路径","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2024/66430550"},"url":"https://hgnulb.github.io/blog/2024/66430550"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法栈记录各层路径长度">解法：栈记录各层路径长度</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 388. 文件的最长绝对路径">LeetCode 388. 文件的最长绝对路径</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2024-09-10 00:54:38"
+                    datetime="2024-09-10T00:54:38+08:00"
+            >
+                2024-09-10
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2599 字 · 英文 168 词 · 代码 46 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2599 字 · 英文 168 词 · 代码 46 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9879723011/" title="百度">
+        百度
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法栈记录各层路径长度">解法：栈记录各层路径长度</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/longest-absolute-file-path/">388. 文件的最长绝对路径</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>输入是一个用换行符和制表符编码的目录树：每一行是一个目录名或文件名，行首制表符的个数表示它在树中的深度，深度为 $d$ 的条目属于它上面最近那个深度为 $d-1$ 的目录。要求找出所有文件的绝对路径中最长的那条的长度；如果整棵树里一个文件都没有，返回 $0$。</p>
+
+  <p>绝对路径的长度按「各级名称长度之和，加上层与层之间的斜杠个数」计算，斜杠本身不出现在输入里，需要自己补上。深度为 $d$ 的文件，其路径里恰好有 $d$ 个斜杠。</p>
+
+  <p>有两个信号值得留意。第一，题目只要长度，不要路径字符串本身，这意味着完全不必拼接字符串，维护整数长度即可。第二，输入的行序天然就是目录树的先序遍历——处理到某一行时，它的所有祖先都已经在前面出现过。这条性质是把「树上求最长路径」降级成「一趟线性扫描」的关键。</p>
+
+  <p>边界方面：区分目录与文件的判据是名称里是否含有 <code class="language-plaintext highlighter-rouge">.</code>；根层条目的深度为 $0$，其路径前面不加斜杠；同一层可能有多个兄弟，后面的兄弟必须覆盖掉前一个兄弟留下的信息；文件名本身可能含有多个点，目录名则约定不含点。</p>
+</blockquote>
+
+<h2 id="解法栈记录各层路径长度">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%A0%88%E8%AE%B0%E5%BD%95%E5%90%84%E5%B1%82%E8%B7%AF%E5%BE%84%E9%95%BF%E5%BA%A6" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：栈记录各层路径长度</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>一种直白的做法是先按缩进把输入还原成一棵树，再对树做深度优先搜索求最长文件路径。这样是对的，但要额外建节点、连父子、再遍历一遍，代码量和出错面都不小。</p>
+
+  <p>瓶颈其实是「建树」这一步纯属多余。既然行序就是先序遍历，那么当扫到深度为 $d$ 的一行时，它的父目录必然是此前最后一个出现的深度为 $d-1$ 的目录，而这个信息可以在扫描过程中顺手记住。</p>
+
+  <p>于是把状态定义为一个按深度索引的数组：$stack[d]$ 表示「当前正在处理的这条分支上，深度为 $d$ 的位置之前的路径前缀长度，含该前缀末尾的斜杠」。换句话说，一个深度为 $d$ 的条目，它的完整路径长度就是 $stack[d] + \text{名称长度}$。根据这个定义，$stack[0] = 0$，因为根层条目前面什么都没有。</p>
+
+  <p>维持这个定义的不变量是：每当扫到一个深度为 $d$ 的目录，就立刻写入 $stack[d+1] = stack[d] + \text{名称长度} + 1$，那个 $+1$ 就是这个目录名之后的斜杠。由于行序是先序遍历，处理深度为 $d+1$ 的条目之前，最后一次写入 $stack[d+1]$ 的必定正是它真正的父目录，旧的兄弟分支留下的值被自然覆盖。这就是为什么用数组下标直接覆盖，而不需要真的弹栈。</p>
+
+  <p>遇到文件时不写 $stack$，而是用 $stack[d] + \text{名称长度}$ 算出候选答案并更新最大值——文件是路径的终点，后面不会再接斜杠。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>按换行符把输入切成若干行。行数不会超过输入长度，据此为长度数组开一个 <code class="language-plaintext highlighter-rouge">lines.length + 1</code> 的容量，$+1$ 是因为最深的目录还要写入下一层的槽位。</li>
+    <li>对每一行，从行首开始数连续的制表符个数得到深度 $d$，剩下的部分就是名称。之所以能这样切分，是因为制表符只作为缩进出现，名称内部不会含有制表符。</li>
+    <li>判断名称中是否含有 <code class="language-plaintext highlighter-rouge">.</code>，据此区分文件与目录。这是题目给定的唯一判据，不能靠有没有扩展名之类的额外猜测。</li>
+    <li>若是文件，计算 $stack[d] + \text{名称长度}$ 并与当前答案取较大者。这里不加 $1$，因为文件名之后不再有斜杠。</li>
+    <li>若是目录，写入 $stack[d+1] = stack[d] + \text{名称长度} + 1$。写的是下一层而不是当前层，因为这个值是给它的子条目用的前缀；$+1$ 计入分隔用的斜杠。</li>
+    <li>不需要任何显式的出栈操作。当扫描从深层回到浅层时，浅层的 $stack$ 值仍然有效（它由更早的祖先写入且从未被更深的条目改动），而深层的陈旧值会被新分支的目录在使用前重新写入。</li>
+    <li>全部扫完后返回记录的最大值。初值取 $0$ 恰好覆盖了「没有任何文件」的情形。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">"dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext"</code> 走一遍</strong>：切分后共七行，长度数组初始全为 $0$，答案 <code class="language-plaintext highlighter-rouge">best</code> 为 $0$。第一行 <code class="language-plaintext highlighter-rouge">dir</code>，深度 $0$，名称长 $3$ 且不含点，写入 $stack[1] = 0 + 3 + 1 = 4$。第二行 <code class="language-plaintext highlighter-rouge">subdir1</code>，深度 $1$，名称长 $7$ 不含点，写入 $stack[2] = 4 + 7 + 1 = 12$。第三行 <code class="language-plaintext highlighter-rouge">file1.ext</code>，深度 $2$，名称长 $9$ 含点，候选长度为 $12 + 9 = 21$，<code class="language-plaintext highlighter-rouge">best</code> 更新为 $21$，对应路径 <code class="language-plaintext highlighter-rouge">dir/subdir1/file1.ext</code> 确实是 $21$ 个字符。第四行 <code class="language-plaintext highlighter-rouge">subsubdir1</code>，深度 $2$，名称长 $10$ 不含点，写入 $stack[3] = 12 + 10 + 1 = 23$。第五行 <code class="language-plaintext highlighter-rouge">subdir2</code>，深度 $1$，名称长 $7$ 不含点，写入 $stack[2] = stack[1] + 7 + 1 = 4 + 8 = 12$，这一步把上一个兄弟分支留下的同值覆盖掉，之后 $stack[3]$ 的旧值 $23$ 虽然还在数组里，但下一次被读取前必定会被重写。第六行 <code class="language-plaintext highlighter-rouge">subsubdir2</code>，深度 $2$，名称长 $10$ 不含点，写入 $stack[3] = 12 + 10 + 1 = 23$，正是这次重写让陈旧值失效。第七行 <code class="language-plaintext highlighter-rouge">file2.ext</code>，深度 $3$，名称长 $9$ 含点，候选长度为 $23 + 9 = 32$，大于 $21$，<code class="language-plaintext highlighter-rouge">best</code> 更新为 $32$。扫描结束返回 $32$，对应路径 <code class="language-plaintext highlighter-rouge">dir/subdir2/subsubdir2/file2.ext</code>，逐字符数确实是 $32$。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 用数组 stack[depth] 记录到该层目录的累计长度（含末尾 /）。</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">lengthLongestPath</span><span class="o">(</span><span class="nc">String</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">String</span><span class="o">[]</span> <span class="n">lines</span> <span class="o">=</span> <span class="n">input</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">"\n"</span><span class="o">);</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">lines</span><span class="o">.</span><span class="na">length</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">best</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">line</span> <span class="o">:</span> <span class="n">lines</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">depth</span> <span class="o">&lt;</span> <span class="n">line</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">line</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">depth</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'\t'</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">depth</span><span class="o">++;</span>
+            <span class="o">}</span>
+
+            <span class="nc">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">depth</span><span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">name</span><span class="o">.</span><span class="na">indexOf</span><span class="o">(</span><span class="sc">'.'</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">stack</span><span class="o">[</span><span class="n">depth</span><span class="o">]</span> <span class="o">+</span> <span class="n">name</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">length</span> <span class="o">&gt;</span> <span class="n">best</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">best</span> <span class="o">=</span> <span class="n">length</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">[</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">stack</span><span class="o">[</span><span class="n">depth</span><span class="o">]</span> <span class="o">+</span> <span class="n">name</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">best</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 用数组 stack[depth] 记录到该层目录的累计长度（含末尾 /）。</span>
+<span class="k">func</span> <span class="n">lengthLongestPath</span><span class="p">(</span><span class="n">input</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">lines</span> <span class="o">:=</span> <span class="n">strings</span><span class="o">.</span><span class="n">Split</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+    <span class="n">stack</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="n">best</span> <span class="o">:=</span> <span class="m">0</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">line</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">lines</span> <span class="p">{</span>
+        <span class="n">depth</span> <span class="o">:=</span> <span class="m">0</span>
+        <span class="k">for</span> <span class="n">depth</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">line</span><span class="p">[</span><span class="n">depth</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'\t'</span> <span class="p">{</span>
+            <span class="n">depth</span><span class="o">++</span>
+        <span class="p">}</span>
+
+        <span class="n">name</span> <span class="o">:=</span> <span class="n">line</span><span class="p">[</span><span class="n">depth</span><span class="o">:</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">strings</span><span class="o">.</span><span class="n">ContainsRune</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="sc">'.'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">length</span> <span class="o">:=</span> <span class="n">stack</span><span class="p">[</span><span class="n">depth</span><span class="p">]</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">length</span> <span class="o">&gt;</span> <span class="n">best</span> <span class="p">{</span>
+                <span class="n">best</span> <span class="o">=</span> <span class="n">length</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">stack</span><span class="p">[</span><span class="n">depth</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="n">depth</span><span class="p">]</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="m">1</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">best</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$，$n$ 为输入字符串的总长度。切分成行遍历了一遍输入；对每行数前导制表符和取子串的代价与该行长度成正比，所有行长度之和仍是 $n$；判断是否含点也是逐字符扫一遍该行。合计常数遍线性扫描。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。切分产生的行数组总字符量为 $O(n)$，按深度索引的长度数组大小为行数加一，最坏情况下（每行只有一个字符）行数与 $n$ 同阶。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>输入自带的先序遍历性质，往往能让「先建树再遍历」直接压缩成一趟扫描。看到缩进表示层级的格式，第一反应应该是找这条性质而不是动手建节点。</li>
+    <li>只要答案是标量（这里是长度），就不要拼接中间字符串。维护整数累计量既省内存又避免了大量子串复制。</li>
+    <li>用「按深度索引的数组 + 直接覆盖」代替真正的压栈弹栈，成立的前提是「陈旧值在被读取前必定被重写」。能把这个前提说清楚，才敢省掉出栈逻辑。</li>
+    <li>状态定义要精确到「含不含末尾分隔符」这种细节。本题把斜杠算进 $stack[d+1]$ 而不是在使用时再补，是让文件分支只写 $stack[d] + len$ 这一行的直接原因。</li>
+    <li>面试视角：面试官会关注你如何处理「从深层回到浅层」。主动解释为什么不需要弹栈，比默默写完更能体现对不变量的掌控。</li>
+    <li>面试视角：常见追问是「如果目录名允许含点怎么办」。此时判据要改成由输入格式另行给出（例如按是否有子行判断），能顺口指出这一点说明你意识到了判据的脆弱性。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：目录分支写成 $stack[d] = stack[d] + len + 1$ 而不是写入 $d+1$ → 层级整体错位一格，对样例中的 <code class="language-plaintext highlighter-rouge">dir</code> 会把 $stack[0]$ 改成 $4$，之后所有同层兄弟的前缀被污染，结果偏大。</li>
+    <li>
+<strong>错误写法</strong>：文件分支也加上 $1$，即 $stack[d] + len + 1$ → 每条路径都多算一个不存在的末尾斜杠，样例会返回 $33$ 而非 $32$。</li>
+    <li>
+<strong>错误写法</strong>：把制表符 <code class="language-plaintext highlighter-rouge">\t</code> 当成四个空格或按字符数除以四来算深度 → 输入里缩进就是单个制表符，除以四会让所有深度归零，所有文件都被当成根层条目，样例返回 $9$。</li>
+    <li>
+<strong>错误写法</strong>：用 <code class="language-plaintext highlighter-rouge">name.endsWith(".ext")</code> 之类的后缀判断代替「是否含点」 → 文件扩展名不固定，含其他扩展名的文件会被当成目录，其路径长度从不参与比较，答案偏小甚至为 $0$。</li>
+    <li>
+<strong>错误写法</strong>：数点时用 <code class="language-plaintext highlighter-rouge">line.indexOf('.')</code> 而非在去掉缩进后的名称里找 → 本题制表符里没有点所以恰好不出错，但一旦路径前缀被误拼进 <code class="language-plaintext highlighter-rouge">line</code>，判据就会失效；养成先切出名称再判断的习惯更稳。</li>
+    <li>
+<strong>错误写法</strong>：为长度数组只开 <code class="language-plaintext highlighter-rouge">lines.length</code> 的容量 → 当最后一行是最深处的目录时，写入 $stack[d+1]$ 会越界；容量必须是行数加一。</li>
+    <li>
+<strong>错误写法</strong>：认为浅层回退时必须显式清空更深层的 $stack$ 值 → 清空本身无害，但若清空后忘记在新分支重写，深层文件会用 $0$ 当前缀，样例中 <code class="language-plaintext highlighter-rouge">file2.ext</code> 会算成 $9$。</li>
+    <li>
+<strong>错误写法</strong>：把答案初始化为某个负数或第一行的长度 → 输入中一个文件都没有时（例如只有 <code class="language-plaintext highlighter-rouge">"dir"</code>），应当返回 $0$，用负数初值会返回负值，用首行长度会返回 $3$。</li>
+    <li>
+<strong>错误写法</strong>：先把输入整体按 <code class="language-plaintext highlighter-rouge">\t</code> 也切一遍，试图一次性拿到深度和名称 → 连续制表符会切出空串，空串的个数与深度的对应关系依赖切分实现的细节，极易差一；逐字符数制表符更可靠。</li>
+    <li>
+<strong>错误写法</strong>：为求最长路径而真的拼接出每条绝对路径再取长度 → 深度大时字符串复制的总代价升到 $O(n^2)$ 量级，且完全没有必要，题目只要长度。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/simplify-path/">71. 简化路径</a></td>
+      <td>中等</td>
+      <td>路径规范化，栈里存的是目录名且需要真正处理 <code class="language-plaintext highlighter-rouge">.</code> 与 <code class="language-plaintext highlighter-rouge">..</code> 出栈</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/remove-sub-folders-from-the-filesystem/">1233. 删除子文件夹</a></td>
+      <td>中等</td>
+      <td>排序后用前缀关系判断包含，考察的是路径之间的比较而非解析</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/exclusive-time-of-functions/">636. 函数的独占时间</a></td>
+      <td>中等</td>
+      <td>同样靠嵌套层级驱动，但需要真正的压栈弹栈来结算区间时长</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/decode-string/">394. 字符串解码</a></td>
+      <td>中等</td>
+      <td>嵌套结构的展开，栈中要同时保存计数与已构造的片段</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/mini-parser/">385. 迷你语法分析器</a></td>
+      <td>中等</td>
+      <td>由字符串还原嵌套对象，考察分隔符与括号配对的解析细节</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2024/16524784" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 补充题 7. 木头切割问题</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2024/47592196" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1171. 从链表中删去总和值为零的连续节点</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2024/66430550">https://hgnulb.github.io/blog/2024/66430550</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

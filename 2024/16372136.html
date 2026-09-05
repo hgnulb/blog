@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1485. 克隆含随机指针的二叉树 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,二叉树,哈希表,字节跳动,广度优先搜索,树,深度优先搜索" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1485. 克隆含随机指针的二叉树" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2024/16372136" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2024/16372136" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-01-03T12:11:51+08:00" />
+<meta property="article:modified_time" content="2024-01-03T12:11:51+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1485. 克隆含随机指针的二叉树" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2024-01-03T12:11:51+08:00","datePublished":"2024-01-03T12:11:51+08:00","description":"题目描述","headline":"LeetCode 1485. 克隆含随机指针的二叉树","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2024/16372136"},"url":"https://hgnulb.github.io/blog/2024/16372136"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dfs--哈希表映射原节点到克隆节点">解法：DFS + 哈希表映射原节点到克隆节点</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1485. 克隆含随机指针的二叉树">LeetCode 1485. 克隆含随机指针的二叉树</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2024-01-03 12:11:51"
+                    datetime="2024-01-03T12:11:51+08:00"
+            >
+                2024-01-03
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1505 字 · 英文 40 词 · 代码 78 行"
+            aria-label="预计阅读时间约 7 分钟，正文 1505 字 · 英文 40 词 · 代码 78 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 7 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2805463697/" title="树">
+        树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3241866243/" title="二叉树">
+        二叉树
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dfs--哈希表映射原节点到克隆节点">解法：DFS + 哈希表映射原节点到克隆节点</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/clone-binary-tree-with-random-pointer/">1485. 克隆含随机指针的二叉树</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一棵二叉树，每个节点除了 <code class="language-plaintext highlighter-rouge">val</code>、<code class="language-plaintext highlighter-rouge">left</code>、<code class="language-plaintext highlighter-rouge">right</code>，还多一个 <code class="language-plaintext highlighter-rouge">random</code> 指针，<strong>可以指向树中任意一个节点，也可以是空</strong>。要求返回这棵树的<strong>深拷贝</strong>：新树的结构、值、以及 <code class="language-plaintext highlighter-rouge">random</code> 的指向关系都与原树一致，但所有节点都必须是新建的对象，新树里不能出现任何指向原树节点的指针。</p>
+</blockquote>
+
+<blockquote>
+  <p>「深拷贝」这三个字是全题的判定标准。<code class="language-plaintext highlighter-rouge">random</code> 指向哪个节点，在新树里就必须指向<strong>对应的那个新节点</strong>——不是值相同的某个节点（值可能重复），也不是原树的那个节点（那就成了浅拷贝）。这意味着我们需要一个从「原节点」到「新节点」的<strong>身份级别的对应关系</strong>，而不是值级别的。</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">random</code> 的存在把这个结构从「树」变成了「图」。普通二叉树拷贝之所以能一行递归搞定，是因为 <code class="language-plaintext highlighter-rouge">left</code>/<code class="language-plaintext highlighter-rouge">right</code> 子树互不相交、每个节点恰好被访问一次。加上 <code class="language-plaintext highlighter-rouge">random</code> 之后，同一个节点可能从多条路径被抵达：既可能作为某人的左孩子，又可能作为另一个人的 <code class="language-plaintext highlighter-rouge">random</code> 目标。于是两个问题立刻出现——<strong>重复创建</strong>（同一原节点被拷了两份，<code class="language-plaintext highlighter-rouge">random</code> 指向的和 <code class="language-plaintext highlighter-rouge">left</code> 指向的不是同一个对象）和<strong>指向尚未创建的节点</strong>（<code class="language-plaintext highlighter-rouge">random</code> 目标在遍历序中还在后面）。</p>
+</blockquote>
+
+<blockquote>
+  <p>约束里节点数到 $10^4$，值不超过 $10^4$ 且<strong>可能重复</strong>。值可重复这一条直接否掉了「用 <code class="language-plaintext highlighter-rouge">val</code> 当映射键」的做法。$10^4$ 的规模让 $O(n)$ 的哈希表方案毫无压力，但也意味着递归深度在极端链状树下可达 $10^4$，需要心里有数。</p>
+</blockquote>
+
+<blockquote>
+  <p>边界：空树返回空；<code class="language-plaintext highlighter-rouge">random</code> 为空要如实拷成空；<code class="language-plaintext highlighter-rouge">random</code> 指向自己（自环）；两个节点的 <code class="language-plaintext highlighter-rouge">random</code> 互相指向（互指环）；整棵树是一条长链。</p>
+</blockquote>
+
+<h2 id="解法dfs--哈希表映射原节点到克隆节点">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95dfs--%E5%93%88%E5%B8%8C%E8%A1%A8%E6%98%A0%E5%B0%84%E5%8E%9F%E8%8A%82%E7%82%B9%E5%88%B0%E5%85%8B%E9%9A%86%E8%8A%82%E7%82%B9" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：DFS + 哈希表映射原节点到克隆节点</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">random</code> 可能形成自环或互指，结构应按图来克隆。核心是维护身份映射 <code class="language-plaintext highlighter-rouge">copies[original] = clone</code>：同一个原节点始终对应同一个新对象，键必须是节点引用，不能是可能重复的 <code class="language-plaintext highlighter-rouge">val</code>。</p>
+
+  <p>节点数可达一万，递归 DFS 在退化树上依赖运行时栈大小。这里使用显式栈做两趟 DFS：第一趟只沿 <code class="language-plaintext highlighter-rouge">left/right</code> 遍历原二叉树，为每个节点创建唯一副本；第二趟再次遍历，把副本的 <code class="language-plaintext highlighter-rouge">left/right/random</code> 都指向映射中的对应副本。</p>
+
+  <p>第一趟的不变量是：已发现的每个原节点都恰有一个尚未连边的克隆。第二趟的不变量是：出栈节点的三个指针会被完整映射，此前处理过的克隆均已连边正确。</p>
+
+  <p><strong>正确性说明</strong>：<code class="language-plaintext highlighter-rouge">left/right</code> 边能到达原树的全部节点，所以第一趟建立完整的一一映射。第二趟对每条原指针 <code class="language-plaintext highlighter-rouge">u → v</code> 写入 <code class="language-plaintext highlighter-rouge">copy(u) → copy(v)</code>；空指针仍为空，非空指针只指向新对象。于是值、树结构和所有随机关系均与原树一致，且没有任何引用泄漏到原树。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>空树直接返回空。</li>
+    <li>创建根副本并登记映射，用显式栈沿左右孩子遍历，为每个原节点创建一次副本。</li>
+    <li>重新从根开始 DFS；对当前原节点，从映射中取出其副本。</li>
+    <li>将副本的 <code class="language-plaintext highlighter-rouge">left</code>、<code class="language-plaintext highlighter-rouge">right</code>、<code class="language-plaintext highlighter-rouge">random</code> 分别设为对应原指针在映射中的值。</li>
+    <li>第二趟结束后返回根对应的副本。</li>
+  </ul>
+
+  <p>自环 <code class="language-plaintext highlighter-rouge">node.random = node</code> 会映射为 <code class="language-plaintext highlighter-rouge">copy.random = copy</code>；A、B 互相随机指向时，两条边也都落在 A、B 的副本之间。重复节点值不会冲突，因为映射按对象身份区分。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Deque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.IdentityHashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">NodeCopy</span> <span class="nf">copyRandomBinaryTree</span><span class="o">(</span><span class="nc">Node</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Node</span><span class="o">,</span> <span class="nc">NodeCopy</span><span class="o">&gt;</span> <span class="n">copies</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IdentityHashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Node</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="n">copies</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">root</span><span class="o">,</span> <span class="k">new</span> <span class="nc">NodeCopy</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span><span class="o">));</span>
+        <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">root</span><span class="o">);</span>
+
+        <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">copies</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="k">new</span> <span class="nc">NodeCopy</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">.</span><span class="na">val</span><span class="o">));</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">copies</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="k">new</span> <span class="nc">NodeCopy</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">.</span><span class="na">val</span><span class="o">));</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">root</span><span class="o">);</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+            <span class="nc">NodeCopy</span> <span class="n">copy</span> <span class="o">=</span> <span class="n">copies</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+            <span class="n">copy</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">copies</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
+            <span class="n">copy</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">copies</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+            <span class="n">copy</span><span class="o">.</span><span class="na">random</span> <span class="o">=</span> <span class="n">copies</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">random</span><span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">copies</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">root</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">copyRandomBinaryTree</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">Node</span><span class="p">)</span> <span class="o">*</span><span class="n">NodeCopy</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">root</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">nil</span>
+	<span class="p">}</span>
+
+	<span class="n">copies</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="o">*</span><span class="n">Node</span><span class="p">]</span><span class="o">*</span><span class="n">NodeCopy</span><span class="p">{</span>
+		<span class="n">root</span><span class="o">:</span> <span class="p">{</span><span class="n">Val</span><span class="o">:</span> <span class="n">root</span><span class="o">.</span><span class="n">Val</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="n">stack</span> <span class="o">:=</span> <span class="p">[]</span><span class="o">*</span><span class="n">Node</span><span class="p">{</span><span class="n">root</span><span class="p">}</span>
+
+	<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">node</span> <span class="o">:=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+		<span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+
+		<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">Left</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">copies</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Left</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">NodeCopy</span><span class="p">{</span><span class="n">Val</span><span class="o">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Left</span><span class="o">.</span><span class="n">Val</span><span class="p">}</span>
+			<span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Left</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">Right</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">copies</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Right</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">NodeCopy</span><span class="p">{</span><span class="n">Val</span><span class="o">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Right</span><span class="o">.</span><span class="n">Val</span><span class="p">}</span>
+			<span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Right</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">root</span><span class="p">)</span>
+	<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">node</span> <span class="o">:=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+		<span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+		<span class="nb">copy</span> <span class="o">:=</span> <span class="n">copies</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
+
+		<span class="nb">copy</span><span class="o">.</span><span class="n">Left</span> <span class="o">=</span> <span class="n">copies</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Left</span><span class="p">]</span>
+		<span class="nb">copy</span><span class="o">.</span><span class="n">Right</span> <span class="o">=</span> <span class="n">copies</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Right</span><span class="p">]</span>
+		<span class="nb">copy</span><span class="o">.</span><span class="n">Random</span> <span class="o">=</span> <span class="n">copies</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Random</span><span class="p">]</span>
+
+		<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">Left</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Left</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">Right</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Right</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">copies</span><span class="p">[</span><span class="n">root</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度：$O(n)$</strong>。两趟 DFS 都只访问每个树节点一次。</li>
+    <li>
+<strong>空间复杂度：$O(n)$</strong>。身份映射保存 n 个条目；显式栈最多为 $O(h)$，新树本身属于输出。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>随机指针把树扩展成对象图，深拷贝必须维护“原对象到新对象”的身份映射。</li>
+    <li>先创建全部副本再统一连边，天然处理前向引用、自环和互指环。</li>
+    <li>第一趟只需沿左右孩子发现节点，因为题目保证 <code class="language-plaintext highlighter-rouge">random</code> 指向树内节点。</li>
+    <li>显式栈避免退化树造成递归栈溢出，仍保持 DFS 的线性复杂度。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>用节点值作映射键</strong>：两个值同为 7 的不同节点会合并成一个副本，结构和随机指针都被破坏。</li>
+    <li>
+<strong>把 <code class="language-plaintext highlighter-rouge">copy.random</code> 直接赋成 <code class="language-plaintext highlighter-rouge">node.random</code></strong>：新树会引用原树节点，属于浅拷贝。</li>
+    <li>
+<strong>第一趟尚未创建完就直接查随机目标</strong>：随机指针可能指向尚未访问的节点，映射查询会得到空。</li>
+    <li>
+<strong>第二趟漏连 <code class="language-plaintext highlighter-rouge">random</code></strong>：左右结构虽正确，随机关系全部丢失。</li>
+    <li>
+<strong>每遇到一次引用就新建节点</strong>：同一目标会产生多个副本，自环还会无限创建。</li>
+    <li>
+<strong>递归遍历一万层退化树</strong>：Java 可能抛出 <code class="language-plaintext highlighter-rouge">StackOverflowError</code>；显式栈不依赖调用栈深度。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/clone-graph/">133. 克隆图</a></td>
+      <td>中等</td>
+      <td>无向图任意成环，邻居是列表而非固定两个指针，映射表的作用完全一致</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/copy-list-with-random-pointer/">138. 随机链表的复制</a></td>
+      <td>中等</td>
+      <td>一维版本，可用「交织插入 + 拆分」做到 $O(1)$ 额外空间，是本题的经典对照</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/clone-n-ary-tree/">1490. 克隆 N 叉树</a></td>
+      <td>中等</td>
+      <td>无 <code class="language-plaintext highlighter-rouge">random</code> 因而无环，孩子数不定，纯递归即可，不需要映射表</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/">297. 二叉树的序列化与反序列化</a></td>
+      <td>困难</td>
+      <td>通过字符串中转实现等价的深拷贝，重点在空节点的编码与解析的一致性</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/find-duplicate-subtrees/">652. 寻找重复的子树</a></td>
+      <td>中等</td>
+      <td>同样用哈希表登记子树，但键是结构签名而非节点身份，考的是子树的相等判定</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/invert-binary-tree/">226. 翻转二叉树</a></td>
+      <td>简单</td>
+      <td>纯 <code class="language-plaintext highlighter-rouge">left</code>/<code class="language-plaintext highlighter-rouge">right</code> 的递归骨架，可用来对照理解「没有 random 时为何不需要表」</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2023/99571062" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1048. 最长字符串链</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2024/63225408" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1126. 查询活跃业务</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2024/16372136">https://hgnulb.github.io/blog/2024/16372136</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

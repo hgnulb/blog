@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 面试题 17.20. 连续中值 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,双指针,堆（优先队列）,排序,数据流,设计" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 面试题 17.20. 连续中值" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/92742480" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/92742480" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-29T01:59:06+08:00" />
+<meta property="article:modified_time" content="2026-03-29T01:59:06+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 面试题 17.20. 连续中值" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-03-29T01:59:06+08:00","datePublished":"2026-03-29T01:59:06+08:00","description":"题目描述","headline":"LeetCode 面试题 17.20. 连续中值","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/92742480"},"url":"https://hgnulb.github.io/blog/2026/92742480"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法双堆维护中位数">解法：双堆维护中位数</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 面试题 17.20. 连续中值">LeetCode 面试题 17.20. 连续中值</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-03-29 01:59:06"
+                    datetime="2026-03-29T01:59:06+08:00"
+            >
+                2026-03-29
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2983 字 · 英文 144 词 · 代码 81 行"
+            aria-label="预计阅读时间约 10 分钟，正文 2983 字 · 英文 144 词 · 代码 81 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 10 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    3 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7723837750/" title="程序员面试金典（第 6 版）">
+        程序员面试金典（第 6 版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3320177889/" title="排序">
+        排序
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8294756076/" title="双指针">
+        双指针
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7037379732/" title="堆（优先队列）">
+        堆（优先队列）
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8438014738/" title="数据流">
+        数据流
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法双堆维护中位数">解法：双堆维护中位数</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/continuous-median-lcci/">面试题 17.20. 连续中值</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>题目要求设计一个数据结构，支持两种操作：<code class="language-plaintext highlighter-rouge">addNum</code> 把一个整数加入数据流，<code class="language-plaintext highlighter-rouge">findMedian</code> 返回当前所有已加入元素的中位数。数据是持续到来的，不是一次性给定的数组，所以不存在「先拿到全部数据再处理」的机会，每一次查询面对的都是一个随时可能变长的集合。</p>
+
+  <p>中位数的定义要看清楚：把已加入的元素排好序后，如果个数为奇数，中位数是正中间那个数；如果个数为偶数，中位数是中间两个数的平均值。平均值意味着返回类型必须是浮点数，而不是整数。</p>
+
+  <p>约束里有两个明显的信号。第一，<code class="language-plaintext highlighter-rouge">addNum</code> 和 <code class="language-plaintext highlighter-rouge">findMedian</code> 的调用次数最多可以到 $5 \times 10^4$ 量级，两个操作交替出现，所以单次操作的代价必须足够低，不能让某一个操作退化成线性甚至更差。第二，元素值域是 $[-10^5, 10^5]$，是一个有限且不大的范围，这是一个留给进阶优化的伏笔。</p>
+
+  <p>边界情况：数据流为空时不会调用 <code class="language-plaintext highlighter-rouge">findMedian</code>，所以不必处理空集合；只有一个元素时中位数就是它自己；元素可以重复，也可以是负数，中位数本身不要求是数据流中出现过的数。</p>
+</blockquote>
+
+<h2 id="解法双堆维护中位数">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%8F%8C%E5%A0%86%E7%BB%B4%E6%8A%A4%E4%B8%AD%E4%BD%8D%E6%95%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：双堆维护中位数</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最朴素的写法是把所有数字塞进一个动态数组，每次查询中位数时排一遍序再取中间。这样 <code class="language-plaintext highlighter-rouge">addNum</code> 是 $O(1)$，但 <code class="language-plaintext highlighter-rouge">findMedian</code> 是 $O(n \log n)$，交替调用时总代价直奔 $O(n^2 \log n)$，在 $5 \times 10^4$ 次操作下无法接受。稍作改进，改成插入时用二分找位置、保持数组始终有序，查询就变成 $O(1)$，可代价转移到了插入：找位置只要 $O(\log n)$，但为了腾出空位仍然要搬移后面的所有元素，插入依旧是 $O(n)$。</p>
+
+  <p>瓶颈在于我们维护了「完整的有序性」，而中位数根本不需要这么多信息。观察一下：要回答中位数，只需要知道排序后正中间那一两个数是谁，两侧的元素究竟按什么顺序排列完全无关紧要。换句话说，我们只需要把集合切成「较小的一半」和「较大的一半」，并且能随时问出较小一半里的最大值、较大一半里的最小值——而「求一堆数里的极值并支持动态增删」正是堆最擅长的事。</p>
+
+  <p>于是用两个堆：大顶堆 <code class="language-plaintext highlighter-rouge">small</code> 存较小的一半，小顶堆 <code class="language-plaintext highlighter-rouge">large</code> 存较大的一半。整个解法建立在两条不变量之上，任何一次操作结束时它们都必须成立：</p>
+
+  <p>其一是有序划分不变量：<code class="language-plaintext highlighter-rouge">small</code> 中的每个元素都不大于 <code class="language-plaintext highlighter-rouge">large</code> 中的每个元素。等价的可检验形式是 <code class="language-plaintext highlighter-rouge">small</code> 的堆顶（较小一半的最大值）不大于 <code class="language-plaintext highlighter-rouge">large</code> 的堆顶（较大一半的最小值）。这条保证了两个堆顶恰好夹在整个有序序列的中间位置。</p>
+
+  <p>其二是大小平衡不变量：两堆的元素个数之差不超过 1，且约定多出来的那一个永远归 <code class="language-plaintext highlighter-rouge">small</code>。也就是 <code class="language-plaintext highlighter-rouge">small.size()</code> 等于 <code class="language-plaintext highlighter-rouge">large.size()</code>，或者比它多 1。这条保证了元素总数为奇数时中位数就是 <code class="language-plaintext highlighter-rouge">small</code> 的堆顶，为偶数时是两个堆顶的平均值。</p>
+
+  <p>难点在于插入时如何同时维持这两条不变量。新数字来的时候，我们并不知道它该去哪一半——它可能比 <code class="language-plaintext highlighter-rouge">large</code> 的堆顶还大，也可能比 <code class="language-plaintext highlighter-rouge">small</code> 的堆顶还小。逐个比较判断当然可行，但分支会变多且容易漏情况。更干净的技巧是「先入对面堆，再把堆顶转移过来」：想让元素最终落在 <code class="language-plaintext highlighter-rouge">small</code> 一侧的容量增长时，先把它放进 <code class="language-plaintext highlighter-rouge">small</code>，再从 <code class="language-plaintext highlighter-rouge">small</code> 弹出堆顶塞给 <code class="language-plaintext highlighter-rouge">large</code>，最后如果 <code class="language-plaintext highlighter-rouge">large</code> 变得比 <code class="language-plaintext highlighter-rouge">small</code> 多，就把 <code class="language-plaintext highlighter-rouge">large</code> 的堆顶弹回 <code class="language-plaintext highlighter-rouge">small</code>。</p>
+
+  <p>这个套路为什么能自动维持有序划分？关键在于「弹堆顶」这个动作本身就是在做筛选。把新数 $x$ 压进 <code class="language-plaintext highlighter-rouge">small</code> 后，<code class="language-plaintext highlighter-rouge">small</code> 的堆顶必然是新的最大值，它要么是 $x$ 自己（说明 $x$ 属于较大一半，应该被送走），要么是原来的最大值（说明 $x$ 比它小，理应留在较小一半，而被送走的那个原最大值本来就是较小一半里最该晋升的候选）。无论哪种情况，被移交给 <code class="language-plaintext highlighter-rouge">large</code> 的都恰好是「合并后应该属于较大一半的那一个」，我们不需要写任何显式的比较分支。反向把 <code class="language-plaintext highlighter-rouge">large</code> 堆顶弹回 <code class="language-plaintext highlighter-rouge">small</code> 时同理，弹出的是较大一半的最小值，也正是最该降级的元素。两次转移都只经手极值，划分自然不会被破坏。</p>
+
+  <p>至于实现细节：Java 的 <code class="language-plaintext highlighter-rouge">PriorityQueue</code> 默认是小顶堆，这里用存相反数的方式模拟大顶堆，省掉自定义比较器；由于取反可能触及边界，统一用 <code class="language-plaintext highlighter-rouge">long</code> 存储更稳妥。Go 代码手写了上浮 <code class="language-plaintext highlighter-rouge">pushHeap</code> 和下沉 <code class="language-plaintext highlighter-rouge">popHeap</code>，同样把 <code class="language-plaintext highlighter-rouge">small</code> 存成相反数，逻辑与 Java 完全等价。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>准备两个堆：大顶堆 <code class="language-plaintext highlighter-rouge">small</code> 装较小的一半，小顶堆 <code class="language-plaintext highlighter-rouge">large</code> 装较大的一半。之所以要一大一小两种堆顶方向，是因为我们只关心分界处的两个数，<code class="language-plaintext highlighter-rouge">small</code> 要能吐出它的最大值，<code class="language-plaintext highlighter-rouge">large</code> 要能吐出它的最小值。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">addNum</code> 第一步：把新数字压入 <code class="language-plaintext highlighter-rouge">small</code>。这一步不做任何比较，因为接下来的转移会自动纠正位置。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">addNum</code> 第二步：弹出 <code class="language-plaintext highlighter-rouge">small</code> 的堆顶，压入 <code class="language-plaintext highlighter-rouge">large</code>。弹出的一定是当前较小一半里的最大值，它是最有资格「晋升」到较大一半的元素，所以转移之后有序划分不变量依然成立。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">addNum</code> 第三步：如果此时 <code class="language-plaintext highlighter-rouge">large</code> 的元素个数超过了 <code class="language-plaintext highlighter-rouge">small</code>，就弹出 <code class="language-plaintext highlighter-rouge">large</code> 的堆顶压回 <code class="language-plaintext highlighter-rouge">small</code>。弹回的是较大一半的最小值，是最该「降级」的元素，划分同样不受影响。这一步把多出来的那个元素固定归给 <code class="language-plaintext highlighter-rouge">small</code>，兑现了大小平衡不变量的约定。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">findMedian</code>：若两堆等大，说明元素总数为偶数，返回两个堆顶的平均值，注意用浮点除法；若不等大，只可能是 <code class="language-plaintext highlighter-rouge">small</code> 多一个，说明总数为奇数，直接返回 <code class="language-plaintext highlighter-rouge">small</code> 的堆顶。</li>
+    <li>
+<strong>以 <code class="language-plaintext highlighter-rouge">addNum(1)</code>、<code class="language-plaintext highlighter-rouge">addNum(2)</code>、<code class="language-plaintext highlighter-rouge">findMedian</code>、<code class="language-plaintext highlighter-rouge">addNum(3)</code>、<code class="language-plaintext highlighter-rouge">findMedian</code> 走一遍</strong>：初始两堆皆空。<code class="language-plaintext highlighter-rouge">addNum(1)</code>：1 先入 <code class="language-plaintext highlighter-rouge">small</code>，再弹给 <code class="language-plaintext highlighter-rouge">large</code>，此时 <code class="language-plaintext highlighter-rouge">large</code> 有 1 个元素而 <code class="language-plaintext highlighter-rouge">small</code> 有 0 个，触发回弹，结果 <code class="language-plaintext highlighter-rouge">small = [1]</code>、<code class="language-plaintext highlighter-rouge">large = []</code>。<code class="language-plaintext highlighter-rouge">addNum(2)</code>：2 入 <code class="language-plaintext highlighter-rouge">small</code> 得到 <code class="language-plaintext highlighter-rouge">[2, 1]</code>，弹出堆顶 2 给 <code class="language-plaintext highlighter-rouge">large</code>，此时 <code class="language-plaintext highlighter-rouge">small = [1]</code>、<code class="language-plaintext highlighter-rouge">large = [2]</code>，两堆等大不再回弹。<code class="language-plaintext highlighter-rouge">findMedian</code>：两堆等大，返回 $(1 + 2) / 2 = 1.5$。<code class="language-plaintext highlighter-rouge">addNum(3)</code>：3 入 <code class="language-plaintext highlighter-rouge">small</code> 得到 <code class="language-plaintext highlighter-rouge">[3, 1]</code>，弹出堆顶 3 给 <code class="language-plaintext highlighter-rouge">large</code> 得到 <code class="language-plaintext highlighter-rouge">large = [2, 3]</code>、<code class="language-plaintext highlighter-rouge">small = [1]</code>，此时 <code class="language-plaintext highlighter-rouge">large</code> 比 <code class="language-plaintext highlighter-rouge">small</code> 多，回弹 <code class="language-plaintext highlighter-rouge">large</code> 的堆顶 2，最终 <code class="language-plaintext highlighter-rouge">small = [2, 1]</code>、<code class="language-plaintext highlighter-rouge">large = [3]</code>。注意 3 虽然是从 <code class="language-plaintext highlighter-rouge">small</code> 出发的，却精准地留在了较大一半，而被换回来的 2 也正确地归入较小一半。<code class="language-plaintext highlighter-rouge">findMedian</code>：<code class="language-plaintext highlighter-rouge">small</code> 比 <code class="language-plaintext highlighter-rouge">large</code> 多一个，返回 <code class="language-plaintext highlighter-rouge">small</code> 的堆顶 2。两次查询结果为 1.5 和 2，与直接排序 <code class="language-plaintext highlighter-rouge">[1, 2]</code> 和 <code class="language-plaintext highlighter-rouge">[1, 2, 3]</code> 的中位数一致。</li>
+  </ul>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">MedianFinder</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">small</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">large</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">MedianFinder</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">small</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;();</span>
+        <span class="n">large</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addNum</span><span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// small 用相反数模拟最大堆，堆顶对应较小一半的最大值。</span>
+        <span class="n">small</span><span class="o">.</span><span class="na">offer</span><span class="o">(-(</span><span class="kt">long</span><span class="o">)</span> <span class="n">num</span><span class="o">);</span>
+        <span class="n">large</span><span class="o">.</span><span class="na">offer</span><span class="o">(-</span><span class="n">small</span><span class="o">.</span><span class="na">poll</span><span class="o">());</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">large</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">small</span><span class="o">.</span><span class="na">size</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">small</span><span class="o">.</span><span class="na">offer</span><span class="o">(-</span><span class="n">large</span><span class="o">.</span><span class="na">poll</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">findMedian</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">small</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="n">large</span><span class="o">.</span><span class="na">size</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">((-</span><span class="n">small</span><span class="o">.</span><span class="na">peek</span><span class="o">())</span> <span class="o">+</span> <span class="n">large</span><span class="o">.</span><span class="na">peek</span><span class="o">())</span> <span class="o">/</span> <span class="mf">2.0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">small</span><span class="o">.</span><span class="na">peek</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">MedianFinder</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">small</span> <span class="p">[]</span><span class="kt">int</span>
+    <span class="n">large</span> <span class="p">[]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">MedianFinder</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">MedianFinder</span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">MedianFinder</span><span class="p">)</span> <span class="n">AddNum</span><span class="p">(</span><span class="n">num</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c">// small 保存较小一半的相反数，因此它按最小堆维护。</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">small</span> <span class="o">=</span> <span class="n">pushHeap</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">small</span><span class="p">,</span> <span class="o">-</span><span class="n">num</span><span class="p">)</span>
+    <span class="n">moved</span> <span class="o">:=</span> <span class="o">-</span><span class="n">this</span><span class="o">.</span><span class="n">small</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">small</span> <span class="o">=</span> <span class="n">popHeap</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">small</span><span class="p">)</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">large</span> <span class="o">=</span> <span class="n">pushHeap</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">large</span><span class="p">,</span> <span class="n">moved</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">large</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">small</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">moved</span> <span class="o">=</span> <span class="o">-</span><span class="n">this</span><span class="o">.</span><span class="n">large</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">large</span> <span class="o">=</span> <span class="n">popHeap</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">large</span><span class="p">)</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">small</span> <span class="o">=</span> <span class="n">pushHeap</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">small</span><span class="p">,</span> <span class="n">moved</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">MedianFinder</span><span class="p">)</span> <span class="n">FindMedian</span><span class="p">()</span> <span class="kt">float64</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">small</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">large</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kt">float64</span><span class="p">(</span><span class="o">-</span><span class="n">this</span><span class="o">.</span><span class="n">small</span><span class="p">[</span><span class="m">0</span><span class="p">]</span><span class="o">+</span><span class="n">this</span><span class="o">.</span><span class="n">large</span><span class="p">[</span><span class="m">0</span><span class="p">])</span> <span class="o">/</span> <span class="m">2.0</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kt">float64</span><span class="p">(</span><span class="o">-</span><span class="n">this</span><span class="o">.</span><span class="n">small</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">pushHeap</span><span class="p">(</span><span class="n">heap</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">value</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">child</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">heap</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">child</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">;</span> <span class="p">{</span>
+        <span class="n">parent</span> <span class="o">:=</span> <span class="p">(</span><span class="n">child</span> <span class="o">-</span> <span class="m">1</span><span class="p">)</span> <span class="o">/</span> <span class="m">2</span>
+        <span class="k">if</span> <span class="n">heap</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">]</span> <span class="p">{</span>
+            <span class="k">break</span>
+        <span class="p">}</span>
+        <span class="n">heap</span><span class="p">[</span><span class="n">parent</span><span class="p">],</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">]</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">],</span> <span class="n">heap</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">heap</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">popHeap</span><span class="p">(</span><span class="n">heap</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="n">last</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">heap</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span>
+    <span class="n">heap</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">last</span><span class="p">]</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="o">:</span><span class="n">last</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">parent</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="p">;</span> <span class="p">{</span>
+        <span class="n">left</span> <span class="o">:=</span> <span class="n">parent</span><span class="o">*</span><span class="m">2</span> <span class="o">+</span> <span class="m">1</span>
+        <span class="k">if</span> <span class="n">left</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">heap</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">break</span>
+        <span class="p">}</span>
+        <span class="n">child</span> <span class="o">:=</span> <span class="n">left</span>
+        <span class="n">right</span> <span class="o">:=</span> <span class="n">left</span> <span class="o">+</span> <span class="m">1</span>
+        <span class="k">if</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">heap</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">heap</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">child</span> <span class="o">=</span> <span class="n">right</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">heap</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">]</span> <span class="p">{</span>
+            <span class="k">break</span>
+        <span class="p">}</span>
+        <span class="n">heap</span><span class="p">[</span><span class="n">parent</span><span class="p">],</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">]</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">],</span> <span class="n">heap</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">child</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">heap</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：<code class="language-plaintext highlighter-rouge">addNum</code> 为 $O(\log n)$，因为它固定执行常数次堆的插入与弹出，每次操作的代价是堆高度 $O(\log n)$；<code class="language-plaintext highlighter-rouge">findMedian</code> 为 $O(1)$，只读取两个堆顶，不做任何调整。$n$ 次插入的总代价为 $O(n \log n)$。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$，两个堆合起来保存了数据流中的全部元素，除此之外只用了常数个临时变量。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「只要中间值就别维护全序」是一条可迁移的降本原则。完整排序提供的信息远超需求，把集合按需切成若干块、每块只暴露极值，往往能把 $O(n \log n)$ 的查询压到 $O(1)$。</li>
+    <li>「先入对面堆再转移堆顶」是双堆题的通用模板。它用两次极值操作替代了显式的大小判断分支，代码更短、也更不容易漏掉「新元素恰好落在分界线上」这类边界。</li>
+    <li>不变量要写成可以随时检验的形式。「<code class="language-plaintext highlighter-rouge">small</code> 堆顶 ≤ <code class="language-plaintext highlighter-rouge">large</code> 堆顶」和「<code class="language-plaintext highlighter-rouge">small.size()</code> 减 <code class="language-plaintext highlighter-rouge">large.size()</code> 属于 ${0, 1}$」这两句话，是调试时逐步打印就能验证的断言，比「大概保持平衡」这种模糊描述有用得多。</li>
+    <li>多出来的元素归哪一边必须提前约定死。约定归 <code class="language-plaintext highlighter-rouge">small</code> 之后，奇数情况的取值代码只有一行；如果不约定，<code class="language-plaintext highlighter-rouge">findMedian</code> 就要分三种情况讨论。</li>
+    <li>面试视角：这题几乎必然会追问「如果所有数字都在 0 到 100 的范围内，怎么优化」。答案是改用计数数组，开一个长度 101 的桶记录每个值出现的次数，<code class="language-plaintext highlighter-rouge">addNum</code> 变成 $O(1)$ 的自增，<code class="language-plaintext highlighter-rouge">findMedian</code> 则从头累加前缀计数，找到第 $\lfloor (n+1)/2 \rfloor$ 和第 $\lceil (n+1)/2 \rceil$ 个元素落在哪个桶，代价是 $O(100)$ 即常数。若追问再变成「99% 的数字都在 0 到 100 范围内，剩下 1% 是任意值」，则用「桶 + 两侧溢出堆」的混合结构：范围内的走计数数组，范围外的分别丢进一个大顶堆和一个小顶堆，查询时先看两侧溢出的数量再决定从哪里数起。</li>
+    <li>面试视角：还常被问「能不能保证 <code class="language-plaintext highlighter-rouge">findMedian</code> 严格 $O(1)$ 且 <code class="language-plaintext highlighter-rouge">addNum</code> 也 $O(1)$」。在比较模型下这是做不到的，因为那等价于 $O(n)$ 完成排序；这时应当直接指出下界，而不是硬凑方案。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：直接把新元素放进当前 size 较小的那个堆，不做交叉转移。用例 <code class="language-plaintext highlighter-rouge">addNum(5)</code>、<code class="language-plaintext highlighter-rouge">addNum(1)</code>、<code class="language-plaintext highlighter-rouge">addNum(2)</code> → 5 进 <code class="language-plaintext highlighter-rouge">small</code>，1 因为 <code class="language-plaintext highlighter-rouge">large</code> 更小而直接进 <code class="language-plaintext highlighter-rouge">large</code>，此时 <code class="language-plaintext highlighter-rouge">small</code> 的堆顶 5 大于 <code class="language-plaintext highlighter-rouge">large</code> 的堆顶 1，有序划分已经被破坏；再插入 2 后 <code class="language-plaintext highlighter-rouge">findMedian</code> 会返回 $(5 + 1) / 2 = 3$，而正确答案是 2。大小平衡看似满足，划分却错了，这类 bug 在小样例上未必暴露。</li>
+    <li>
+<strong>错误写法</strong>：只做「入 <code class="language-plaintext highlighter-rouge">small</code>、弹给 <code class="language-plaintext highlighter-rouge">large</code>」两步，省掉第三步的回弹。用例 <code class="language-plaintext highlighter-rouge">addNum(1)</code> → <code class="language-plaintext highlighter-rouge">small</code> 为空、<code class="language-plaintext highlighter-rouge">large = [1]</code>，随后 <code class="language-plaintext highlighter-rouge">findMedian</code> 读取 <code class="language-plaintext highlighter-rouge">small</code> 的堆顶直接崩溃；即便不崩溃，<code class="language-plaintext highlighter-rouge">large</code> 也会永远比 <code class="language-plaintext highlighter-rouge">small</code> 多，奇数情况的取值全部取错一位。</li>
+    <li>
+<strong>错误写法</strong>：把回弹条件写成 <code class="language-plaintext highlighter-rouge">large.size() &gt;= small.size()</code>。用例 <code class="language-plaintext highlighter-rouge">addNum(1)</code>、<code class="language-plaintext highlighter-rouge">addNum(2)</code> → 本该形成 <code class="language-plaintext highlighter-rouge">small = [1]</code>、<code class="language-plaintext highlighter-rouge">large = [2]</code> 的均衡状态，却被强行把 2 弹回 <code class="language-plaintext highlighter-rouge">small</code>，<code class="language-plaintext highlighter-rouge">large</code> 变空，<code class="language-plaintext highlighter-rouge">findMedian</code> 返回 2 而不是 1.5。回弹只应在 <code class="language-plaintext highlighter-rouge">large</code> 严格多于 <code class="language-plaintext highlighter-rouge">small</code> 时触发。</li>
+    <li>
+<strong>错误写法</strong>：偶数情况用整数除法求平均，写成 <code class="language-plaintext highlighter-rouge">(small.peek() + large.peek()) / 2</code>。用例 <code class="language-plaintext highlighter-rouge">addNum(1)</code>、<code class="language-plaintext highlighter-rouge">addNum(2)</code> → 期望 1.5，实际得到 1。必须除以 <code class="language-plaintext highlighter-rouge">2.0</code>，或先转成浮点再相加。</li>
+    <li>
+<strong>错误写法</strong>：Java 用 <code class="language-plaintext highlighter-rouge">int</code> 存相反数并在极端值上取反。用例中若出现 <code class="language-plaintext highlighter-rouge">Integer.MIN_VALUE</code>，<code class="language-plaintext highlighter-rouge">-num</code> 会溢出回自身，导致堆序完全错乱。用 <code class="language-plaintext highlighter-rouge">long</code> 保存或先转宽再取负是安全做法。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">findMedian</code> 用 <code class="language-plaintext highlighter-rouge">small.size() &gt; large.size()</code> 之外的条件判断奇偶，比如自己额外维护一个 <code class="language-plaintext highlighter-rouge">count</code> 计数器却忘记在回弹分支同步更新。用例是任意一串插入 → 计数与实际堆大小脱节，奇偶判断错位。直接读堆的 size 就不会有这个问题。</li>
+    <li>
+<strong>错误写法</strong>：把 <code class="language-plaintext highlighter-rouge">small</code> 定义成小顶堆、<code class="language-plaintext highlighter-rouge">large</code> 定义成大顶堆（方向搞反）。用例 <code class="language-plaintext highlighter-rouge">addNum(1)</code>、<code class="language-plaintext highlighter-rouge">addNum(2)</code> → <code class="language-plaintext highlighter-rouge">small</code> 的堆顶给出的是较小一半的最小值，根本不是分界元素，中位数无从谈起。记住口诀：两个堆顶要「相对而立」，都朝着分界线的方向。</li>
+    <li>
+<strong>错误写法</strong>：Go 手写堆的 <code class="language-plaintext highlighter-rouge">popHeap</code> 里先截断切片再取堆顶，或者下沉时用旧长度做边界判断。用例是任意超过两个元素的插入序列 → 越界 panic 或者堆序被破坏。正确顺序是先取出堆顶值、把末尾元素搬到根、再截断，然后按新长度下沉。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/sliding-window-median/">480. 滑动窗口中位数</a></td>
+      <td>困难</td>
+      <td>双堆还要支持窗口滑出时的删除，需配合延迟删除或有序集合</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shu-ju-liu-zhong-de-zhong-wei-shu-lcof/">剑指 Offer 41. 数据流中的中位数</a></td>
+      <td>困难</td>
+      <td>同款双堆模板，可作为默写复现的对照题</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/kth-largest-element-in-a-stream/">703. 数据流中的第 K 大元素</a></td>
+      <td>简单</td>
+      <td>只需单个容量为 K 的小顶堆，不涉及两堆之间的平衡</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/kth-largest-element-in-an-array/">215. 数组中的第K个最大元素</a></td>
+      <td>中等</td>
+      <td>静态数组求第 K 大，可用快速选择做到平均 $O(n)$</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/50735352" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 面试题 17.17. 多次搜索</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/77907531" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 面试题 17.23. 最大黑方阵</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/92742480">https://hgnulb.github.io/blog/2026/92742480</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

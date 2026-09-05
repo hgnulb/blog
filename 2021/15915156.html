@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 面试题 17.22. 单词转换 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,哈希表,回溯,字符串,广度优先搜索,百度" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 面试题 17.22. 单词转换" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/15915156" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/15915156" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-09-11T16:41:53+08:00" />
+<meta property="article:modified_time" content="2021-09-11T16:41:53+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 面试题 17.22. 单词转换" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-09-11T16:41:53+08:00","datePublished":"2021-09-11T16:41:53+08:00","description":"题目描述","headline":"LeetCode 面试题 17.22. 单词转换","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/15915156"},"url":"https://hgnulb.github.io/blog/2021/15915156"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法bfs-最短路径">解法：BFS 最短路径</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 面试题 17.22. 单词转换">LeetCode 面试题 17.22. 单词转换</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-09-11 16:41:53"
+                    datetime="2021-09-11T16:41:53+08:00"
+            >
+                2021-09-11
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3725 字 · 英文 140 词 · 代码 128 行"
+            aria-label="预计阅读时间约 14 分钟，正文 3725 字 · 英文 140 词 · 代码 128 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 14 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    6 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7723837750/" title="程序员面试金典（第 6 版）">
+        程序员面试金典（第 6 版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9879723011/" title="百度">
+        百度
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9755043388/" title="回溯">
+        回溯
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法bfs-最短路径">解法：BFS 最短路径</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/word-transformer-lcci/">面试题 17.22. 单词转换</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给定起始单词、目标单词和一本字典，每次只能改动一个字母，且改完之后得到的单词必须在字典里，要求返回<strong>一条完整的变换序列</strong>（含首尾），无解则返回空列表。注意题目要的是路径本身而不是路径长度，这一点直接决定了必须额外记录「每个单词是从谁变过来的」。</p>
+
+  <p>题面还有两个容易忽略的细节：所有单词<strong>长度相同</strong>，且都由小写字母组成。长度相同意味着变换只有「替换某一位」这一种形式，不存在插入或删除；只含小写字母意味着每一位的候选替换值最多 25 个（排除原字符），这是一个非常小的常数。</p>
+
+  <p>字典规模在几千到上万量级，单词长度不超过十几。这两个数字放在一起给出了强烈的信号：<strong>枚举「所有可能的邻居字符串」再查字典，比两两比较字典中的单词更划算</strong>。前者对每个单词是 $L \times 25$ 次查表，后者是 $O(n L)$ 次逐字符比对，当 n 远大于 $25L$ 时前者胜出。</p>
+
+  <p>边界上要考虑：起始词和目标词可能相同，此时答案就是只含一个词的序列；目标词可能根本不在字典里，直接无解；起始词自身不一定在字典里，不能想当然地把它当成字典元素处理；字典里也可能存在孤立的单词群，导致从起点根本走不到终点。</p>
+</blockquote>
+
+<h2 id="解法bfs-最短路径">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95bfs-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：BFS 最短路径</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最朴素的做法是从起始词开始做深度优先枚举：每一步尝试所有可达的字典单词，一路递归到目标词为止。这在稠密的字典上会退化成指数级的路径枚举——同一个中间单词可能被无数条前缀不同的路径重复访问，而它们后续的探索完全一样，做的是大量重复劳动。</p>
+
+  <p>瓶颈的本质是<strong>没有把「单词」当成状态去做去重</strong>。事实上，一旦确定当前手里是哪个单词，接下来能走到哪些地方就完全确定了，与「我是怎么走到这里的」无关。这正是图论模型成立的条件。</p>
+
+  <p>于是把每个单词看成图上的一个点，两个单词若只差一个字母就在它们之间连一条无权边。问题立刻变成「在这张图上求从起点到终点的一条路径」。由于边权全为 1，逐层向外扩展的搜索顺序天然保证：<strong>任何单词第一次被访问到时，走过的步数就是从起点到它的最短距离</strong>，这就是可以对每个单词只访问一次、直接打上已访问标记的理论依据。</p>
+
+  <p>算法维持的不变量有两条。其一，队列中的元素按到起点的距离非递减排列，同一轮循环处理的是同一层；其二，<code class="language-plaintext highlighter-rouge">parent[w]</code> 一旦被写入就不再修改，它记录的是<strong>首次</strong>到达 w 时的前驱，因而沿 parent 从终点一路回溯，得到的必然是一条合法且最短的路径。</p>
+
+  <p>邻居的产生方式选择「构造而非比较」：把当前单词拆成字符数组，对每一位依次替换成其余 25 个字母，拼出新串后到字典哈希集合里查一次。这样每个单词的扩展代价是 $O(L \times 26)$ 次哈希查询，与字典总规模无关，比遍历整本字典逐个比较要稳得多。</p>
+
+  <p>最后，因为题目只要求返回任意一条合法序列而非全部序列，一旦目标词入队就可以立刻停止扩展——继续搜下去也只会找到不更短的路径。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>先处理起点等于终点的退化情况，直接返回只含它自己的列表</strong>。这是因为后续的搜索逻辑建立在「至少变换一次」之上，起点从不进入邻居枚举的判定，不特判会走到「未找到」分支返回空列表。</li>
+    <li>
+<strong>把字典装进哈希集合，并检查目标词是否在其中，不在则立刻返回空</strong>。装集合是为了把「某个拼出来的串是否合法」降到常数判定；提前检查目标词则能在无解时省掉整轮搜索，也避免了搜索成功却无法回溯的矛盾状态。</li>
+    <li>
+<strong>初始化队列放入起点，同时把起点加入已访问集合</strong>。访问标记必须在<strong>入队时</strong>打，而不是出队时打，否则同一层里两个不同单词可能各自把同一个邻居塞进队列，造成重复扩展和 parent 被覆盖。</li>
+    <li>
+<strong>按层循环：先记下当前队列长度 size，再恰好弹出 size 个元素</strong>。这样每一轮内部处理的都是距离相同的一批单词，层与层之间界限清晰；虽然本题只要一条路径、不严格依赖分层，但这个写法能让「首次到达即最短」的性质一目了然，也便于扩展成需要层数的变体。</li>
+    <li>
+<strong>对每个出队单词，逐位尝试替换成 'a' 到 'z'，跳过与原字符相同的情形</strong>。跳过是因为替换成自己等于没变，会生成当前单词本身，白白多一次查表。替换后拼出新串，若不在字典中或已访问过则跳过；否则打标记、写 parent、入队。</li>
+    <li>
+<strong>每处理完一位后必须把该位复原</strong>。字符数组是复用的，不还原会导致后续位的枚举建立在已被污染的串上，生成大量本不存在的邻居。</li>
+    <li>
+<strong>一旦生成的邻居就是目标词，置标志位并层层跳出所有循环</strong>。三层循环各有一次 break 判断，是为了在不使用异常或标签跳转的前提下尽快退出。</li>
+    <li>
+<strong>从目标词沿 parent 反向回溯到起点，再整体反转</strong>。反转是必要的，因为回溯天然给出的是从终点到起点的逆序；起点的 parent 不存在（Java 中为 null、Go 中为空串），正好作为循环终止条件。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]</code> 走一遍。起点终点不同，字典集合建好，<code class="language-plaintext highlighter-rouge">cog</code> 在其中，继续。队列初始为 <code class="language-plaintext highlighter-rouge">["hit"]</code>，visited = {hit}。</p>
+
+  <p>第一层：弹出 <code class="language-plaintext highlighter-rouge">hit</code>。改第 0 位得到 ait…zit，其中只有…都不在字典；改第 1 位得到 hat、hbt…，其中 <code class="language-plaintext highlighter-rouge">hot</code> 在字典且未访问，于是 visited 加入 hot、<code class="language-plaintext highlighter-rouge">parent["hot"] = "hit"</code>、入队；改第 2 位得到 hia、hib… 均不在字典。本层结束，队列为 <code class="language-plaintext highlighter-rouge">["hot"]</code>。</p>
+
+  <p>第二层：弹出 <code class="language-plaintext highlighter-rouge">hot</code>。改第 0 位时试到 <code class="language-plaintext highlighter-rouge">dot</code>（在字典、未访问），记 <code class="language-plaintext highlighter-rouge">parent["dot"] = "hot"</code> 入队；继续试到 <code class="language-plaintext highlighter-rouge">lot</code>，记 <code class="language-plaintext highlighter-rouge">parent["lot"] = "hot"</code> 入队。改第 1 位得到 hat、hbt… 均不在字典（<code class="language-plaintext highlighter-rouge">hit</code> 虽在起点但不在字典里，即使拼出来也会被字典判定挡掉）。改第 2 位得到 hoa、hob… 也都不在字典。本层结束，队列为 <code class="language-plaintext highlighter-rouge">["dot", "lot"]</code>。</p>
+
+  <p>第三层：弹出 <code class="language-plaintext highlighter-rouge">dot</code>，改第 2 位试到 <code class="language-plaintext highlighter-rouge">dog</code>（在字典、未访问），记 <code class="language-plaintext highlighter-rouge">parent["dog"] = "dot"</code> 入队；<code class="language-plaintext highlighter-rouge">dog</code> 不等于 <code class="language-plaintext highlighter-rouge">cog</code>，继续。再弹出 <code class="language-plaintext highlighter-rouge">lot</code>，改第 2 位试到 <code class="language-plaintext highlighter-rouge">log</code>，记 <code class="language-plaintext highlighter-rouge">parent["log"] = "lot"</code> 入队。本层结束，队列为 <code class="language-plaintext highlighter-rouge">["dog", "log"]</code>。</p>
+
+  <p>第四层：弹出 <code class="language-plaintext highlighter-rouge">dog</code>，改第 0 位试到 <code class="language-plaintext highlighter-rouge">cog</code>，它在字典且未访问，记 <code class="language-plaintext highlighter-rouge">parent["cog"] = "dog"</code> 入队，同时发现它等于终点，found 置真，逐层 break 退出。</p>
+
+  <p>回溯阶段：从 <code class="language-plaintext highlighter-rouge">cog</code> 出发，path = [cog]；<code class="language-plaintext highlighter-rouge">parent["cog"] = "dog"</code>，path = [cog, dog]；<code class="language-plaintext highlighter-rouge">parent["dog"] = "dot"</code>，path = [cog, dog, dot]；<code class="language-plaintext highlighter-rouge">parent["dot"] = "hot"</code>，path = [cog, dog, dot, hot]；<code class="language-plaintext highlighter-rouge">parent["hot"] = "hit"</code>，path = [cog, dog, dot, hot, hit]；<code class="language-plaintext highlighter-rouge">hit</code> 没有 parent，循环结束。反转得到 <code class="language-plaintext highlighter-rouge">["hit", "hot", "dot", "dog", "cog"]</code>，每相邻两词恰好差一个字母，且除首词外全部来自字典，答案合法。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 广度优先搜索 从 beginWord 出发，首次到达 endWord 即为最短路径。</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">findLadders</span><span class="o">(</span><span class="nc">String</span> <span class="n">beginWord</span><span class="o">,</span> <span class="nc">String</span> <span class="n">endWord</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">wordList</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">beginWord</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">endWord</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">beginWord</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">dict</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;(</span><span class="n">wordList</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">dict</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">endWord</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="o">}</span>
+
+        <span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">parent</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">visited</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+
+        <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">beginWord</span><span class="o">);</span>
+        <span class="n">visited</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">beginWord</span><span class="o">);</span>
+
+        <span class="kt">boolean</span> <span class="n">found</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">queue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">found</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="nc">String</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+                <span class="kt">char</span><span class="o">[]</span> <span class="n">arr</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">();</span>
+
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">p</span><span class="o">++)</span> <span class="o">{</span>
+                    <span class="kt">char</span> <span class="n">old</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">p</span><span class="o">];</span>
+                    <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="sc">'a'</span><span class="o">;</span> <span class="n">c</span> <span class="o">&lt;=</span> <span class="sc">'z'</span><span class="o">;</span> <span class="n">c</span><span class="o">++)</span> <span class="o">{</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="n">old</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">continue</span><span class="o">;</span>
+                        <span class="o">}</span>
+                        <span class="n">arr</span><span class="o">[</span><span class="n">p</span><span class="o">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">;</span>
+                        <span class="nc">String</span> <span class="n">next</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">(</span><span class="n">arr</span><span class="o">);</span>
+                        <span class="k">if</span> <span class="o">(!</span><span class="n">dict</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">next</span><span class="o">)</span> <span class="o">||</span> <span class="n">visited</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">next</span><span class="o">))</span> <span class="o">{</span>
+                            <span class="k">continue</span><span class="o">;</span>
+                        <span class="o">}</span>
+
+                        <span class="n">visited</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">next</span><span class="o">);</span>
+                        <span class="n">parent</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">next</span><span class="o">,</span> <span class="n">cur</span><span class="o">);</span>
+                        <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">next</span><span class="o">);</span>
+
+                        <span class="k">if</span> <span class="o">(</span><span class="n">next</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">endWord</span><span class="o">))</span> <span class="o">{</span>
+                            <span class="n">found</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                            <span class="k">break</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                    <span class="n">arr</span><span class="o">[</span><span class="n">p</span><span class="o">]</span> <span class="o">=</span> <span class="n">old</span><span class="o">;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">found</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">found</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(!</span><span class="n">found</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="o">}</span>
+
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">path</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">String</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">endWord</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">cur</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">path</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">cur</span><span class="o">);</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">cur</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nc">Collections</span><span class="o">.</span><span class="na">reverse</span><span class="o">(</span><span class="n">path</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">path</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 广度优先搜索 从 beginWord 出发，首次到达 endWord 即为最短路径。</span>
+<span class="k">func</span> <span class="n">findLadders</span><span class="p">(</span><span class="n">beginWord</span> <span class="kt">string</span><span class="p">,</span> <span class="n">endWord</span> <span class="kt">string</span><span class="p">,</span> <span class="n">wordList</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">beginWord</span> <span class="o">==</span> <span class="n">endWord</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="n">beginWord</span><span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">dict</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">w</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">wordList</span> <span class="p">{</span>
+        <span class="n">dict</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="o">!</span><span class="n">dict</span><span class="p">[</span><span class="n">endWord</span><span class="p">]</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{}</span>
+    <span class="p">}</span>
+
+    <span class="n">queue</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="n">beginWord</span><span class="p">}</span>
+    <span class="n">visited</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">{</span><span class="n">beginWord</span><span class="o">:</span> <span class="no">true</span><span class="p">}</span>
+    <span class="n">parent</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{}</span>
+
+    <span class="n">found</span> <span class="o">:=</span> <span class="no">false</span>
+    <span class="k">for</span> <span class="n">head</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">head</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">found</span><span class="p">;</span> <span class="p">{</span>
+        <span class="n">size</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span> <span class="o">-</span> <span class="n">head</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">cur</span> <span class="o">:=</span> <span class="n">queue</span><span class="p">[</span><span class="n">head</span><span class="p">]</span>
+            <span class="n">head</span><span class="o">++</span>
+
+            <span class="n">arr</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">);</span> <span class="n">p</span><span class="o">++</span> <span class="p">{</span>
+                <span class="n">old</span> <span class="o">:=</span> <span class="n">arr</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="o">:=</span> <span class="kt">byte</span><span class="p">(</span><span class="sc">'a'</span><span class="p">);</span> <span class="n">c</span> <span class="o">&lt;=</span> <span class="kt">byte</span><span class="p">(</span><span class="sc">'z'</span><span class="p">);</span> <span class="n">c</span><span class="o">++</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="n">old</span> <span class="p">{</span>
+                        <span class="k">continue</span>
+                    <span class="p">}</span>
+                    <span class="n">arr</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+                    <span class="n">next</span> <span class="o">:=</span> <span class="kt">string</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="o">!</span><span class="n">dict</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">||</span> <span class="n">visited</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="p">{</span>
+                        <span class="k">continue</span>
+                    <span class="p">}</span>
+
+                    <span class="n">visited</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+                    <span class="n">parent</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur</span>
+                    <span class="n">queue</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">next</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">next</span> <span class="o">==</span> <span class="n">endWord</span> <span class="p">{</span>
+                        <span class="n">found</span> <span class="o">=</span> <span class="no">true</span>
+                        <span class="k">break</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="n">arr</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">old</span>
+                <span class="k">if</span> <span class="n">found</span> <span class="p">{</span>
+                    <span class="k">break</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">found</span> <span class="p">{</span>
+                <span class="k">break</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="o">!</span><span class="n">found</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{}</span>
+    <span class="p">}</span>
+
+    <span class="n">path</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="n">cur</span> <span class="o">:=</span> <span class="n">endWord</span>
+    <span class="k">for</span> <span class="n">cur</span> <span class="o">!=</span> <span class="s">""</span> <span class="p">{</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">cur</span><span class="p">)</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">parent</span><span class="p">[</span><span class="n">cur</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">;</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+        <span class="n">path</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">path</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">path</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">path</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n \times L^2)$，其中 n 为字典单词数、L 为单词长度。凭什么？每个单词最多出队一次（已访问集合保证），出队后要枚举 L 个位置各 25 个替换字符，共约 $26L$ 次尝试；每次尝试都要用 <code class="language-plaintext highlighter-rouge">new String(arr)</code> 构造一个长度为 L 的新串并做哈希，构造与哈希各是 $O(L)$，于是单个单词的扩展代价是 $O(26 L^2)$，乘以 n 个单词、去掉常数即得。回溯路径最多经过 n 个单词，量级更低不影响总和。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n \times L)$。凭什么？字典集合、已访问集合、parent 映射和队列各自最多保存 n 个单词，每个单词占 L 个字符；这四个结构都是线性于字典规模的，没有二维邻接表这类平方级开销。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>状态无后效性是图建模的前提</strong>：能否把问题抽象成图，判据是「当前状态是否唯一决定了后续所有可能」。本题中「手里是哪个单词」就是完整状态，历史路径不影响未来，因此可以对状态去重，把指数级枚举压成线性遍历。遇到「每步做一个小改动、问能否到达/最少几步」的题，先问自己这个问题。</li>
+    <li>
+<strong>边权全为 1 时逐层扩展即最短路</strong>：这是不需要优先队列、不需要松弛操作的关键理由。一旦题目给某些变换加上不同代价，这个性质立刻失效，必须换成带优先队列的最短路算法——面试中被追问「如果每种字母替换代价不同呢」，标准答案就是这个。</li>
+    <li>
+<strong>邻居的产生方式要按规模选择</strong>：「构造候选串再查字典」的代价是 $O(26L^2)$ 且与字典大小无关，「遍历字典逐个比较」的代价是 $O(nL)$。字典大而单词短时选前者，字典小而单词极长时选后者。能说清这个取舍，比背下模板更能体现工程判断。</li>
+    <li>
+<strong>要路径就得记前驱，且前驱只写一次</strong>：距离和路径是两种不同的输出需求。只要答案是路径，就必须维护 parent 映射，并且严格保证「首次到达时写入、之后永不覆盖」——这条不变量正是回溯结果最短且无环的保证。</li>
+    <li>
+<strong>访问标记的时机决定正确性与效率</strong>：入队即标记，可以避免同一层内多个单词把同一邻居重复入队；若改成出队才标记，队列规模会成倍膨胀，且 parent 可能被后写的路径覆盖。</li>
+    <li>
+<strong>面试视角</strong>：这题是「单词接龙」的简化版，考察点集中在建模而非算法本身。答题时先明确说出「把单词当节点、差一个字母连边、边权为 1」，再讲搜索顺序和 parent 回溯，最后主动提一句「如果要返回所有最短路径，就要把 parent 换成前驱列表并在同层允许多次记录」，能显著拉开与只会套模板的候选人的差距。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：忘记特判起点等于终点</strong>。用例 <code class="language-plaintext highlighter-rouge">beginWord = "a", endWord = "a", wordList = ["a","b"]</code> → 搜索时枚举邻居会跳过与原字符相同的替换，永远生成不出 <code class="language-plaintext highlighter-rouge">a</code> 自己，found 保持假，返回空列表；正确答案是 <code class="language-plaintext highlighter-rouge">["a"]</code>。</li>
+    <li>
+<strong>错误写法：不检查终点是否在字典中</strong>。用例 <code class="language-plaintext highlighter-rouge">beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog"]</code> → 搜索会把整个连通块跑完才发现无解，虽然结果仍是空列表，但在字典达到万级时白白多跑一整轮；更糟的是若把「拼出的串等于终点」作为命中条件而绕过字典判定，会返回一条包含非法单词的路径。</li>
+    <li>
+<strong>错误写法：出队时才把单词加入已访问集合</strong>。用例 <code class="language-plaintext highlighter-rouge">beginWord = "hit", endWord = "cog", wordList = ["hot","hog","cog","dot","dog"]</code> → 同一层的 <code class="language-plaintext highlighter-rouge">dot</code> 和 <code class="language-plaintext highlighter-rouge">hot</code> 都能生成 <code class="language-plaintext highlighter-rouge">dog</code>，两次都入队；第二次入队时 <code class="language-plaintext highlighter-rouge">parent["dog"]</code> 被覆盖成后来者，回溯出的前驱与实际最短路不符，且队列中出现重复元素导致后续层被重复扩展。</li>
+    <li>
+<strong>错误写法：替换字符后忘记把该位复原</strong>。用例 <code class="language-plaintext highlighter-rouge">beginWord = "hit", wordList = ["hot","hop"]</code> → 处理完第 1 位得到 <code class="language-plaintext highlighter-rouge">hot</code> 后，若不把 arr[1] 还原成 <code class="language-plaintext highlighter-rouge">i</code>，枚举第 2 位时基串已变成 <code class="language-plaintext highlighter-rouge">ho?</code>，会拼出 <code class="language-plaintext highlighter-rouge">hoa</code>…<code class="language-plaintext highlighter-rouge">hoz</code> 这批本不应从 <code class="language-plaintext highlighter-rouge">hit</code> 一步到达的串，一旦其中有字典单词（如 <code class="language-plaintext highlighter-rouge">hop</code>）就会连出一条实际需要两步的假边，返回的序列相邻两词差了两个字母。</li>
+    <li>
+<strong>错误写法：枚举替换字符时不跳过原字符</strong>。用例 <code class="language-plaintext highlighter-rouge">beginWord = "hot", wordList = ["hot","dot"]</code> → 会生成 <code class="language-plaintext highlighter-rouge">hot</code> 自己，若它恰好在字典中且未被标记（例如起点未加入 visited），就会自己指向自己入队，parent 形成自环，回溯阶段陷入死循环直到栈溢出或超时。</li>
+    <li>
+<strong>错误写法：回溯路径后忘记反转</strong>。用例 <code class="language-plaintext highlighter-rouge">beginWord = "hit", endWord = "cog"</code> → 返回 <code class="language-plaintext highlighter-rouge">["cog","dog","dot","hot","hit"]</code>，方向完全相反，判题按序列首元素必须等于 beginWord 校验，直接判错。</li>
+    <li>
+<strong>错误写法：找到终点后不跳出，继续把整层扩展完</strong>。用例字典规模上万且终点在第一层就被找到 → 仍要枚举完当前层所有单词的全部邻居，多做数万次哈希查询；虽然结果正确，但在卡常数的数据下会超时。三层循环都要有跳出判断。</li>
+    <li>
+<strong>错误写法：Go 里用 <code class="language-plaintext highlighter-rouge">for cur != ""</code> 回溯却让某个单词本身是空串</strong>。用例 <code class="language-plaintext highlighter-rouge">wordList</code> 含空字符串（越界数据）→ 循环提前终止，路径被截断；更常见的是把 <code class="language-plaintext highlighter-rouge">parent</code> 声明为 <code class="language-plaintext highlighter-rouge">map[string]string</code> 后误以为访问缺失键会 panic 而加了 <code class="language-plaintext highlighter-rouge">ok</code> 判断却写反条件，导致起点被漏进路径。稳妥做法是显式判断 <code class="language-plaintext highlighter-rouge">cur == beginWord</code> 后再终止。</li>
+    <li>
+<strong>错误写法：Java 里用 <code class="language-plaintext highlighter-rouge">String</code> 拼接生成邻居，例如 <code class="language-plaintext highlighter-rouge">cur.substring(0,p) + c + cur.substring(p+1)</code></strong>。用例字典一万词、单词长度 10 → 每次拼接产生三个临时对象，总共数百万次对象分配，虽然复杂度同阶但常数极大，在时限紧的判题环境下容易 TLE；复用 <code class="language-plaintext highlighter-rouge">char[]</code> 数组是标准做法。</li>
+    <li>
+<strong>错误写法：把 beginWord 也当作字典成员加入 visited 之外的结构，或反过来假设它一定在字典里</strong>。用例 <code class="language-plaintext highlighter-rouge">beginWord = "hit"</code> 而 <code class="language-plaintext highlighter-rouge">wordList</code> 不含 <code class="language-plaintext highlighter-rouge">hit</code> → 若代码在初始化时执行 <code class="language-plaintext highlighter-rouge">dict.remove(beginWord)</code> 之类的操作没问题，但若在扩展时要求「当前单词必须在字典中」才继续，起点会被直接排除，第一层就无法扩展，返回空列表。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/word-ladder/">127. 单词接龙</a></td>
+      <td>困难</td>
+      <td>只要最短长度不要路径，可省去 parent 映射并用双向扩展把搜索规模开方</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/word-ladder-ii/">126. 单词接龙 II</a></td>
+      <td>困难</td>
+      <td>要求列出全部最短路径，前驱必须存成列表且同层允许重复记录，去重时机完全不同</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-genetic-mutation/">433. 最小基因变化</a></td>
+      <td>中等</td>
+      <td>字符集只有 ACGT 四种、串长固定为 8，可以用位压缩把状态编码成整数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/open-the-lock/">752. 打开转盘锁</a></td>
+      <td>中等</td>
+      <td>邻居由数字环上下拨动生成而非查字典，还多了一组必须绕开的死亡状态</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/bus-routes/">815. 公交路线</a></td>
+      <td>困难</td>
+      <td>节点应建在路线而非站点上，考察如何选择合适的状态定义来压缩边数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-path-in-binary-matrix/">1091. 二进制矩阵中的最短路径</a></td>
+      <td>中等</td>
+      <td>图结构由网格八连通直接给出，无需构造邻居，重点在越界与障碍判定</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2021/39327240" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 529. 扫雷游戏</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/49147666" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 面试题 16.10. 生存人数</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/15915156">https://hgnulb.github.io/blog/2021/15915156</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

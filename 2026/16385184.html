@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode LCR 062. 实现 Trie (前缀树) | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,LCR,哈希表,字典树,字符串,设计" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode LCR 062. 实现 Trie (前缀树)" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/16385184" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/16385184" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-29T01:59:06+08:00" />
+<meta property="article:modified_time" content="2026-03-29T01:59:06+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode LCR 062. 实现 Trie (前缀树)" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-03-29T01:59:06+08:00","datePublished":"2026-03-29T01:59:06+08:00","description":"题目描述","headline":"LeetCode LCR 062. 实现 Trie (前缀树)","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/16385184"},"url":"https://hgnulb.github.io/blog/2026/16385184"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希表统计状态">解法：哈希表统计状态</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode LCR 062. 实现 Trie (前缀树)">LeetCode LCR 062. 实现 Trie (前缀树)</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-03-29 01:59:06"
+                    datetime="2026-03-29T01:59:06+08:00"
+            >
+                2026-03-29
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2348 字 · 英文 56 词 · 代码 74 行"
+            aria-label="预计阅读时间约 8 分钟，正文 2348 字 · 英文 56 词 · 代码 74 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 8 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3007053882/" title="119 经典题变种挑战">
+        119 经典题变种挑战
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3355311990/" title="剑指 Offer">
+        剑指 Offer
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7450658006/" title="剑指 Offer（专项突击版）">
+        剑指 Offer（专项突击版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6142931175/" title="LCR">
+        LCR
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1523889636/" title="字典树">
+        字典树
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希表统计状态">解法：哈希表统计状态</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/QC3q1f/">LCR 062. 实现 Trie (前缀树)</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>设计一个字符串集合，支持三种操作：插入一个单词、查询某个单词是否被完整插入过、查询是否存在以某个字符串为前缀的已插入单词。三个接口都要高效。</p>
+
+  <p>关键在于 <code class="language-plaintext highlighter-rouge">search</code> 与 <code class="language-plaintext highlighter-rouge">startsWith</code> 的语义差别。<code class="language-plaintext highlighter-rouge">insert("apple")</code> 之后，<code class="language-plaintext highlighter-rouge">search("app")</code> 必须返回 <code class="language-plaintext highlighter-rouge">false</code>，因为 <code class="language-plaintext highlighter-rouge">"app"</code> 从未作为完整单词插入；而 <code class="language-plaintext highlighter-rouge">startsWith("app")</code> 必须返回 <code class="language-plaintext highlighter-rouge">true</code>，因为 <code class="language-plaintext highlighter-rouge">"apple"</code> 以它开头。这说明数据结构除了要能沿着字符走下去，还必须能区分「这里只是路过」和「这里是某个单词的终点」。</p>
+
+  <p>约束给出的信号很明确：所有字符串只含小写英文字母，字符集固定为 26；调用总次数到 $3 \times 10^4$，单串长度到 2000。字符集小而固定，意味着每个节点用一个长度 26 的数组做转移表是划算的，查找转移是 $O(1)$ 且没有哈希开销；总字符量有上界，意味着按字符逐位下沉的做法总代价可控。</p>
+
+  <p>边界上要注意：查询的字符串可能在集合中根本没有对应路径，中途就断掉；插入同一个单词多次应当幂等；前缀查询允许查询串正好等于某个已插入单词，此时也算前缀成立。</p>
+</blockquote>
+
+<h2 id="解法哈希表统计状态">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%93%88%E5%B8%8C%E8%A1%A8%E7%BB%9F%E8%AE%A1%E7%8A%B6%E6%80%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：哈希表统计状态</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最朴素的实现是把所有单词丢进一个哈希集合。<code class="language-plaintext highlighter-rouge">insert</code> 和 <code class="language-plaintext highlighter-rouge">search</code> 都是 $O(L)$，非常好；但 <code class="language-plaintext highlighter-rouge">startsWith</code> 只能遍历集合里每个单词逐个比对前缀，代价是 $O(N \cdot L)$，在 $3 \times 10^4$ 次调用下彻底崩掉。</p>
+
+  <p>瓶颈在于哈希把整个单词压成一个不可分解的键，前缀信息在哈希的那一刻就被销毁了。而前缀查询本质上需要「共享开头的单词能被一起处理」，这要求结构保留字符串的逐字符层次。</p>
+
+  <p>观察到：所有以 <code class="language-plaintext highlighter-rouge">"app"</code> 开头的单词，它们的前三个字符走的是同一条路径。把字符串看成一条从根出发的路径、每个字符是一条边，那么「拥有公共前缀」就等价于「共享一段起始路径」。于是集合被组织成一棵树，根代表空串，从根走到任意节点的路径拼起来就是一个前缀。</p>
+
+  <p>由此定下节点的状态定义：每个节点持有 <code class="language-plaintext highlighter-rouge">children[26]</code>，<code class="language-plaintext highlighter-rouge">children[c]</code> 非空表示「当前前缀后面接字符 <code class="language-plaintext highlighter-rouge">c</code> 仍然是某个已插入单词的前缀」；另有布尔位 <code class="language-plaintext highlighter-rouge">isEnd</code>，表示「从根到当前节点这条路径本身是一个完整单词」。这两项就是全部状态，<code class="language-plaintext highlighter-rouge">search</code> 与 <code class="language-plaintext highlighter-rouge">startsWith</code> 的差别被完全收敛到 <code class="language-plaintext highlighter-rouge">isEnd</code> 上。</p>
+
+  <p>维持的不变量是：<strong>根到任一存在节点的路径，一定是某个已插入单词的前缀；且 <code class="language-plaintext highlighter-rouge">isEnd</code> 为真当且仅当该路径是一个被完整插入过的单词</strong>。有了它，三个接口都变成同一个动作——沿字符下沉，走不通即失败——只是终点处的判定条件不同。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>节点结构定义为「26 叉指针数组 + 一个结束标记」。用定长数组而不是哈希表，是因为字符集固定为 26，数组下标 <code class="language-plaintext highlighter-rouge">c - 'a'</code> 直接寻址，常数远小于哈希，且不必处理扩容。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">insert</code> 从根出发逐字符下沉：若对应子节点为空则新建，然后移动到该子节点。新建是「按需」的，只有真正出现过的前缀才占用节点，这保证空间与总字符量同阶而不是 $26^L$。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">insert</code> 走完全部字符后，把终点节点的 <code class="language-plaintext highlighter-rouge">isEnd</code> 置为真。置位而不是计数，使得重复插入同一单词天然幂等。</li>
+    <li>把 <code class="language-plaintext highlighter-rouge">search</code> 与 <code class="language-plaintext highlighter-rouge">startsWith</code> 的公共部分抽成私有的 <code class="language-plaintext highlighter-rouge">searchPrefix</code>：沿字符下沉，中途遇到空子节点立刻返回空，走完返回终点节点。抽出来是因为两者的寻路逻辑完全一致，差别仅在终点如何判定，合并可以杜绝两份代码走偏。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">startsWith</code> 只需判断 <code class="language-plaintext highlighter-rouge">searchPrefix</code> 的返回值非空——路径存在就说明存在以它为前缀的单词。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">search</code> 在非空的基础上还要检查 <code class="language-plaintext highlighter-rouge">isEnd</code>——路径存在只说明是前缀，必须终点标记为真才算完整单词。这一处判定是整题唯一的区分点，漏掉它两个接口就退化成同一个。</li>
+  </ul>
+
+  <p><strong>以调用序列 <code class="language-plaintext highlighter-rouge">insert("apple")</code> → <code class="language-plaintext highlighter-rouge">search("apple")</code> → <code class="language-plaintext highlighter-rouge">search("app")</code> → <code class="language-plaintext highlighter-rouge">startsWith("app")</code> → <code class="language-plaintext highlighter-rouge">insert("app")</code> → <code class="language-plaintext highlighter-rouge">search("app")</code> 走一遍</strong>：<code class="language-plaintext highlighter-rouge">insert("apple")</code> 从根开始，<code class="language-plaintext highlighter-rouge">a</code>、<code class="language-plaintext highlighter-rouge">p</code>、<code class="language-plaintext highlighter-rouge">p</code>、<code class="language-plaintext highlighter-rouge">l</code>、<code class="language-plaintext highlighter-rouge">e</code> 五个子节点依次因为为空而被新建，最后 <code class="language-plaintext highlighter-rouge">e</code> 所在节点的 <code class="language-plaintext highlighter-rouge">isEnd</code> 置真，此时树上共 5 个非根节点，只有最后一个 <code class="language-plaintext highlighter-rouge">isEnd</code> 为真。<code class="language-plaintext highlighter-rouge">search("apple")</code> 沿 <code class="language-plaintext highlighter-rouge">a→p→p→l→e</code> 五步全部走通，终点非空且 <code class="language-plaintext highlighter-rouge">isEnd</code> 为真，返回 <code class="language-plaintext highlighter-rouge">true</code>。<code class="language-plaintext highlighter-rouge">search("app")</code> 沿 <code class="language-plaintext highlighter-rouge">a→p→p</code> 三步走通，终点非空但 <code class="language-plaintext highlighter-rouge">isEnd</code> 为假（它只是 <code class="language-plaintext highlighter-rouge">"apple"</code> 路上的中转），返回 <code class="language-plaintext highlighter-rouge">false</code>。<code class="language-plaintext highlighter-rouge">startsWith("app")</code> 走到同一个节点，只要求非空，返回 <code class="language-plaintext highlighter-rouge">true</code>。<code class="language-plaintext highlighter-rouge">insert("app")</code> 再走一遍 <code class="language-plaintext highlighter-rouge">a→p→p</code>，三个子节点都已存在故不新建，只把该节点的 <code class="language-plaintext highlighter-rouge">isEnd</code> 置真。此后 <code class="language-plaintext highlighter-rouge">search("app")</code> 终点非空且 <code class="language-plaintext highlighter-rouge">isEnd</code> 为真，返回 <code class="language-plaintext highlighter-rouge">true</code>——整棵树的节点数依旧是 5，唯一的变化是多了一个结束标记。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Trie</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Trie</span><span class="o">[]</span> <span class="n">children</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">isEnd</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Trie</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">children</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Trie</span><span class="o">[</span><span class="mi">26</span><span class="o">];</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">insert</span><span class="o">(</span><span class="nc">String</span> <span class="n">word</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Trie</span> <span class="n">node</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">word</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Trie</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">idx</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">isEnd</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">search</span><span class="o">(</span><span class="nc">String</span> <span class="n">word</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Trie</span> <span class="n">node</span> <span class="o">=</span> <span class="n">searchPrefix</span><span class="o">(</span><span class="n">word</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">node</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="na">isEnd</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">startsWith</span><span class="o">(</span><span class="nc">String</span> <span class="n">prefix</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Trie</span> <span class="n">node</span> <span class="o">=</span> <span class="n">searchPrefix</span><span class="o">(</span><span class="n">prefix</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">node</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">Trie</span> <span class="nf">searchPrefix</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Trie</span> <span class="n">node</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">s</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">[</span><span class="n">idx</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Trie</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">children</span> <span class="p">[</span><span class="m">26</span><span class="p">]</span><span class="o">*</span><span class="n">Trie</span>
+    <span class="n">isEnd</span>    <span class="kt">bool</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">Trie</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">Trie</span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">Trie</span><span class="p">)</span> <span class="n">Insert</span><span class="p">(</span><span class="n">word</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">node</span> <span class="o">:=</span> <span class="n">this</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">word</span> <span class="p">{</span>
+        <span class="n">idx</span> <span class="o">:=</span> <span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span>
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Trie</span><span class="p">{}</span>
+        <span class="p">}</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">.</span><span class="n">isEnd</span> <span class="o">=</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">Trie</span><span class="p">)</span> <span class="n">Search</span><span class="p">(</span><span class="n">word</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="n">node</span> <span class="o">:=</span> <span class="n">this</span><span class="o">.</span><span class="n">SearchPrefix</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">node</span> <span class="o">!=</span> <span class="no">nil</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="n">isEnd</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">Trie</span><span class="p">)</span> <span class="n">StartsWith</span><span class="p">(</span><span class="n">prefix</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="n">node</span> <span class="o">:=</span> <span class="n">this</span><span class="o">.</span><span class="n">SearchPrefix</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">node</span> <span class="o">!=</span> <span class="no">nil</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">Trie</span><span class="p">)</span> <span class="n">SearchPrefix</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="n">Trie</span> <span class="p">{</span>
+    <span class="n">node</span> <span class="o">:=</span> <span class="n">this</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">s</span> <span class="p">{</span>
+        <span class="n">idx</span> <span class="o">:=</span> <span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span>
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="no">nil</span>
+        <span class="p">}</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">node</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：三个接口都是 $O(L)$，$L$ 为传入字符串的长度。每个字符只做一次常数级的数组下标寻址，与已插入单词的数量完全无关。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(26 \cdot C)$，$C$ 为所有插入单词去掉公共前缀后的节点总数，上界是全部插入字符数。每个节点固定携带一个长度 26 的指针数组，公共前缀被复用因而不重复计费。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>前缀查询要求结构保留字符的层次关系，哈希集合把单词压成整体键、销毁了前缀信息，这是选择树形结构的根本理由。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">isEnd</code> 是把「路径存在」和「单词存在」区分开的唯一手段。设计时先明确每个状态位回答哪个问题，接口实现自然就分岔清楚了。</li>
+    <li>字符集固定且小时用定长数组做转移表，寻址 $O(1)$ 且无哈希常数；字符集大或稀疏时才换成哈希映射，这是一个可迁移的取舍标准。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">search</code> 与 <code class="language-plaintext highlighter-rouge">startsWith</code> 共享寻路逻辑，抽出公共私有方法既省代码也防止两者行为漂移，是设计类题目里稳拿印象分的写法。</li>
+    <li>节点按需创建，空间只与实际出现的前缀相关；公共前缀天然共享，这正是 Trie 相比逐串存储的空间优势所在。</li>
+    <li>面试视角：白板上先画出插入 <code class="language-plaintext highlighter-rouge">"apple"</code> 和 <code class="language-plaintext highlighter-rouge">"app"</code> 之后的树形，用图指出哪个节点 <code class="language-plaintext highlighter-rouge">isEnd</code> 为真，比直接写代码更容易让面试官确认你理解了语义差别。</li>
+    <li>面试视角：常见追问是「如何支持删除」和「如何支持通配符匹配」。前者答给节点加引用计数、删除时逐层减一并回收计数归零的节点；后者答在 <code class="language-plaintext highlighter-rouge">.</code> 处对 26 个子节点递归分支，正是 211 题的做法。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">search</code> 只判断路径是否走通，不检查 <code class="language-plaintext highlighter-rouge">isEnd</code>。用例 <code class="language-plaintext highlighter-rouge">insert("apple")</code> 后 <code class="language-plaintext highlighter-rouge">search("app")</code> → 路径走得通于是返回 <code class="language-plaintext highlighter-rouge">true</code>，正确答案是 <code class="language-plaintext highlighter-rouge">false</code>，<code class="language-plaintext highlighter-rouge">search</code> 退化成了 <code class="language-plaintext highlighter-rouge">startsWith</code>。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">startsWith</code> 也顺手检查了 <code class="language-plaintext highlighter-rouge">isEnd</code>。用例 <code class="language-plaintext highlighter-rouge">insert("apple")</code> 后 <code class="language-plaintext highlighter-rouge">startsWith("app")</code> → 终点 <code class="language-plaintext highlighter-rouge">isEnd</code> 为假于是返回 <code class="language-plaintext highlighter-rouge">false</code>，正确答案是 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">insert</code> 在下沉过程中给每个途经节点都置 <code class="language-plaintext highlighter-rouge">isEnd</code> 为真。用例 <code class="language-plaintext highlighter-rouge">insert("apple")</code> 后 <code class="language-plaintext highlighter-rouge">search("app")</code> → 返回 <code class="language-plaintext highlighter-rouge">true</code>，正确答案是 <code class="language-plaintext highlighter-rouge">false</code>，所有前缀都被误标成了完整单词。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">searchPrefix</code> 中途遇到空子节点仍继续循环。用例 <code class="language-plaintext highlighter-rouge">insert("apple")</code> 后 <code class="language-plaintext highlighter-rouge">search("apq")</code> → 第三个字符处子节点为空，不立即返回则下一轮解引用空指针抛异常。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">insert</code> 时把已存在的子节点也重新 <code class="language-plaintext highlighter-rouge">new</code> 一遍覆盖掉。用例 <code class="language-plaintext highlighter-rouge">insert("apple")</code> 后 <code class="language-plaintext highlighter-rouge">insert("apply")</code> 再 <code class="language-plaintext highlighter-rouge">search("apple")</code> → 第二次插入把共享的 <code class="language-plaintext highlighter-rouge">a→p→p→l</code> 路径重建成空节点，先前的 <code class="language-plaintext highlighter-rouge">"apple"</code> 终点标记丢失，返回 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>
+<strong>错误写法</strong>：把 <code class="language-plaintext highlighter-rouge">isEnd</code> 换成「该节点无任何子节点即为单词结尾」的判断。用例 <code class="language-plaintext highlighter-rouge">insert("apple")</code>、<code class="language-plaintext highlighter-rouge">insert("app")</code> 后 <code class="language-plaintext highlighter-rouge">search("app")</code> → <code class="language-plaintext highlighter-rouge">app</code> 节点还有子节点 <code class="language-plaintext highlighter-rouge">l</code>，判定为非结尾返回 <code class="language-plaintext highlighter-rouge">false</code>，正确答案是 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+    <li>
+<strong>错误写法</strong>：下标计算写成 <code class="language-plaintext highlighter-rouge">c - 'A'</code>。用例 <code class="language-plaintext highlighter-rouge">insert("a")</code> → <code class="language-plaintext highlighter-rouge">'a' - 'A'</code> 等于 32，越过长度 26 的数组抛越界异常。</li>
+    <li>
+<strong>错误写法</strong>：Go 版本把 <code class="language-plaintext highlighter-rouge">Insert</code> 的接收者写成值接收者 <code class="language-plaintext highlighter-rouge">func (this Trie)</code>。用例 <code class="language-plaintext highlighter-rouge">insert("a")</code> 后 <code class="language-plaintext highlighter-rouge">search("a")</code> → 值接收者操作的是结构体副本，<code class="language-plaintext highlighter-rouge">isEnd</code> 的修改写在副本上，原对象毫无变化，返回 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/implement-trie-prefix-tree/">208. 实现 Trie (前缀树)</a></td>
+      <td>中等</td>
+      <td>与本题同题，可用来对比数组转移表与哈希转移表的常数差异</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-add-and-search-words-data-structure/">211. 添加与搜索单词 - 数据结构设计</a></td>
+      <td>中等</td>
+      <td>查询串含通配符 <code class="language-plaintext highlighter-rouge">.</code>，寻路从单链下沉变成 26 路递归分支</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/word-search-ii/">212. 单词搜索 II</a></td>
+      <td>困难</td>
+      <td>Trie 只作剪枝索引，主体是网格回溯，命中后还要处理去重与剪枝</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/replace-words/">648. 单词替换</a></td>
+      <td>中等</td>
+      <td>需要在下沉途中提前停在最短词根，考的是遍历中途的终止时机</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/map-sum-pairs/">677. 键值映射</a></td>
+      <td>中等</td>
+      <td>节点上挂的是可累加的权值而非布尔位，插入需处理同键覆盖更新</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-word-in-dictionary/">720. 词典中最长的单词</a></td>
+      <td>中等</td>
+      <td>要求路径上每个前缀都是完整单词，判定落在整条路径而不只是终点</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/search-suggestions-system/">1268. 搜索推荐系统</a></td>
+      <td>中等</td>
+      <td>每个前缀要返回字典序最小的三个结果，节点需额外维护候选列表</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/44061981" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode LCR 061. 查找和最小的 K 对数字</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/48550215" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode LCR 063. 单词替换</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/16385184">https://hgnulb.github.io/blog/2026/16385184</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

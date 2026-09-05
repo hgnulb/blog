@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1242. 多线程网络爬虫 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,多线程,广度优先搜索,快手,深度优先搜索" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1242. 多线程网络爬虫" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2024/80513569" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2024/80513569" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-01-24T10:44:39+08:00" />
+<meta property="article:modified_time" content="2024-01-24T10:44:39+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1242. 多线程网络爬虫" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2024-01-24T10:44:39+08:00","datePublished":"2024-01-24T10:44:39+08:00","description":"题目描述","headline":"LeetCode 1242. 多线程网络爬虫","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2024/80513569"},"url":"https://hgnulb.github.io/blog/2024/80513569"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法并发-bfs">解法：并发 BFS</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1242. 多线程网络爬虫">LeetCode 1242. 多线程网络爬虫</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2024-01-24 10:44:39"
+                    datetime="2024-01-24T10:44:39+08:00"
+            >
+                2024-01-24
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3024 字 · 英文 103 词 · 代码 96 行"
+            aria-label="预计阅读时间约 11 分钟，正文 3024 字 · 英文 103 词 · 代码 96 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 11 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1259449732/" title="快手">
+        快手
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4625220551/" title="多线程">
+        多线程
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法并发-bfs">解法：并发 BFS</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/web-crawler-multithreaded/">1242. 多线程网页爬虫</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>输入输出和单线程版本完全一致：给一个起始 URL 和一个只能按需调用的 <code class="language-plaintext highlighter-rouge">getUrls(url)</code> 接口，返回所有从起始页可达且与起始页同主机名的 URL，顺序任意。唯一的不同是题目明确要求用多线程实现。</p>
+</blockquote>
+
+<blockquote>
+  <p>为什么值得并发：<code class="language-plaintext highlighter-rouge">getUrls</code> 模拟的是网络请求，是高延迟的 I/O 操作，而两次请求之间没有依赖——只要知道了某个页面的地址，抓它就不需要等别的页面抓完。这是典型的 I/O 密集型可并行场景，加速比不受 CPU 核数限制。</p>
+</blockquote>
+
+<blockquote>
+  <p>并发引入了两个单线程版本不存在的问题。第一是共享去重表的竞态：两个线程同时发现同一个新 URL，如果「查是否存在」和「写入」不是原子的，这个页面会被抓两次。第二是终止判定：单线程版本靠「队列空」判断结束，但并发下「队列空」不代表结束——可能所有线程都还在等 <code class="language-plaintext highlighter-rouge">getUrls</code> 返回，马上就会产生新任务。</p>
+</blockquote>
+
+<blockquote>
+  <p>主机名规则与单线程版一致：<code class="language-plaintext highlighter-rouge">http://</code> 之后到下一个 <code class="language-plaintext highlighter-rouge">/</code> 之前，题目保证协议前缀固定且无端口号。</p>
+</blockquote>
+
+<blockquote>
+  <p>边界：起始页无外链、全部外链为外域、图中存在环和多路径汇聚、<code class="language-plaintext highlighter-rouge">getUrls</code> 返回大量重复链接。</p>
+</blockquote>
+
+<h2 id="解法并发-bfs">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%B9%B6%E5%8F%91-bfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：并发 BFS</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先明确算法骨架没有变：仍然是从起点出发的可达性遍历，扩展时按主机名过滤，靠一张全局去重表保证每个页面只抓一次。改动全部集中在「谁来执行扩展」和「怎么知道全都做完了」。</p>
+</blockquote>
+
+<blockquote>
+  <p>朴素的并发写法是「主线程维护队列，起一批 worker 从队列取任务」。它的麻烦在于终止：worker 取不到任务时不能直接退出，因为别的 worker 可能正要往队列里塞新任务；用有界通道还会引入死锁——所有 worker 都阻塞在「往满通道里写」时，就没人再来消费了。</p>
+</blockquote>
+
+<blockquote>
+  <p>换个角度：这个遍历天然是递归形状的——处理一个页面，就派生出若干个「处理它的某个新邻居」的子任务，子任务再派生孙任务。与其自己维护队列，不如直接把「派生子任务并等它们结束」交给运行时。Java 用 <code class="language-plaintext highlighter-rouge">ForkJoinPool</code> + <code class="language-plaintext highlighter-rouge">RecursiveAction</code>，<code class="language-plaintext highlighter-rouge">invokeAll</code> 会等所有子任务完成才返回；Go 用 <code class="language-plaintext highlighter-rouge">sync.WaitGroup</code> 配合每发现一个新页面就 <code class="language-plaintext highlighter-rouge">go</code> 一个协程，<code class="language-plaintext highlighter-rouge">wg.Wait()</code> 在计数归零时返回。两者都把终止判定变成了「派生计数归零」，不需要显式的空队列检测。</p>
+</blockquote>
+
+<blockquote>
+  <p>这里的不变量是：<code class="language-plaintext highlighter-rouge">visited</code> 中的每个 URL 都有且只有一个任务所有者，并且该任务已经运行、已经登记待启动，或已经完成。必须原子完成的是「判断 URL 未访问并取得所有权」；真正启动线程可以稍后发生，但在这段间隙内，当前父任务必须仍被终止机制计数，不能让主线程误判为全部完成。</p>
+</blockquote>
+
+<blockquote>
+  <p>Java 中，<code class="language-plaintext highlighter-rouge">ConcurrentHashMap.newKeySet()</code> 的 <code class="language-plaintext highlighter-rouge">add</code> 原子地授予所有权，只有成功者把子任务加入自己的私有任务列表；父任务随后用 <code class="language-plaintext highlighter-rouge">invokeAll</code> 启动并等待整批子任务。Go 没有直接使用并发集合，因此用一把 <code class="language-plaintext highlighter-rouge">sync.Mutex</code> 保护「查重、写入、<code class="language-plaintext highlighter-rouge">wg.Add(1)</code>」三个动作；解锁后再启动协程。此时父协程尚未执行延迟的 <code class="language-plaintext highlighter-rouge">Done</code>，所以计数不可能在启动间隙归零。两种写法都把慢速 <code class="language-plaintext highlighter-rouge">getUrls</code> 留在同步区域之外。</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">wg.Add(1)</code> 的位置也有讲究：必须在启动协程<strong>之前</strong>、在父任务还没结束时调用。如果放到子协程内部，父协程可能先跑完 <code class="language-plaintext highlighter-rouge">wg.Done()</code> 让计数提前归零，<code class="language-plaintext highlighter-rouge">Wait</code> 直接返回，抓取还没做完就返回了残缺结果。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>先算出起始页的主机名并存为常量。这个值被所有线程只读共享，没有写入就没有竞态，不需要任何同步。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>把起始 URL 预先放进 <code class="language-plaintext highlighter-rouge">visited</code>，再为它派生第一个任务。先入集合再派生，是为了防止某个页面链回起点时起点被第二次派生。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>每个任务的职责固定为三步：对自己的 URL 调一次 <code class="language-plaintext highlighter-rouge">getUrls</code>，逐个检查邻居，对新的同域邻居派生子任务。慢调用 <code class="language-plaintext highlighter-rouge">getUrls</code> 必须在任何锁之外执行，这是并发版本能真正加速的前提。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>邻居检查的顺序是「先比主机名，再抢占去重表」。先过滤后标记，<code class="language-plaintext highlighter-rouge">visited</code> 最终就直接是答案；反过来会把外域 URL 写进结果。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>抢占用原子操作完成。Java 直接依赖 <code class="language-plaintext highlighter-rouge">ConcurrentHashMap.newKeySet()</code> 的 <code class="language-plaintext highlighter-rouge">add</code> 返回值；Go 在同一个临界区完成「查 map、写 map、<code class="language-plaintext highlighter-rouge">wg.Add(1)</code>」，然后释放锁并启动协程。这样一个 URL 一旦进入 <code class="language-plaintext highlighter-rouge">visited</code>，终止计数中已经有对应任务；慢调用仍然不持锁。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>等待全部完成。Java 里 <code class="language-plaintext highlighter-rouge">invokeAll(tasks)</code> 让当前任务阻塞直到所有直接子任务结束，递归展开后根任务的 <code class="language-plaintext highlighter-rouge">invoke</code> 返回即代表整棵任务树完成；Go 里主协程 <code class="language-plaintext highlighter-rouge">wg.Wait()</code>，计数在每个 <code class="language-plaintext highlighter-rouge">walk</code> 的 <code class="language-plaintext highlighter-rouge">defer wg.Done()</code> 中递减，归零即全部完成。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>处理异常退出。Java 用 <code class="language-plaintext highlighter-rouge">finally</code> 关闭专用线程池，任务异常由 <code class="language-plaintext highlighter-rouge">pool.invoke</code> 向调用方传播，不会把尚未完成的集合当作正常答案返回。Go 题目接口没有错误返回值；<code class="language-plaintext highlighter-rouge">defer wg.Done()</code> 保证任何正常返回路径都会注销任务。若生产接口增加错误返回，应记录或传播错误，同时仍让 <code class="language-plaintext highlighter-rouge">Done</code> 执行，不能静默返回部分结果。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>全部结束后把 <code class="language-plaintext highlighter-rouge">visited</code> 转成切片/列表返回。此时已经没有并发写入，可以安全地遍历。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<code class="language-plaintext highlighter-rouge">getHost</code> 从下标 7（<code class="language-plaintext highlighter-rouge">http://</code> 之后）开始找第一个 <code class="language-plaintext highlighter-rouge">/</code>：找到就截取到它之前，找不到说明 URL 没有路径部分，返回从 7 到末尾的整段。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>以 <code class="language-plaintext highlighter-rouge">startUrl = "http://a.com/x"</code> 走一遍，图为：<code class="language-plaintext highlighter-rouge">getUrls("http://a.com/x")</code> 返回 <code class="language-plaintext highlighter-rouge">["http://a.com/y", "http://b.com/z", "http://a.com/x"]</code>，<code class="language-plaintext highlighter-rouge">getUrls("http://a.com/y")</code> 返回 <code class="language-plaintext highlighter-rouge">["http://a.com/x", "http://a.com/w"]</code>，<code class="language-plaintext highlighter-rouge">getUrls("http://a.com/w")</code> 返回空。</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">getHost("http://a.com/x")</code>：从下标 7 的字符 'a' 开始扫，第一个 <code class="language-plaintext highlighter-rouge">/</code> 在下标 12，得到 <code class="language-plaintext highlighter-rouge">"a.com"</code>。<code class="language-plaintext highlighter-rouge">visited = {http://a.com/x}</code>，为起点派生任务 T1，等待计数为 1。</p>
+</blockquote>
+
+<blockquote>
+  <p>T1 调用 <code class="language-plaintext highlighter-rouge">getUrls</code> 拿到三个链接。<code class="language-plaintext highlighter-rouge">http://a.com/y</code> 主机名是 <code class="language-plaintext highlighter-rouge">a.com</code>，同域；抢占 <code class="language-plaintext highlighter-rouge">visited</code> 成功，计数加到 2，派生 T2。<code class="language-plaintext highlighter-rouge">http://b.com/z</code> 主机名 <code class="language-plaintext highlighter-rouge">b.com</code>，与 <code class="language-plaintext highlighter-rouge">a.com</code> 不等，跳过，不进 <code class="language-plaintext highlighter-rouge">visited</code>。<code class="language-plaintext highlighter-rouge">http://a.com/x</code> 同域，但抢占失败（起点已在集合中），忽略——这一步挡住了自环。T1 的邻居处理完毕，其计数递减。</p>
+</blockquote>
+
+<blockquote>
+  <p>T2 调用 <code class="language-plaintext highlighter-rouge">getUrls</code> 拿到两个链接。<code class="language-plaintext highlighter-rouge">http://a.com/x</code> 抢占失败，忽略。<code class="language-plaintext highlighter-rouge">http://a.com/w</code> 是新的同域页面，抢占成功，派生 T3。T2 结束。</p>
+</blockquote>
+
+<blockquote>
+  <p>T3 的外链为空，直接结束。此时所有派生任务都已完成、计数归零，<code class="language-plaintext highlighter-rouge">Wait</code> 返回。结果是 <code class="language-plaintext highlighter-rouge">visited</code> 的三个元素：<code class="language-plaintext highlighter-rouge">http://a.com/x</code>、<code class="language-plaintext highlighter-rouge">http://a.com/y</code>、<code class="language-plaintext highlighter-rouge">http://a.com/w</code>。整个过程中 <code class="language-plaintext highlighter-rouge">getUrls</code> 恰好被调用三次，每个可达同域页面一次。</p>
+</blockquote>
+
+<blockquote>
+  <p>关键在于 T2 和 T3 可能与其他任务并发执行，但由于「抢占成功者才派生」这条不变量，无论线程调度顺序如何，每个 URL 都只会被派生一次，结果集合完全确定（只是元素顺序不确定，而题目允许任意顺序）。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 抢占式去重：只有把 URL 抢进并发集合的线程才派生子任务，invokeAll 负责终止判定。</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.ConcurrentHashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.ForkJoinPool</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.RecursiveAction</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">crawl</span><span class="o">(</span><span class="nc">String</span> <span class="n">startUrl</span><span class="o">,</span> <span class="nc">HtmlParser</span> <span class="n">htmlParser</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">String</span> <span class="n">host</span> <span class="o">=</span> <span class="n">getHost</span><span class="o">(</span><span class="n">startUrl</span><span class="o">);</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">visited</span> <span class="o">=</span> <span class="nc">ConcurrentHashMap</span><span class="o">.</span><span class="na">newKeySet</span><span class="o">();</span>
+        <span class="n">visited</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">startUrl</span><span class="o">);</span>
+
+        <span class="nc">ForkJoinPool</span> <span class="n">pool</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ForkJoinPool</span><span class="o">();</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">pool</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="k">new</span> <span class="nc">CrawlTask</span><span class="o">(</span><span class="n">startUrl</span><span class="o">,</span> <span class="n">host</span><span class="o">,</span> <span class="n">htmlParser</span><span class="o">,</span> <span class="n">visited</span><span class="o">));</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">pool</span><span class="o">.</span><span class="na">shutdown</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">visited</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">CrawlTask</span> <span class="kd">extends</span> <span class="nc">RecursiveAction</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">url</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">host</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="nc">HtmlParser</span> <span class="n">parser</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">visited</span><span class="o">;</span>
+
+        <span class="nc">CrawlTask</span><span class="o">(</span><span class="nc">String</span> <span class="n">url</span><span class="o">,</span> <span class="nc">String</span> <span class="n">host</span><span class="o">,</span> <span class="nc">HtmlParser</span> <span class="n">parser</span><span class="o">,</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">visited</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">url</span> <span class="o">=</span> <span class="n">url</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">host</span> <span class="o">=</span> <span class="n">host</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">parser</span> <span class="o">=</span> <span class="n">parser</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">visited</span> <span class="o">=</span> <span class="n">visited</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">compute</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">CrawlTask</span><span class="o">&gt;</span> <span class="n">tasks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">next</span> <span class="o">:</span> <span class="n">parser</span><span class="o">.</span><span class="na">getUrls</span><span class="o">(</span><span class="n">url</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">host</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">getHost</span><span class="o">(</span><span class="n">next</span><span class="o">)))</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">visited</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">next</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">tasks</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">CrawlTask</span><span class="o">(</span><span class="n">next</span><span class="o">,</span> <span class="n">host</span><span class="o">,</span> <span class="n">parser</span><span class="o">,</span> <span class="n">visited</span><span class="o">));</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="n">invokeAll</span><span class="o">(</span><span class="n">tasks</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">getHost</span><span class="o">(</span><span class="nc">String</span> <span class="n">url</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">7</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">slash</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="na">indexOf</span><span class="o">(</span><span class="sc">'/'</span><span class="o">,</span> <span class="n">start</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">slash</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">url</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">start</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">url</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">start</span><span class="o">,</span> <span class="n">slash</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 互斥锁保护「查 + 写 + 登记任务」，慢调用 GetUrls 留在锁外；WaitGroup 归零即全部完成。</span>
+<span class="k">import</span> <span class="s">"sync"</span>
+
+<span class="k">func</span> <span class="n">crawl</span><span class="p">(</span><span class="n">startUrl</span> <span class="kt">string</span><span class="p">,</span> <span class="n">htmlParser</span> <span class="n">HtmlParser</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+	<span class="n">host</span> <span class="o">:=</span> <span class="n">getHost</span><span class="p">(</span><span class="n">startUrl</span><span class="p">)</span>
+
+	<span class="k">var</span> <span class="n">mu</span> <span class="n">sync</span><span class="o">.</span><span class="n">Mutex</span>
+	<span class="n">visited</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">struct</span><span class="p">{}{</span><span class="n">startUrl</span><span class="o">:</span> <span class="p">{}}</span>
+
+	<span class="k">var</span> <span class="n">wg</span> <span class="n">sync</span><span class="o">.</span><span class="n">WaitGroup</span>
+	<span class="k">var</span> <span class="n">walk</span> <span class="k">func</span><span class="p">(</span><span class="n">u</span> <span class="kt">string</span><span class="p">)</span>
+	<span class="n">walk</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">u</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">defer</span> <span class="n">wg</span><span class="o">.</span><span class="n">Done</span><span class="p">()</span>
+		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">next</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">htmlParser</span><span class="o">.</span><span class="n">GetUrls</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">getHost</span><span class="p">(</span><span class="n">next</span><span class="p">)</span> <span class="o">!=</span> <span class="n">host</span> <span class="p">{</span>
+				<span class="k">continue</span>
+			<span class="p">}</span>
+			<span class="n">mu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+			<span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">visited</span><span class="p">[</span><span class="n">next</span><span class="p">];</span> <span class="n">ok</span> <span class="p">{</span>
+				<span class="n">mu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span>
+				<span class="k">continue</span>
+			<span class="p">}</span>
+			<span class="n">visited</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">=</span> <span class="k">struct</span><span class="p">{}{}</span>
+			<span class="n">wg</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
+			<span class="n">mu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span>
+
+			<span class="k">go</span> <span class="n">walk</span><span class="p">(</span><span class="n">next</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="n">wg</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
+	<span class="k">go</span> <span class="n">walk</span><span class="p">(</span><span class="n">startUrl</span><span class="p">)</span>
+	<span class="n">wg</span><span class="o">.</span><span class="n">Wait</span><span class="p">()</span>
+
+	<span class="n">res</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">))</span>
+	<span class="k">for</span> <span class="n">u</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">visited</span> <span class="p">{</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">getHost</span><span class="p">(</span><span class="n">url</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">7</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">url</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">url</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'/'</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">url</span><span class="p">[</span><span class="m">7</span><span class="o">:</span><span class="n">i</span><span class="p">]</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">url</span><span class="p">[</span><span class="m">7</span><span class="o">:</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：若 URL 平均长度为 L，总工作量是 $O((V + E) \cdot L)$，其中 V 为可达同域页面数、E 为这些页面返回的外链总数；每个页面抓取一次，每条链接做主机名提取和哈希操作。并发降低的是墙钟时间，不改变总工作量；它受线程/连接上限、图的关键路径和 <code class="language-plaintext highlighter-rouge">getUrls</code> 延迟共同影响，不能仅用图深度给出无条件保证。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>空间复杂度</strong>：$O(V \cdot L)$，L 为 URL 平均长度。<code class="language-plaintext highlighter-rouge">visited</code> 存下全部可达同域 URL；同时存活的任务数不超过 V，每个任务只持有一个 URL 引用和几个共享对象的引用。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>并发版本要改的从来不是算法，而是三件事：共享状态的原子性、慢调用与临界区的分离、终止条件的判定方式。把这三点拆开讲，比笼统地说「加锁」更能体现对并发的理解。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>「查重 + 标记」必须是一个原子操作。<code class="language-plaintext highlighter-rouge">contains</code> 后再 <code class="language-plaintext highlighter-rouge">add</code> 在并发下是经典的检查后使用漏洞，两个线程会同时通过检查。常见做法是使用并发集合的原子插入、<code class="language-plaintext highlighter-rouge">sync.Map.LoadOrStore</code>，或用互斥锁包住检查与写入。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>锁的临界区里绝不能放 I/O。<code class="language-plaintext highlighter-rouge">getUrls</code> 一旦被锁住，所有线程串行等待，并发退化成加了锁开销的单线程——这是面试官最常挖的坑。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>用「所有已登记任务完成」代替「队列为空」做终止判定。队列空只是瞬时状态，不代表没有在途任务；<code class="language-plaintext highlighter-rouge">WaitGroup</code> 用计数表达该条件，<code class="language-plaintext highlighter-rouge">invokeAll</code> 则通过父任务等待全部子任务形成结构化终止。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<code class="language-plaintext highlighter-rouge">wg.Add</code> 必须在启动协程之前、父协程 <code class="language-plaintext highlighter-rouge">Done</code> 之前调用。放在子协程内部会导致计数提前归零、<code class="language-plaintext highlighter-rouge">Wait</code> 提前返回、结果残缺，而且这类 bug 有很强的随机性，本地跑十次可能都不复现。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>有界通道加固定 worker 池在这类「任务会派生任务」的场景下容易死锁：所有 worker 都阻塞在往满通道写入时，就没有消费者了。要么用无界队列 + 显式的在途计数，要么直接用结构化并发，后者在白板上更短也更难写错。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>面试视角：当前 Go 写法会按页面派生协程，适合题目规模；生产环境若要限制并发度，应由固定 worker 池或独立调度器消费任务，并继续维护在途任务数。不要让持有并发名额的递归任务同步等待新的名额，否则所有 worker 都可能互相等待而死锁。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>错误写法：用普通 <code class="language-plaintext highlighter-rouge">HashSet</code> 做去重表 → 多个线程同时写入会破坏内部结构，走查里的 <code class="language-plaintext highlighter-rouge">http://a.com/x</code> 被 T1、T2 同时读写时可能丢失元素甚至抛出 <code class="language-plaintext highlighter-rouge">ConcurrentModificationException</code>，返回结果不完整。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：<code class="language-plaintext highlighter-rouge">if (!visited.contains(next)) { visited.add(next); ... }</code> 分两步做 → 两个线程可能同时通过 <code class="language-plaintext highlighter-rouge">contains</code> 检查，同一个页面被派生两次，<code class="language-plaintext highlighter-rouge">getUrls</code> 被重复调用，环状图上可能无限膨胀。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：Go 里把 <code class="language-plaintext highlighter-rouge">htmlParser.GetUrls(u)</code> 写在 <code class="language-plaintext highlighter-rouge">mu.Lock()</code> 和 <code class="language-plaintext highlighter-rouge">mu.Unlock()</code> 之间 → 所有协程排队等同一把锁，并发度退化到 1，墙钟时间和单线程版本一样甚至更慢。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：Go 里把 <code class="language-plaintext highlighter-rouge">wg.Add(1)</code> 写在子协程内部（<code class="language-plaintext highlighter-rouge">go func(){ wg.Add(1); ... }()</code>）→ 主协程的 <code class="language-plaintext highlighter-rouge">wg.Wait()</code> 可能在子协程还没执行 <code class="language-plaintext highlighter-rouge">Add</code> 时就看到计数为 0 并返回，走查中可能只返回起点一个 URL。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：忘记 <code class="language-plaintext highlighter-rouge">defer wg.Done()</code> 或在提前 <code class="language-plaintext highlighter-rouge">return</code> 的分支里漏掉 <code class="language-plaintext highlighter-rouge">Done</code> → 计数永远不归零，<code class="language-plaintext highlighter-rouge">wg.Wait()</code> 永久阻塞，程序超时。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：用固定 worker 池 + 有界 channel，且 worker 在处理任务时直接往同一个 channel 写新任务 → 走查图放大到超过缓冲区容量时，所有 worker 都阻塞在写入上、无人消费，直接死锁。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：先 <code class="language-plaintext highlighter-rouge">visited.add(next)</code> 再判断主机名 → <code class="language-plaintext highlighter-rouge">http://b.com/z</code> 被写进结果集合，返回的列表里混入外域 URL。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：起始 URL 不预先放进 <code class="language-plaintext highlighter-rouge">visited</code> → 走查里 <code class="language-plaintext highlighter-rouge">http://a.com/x</code> 链回自己，起点被第二次抢占成功并派生任务，环上任务无限增殖。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：<code class="language-plaintext highlighter-rouge">getHost</code> 从下标 0 开始找 <code class="language-plaintext highlighter-rouge">/</code> → 命中协议里的斜杠，所有主机名都变成空串，过滤失效，会把整个网络爬下来。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：<code class="language-plaintext highlighter-rouge">getHost</code> 不处理「7 之后没有 <code class="language-plaintext highlighter-rouge">/</code>」的情况 → <code class="language-plaintext highlighter-rouge">http://a.com</code> 这种无路径 URL 上取到 -1 下标，Java 抛 <code class="language-plaintext highlighter-rouge">StringIndexOutOfBoundsException</code>，Go 切片越界 panic。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：Java 里派生子任务后不调用 <code class="language-plaintext highlighter-rouge">invokeAll</code>（或只 <code class="language-plaintext highlighter-rouge">fork</code> 不 <code class="language-plaintext highlighter-rouge">join</code>）→ 根任务的 <code class="language-plaintext highlighter-rouge">invoke</code> 提前返回，<code class="language-plaintext highlighter-rouge">visited</code> 还在被后台任务写入时就被拷贝成列表，结果随机缺失。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/web-crawler/">1236. 网络爬虫</a></td>
+      <td>中等</td>
+      <td>同一遍历的单线程版，可用来对照并发改造改了哪三处</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/print-in-order/">1114. 按序打印</a></td>
+      <td>简单</td>
+      <td>只需线性顺序约束，用信号量或 <code class="language-plaintext highlighter-rouge">CountDownLatch</code> 串行化</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/the-dining-philosophers/">1226. 哲学家进餐</a></td>
+      <td>中等</td>
+      <td>多把锁的获取顺序问题，重点是避免循环等待造成的死锁</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/keys-and-rooms/">841. 钥匙和房间</a></td>
+      <td>中等</td>
+      <td>同样是可达性遍历，但邻接表已知且单线程，可对比骨架部分</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2024/57613487" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 面试题 08.11. 硬币</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2024/54445111" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 面试题 08.02. 迷路的机器人</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2024/80513569">https://hgnulb.github.io/blog/2024/80513569</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 536. 从字符串生成二叉树 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,二叉树,字符串,栈,树,深度优先搜索,阿里巴巴" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 536. 从字符串生成二叉树" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/53498882" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/53498882" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-30T00:00:00+08:00" />
+<meta property="article:modified_time" content="2022-09-30T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 536. 从字符串生成二叉树" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-09-30T00:00:00+08:00","datePublished":"2022-09-30T00:00:00+08:00","description":"题目描述","headline":"LeetCode 536. 从字符串生成二叉树","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/53498882"},"url":"https://hgnulb.github.io/blog/2022/53498882"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法递归解析括号">解法：递归解析括号</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 536. 从字符串生成二叉树">LeetCode 536. 从字符串生成二叉树</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-09-30 00:00:00"
+                    datetime="2022-09-30T00:00:00+08:00"
+            >
+                2022-09-30
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3070 字 · 英文 48 词 · 代码 76 行"
+            aria-label="预计阅读时间约 10 分钟，正文 3070 字 · 英文 48 词 · 代码 76 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 10 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8699249851/" title="阿里巴巴">
+        阿里巴巴
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2805463697/" title="树">
+        树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3241866243/" title="二叉树">
+        二叉树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法递归解析括号">解法：递归解析括号</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/construct-binary-tree-from-string/">536. 从字符串生成二叉树</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个用括号表示的字符串 <code class="language-plaintext highlighter-rouge">s</code>，把它还原成二叉树。字符串的构成规则是：<strong>先写节点的整数值，然后依次用一对括号包住左子树、再用一对括号包住右子树</strong>；子树为空时对应的括号整个省略。例如 <code class="language-plaintext highlighter-rouge">4(2(3)(1))(6(5))</code> 表示根为 <code class="language-plaintext highlighter-rouge">4</code>，左子树根为 <code class="language-plaintext highlighter-rouge">2</code>（有左孩子 <code class="language-plaintext highlighter-rouge">3</code>、右孩子 <code class="language-plaintext highlighter-rouge">1</code>），右子树根为 <code class="language-plaintext highlighter-rouge">6</code>（只有左孩子 <code class="language-plaintext highlighter-rouge">5</code>）。</p>
+
+  <p>这个格式里藏着两个必须看清的性质。第一，<strong>它是完全无歧义的递归定义</strong>：括号内部又是一个同样格式的字符串，所以整个解析过程天然是递归的，不需要任何回溯或猜测。第二，<strong>空子树是靠「括号缺席」表示的，而不是空括号</strong>。这意味着当只有一个括号跟在数值后面时，它必然属于<strong>左</strong>子树——不存在「只有右孩子」的写法，右孩子必须由第二对括号承载。这条规则决定了解析时两个 <code class="language-plaintext highlighter-rouge">if</code> 的顺序不能颠倒、也不能写成 <code class="language-plaintext highlighter-rouge">else if</code>。</p>
+
+  <p>数值部分可能带负号（题目允许节点值为负），所以读数字前要先看一眼是不是 <code class="language-plaintext highlighter-rouge">-</code>。数值也可能是多位数，必须一直读到非数字字符为止，一次只读一个字符会把 <code class="language-plaintext highlighter-rouge">123</code> 拆成三个节点。</p>
+
+  <p>约束层面，字符串长度是线性规模且格式保证合法，说明不需要做容错校验，只要一趟从左到右扫描即可，目标复杂度是 $O(n)$。「必须一趟扫完、且子结构自相似」这两点合起来，指向「一个全局推进的下标 + 递归」的解析框架。</p>
+
+  <p>边界：<code class="language-plaintext highlighter-rouge">s</code> 为空串时返回空树；单个数字（如 <code class="language-plaintext highlighter-rouge">-4</code>）是一棵只有根的树；解析过程中每次进入括号要吃掉 <code class="language-plaintext highlighter-rouge">(</code>、返回时要吃掉 <code class="language-plaintext highlighter-rouge">)</code>，这两次「吃字符」必须成对，否则下标会整体错位、后续解析全盘崩塌。</p>
+</blockquote>
+
+<h2 id="解法递归解析括号">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E9%80%92%E5%BD%92%E8%A7%A3%E6%9E%90%E6%8B%AC%E5%8F%B7" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：递归解析括号</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>直觉上会想到「先用括号匹配把字符串切成三段——数值、左子树串、右子树串——再对两段分别递归」。这个思路正确，但每层都要从当前位置向右扫描去找配对的右括号，最坏情况（左偏树）下每层扫描 $O(n)$，总共退化到 $O(n^2)$；而且切子串还要额外的内存拷贝。</p>
+
+  <p>瓶颈在于<strong>重复扫描</strong>：为了找配对括号而走过的字符，进入递归后又要再走一遍。既然每个字符最终都恰好要被解析一次，那就干脆<strong>只走一遍</strong>——用一个在所有递归层之间共享的下标 <code class="language-plaintext highlighter-rouge">i</code> 表示「当前读到哪里」，每个递归层只负责把属于自己的那一段消费掉，然后把 <code class="language-plaintext highlighter-rouge">i</code> 留在下一段的开头。这样每个字符只被读一次，总复杂度降到 $O(n)$，也不需要任何子串拷贝。</p>
+
+  <p>这里的关键是把 <code class="language-plaintext highlighter-rouge">i</code> 提成成员变量（Go 里用闭包捕获），而<strong>不能</strong>作为参数按值传递——按值传递时子递归对 <code class="language-plaintext highlighter-rouge">i</code> 的推进无法反馈给父层，父层不知道左子树消费到了哪里，也就找不到右子树的起点。</p>
+
+  <p>于是每一层 <code class="language-plaintext highlighter-rouge">dfs</code> 的职责固定为三步：读出本节点的整数值（含可能的负号和多位数字）；若下一个字符是 <code class="language-plaintext highlighter-rouge">(</code>，说明有左子树，跨过 <code class="language-plaintext highlighter-rouge">(</code>、递归、再跨过 <code class="language-plaintext highlighter-rouge">)</code>；若此时下一个字符还是 <code class="language-plaintext highlighter-rouge">(</code>，说明有右子树，同样处理。做完返回本层节点。</p>
+
+  <p>递归契约（也就是这段代码的不变量）必须写清楚：<strong>调用 <code class="language-plaintext highlighter-rouge">dfs</code> 时 <code class="language-plaintext highlighter-rouge">i</code> 指向一棵子树表示串的第一个字符；<code class="language-plaintext highlighter-rouge">dfs</code> 返回时 <code class="language-plaintext highlighter-rouge">i</code> 恰好指向这棵子树表示串之后的第一个字符</strong>（可能是 <code class="language-plaintext highlighter-rouge">)</code>，也可能是字符串末尾）。只要每层都遵守这个契约，父层就能靠「看一眼 <code class="language-plaintext highlighter-rouge">s[i]</code> 是不是 <code class="language-plaintext highlighter-rouge">(</code>」来判断还有没有下一棵子树，整套解析自然成立。</p>
+
+  <p>最后注意两个 <code class="language-plaintext highlighter-rouge">if</code> 必须都写成独立的 <code class="language-plaintext highlighter-rouge">if</code> 而不是 <code class="language-plaintext highlighter-rouge">if...else</code>：一个节点可以同时有左右两棵子树，两段括号要连着处理。而顺序上先左后右，是因为格式规定第一对括号永远是左子树。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>把下标 <code class="language-plaintext highlighter-rouge">i</code> 声明为跨递归层共享的状态，并在入口重置为 <code class="language-plaintext highlighter-rouge">0</code></strong>。<strong>为什么</strong>：解析要求「每个字符只读一次」，子层消费到哪里必须让父层看得见；重置是因为同一个 <code class="language-plaintext highlighter-rouge">Solution</code> 实例可能被判题复用，残留的旧下标会让第二次调用直接越界。</li>
+    <li>
+<strong>入口先判 <code class="language-plaintext highlighter-rouge">s</code> 为空则返回空树</strong>。<strong>为什么</strong>：<code class="language-plaintext highlighter-rouge">dfs</code> 第一行就要读 <code class="language-plaintext highlighter-rouge">s.charAt(i)</code>，空串会直接越界；把这个唯一的非法输入挡在门外，<code class="language-plaintext highlighter-rouge">dfs</code> 内部就可以假定「进来时至少有一个字符」。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">dfs</code> 第一步：若当前字符是 <code class="language-plaintext highlighter-rouge">-</code>，记下负号并把 <code class="language-plaintext highlighter-rouge">i</code> 前移一位</strong>。<strong>为什么</strong>：节点值可以为负，符号必须在读数字前处理；只有紧跟在子树开头的 <code class="language-plaintext highlighter-rouge">-</code> 才是符号，读完数字后不会再遇到它。</li>
+    <li>
+<strong>循环读取连续数字，用 <code class="language-plaintext highlighter-rouge">val = val * 10 + (c - '0')</code> 累积，直到遇到非数字</strong>。<strong>为什么</strong>：数值可能是多位数，必须一次读完；以「非数字」作为终止条件而不是以 <code class="language-plaintext highlighter-rouge">(</code> 作为终止条件，可以同时正确处理后面跟 <code class="language-plaintext highlighter-rouge">)</code> 或字符串结束这两种情况。</li>
+    <li>
+<strong>用 <code class="language-plaintext highlighter-rouge">sign * val</code> 建出当前节点</strong>。<strong>为什么</strong>：节点必须在解析子树之前建好，因为子树要挂在它身上；同时这一步之后 <code class="language-plaintext highlighter-rouge">i</code> 恰好停在本节点数值之后，进入了「判断有没有子树」的状态。</li>
+    <li>
+<strong>若 <code class="language-plaintext highlighter-rouge">i</code> 未越界且 <code class="language-plaintext highlighter-rouge">s[i] == '('</code>：<code class="language-plaintext highlighter-rouge">i++</code> 跨过左括号，递归得到左子树，返回后再 <code class="language-plaintext highlighter-rouge">i++</code> 跨过右括号</strong>。<strong>为什么</strong>：递归契约要求进入 <code class="language-plaintext highlighter-rouge">dfs</code> 时 <code class="language-plaintext highlighter-rouge">i</code> 指向子树串首字符，所以必须先跨过 <code class="language-plaintext highlighter-rouge">(</code>；返回时按契约 <code class="language-plaintext highlighter-rouge">i</code> 停在 <code class="language-plaintext highlighter-rouge">)</code> 上，父层负责把它吃掉——「谁开的括号谁关」这个分工必须固定，否则下标会错位。</li>
+    <li>
+<strong>再判一次 <code class="language-plaintext highlighter-rouge">i</code> 未越界且 <code class="language-plaintext highlighter-rouge">s[i] == '('</code>，同样处理右子树</strong>。<strong>为什么</strong>：写成第二个独立的 <code class="language-plaintext highlighter-rouge">if</code> 而不是 <code class="language-plaintext highlighter-rouge">else</code>，因为左右子树可以同时存在；能走到这里说明左括号已经成对消费完，此刻的 <code class="language-plaintext highlighter-rouge">(</code> 只可能是右子树的开始。</li>
+    <li>
+<strong>返回当前节点</strong>。<strong>为什么</strong>：此时 <code class="language-plaintext highlighter-rouge">i</code> 恰好停在本子树之后，契约得以维持，父层可以安全地继续判断。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">s = "4(2(3)(1))(6(5))"</code> 走一遍</strong>（下标从 <code class="language-plaintext highlighter-rouge">0</code> 开始）。入口 <code class="language-plaintext highlighter-rouge">i = 0</code>，串非空，进入 <code class="language-plaintext highlighter-rouge">dfs</code>。</p>
+
+  <p>第 1 层：读到 <code class="language-plaintext highlighter-rouge">4</code>，<code class="language-plaintext highlighter-rouge">i</code> 推到 <code class="language-plaintext highlighter-rouge">1</code>，建节点 <code class="language-plaintext highlighter-rouge">4</code>。<code class="language-plaintext highlighter-rouge">s[1] == '('</code>，<code class="language-plaintext highlighter-rouge">i</code> 变 <code class="language-plaintext highlighter-rouge">2</code>，递归解析左子树。</p>
+
+  <p>第 2 层：读到 <code class="language-plaintext highlighter-rouge">2</code>，<code class="language-plaintext highlighter-rouge">i</code> 推到 <code class="language-plaintext highlighter-rouge">3</code>，建节点 <code class="language-plaintext highlighter-rouge">2</code>。<code class="language-plaintext highlighter-rouge">s[3] == '('</code>，<code class="language-plaintext highlighter-rouge">i</code> 变 <code class="language-plaintext highlighter-rouge">4</code>，递归。第 3 层读到 <code class="language-plaintext highlighter-rouge">3</code>，<code class="language-plaintext highlighter-rouge">i</code> 推到 <code class="language-plaintext highlighter-rouge">5</code>，建节点 <code class="language-plaintext highlighter-rouge">3</code>；<code class="language-plaintext highlighter-rouge">s[5] == ')'</code> 不是 <code class="language-plaintext highlighter-rouge">(</code>，两个 <code class="language-plaintext highlighter-rouge">if</code> 都不进，返回节点 <code class="language-plaintext highlighter-rouge">3</code>，此时 <code class="language-plaintext highlighter-rouge">i = 5</code> 正停在 <code class="language-plaintext highlighter-rouge">)</code> 上——契约成立。回到第 2 层，把左孩子挂上，<code class="language-plaintext highlighter-rouge">i++</code> 吃掉 <code class="language-plaintext highlighter-rouge">)</code> 变成 <code class="language-plaintext highlighter-rouge">6</code>。<code class="language-plaintext highlighter-rouge">s[6] == '('</code>，<code class="language-plaintext highlighter-rouge">i</code> 变 <code class="language-plaintext highlighter-rouge">7</code>，递归解析右子树：读到 <code class="language-plaintext highlighter-rouge">1</code>，<code class="language-plaintext highlighter-rouge">i</code> 推到 <code class="language-plaintext highlighter-rouge">8</code>，返回节点 <code class="language-plaintext highlighter-rouge">1</code>。第 2 层挂上右孩子，<code class="language-plaintext highlighter-rouge">i++</code> 吃掉 <code class="language-plaintext highlighter-rouge">)</code> 变成 <code class="language-plaintext highlighter-rouge">9</code>。此时 <code class="language-plaintext highlighter-rouge">s[9] == ')'</code>，不是 <code class="language-plaintext highlighter-rouge">(</code>，第 2 层返回节点 <code class="language-plaintext highlighter-rouge">2</code>（带着孩子 <code class="language-plaintext highlighter-rouge">3</code> 和 <code class="language-plaintext highlighter-rouge">1</code>），<code class="language-plaintext highlighter-rouge">i = 9</code>。</p>
+
+  <p>回到第 1 层：挂上左孩子 <code class="language-plaintext highlighter-rouge">2</code>，<code class="language-plaintext highlighter-rouge">i++</code> 吃掉 <code class="language-plaintext highlighter-rouge">)</code> 变成 <code class="language-plaintext highlighter-rouge">10</code>。<code class="language-plaintext highlighter-rouge">s[10] == '('</code>，进入第二个 <code class="language-plaintext highlighter-rouge">if</code>，<code class="language-plaintext highlighter-rouge">i</code> 变 <code class="language-plaintext highlighter-rouge">11</code>，递归解析右子树：读到 <code class="language-plaintext highlighter-rouge">6</code>，<code class="language-plaintext highlighter-rouge">i</code> 推到 <code class="language-plaintext highlighter-rouge">12</code>；<code class="language-plaintext highlighter-rouge">s[12] == '('</code>，<code class="language-plaintext highlighter-rouge">i</code> 变 <code class="language-plaintext highlighter-rouge">13</code>，再递归读到 <code class="language-plaintext highlighter-rouge">5</code>，<code class="language-plaintext highlighter-rouge">i</code> 推到 <code class="language-plaintext highlighter-rouge">14</code>，返回节点 <code class="language-plaintext highlighter-rouge">5</code>；挂为 <code class="language-plaintext highlighter-rouge">6</code> 的左孩子，<code class="language-plaintext highlighter-rouge">i++</code> 吃掉 <code class="language-plaintext highlighter-rouge">)</code> 变成 <code class="language-plaintext highlighter-rouge">15</code>；<code class="language-plaintext highlighter-rouge">s[15] == ')'</code> 不是 <code class="language-plaintext highlighter-rouge">(</code>，返回节点 <code class="language-plaintext highlighter-rouge">6</code>。第 1 层挂上右孩子，<code class="language-plaintext highlighter-rouge">i++</code> 吃掉 <code class="language-plaintext highlighter-rouge">)</code> 变成 <code class="language-plaintext highlighter-rouge">16</code>，已到串尾，两个 <code class="language-plaintext highlighter-rouge">if</code> 的越界判断都不通过，返回根节点 <code class="language-plaintext highlighter-rouge">4</code>。</p>
+
+  <p>整棵树正确还原，且 <code class="language-plaintext highlighter-rouge">i</code> 恰好走完全串一次。注意节点 <code class="language-plaintext highlighter-rouge">6</code> 那里：它只有左孩子 <code class="language-plaintext highlighter-rouge">5</code>，对应的串是 <code class="language-plaintext highlighter-rouge">6(5)</code>——正因为「单个括号必属左子树」，才能在没有任何额外标记的情况下判断出 <code class="language-plaintext highlighter-rouge">5</code> 是左孩子而不是右孩子。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// i 跨递归层共享：子层消费到哪里，父层必须看得见。</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">i</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">TreeNode</span> <span class="nf">str2tree</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="nf">dfs</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c1">// 契约：进入时 i 指向子树串首字符，返回时 i 指向该子树之后的第一个字符。</span>
+    <span class="kd">private</span> <span class="nc">TreeNode</span> <span class="nf">dfs</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">sign</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'-'</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">sign</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+            <span class="n">i</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="c1">// 数值可能是多位数，必须一次读完。</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="nc">Character</span><span class="o">.</span><span class="na">isDigit</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)))</span> <span class="o">{</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">val</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'0'</span><span class="o">);</span>
+            <span class="n">i</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="nc">TreeNode</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TreeNode</span><span class="o">(</span><span class="n">sign</span> <span class="o">*</span> <span class="n">val</span><span class="o">);</span>
+
+        <span class="c1">// 第一对括号必然是左子树：谁开的括号谁关。</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'('</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">i</span><span class="o">++;</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">dfs</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+            <span class="n">i</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="c1">// 独立的 if 而非 else：左右子树可以同时存在。</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'('</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">i</span><span class="o">++;</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">dfs</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+            <span class="n">i</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">str2tree</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="n">TreeNode</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">nil</span>
+	<span class="p">}</span>
+	<span class="c">// i 由闭包捕获，跨递归层共享。</span>
+	<span class="n">i</span> <span class="o">:=</span> <span class="m">0</span>
+
+	<span class="c">// 契约：进入时 i 指向子树串首字符，返回时 i 指向该子树之后的第一个字符。</span>
+	<span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">()</span> <span class="o">*</span><span class="n">TreeNode</span>
+	<span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">()</span> <span class="o">*</span><span class="n">TreeNode</span> <span class="p">{</span>
+		<span class="n">sign</span> <span class="o">:=</span> <span class="m">1</span>
+		<span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'-'</span> <span class="p">{</span>
+			<span class="n">sign</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+			<span class="n">i</span><span class="o">++</span>
+		<span class="p">}</span>
+		<span class="n">val</span> <span class="o">:=</span> <span class="m">0</span>
+		<span class="c">// 数值可能是多位数，必须一次读完。</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="sc">'0'</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="sc">'9'</span> <span class="p">{</span>
+			<span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">*</span><span class="m">10</span> <span class="o">+</span> <span class="kt">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="sc">'0'</span><span class="p">)</span>
+			<span class="n">i</span><span class="o">++</span>
+		<span class="p">}</span>
+		<span class="n">node</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">TreeNode</span><span class="p">{</span><span class="n">Val</span><span class="o">:</span> <span class="n">sign</span> <span class="o">*</span> <span class="n">val</span><span class="p">}</span>
+
+		<span class="c">// 第一对括号必然是左子树：谁开的括号谁关。</span>
+		<span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'('</span> <span class="p">{</span>
+			<span class="n">i</span><span class="o">++</span>
+			<span class="n">node</span><span class="o">.</span><span class="n">Left</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">()</span>
+			<span class="n">i</span><span class="o">++</span>
+		<span class="p">}</span>
+		<span class="c">// 独立的 if 而非 else：左右子树可以同时存在。</span>
+		<span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'('</span> <span class="p">{</span>
+			<span class="n">i</span><span class="o">++</span>
+			<span class="n">node</span><span class="o">.</span><span class="n">Right</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">()</span>
+			<span class="n">i</span><span class="o">++</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="n">node</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">dfs</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$，<code class="language-plaintext highlighter-rouge">n</code> 为字符串长度。凭什么：下标 <code class="language-plaintext highlighter-rouge">i</code> 只增不减，每个字符恰好被读一次——数字字符在读数循环里被消费，括号字符被 <code class="language-plaintext highlighter-rouge">i++</code> 跨过，负号被符号判断消费；递归层数虽多，但所有层加起来对 <code class="language-plaintext highlighter-rouge">i</code> 的推进总量就是 <code class="language-plaintext highlighter-rouge">n</code>。</li>
+    <li>
+<strong>空间复杂度</strong>：辅助空间为 $O(h)$，<code class="language-plaintext highlighter-rouge">h</code> 是树高，来自递归栈；链状树时最坏为 $O(n)$。除此之外只有共享游标和每层的几个标量。返回的树本身占 $O(n)$，不计入辅助空间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>递归下降解析的标准骨架就是「共享一个游标 + 每层只消费自己那一段」。凡是遇到自相似的括号 / 嵌套结构，先定下这个骨架，再考虑细节。</li>
+    <li>必须显式写出递归契约：进入时游标在哪、返回时游标在哪。面试时把这句话说出来，等于同时给出了正确性证明和调试指南——所有下标错位的 bug 都是违反契约导致的。</li>
+    <li>游标要跨层共享（成员变量或闭包捕获），不能按值传参。这是「一趟扫描 $O(n)$」与「反复找配对括号 $O(n^2)$」的分水岭。</li>
+    <li>「空子树用括号缺席表示」推出「第一对括号必是左子树」。识别出这条隐含规则，两个 <code class="language-plaintext highlighter-rouge">if</code> 的顺序和独立性就都有了依据。</li>
+    <li>读数值时要同时处理负号和多位数，终止条件用「非数字」而不是「遇到某个特定字符」，这样对串尾和 <code class="language-plaintext highlighter-rouge">)</code> 两种收尾都自动正确。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>把 <code class="language-plaintext highlighter-rouge">i</code> 作为参数按值传给 <code class="language-plaintext highlighter-rouge">dfs</code></strong>：<code class="language-plaintext highlighter-rouge">"4(2)(6)"</code> → 解析完左子树后父层的 <code class="language-plaintext highlighter-rouge">i</code> 仍停在 <code class="language-plaintext highlighter-rouge">2</code> 的位置，右子树的括号被当成左子树重新解析，结果树结构错乱甚至无限递归。</li>
+    <li>
+<strong>两个 <code class="language-plaintext highlighter-rouge">if</code> 写成 <code class="language-plaintext highlighter-rouge">if...else if</code></strong>：<code class="language-plaintext highlighter-rouge">"4(2)(6)"</code> → 只解析出左孩子 <code class="language-plaintext highlighter-rouge">2</code>，右孩子 <code class="language-plaintext highlighter-rouge">6</code> 被完全忽略，且 <code class="language-plaintext highlighter-rouge">i</code> 停在中间。</li>
+    <li>
+<strong>两个 <code class="language-plaintext highlighter-rouge">if</code> 顺序颠倒（先挂右后挂左）</strong>：<code class="language-plaintext highlighter-rouge">"6(5)"</code> → <code class="language-plaintext highlighter-rouge">5</code> 被挂成右孩子，而正确答案是左孩子，结构镜像出错。</li>
+    <li>
+<strong>忘记处理负号</strong>：<code class="language-plaintext highlighter-rouge">"-4(2)"</code> → 第一行读数循环遇到 <code class="language-plaintext highlighter-rouge">-</code> 立刻退出，<code class="language-plaintext highlighter-rouge">val</code> 为 <code class="language-plaintext highlighter-rouge">0</code>，建出值为 <code class="language-plaintext highlighter-rouge">0</code> 的节点，随后 <code class="language-plaintext highlighter-rouge">s[i]</code> 是 <code class="language-plaintext highlighter-rouge">-</code> 也不是 <code class="language-plaintext highlighter-rouge">(</code>，直接返回，整棵子树丢失。</li>
+    <li>
+<strong>一次只读一位数字</strong>：<code class="language-plaintext highlighter-rouge">"123"</code> → 建出值为 <code class="language-plaintext highlighter-rouge">1</code> 的节点，后面的 <code class="language-plaintext highlighter-rouge">23</code> 无人消费，返回的树只有一个错误节点。</li>
+    <li>
+<strong>递归返回后忘记 <code class="language-plaintext highlighter-rouge">i++</code> 跨过 <code class="language-plaintext highlighter-rouge">)</code></strong>：<code class="language-plaintext highlighter-rouge">"4(2)(6)"</code> → 左子树返回时 <code class="language-plaintext highlighter-rouge">i</code> 停在 <code class="language-plaintext highlighter-rouge">)</code>，第二个 <code class="language-plaintext highlighter-rouge">if</code> 判断 <code class="language-plaintext highlighter-rouge">s[i] == '('</code> 失败，右孩子 <code class="language-plaintext highlighter-rouge">6</code> 丢失。</li>
+    <li>
+<strong>进入递归前忘记 <code class="language-plaintext highlighter-rouge">i++</code> 跨过 <code class="language-plaintext highlighter-rouge">(</code></strong>：<code class="language-plaintext highlighter-rouge">"4(2)"</code> → <code class="language-plaintext highlighter-rouge">dfs</code> 第一行读到的是 <code class="language-plaintext highlighter-rouge">(</code> 而不是数字，<code class="language-plaintext highlighter-rouge">val</code> 为 <code class="language-plaintext highlighter-rouge">0</code>，建出多余的 <code class="language-plaintext highlighter-rouge">0</code> 节点并陷入错误的解析路径。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">if</code> 里漏掉 <code class="language-plaintext highlighter-rouge">i &lt; s.length()</code> 的越界判断</strong>：<code class="language-plaintext highlighter-rouge">"4"</code> → 读完数值后 <code class="language-plaintext highlighter-rouge">i</code> 已等于长度，直接访问 <code class="language-plaintext highlighter-rouge">s.charAt(i)</code> 抛 <code class="language-plaintext highlighter-rouge">StringIndexOutOfBoundsException</code>。</li>
+    <li>
+<strong>用「找配对右括号后切子串再递归」的写法</strong>：<code class="language-plaintext highlighter-rouge">"1(2(3(4(5))))"</code> 这类链状输入 → 每层都要向右扫到底，总时间退化成 $O(n^2)$，长串上超时；同时大量 <code class="language-plaintext highlighter-rouge">substring</code> 拷贝额外吃掉 $O(n^2)$ 内存。</li>
+    <li>
+<strong>空串未提前返回</strong>：<code class="language-plaintext highlighter-rouge">s = ""</code> → <code class="language-plaintext highlighter-rouge">dfs</code> 第一行 <code class="language-plaintext highlighter-rouge">s.charAt(0)</code> 越界崩溃，而正确答案是空树。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/construct-string-from-binary-tree/">606. 根据二叉树创建字符串</a></td>
+      <td>中等</td>
+      <td>本题的逆运算，难点转为「何时可以省略空括号」而非如何解析</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/">297. 二叉树的序列化与反序列化</a></td>
+      <td>困难</td>
+      <td>编码格式由自己设计，空节点要显式写出占位符，解析反而比本题简单</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/decode-string/">394. 字符串解码</a></td>
+      <td>中等</td>
+      <td>同为括号嵌套的递归下降，但产出是展开后的字符串，且括号前带重复次数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/mini-parser/">385. 迷你语法分析器</a></td>
+      <td>中等</td>
+      <td>嵌套结构是列表而非二叉树，分隔符是逗号，同一层可以有任意多个子项</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/basic-calculator/">224. 基本计算器</a></td>
+      <td>困难</td>
+      <td>括号之外还要处理运算符优先级与正负号，解析同时要完成求值</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/parsing-a-boolean-expression/">1106. 解析布尔表达式</a></td>
+      <td>困难</td>
+      <td>括号前的操作符决定子结果如何归并，递归返回的是布尔值而非节点</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-atoms/">726. 原子的数量</a></td>
+      <td>困难</td>
+      <td>括号后带乘数需要把整个子结果按倍数放大，还要对结果排序输出</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/">105. 从前序与中序遍历序列构造二叉树</a></td>
+      <td>中等</td>
+      <td>同样是重建二叉树，但结构信息来自两个序列的交叉定位而非括号</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/verify-preorder-serialization-of-a-binary-tree/">331. 验证二叉树的前序序列化</a></td>
+      <td>中等</td>
+      <td>只需判断格式合法性而不必真正建树，可用槽位计数一趟扫描</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/64807548" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1005. K 次取反后最大化的数组和</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/90470912" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 926. 将字符串翻转到单调递增</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/53498882">https://hgnulb.github.io/blog/2022/53498882</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

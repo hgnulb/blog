@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 862. 和至少为 K 的最短子数组 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,二分查找,前缀和,单调队列,堆（优先队列）,子数组问题,字节跳动,微软,数组,滑动窗口,腾讯,队列,阿里巴巴" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 862. 和至少为 K 的最短子数组" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/33647923" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/33647923" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-09-03T19:46:52+08:00" />
+<meta property="article:modified_time" content="2026-09-03T19:46:52+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 862. 和至少为 K 的最短子数组" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-09-03T19:46:52+08:00","datePublished":"2026-09-03T19:46:52+08:00","description":"题目描述","headline":"LeetCode 862. 和至少为 K 的最短子数组","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/33647923"},"url":"https://hgnulb.github.io/blog/2026/33647923"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法前缀和--单调队列">解法：前缀和 + 单调队列</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 862. 和至少为 K 的最短子数组">LeetCode 862. 和至少为 K 的最短子数组</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-09-03 19:46:52"
+                    datetime="2026-09-03T19:46:52+08:00"
+            >
+                2026-09-03
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1762 字 · 英文 68 词 · 代码 52 行 · 图片 1 张"
+            aria-label="预计阅读时间约 7 分钟，正文 1762 字 · 英文 68 词 · 代码 52 行 · 图片 1 张"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 7 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    12 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/9362659490/" title="10-20">
+        10-20
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2381712535/" title="腾讯">
+        腾讯
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8699249851/" title="阿里巴巴">
+        阿里巴巴
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3447615142/" title="二分查找">
+        二分查找
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7037379732/" title="堆（优先队列）">
+        堆（优先队列）
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5692196181/" title="滑动窗口">
+        滑动窗口
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7488286296/" title="前缀和">
+        前缀和
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1903280772/" title="队列">
+        队列
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3661710916/" title="子数组问题">
+        子数组问题
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9610976038/" title="单调队列">
+        单调队列
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法前缀和--单调队列">解法：前缀和 + 单调队列</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/shortest-subarray-with-sum-at-least-k/">862. 和至少为 K 的最短子数组</a></p>
+</blockquote>
+
+<p><img src="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/post-list/image-20250509215652807.png" alt="image-20250509215652807" decoding="async" loading="lazy" width="770" height="661"></p>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>要在数组里找一段<strong>连续且非空</strong>的子数组，使它的元素之和<strong>不小于 <code class="language-plaintext highlighter-rouge">k</code></strong>，并且在所有满足条件的子数组中长度最短；若一个都不存在就返回 <code class="language-plaintext highlighter-rouge">-1</code>。注意判据是「至少为 <code class="language-plaintext highlighter-rouge">k</code>」而不是「恰好等于 <code class="language-plaintext highlighter-rouge">k</code>」，所以超出得越多也无所谓，只比长度。</p>
+
+  <p>这道题真正的杀手锏藏在数据范围里：<code class="language-plaintext highlighter-rouge">nums[i]</code> 的取值是 <code class="language-plaintext highlighter-rouge">[-10^5, 10^5]</code>，<strong>含负数</strong>。这一条直接把 <a href="https://leetcode.cn/problems/minimum-size-subarray-sum/">209. 长度最小的子数组</a> 那套双指针滑动窗口判了死刑。209 之所以能滑，是因为元素全为正，窗口和对区间<strong>单调</strong>——右端点右移和必然变大，左端点右移和必然变小，于是「当前窗口和是否够 <code class="language-plaintext highlighter-rouge">k</code>」可以指导两根指针单向移动。一旦允许负数，这条单调性彻底崩塌：右扩一格可能让和变小，左缩一格反而可能让和变大，两根指针都失去了移动依据。例如 <code class="language-plaintext highlighter-rouge">nums = [3, -2, 5]</code>、<code class="language-plaintext highlighter-rouge">k = 5</code>，普通滑窗先得到长度 3，移除左端的 3 后窗口和降为 3，便停止收缩，从而错过单元素 <code class="language-plaintext highlighter-rouge">[5]</code> 这个最优答案。</p>
+
+  <p>换个角度看约束。<code class="language-plaintext highlighter-rouge">n</code> 最大 $10^5$，说明目标复杂度是 $O(n)$ 或 $O(n \log n)$，$O(n^2)$ 的 $10^{10}$ 必然超时。<code class="language-plaintext highlighter-rouge">k</code> 最大 $10^9$，而所有元素之和的绝对值上界是 $10^5 \times 10^5 = 10^{10}$，<strong>超出了 32 位整数的范围</strong>，所以前缀和必须用 64 位类型存。这是本题少见但致命的一处细节。</p>
+
+  <p>边界情形：可能无解（如全负数组或所有和都够不到 <code class="language-plaintext highlighter-rouge">k</code>），此时返回 <code class="language-plaintext highlighter-rouge">-1</code>；答案可能是长度为 1 的单个元素（如 <code class="language-plaintext highlighter-rouge">nums = [1]</code>、<code class="language-plaintext highlighter-rouge">k = 1</code>）；答案也可能是整个数组；负数在数组中间时，跨过它反而可能凑出更大的和（<code class="language-plaintext highlighter-rouge">[2, -1, 2]</code> 的整段和是 3，比任何单元素都大）。</p>
+</blockquote>
+
+<h2 id="解法前缀和--单调队列">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%89%8D%E7%BC%80%E5%92%8C--%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：前缀和 + 单调队列</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>令 <code class="language-plaintext highlighter-rouge">prefix[i]</code> 表示前 <code class="language-plaintext highlighter-rouge">i</code> 个元素之和，则子数组 <code class="language-plaintext highlighter-rouge">[j, i)</code> 的和为 <code class="language-plaintext highlighter-rouge">prefix[i] - prefix[j]</code>，长度为 <code class="language-plaintext highlighter-rouge">i - j</code>。问题变成：对每个右端点 <code class="language-plaintext highlighter-rouge">i</code>，寻找满足 <code class="language-plaintext highlighter-rouge">prefix[i] - prefix[j] &gt;= k</code> 的左端点 <code class="language-plaintext highlighter-rouge">j</code>，并让距离最短。</p>
+
+  <p>数组含负数，普通滑动窗口失去单调性：右端加入负数可能让和变小，左端移走负数反而可能让和变大。这里用双端队列保存仍有机会成为最优左端点的前缀下标，并维持两个不变量：</p>
+
+  <ol>
+    <li>队列中的下标递增。</li>
+    <li>这些下标对应的前缀和严格递增。</li>
+  </ol>
+
+  <p>每轮有两种淘汰：</p>
+
+  <ul>
+    <li>
+<strong>弹队首</strong>：若 <code class="language-plaintext highlighter-rouge">prefix[i] - prefix[front] &gt;= k</code>，当前区间合法，先更新答案再弹出。对这个左端点来说，当前 <code class="language-plaintext highlighter-rouge">i</code> 已是最早可行的右端点，未来只会得到更长区间；继续弹队首还能尝试更靠后的左端点。</li>
+    <li>
+<strong>弹队尾</strong>：若 <code class="language-plaintext highlighter-rouge">prefix[back] &gt;= prefix[i]</code>，队尾被当前下标支配。当前下标更靠后、前缀和又更小或相等，未来既更容易满足和的要求，也能形成更短区间。</li>
+  </ul>
+
+  <p><strong>正确性</strong>：队首弹出的候选已经取得自身最短解，队尾弹出的候选存在全面优于它的新候选，因此删除它们都不会丢失最优答案。其余候选按前缀和递增留在队列中，每个右端点都会结算所有当前可行的左端点，所以全局最短区间一定会被检查到。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ol>
+    <li>用 <code class="language-plaintext highlighter-rouge">long</code> / <code class="language-plaintext highlighter-rouge">int64</code> 构建长度为 <code class="language-plaintext highlighter-rouge">n + 1</code> 的前缀和数组，避免累加结果超过 32 位整数。</li>
+    <li>初始化空的双端队列和答案 <code class="language-plaintext highlighter-rouge">n + 1</code>；队列只保存前缀下标。</li>
+    <li>遍历 <code class="language-plaintext highlighter-rouge">i = 0...n</code>，先从队首不断弹出所有能与 <code class="language-plaintext highlighter-rouge">i</code> 组成合法区间的下标，并更新最短长度。</li>
+    <li>再从队尾弹出所有前缀和不小于 <code class="language-plaintext highlighter-rouge">prefix[i]</code> 的下标，恢复前缀和严格递增的不变量。</li>
+    <li>将 <code class="language-plaintext highlighter-rouge">i</code> 入队。结束后若答案仍为 <code class="language-plaintext highlighter-rouge">n + 1</code>，返回 <code class="language-plaintext highlighter-rouge">-1</code>。</li>
+  </ol>
+
+  <p>例如 <code class="language-plaintext highlighter-rouge">nums = [3, -2, 5]，k = 5</code>，前缀和为 <code class="language-plaintext highlighter-rouge">[0, 3, 1, 6]</code>。处理前缀 1 时，下标 2 从队尾淘汰前缀更大的下标 1；处理前缀 6 时，先用队首下标 0 得到长度 3，再用新的队首下标 2 得到最短长度 1。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Deque</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">shortestSubarray</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">long</span><span class="o">[]</span> <span class="n">prefix</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">prefix</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+        <span class="o">}</span>
+
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">deque</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">deque</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">prefix</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">-</span> <span class="n">prefix</span><span class="o">[</span><span class="n">deque</span><span class="o">.</span><span class="na">peekFirst</span><span class="o">()]</span> <span class="o">&gt;=</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">deque</span><span class="o">.</span><span class="na">pollFirst</span><span class="o">());</span>
+            <span class="o">}</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">deque</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">prefix</span><span class="o">[</span><span class="n">deque</span><span class="o">.</span><span class="na">peekLast</span><span class="o">()]</span> <span class="o">&gt;=</span> <span class="n">prefix</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">deque</span><span class="o">.</span><span class="na">pollLast</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="n">deque</span><span class="o">.</span><span class="na">offerLast</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span> <span class="o">==</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">shortestSubarray</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+    <span class="n">prefix</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">num</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+        <span class="n">prefix</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">prefix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="kt">int64</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">deque</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="n">ans</span> <span class="o">:=</span> <span class="n">n</span> <span class="o">+</span> <span class="m">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">deque</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span>
+            <span class="n">prefix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">prefix</span><span class="p">[</span><span class="n">deque</span><span class="p">[</span><span class="m">0</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="kt">int64</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">-</span><span class="n">deque</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ans</span> <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">deque</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+            <span class="p">}</span>
+            <span class="n">deque</span> <span class="o">=</span> <span class="n">deque</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">deque</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span>
+            <span class="n">prefix</span><span class="p">[</span><span class="n">deque</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">deque</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="n">prefix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">deque</span> <span class="o">=</span> <span class="n">deque</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">deque</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="n">deque</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">deque</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">ans</span> <span class="o">==</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。每个前缀下标只入队一次，并且最多从队首或队尾弹出一次；两个 <code class="language-plaintext highlighter-rouge">while</code> 的总执行次数是线性的。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。前缀和数组和双端队列最多各保存 <code class="language-plaintext highlighter-rouge">n + 1</code> 个元素。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>含负数时窗口和不单调，不能照搬全正数数组的滑动窗口。</li>
+    <li>队列存下标，且对应的前缀和严格递增。</li>
+    <li>队首负责结算已经达标的区间；队尾负责删除被当前前缀全面支配的候选。</li>
+    <li>两处都必须使用 <code class="language-plaintext highlighter-rouge">while</code>，因为一次可能淘汰多个候选。</li>
+    <li>前缀和最坏可达 $10^{10}$，必须使用 64 位整数。</li>
+    <li>面试表达重点是讲清两条弹出规则为何安全，而不是只背出单调队列模板。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>直接使用滑动窗口</strong>：<code class="language-plaintext highlighter-rouge">[3, -2, 5]，k = 5</code> 中，收缩时移除正数会让窗口暂时不达标，但继续移除负数又能达标，普通滑窗会错过长度 1 的答案。</li>
+    <li>
+<strong>前缀和使用 32 位整数</strong>：数据上界可使累加值超过 <code class="language-plaintext highlighter-rouge">int</code> 范围。</li>
+    <li>
+<strong>队首只弹一次</strong>：同一个右端点可能对应多个可行左端点，后面的左端点能形成更短区间。</li>
+    <li>
+<strong>队尾比较漏掉等号</strong>：相同前缀和应保留更靠后的下标，否则留下的是更差候选。</li>
+    <li>
+<strong>主循环漏掉 <code class="language-plaintext highlighter-rouge">i = n</code></strong>：会遗漏所有以数组最后一个元素结尾的答案。</li>
+    <li>
+<strong>队列保存前缀和值</strong>：没有下标就无法计算区间长度。</li>
+    <li>
+<strong>忘记无解转换</strong>：答案保持哨兵值时应返回 <code class="language-plaintext highlighter-rouge">-1</code>。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-size-subarray-sum/">209. 长度最小的子数组</a></td>
+      <td>中等</td>
+      <td>元素全为正的版本，窗口和单调，双指针即可，是理解本题「为什么滑窗失效」的对照</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/sliding-window-maximum/">239. 滑动窗口最大值</a></td>
+      <td>困难</td>
+      <td>单调队列的入门形态，窗口定长，弹出规则由窗口边界和大小关系共同决定</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/hua-dong-chuang-kou-de-zui-da-zhi-lcof/">剑指 Offer 59 - I. 滑动窗口的最大值</a></td>
+      <td>困难</td>
+      <td>与 239 同题异名，可用来单独打磨双端队列的入队与过期弹出</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/dui-lie-de-zui-da-zhi-lcof/">剑指 Offer 59 - II. 队列的最大值</a></td>
+      <td>中等</td>
+      <td>把单调队列封装成支持 <code class="language-plaintext highlighter-rouge">push</code> 和 <code class="language-plaintext highlighter-rouge">max</code> 的数据结构，考察摊还复杂度的表述</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/subarray-sum-equals-k/">560. 和为 K 的子数组</a></td>
+      <td>中等</td>
+      <td>判据换成「恰好等于」且只求个数，前缀和配哈希表，不需要任何单调性</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-size-subarray-sum-equals-k/">325. 和等于 k 的最长子数组长度</a></td>
+      <td>中等</td>
+      <td>同样含负数、同样求长度，但目标是最长且判据为相等，改用哈希表存最早下标</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-sum-circular-subarray/">918. 环形子数组的最大和</a></td>
+      <td>中等</td>
+      <td>前缀和配单调队列求定长限制内的最优区间，是本题技巧在环形结构上的变体</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/max-consecutive-ones-iii/">1004. 最大连续1的个数 III</a></td>
+      <td>中等</td>
+      <td>约束天然单调，滑动窗口成立，可用来反向确认单调性到底给窗口法提供了什么</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/13009476" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 141. 环形链表</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/49995072" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 306. 累加数</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/33647923">https://hgnulb.github.io/blog/2026/33647923</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 面试题 04.01. 节点间通路 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,图,广度优先搜索,深度优先搜索,虾皮" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 面试题 04.01. 节点间通路" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/52156872" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/52156872" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-07-06T17:23:53+08:00" />
+<meta property="article:modified_time" content="2022-07-06T17:23:53+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 面试题 04.01. 节点间通路" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-07-06T17:23:53+08:00","datePublished":"2022-07-06T17:23:53+08:00","description":"题目描述","headline":"LeetCode 面试题 04.01. 节点间通路","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/52156872"},"url":"https://hgnulb.github.io/blog/2022/52156872"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法bfs邻接表">解法：BFS（邻接表）</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 面试题 04.01. 节点间通路">LeetCode 面试题 04.01. 节点间通路</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-07-06 17:23:53"
+                    datetime="2022-07-06T17:23:53+08:00"
+            >
+                2022-07-06
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2433 字 · 英文 77 词 · 代码 51 行"
+            aria-label="预计阅读时间约 8 分钟，正文 2433 字 · 英文 77 词 · 代码 51 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 8 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    6 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7723837750/" title="程序员面试金典（第 6 版）">
+        程序员面试金典（第 6 版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6901340989/" title="虾皮">
+        虾皮
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5789791753/" title="图">
+        图
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法bfs邻接表">解法：BFS（邻接表）</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/route-between-nodes-lcci/">面试题 04.01. 节点间通路</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给定一个 <code class="language-plaintext highlighter-rouge">n</code> 个节点的<strong>有向图</strong>（节点编号 <code class="language-plaintext highlighter-rouge">0..n-1</code>）和边列表 <code class="language-plaintext highlighter-rouge">graph</code>，其中 <code class="language-plaintext highlighter-rouge">graph[i] = [u, v]</code> 表示存在一条 <code class="language-plaintext highlighter-rouge">u → v</code> 的有向边，判断从 <code class="language-plaintext highlighter-rouge">start</code> 出发能否沿着有向边走到 <code class="language-plaintext highlighter-rouge">target</code>。只要回答"能/不能"，不需要给出路径，也不需要最短路径。</p>
+</blockquote>
+
+<blockquote>
+  <p>约束里有三个必须读出来的信号。第一，边是<strong>有向</strong>的，所以建图时只能加 <code class="language-plaintext highlighter-rouge">u → v</code> 一个方向，把它当无向图处理会把不可达误判成可达。第二，题目明确说明图中<strong>可能存在自环和平行边</strong>，自环意味着搜索必须有访问标记否则会死循环，平行边意味着同一对节点可能被重复加入邻接表（这不影响正确性，只影响常数）。第三，边数可能远大于节点数，因此不能用邻接矩阵（$O(n^2)$ 空间在 <code class="language-plaintext highlighter-rouge">n</code> 较大时不可接受），要用邻接表。</p>
+</blockquote>
+
+<blockquote>
+  <p>边界上要覆盖：<code class="language-plaintext highlighter-rouge">start == target</code>（应当返回 <code class="language-plaintext highlighter-rouge">true</code>，即使没有任何边）；<code class="language-plaintext highlighter-rouge">target</code> 是孤立点；从 <code class="language-plaintext highlighter-rouge">start</code> 出发能走很远但绕不到 <code class="language-plaintext highlighter-rouge">target</code>；图中有环导致的重复访问。</p>
+</blockquote>
+
+<h2 id="解法bfs邻接表">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95bfs%E9%82%BB%E6%8E%A5%E8%A1%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：BFS（邻接表）</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力想法是枚举所有从 <code class="language-plaintext highlighter-rouge">start</code> 出发的路径，看有没有一条终点是 <code class="language-plaintext highlighter-rouge">target</code>。瓶颈非常明显：路径数量随图的规模指数增长，而且一旦图里有环，枚举根本不会终止。</p>
+</blockquote>
+
+<blockquote>
+  <p>观察到的关键点是：<strong>这题问的是可达性，而可达性只和"节点集合"有关，与走法无关</strong>。如果某个节点 <code class="language-plaintext highlighter-rouge">x</code> 已经被证明"从 <code class="language-plaintext highlighter-rouge">start</code> 可达"，那么从 <code class="language-plaintext highlighter-rouge">x</code> 继续往外走能到的所有节点，无论沿哪条路径抵达 <code class="language-plaintext highlighter-rouge">x</code>，结论都一样。所以完全没必要区分不同路径——每个节点只需要被处理一次。这就把"枚举路径"降维成"遍历节点"，规模从指数直接压到 $O(V + E)$。</p>
+</blockquote>
+
+<blockquote>
+  <p>由此定义状态与不变量：用 <code class="language-plaintext highlighter-rouge">visited[]</code> 标记"已经确认从 <code class="language-plaintext highlighter-rouge">start</code> 可达且已经（或即将）展开其出边"的节点，用队列 <code class="language-plaintext highlighter-rouge">queue</code> 存放"已确认可达但出边还没展开"的节点。<strong>不变量</strong>是：<code class="language-plaintext highlighter-rouge">visited</code> 为真的节点集合，恒等于"从 <code class="language-plaintext highlighter-rouge">start</code> 可达且已被发现"的集合；队列中的节点是这个集合里尚未展开的部分。每次从队首取出一个节点展开它的出边，把新发现的节点标记并入队，这个不变量就被保持。</p>
+</blockquote>
+
+<blockquote>
+  <p>队列空时，意味着所有从 <code class="language-plaintext highlighter-rouge">start</code> 可达的节点都已经被发现并展开过，如果其间没有碰到 <code class="language-plaintext highlighter-rouge">target</code>，就可以断言不可达。这里选 BFS 而不是 DFS 有个实际好处：递归 DFS 在链状图上会把栈压到 <code class="language-plaintext highlighter-rouge">n</code> 层，<code class="language-plaintext highlighter-rouge">n</code> 大时有爆栈风险，BFS 用显式队列不存在这个问题；当然改写成显式栈的迭代 DFS 也同样安全，两者在本题的复杂度完全一致。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>先把边列表转成邻接表 <code class="language-plaintext highlighter-rouge">adj</code></strong>。原始输入是散落的边，每次要找"某个节点的所有出边"都得扫一遍整个 <code class="language-plaintext highlighter-rouge">graph</code>，那是 $O(E)$ 一次、总共 $O(VE)$。建一次邻接表是 $O(E)$，之后每次取邻居都是 $O(1)$，这是把重复查询的代价一次性付清。建表时只写 <code class="language-plaintext highlighter-rouge">adj[e[0]].add(e[1])</code>，<strong>不写反向</strong>，因为边是有向的。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>初始化 <code class="language-plaintext highlighter-rouge">visited</code> 数组、队列，把 <code class="language-plaintext highlighter-rouge">start</code> 入队并立刻标记为已访问</strong>。标记必须在<strong>入队时</strong>完成，而不是出队时。若留到出队才标记，同一个节点可能被多个前驱同时推进队列，导致重复展开；在有大量平行边或稠密图时，队列规模会成倍膨胀。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>循环取出队首节点，先判断它是不是 <code class="language-plaintext highlighter-rouge">target</code></strong>。把判断放在出队时而不是入队时，可以让 <code class="language-plaintext highlighter-rouge">start == target</code> 这个边界自然成立——<code class="language-plaintext highlighter-rouge">start</code> 一入队就会被取出并命中，不需要在函数开头额外写一条特判。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>遍历该节点的所有出边，未访问过的邻居标记并入队</strong>。<code class="language-plaintext highlighter-rouge">visited</code> 检查同时承担了两件事：防止环导致的死循环，以及避免同一节点被重复展开。缺了它，只要图里有环，队列就永远不会空。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>队列耗尽仍未命中 <code class="language-plaintext highlighter-rouge">target</code>，返回 <code class="language-plaintext highlighter-rouge">false</code></strong>。此时不变量保证"可达集合已经被完整枚举"，所以这个否定结论是可靠的。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">n = 5</code>，<code class="language-plaintext highlighter-rouge">graph = [[0,1],[0,2],[1,2],[1,3],[2,3],[3,4]]</code>，<code class="language-plaintext highlighter-rouge">start = 0</code>，<code class="language-plaintext highlighter-rouge">target = 4</code> 走一遍</strong>：</p>
+
+  <p>建表得到 <code class="language-plaintext highlighter-rouge">adj[0] = [1, 2]</code>，<code class="language-plaintext highlighter-rouge">adj[1] = [2, 3]</code>，<code class="language-plaintext highlighter-rouge">adj[2] = [3]</code>，<code class="language-plaintext highlighter-rouge">adj[3] = [4]</code>，<code class="language-plaintext highlighter-rouge">adj[4] = []</code>。</p>
+
+  <p>初始化：<code class="language-plaintext highlighter-rouge">queue = [0]</code>，<code class="language-plaintext highlighter-rouge">visited = [T, F, F, F, F]</code>。</p>
+
+  <p>第 1 轮：出队 <code class="language-plaintext highlighter-rouge">0</code>，不是 <code class="language-plaintext highlighter-rouge">4</code>；邻居 <code class="language-plaintext highlighter-rouge">1</code> 未访问 → 标记入队；邻居 <code class="language-plaintext highlighter-rouge">2</code> 未访问 → 标记入队。此时 <code class="language-plaintext highlighter-rouge">queue = [1, 2]</code>，<code class="language-plaintext highlighter-rouge">visited = [T, T, T, F, F]</code>。</p>
+
+  <p>第 2 轮：出队 <code class="language-plaintext highlighter-rouge">1</code>，不是 <code class="language-plaintext highlighter-rouge">4</code>；邻居 <code class="language-plaintext highlighter-rouge">2</code> 已访问跳过（这一步正是标记生效的地方，否则 <code class="language-plaintext highlighter-rouge">2</code> 会被展开两次）；邻居 <code class="language-plaintext highlighter-rouge">3</code> 未访问 → 标记入队。<code class="language-plaintext highlighter-rouge">queue = [2, 3]</code>，<code class="language-plaintext highlighter-rouge">visited = [T, T, T, T, F]</code>。</p>
+
+  <p>第 3 轮：出队 <code class="language-plaintext highlighter-rouge">2</code>，不是 <code class="language-plaintext highlighter-rouge">4</code>；邻居 <code class="language-plaintext highlighter-rouge">3</code> 已访问跳过。<code class="language-plaintext highlighter-rouge">queue = [3]</code>。</p>
+
+  <p>第 4 轮：出队 <code class="language-plaintext highlighter-rouge">3</code>，不是 <code class="language-plaintext highlighter-rouge">4</code>；邻居 <code class="language-plaintext highlighter-rouge">4</code> 未访问 → 标记入队。<code class="language-plaintext highlighter-rouge">queue = [4]</code>。</p>
+
+  <p>第 5 轮：出队 <code class="language-plaintext highlighter-rouge">4</code>，等于 <code class="language-plaintext highlighter-rouge">target</code>，立刻返回 <code class="language-plaintext highlighter-rouge">true</code>。</p>
+
+  <p>再看反例 <code class="language-plaintext highlighter-rouge">start = 4, target = 0</code>：<code class="language-plaintext highlighter-rouge">adj[4]</code> 为空，第一轮出队 <code class="language-plaintext highlighter-rouge">4</code> 不等于 <code class="language-plaintext highlighter-rouge">0</code>，没有邻居可扩展，队列变空，返回 <code class="language-plaintext highlighter-rouge">false</code>——正确，因为边是有向的，从 <code class="language-plaintext highlighter-rouge">4</code> 出发无路可走。如果建图时误加了反向边，这里会错误地返回 <code class="language-plaintext highlighter-rouge">true</code>。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">findWhetherExistsPath</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">graph</span><span class="o">,</span> <span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;[]</span> <span class="n">adj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">List</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">adj</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">e</span> <span class="o">:</span> <span class="n">graph</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">adj</span><span class="o">[</span><span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">]].</span><span class="na">add</span><span class="o">(</span><span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+        <span class="o">}</span>
+
+        <span class="kt">boolean</span><span class="o">[]</span> <span class="n">visited</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="nc">ArrayDeque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">start</span><span class="o">);</span>
+        <span class="n">visited</span><span class="o">[</span><span class="n">start</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+        <span class="k">while</span> <span class="o">(!</span><span class="n">queue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">next</span> <span class="o">:</span> <span class="n">adj</span><span class="o">[</span><span class="n">node</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">visited</span><span class="o">[</span><span class="n">next</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">visited</span><span class="o">[</span><span class="n">next</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">next</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">findWhetherExistsPath</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">graph</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">start</span> <span class="kt">int</span><span class="p">,</span> <span class="n">target</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="n">adj</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">graph</span> <span class="p">{</span>
+        <span class="n">adj</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="m">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">adj</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="m">0</span><span class="p">]],</span> <span class="n">e</span><span class="p">[</span><span class="m">1</span><span class="p">])</span>
+    <span class="p">}</span>
+
+    <span class="n">visited</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">queue</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="n">start</span><span class="p">}</span>
+    <span class="n">visited</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+
+    <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="n">node</span> <span class="o">:=</span> <span class="n">queue</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+        <span class="n">queue</span> <span class="o">=</span> <span class="n">queue</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="n">target</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="no">true</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">next</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">adj</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="o">!</span><span class="n">visited</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="p">{</span>
+                <span class="n">visited</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+                <span class="n">queue</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">next</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="no">false</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(V + E)$，<code class="language-plaintext highlighter-rouge">V = n</code> 为节点数，<code class="language-plaintext highlighter-rouge">E</code> 为边数。建邻接表遍历一次边列表是 $O(E)$；BFS 阶段每个节点最多入队出队一次（靠 <code class="language-plaintext highlighter-rouge">visited</code> 保证），每条出边最多被检查一次，合计 $O(V + E)$。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(V + E)$。邻接表存下了全部边是 $O(E)$，<code class="language-plaintext highlighter-rouge">visited</code> 数组是 $O(V)$，队列最坏同时容纳所有节点也是 $O(V)$。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>"问可达性"就把路径枚举降维成节点遍历</strong>。只要答案只关心"能不能到"而不关心"怎么到"，每个节点就只需处理一次，指数级的路径搜索立刻塌缩成线性的图遍历。反过来，一旦题目要求列出所有路径（如 <code class="language-plaintext highlighter-rouge">797</code>），<code class="language-plaintext highlighter-rouge">visited</code> 就必须改成沿路径回溯的形式。</li>
+    <li>
+<strong>访问标记要在入队/入栈的瞬间打上，而不是出队时</strong>。这是 BFS 最经典的性能陷阱：延后标记不会导致答案错误，但会让同一节点被重复推进队列，稠密图上队列规模成倍膨胀。</li>
+    <li>
+<strong>边的方向必须逐字对齐题面</strong>。有向图只加单向边，无向图要加两条。这一处写错既不会报错也不会死循环，只会静默地给出错误答案，是图论题里最难自查的 bug。</li>
+    <li>
+<strong>散落的边列表先转邻接表，是所有图论题的固定前置动作</strong>。它把"查某点的邻居"从 $O(E)$ 降到 $O(deg)$，一次 $O(E)$ 的预处理换来后续全部查询的常数复杂度。</li>
+    <li>
+<strong>面试视角：主动说明为什么选 BFS 而不是递归 DFS</strong>。两者复杂度相同，但递归深度在链状图上会达到 $O(n)$ 有爆栈风险；同时可以补一句"如果这题改成无向图的静态多次查询，并查集会更合适，预处理后单次查询接近 $O(1)$"，展示对不同工具适用边界的判断。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：建图时同时写 <code class="language-plaintext highlighter-rouge">adj[e[0]].add(e[1])</code> 和 <code class="language-plaintext highlighter-rouge">adj[e[1]].add(e[0])</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">n = 2</code>，<code class="language-plaintext highlighter-rouge">graph = [[0,1]]</code>，<code class="language-plaintext highlighter-rouge">start = 1</code>，<code class="language-plaintext highlighter-rouge">target = 0</code>：正确答案是 <code class="language-plaintext highlighter-rouge">false</code>（只有 0→1 的边），加了反向边后返回 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+    <li>
+<strong>错误写法：不用 <code class="language-plaintext highlighter-rouge">visited</code> 数组</strong> → 用例 <code class="language-plaintext highlighter-rouge">n = 2</code>，<code class="language-plaintext highlighter-rouge">graph = [[0,1],[1,0]]</code>，<code class="language-plaintext highlighter-rouge">start = 0</code>，<code class="language-plaintext highlighter-rouge">target = 3</code> 这类目标不可达的环图：<code class="language-plaintext highlighter-rouge">0</code> 和 <code class="language-plaintext highlighter-rouge">1</code> 互相入队，队列永远不空，程序死循环直到超时。</li>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">visited[next] = true</code> 挪到出队之后再标记</strong> → 用例 <code class="language-plaintext highlighter-rouge">n = 3</code>，<code class="language-plaintext highlighter-rouge">graph = [[0,1],[0,1],[0,2],[1,2]]</code>（含平行边）：<code class="language-plaintext highlighter-rouge">1</code> 会因为两条平行边被入队两次、<code class="language-plaintext highlighter-rouge">2</code> 被入队两次，队列长度翻倍；在稠密图上这会退化成指数级入队，实测直接 TLE。</li>
+    <li>
+<strong>错误写法：把 <code class="language-plaintext highlighter-rouge">node == target</code> 的判断放在入队时而不是出队时，同时删掉起点的特判</strong> → 用例 <code class="language-plaintext highlighter-rouge">n = 1</code>，<code class="language-plaintext highlighter-rouge">graph = []</code>，<code class="language-plaintext highlighter-rouge">start = 0</code>，<code class="language-plaintext highlighter-rouge">target = 0</code>：<code class="language-plaintext highlighter-rouge">start</code> 从未作为"邻居"被入队，判断逻辑一次也没触发，返回 <code class="language-plaintext highlighter-rouge">false</code>，正确答案是 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+    <li>
+<strong>错误写法：函数开头写 <code class="language-plaintext highlighter-rouge">if (graph.length == 0) return false;</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">n = 1</code>，<code class="language-plaintext highlighter-rouge">graph = []</code>，<code class="language-plaintext highlighter-rouge">start = 0</code>，<code class="language-plaintext highlighter-rouge">target = 0</code>：边集为空但起点等于终点，正确答案是 <code class="language-plaintext highlighter-rouge">true</code>，这条特判把它误判成 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>
+<strong>错误写法：用 <code class="language-plaintext highlighter-rouge">int[][] adj = new int[n][n]</code> 邻接矩阵建图</strong> → 用例 <code class="language-plaintext highlighter-rouge">n = 10^5</code>：矩阵需要 $10^{10}$ 个格子，直接 <code class="language-plaintext highlighter-rouge">OutOfMemoryError</code>。节点多而边稀疏时必须用邻接表。</li>
+    <li>
+<strong>错误写法：Java 里 <code class="language-plaintext highlighter-rouge">List&lt;Integer&gt;[] adj = new List[n];</code> 之后忘记逐个 <code class="language-plaintext highlighter-rouge">new ArrayList&lt;&gt;()</code></strong> → 用例任意输入：<code class="language-plaintext highlighter-rouge">adj[i]</code> 全是 <code class="language-plaintext highlighter-rouge">null</code>，第一次 <code class="language-plaintext highlighter-rouge">adj[e[0]].add(...)</code> 就抛 NPE。数组的元素默认是 <code class="language-plaintext highlighter-rouge">null</code>，必须显式初始化每一格。</li>
+    <li>
+<strong>错误写法：Go 里 <code class="language-plaintext highlighter-rouge">queue = queue[1:]</code> 之后又用 <code class="language-plaintext highlighter-rouge">queue[0]</code> 取值</strong> → 用例 <code class="language-plaintext highlighter-rouge">n = 1</code>，<code class="language-plaintext highlighter-rouge">graph = []</code>，<code class="language-plaintext highlighter-rouge">start = 0</code>，<code class="language-plaintext highlighter-rouge">target = 1</code>：出队后队列为空，再取 <code class="language-plaintext highlighter-rouge">queue[0]</code> 越界 panic。必须先取值再截断。</li>
+    <li>
+<strong>错误写法：改写成递归 DFS 时把 <code class="language-plaintext highlighter-rouge">visited[node] = true</code> 写在递归返回后（回溯式撤销标记）</strong> → 用例是一张有多条路径通向同一节点的稠密图：撤销标记会让同一节点沿不同路径被反复访问，复杂度退化成指数级。判可达性时标记只能设不能撤；只有枚举所有路径时才需要回溯撤销。</li>
+    <li>
+<strong>错误写法：把 <code class="language-plaintext highlighter-rouge">start</code>、<code class="language-plaintext highlighter-rouge">target</code> 当成 1-based 编号，访问时写 <code class="language-plaintext highlighter-rouge">visited[start - 1]</code></strong> → 用例 <code class="language-plaintext highlighter-rouge">n = 2</code>，<code class="language-plaintext highlighter-rouge">graph = [[0,1]]</code>，<code class="language-plaintext highlighter-rouge">start = 0</code>：下标 <code class="language-plaintext highlighter-rouge">-1</code> 越界抛异常。题目节点编号从 0 开始，不需要任何偏移。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/all-paths-from-source-to-target/">797. 所有可能的路径</a></td>
+      <td>中等</td>
+      <td>要输出全部路径而非可达性，<code class="language-plaintext highlighter-rouge">visited</code> 必须改成回溯式撤销</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-connected-components-in-an-undirected-graph/">323. 无向图中连通分量的数目</a></td>
+      <td>中等</td>
+      <td>无向图要加双向边，且需对每个未访问点起一轮遍历来计数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-provinces/">547. 省份数量</a></td>
+      <td>中等</td>
+      <td>输入是邻接矩阵而非边列表，更适合直接上并查集做连通性合并</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/clone-graph/">133. 克隆图</a></td>
+      <td>中等</td>
+      <td>遍历的同时要建新节点，<code class="language-plaintext highlighter-rouge">visited</code> 升级成"原节点 → 新节点"的映射</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/course-schedule/">207. 课程表</a></td>
+      <td>中等</td>
+      <td>判的是有向图是否有环，需要入度统计或三色标记而非单纯可达性</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-path-with-alternating-colors/">1129. 颜色交替的最短路径</a></td>
+      <td>中等</td>
+      <td>状态要扩展成"节点 + 上一条边颜色"，访问标记随之变成二维</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/72842458" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1061. 按字典序排列最小的等效字符串</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/47978640" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 922. 按奇偶排序数组 II</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/52156872">https://hgnulb.github.io/blog/2022/52156872</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

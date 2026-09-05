@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1644. 二叉树的最近公共祖先 II | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,Binary Lifting,二叉树,字节跳动,最近公共祖先,树,深度优先搜索" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1644. 二叉树的最近公共祖先 II" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2024/85327356" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2024/85327356" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-11-13T15:36:09+08:00" />
+<meta property="article:modified_time" content="2024-11-13T15:36:09+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1644. 二叉树的最近公共祖先 II" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2024-11-13T15:36:09+08:00","datePublished":"2024-11-13T15:36:09+08:00","description":"题目描述","headline":"LeetCode 1644. 二叉树的最近公共祖先 II","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2024/85327356"},"url":"https://hgnulb.github.io/blog/2024/85327356"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dfs-返回-lca--存在性校验">解法：DFS 返回 LCA + 存在性校验</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1644. 二叉树的最近公共祖先 II">LeetCode 1644. 二叉树的最近公共祖先 II</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2024-11-13 15:36:09"
+                    datetime="2024-11-13T15:36:09+08:00"
+            >
+                2024-11-13
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2476 字 · 英文 80 词 · 代码 59 行"
+            aria-label="预计阅读时间约 8 分钟，正文 2476 字 · 英文 80 词 · 代码 59 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 8 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2805463697/" title="树">
+        树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3241866243/" title="二叉树">
+        二叉树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0463147602/" title="Binary Lifting">
+        Binary Lifting
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9070177033/" title="最近公共祖先">
+        最近公共祖先
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dfs-返回-lca--存在性校验">解法：DFS 返回 LCA + 存在性校验</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree-ii/">1644. 二叉树的最近公共祖先 II</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一棵二叉树的根节点和两个节点 <code class="language-plaintext highlighter-rouge">p</code>、<code class="language-plaintext highlighter-rouge">q</code>，返回它们最深的公共祖先。与 236 的差别只有一句话：<strong><code class="language-plaintext highlighter-rouge">p</code> 和 <code class="language-plaintext highlighter-rouge">q</code> 不保证在树中存在</strong>，只要有一个不在，就必须返回 <code class="language-plaintext highlighter-rouge">null</code>。</p>
+
+  <p>这一句话改变的东西比看上去多。236 之所以能写成「碰到 <code class="language-plaintext highlighter-rouge">p</code> 或 <code class="language-plaintext highlighter-rouge">q</code> 就立刻返回、不再往下走」，靠的是「两个节点一定都在树里」这个前提——一旦提前返回，剩下那一半子树没搜也不影响结论。前提没了，提前返回就等于放弃了确认「另一个节点到底在不在」的机会。</p>
+
+  <p>所以这题实际上是<strong>两个目标叠在同一趟遍历里</strong>：一是找出最深的公共祖先位置，二是确认两个节点都真实存在。前者只需要局部信息（子树里有没有），后者需要全局信息（整棵树里有没有），两者对遍历完整度的要求不同。</p>
+
+  <p>节点值题目保证互不相同，但比较时按节点引用比更稳妥，因为传进来的 <code class="language-plaintext highlighter-rouge">p</code>、<code class="language-plaintext highlighter-rouge">q</code> 就是树里的节点对象。</p>
+
+  <p>边界包括：<code class="language-plaintext highlighter-rouge">p</code> 和 <code class="language-plaintext highlighter-rouge">q</code> 都不在树中；只有一个在；<code class="language-plaintext highlighter-rouge">p</code> 是 <code class="language-plaintext highlighter-rouge">q</code> 的祖先（此时答案是 <code class="language-plaintext highlighter-rouge">p</code> 本身）；<code class="language-plaintext highlighter-rouge">p</code> 与 <code class="language-plaintext highlighter-rouge">q</code> 是同一个节点；以及根节点就是其中之一。</p>
+</blockquote>
+
+<h2 id="解法dfs-返回-lca--存在性校验">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95dfs-%E8%BF%94%E5%9B%9E-lca--%E5%AD%98%E5%9C%A8%E6%80%A7%E6%A0%A1%E9%AA%8C" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：DFS 返回 LCA + 存在性校验</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是先跑两趟遍历确认 <code class="language-plaintext highlighter-rouge">p</code>、<code class="language-plaintext highlighter-rouge">q</code> 是否存在，存在再套 236 的模板跑第三趟，$O(n)$ 时间但常数是三倍，而且代码里有三段几乎一样的遍历。瓶颈在于「存在性」和「祖先位置」被拆成了两件事，实际上它们可以在同一趟后序遍历里同时完成。</p>
+
+  <p>关键观察是：<strong>保留 236 的合并逻辑，但命中目标时不能提前返回</strong>。必须先遍历左右子树，再判断当前节点是不是 <code class="language-plaintext highlighter-rouge">p</code> 或 <code class="language-plaintext highlighter-rouge">q</code>，这样既能计算 LCA 候选，也能完整确认两个目标是否存在。</p>
+
+  <p>递归函数 <code class="language-plaintext highlighter-rouge">dfs(node)</code> 的返回值定义为：<strong>若 <code class="language-plaintext highlighter-rouge">node</code> 子树中同时含有 <code class="language-plaintext highlighter-rouge">p</code> 和 <code class="language-plaintext highlighter-rouge">q</code>，返回它们在该子树中的最近公共祖先；若只含其中一个，返回那一个；若都不含，返回 <code class="language-plaintext highlighter-rouge">null</code></strong>。注意这个定义在 <code class="language-plaintext highlighter-rouge">p</code>、<code class="language-plaintext highlighter-rouge">q</code> 不存在时依然自洽——「都不含」这一支会一路把 <code class="language-plaintext highlighter-rouge">null</code> 传上去。</p>
+
+  <p>Java 在入口创建局部布尔数组 <code class="language-plaintext highlighter-rouge">found[2]</code>，Go 用闭包捕获两个局部布尔值；命中 <code class="language-plaintext highlighter-rouge">p</code>、<code class="language-plaintext highlighter-rouge">q</code> 时分别置真。状态属于本次调用，不放在对象字段里，因此连续调用同一个 <code class="language-plaintext highlighter-rouge">Solution</code> 也不会继承旧结果。</p>
+
+  <p>后序归纳可证明候选正确：左右子树各自返回其内部的目标或 LCA；两侧都非空时当前节点是首次汇合点，当前节点本身命中目标时它必然是另一目标的祖先，否则上传唯一非空结果。遍历结束后，只有两个存在标记都为真，候选才是有效答案。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>空节点返回 <code class="language-plaintext highlighter-rouge">null</code></strong>。这是递归的地基，也让「子树中不含目标」这一支有了统一的表示。</li>
+    <li>
+<strong>先递归左子树，再递归右子树，最后才处理当前节点</strong>。顺序必须是后序：只有把两侧都走完，才能保证 <code class="language-plaintext highlighter-rouge">foundP</code>、<code class="language-plaintext highlighter-rouge">foundQ</code> 覆盖整棵树；一旦在前序位置命中目标就 <code class="language-plaintext highlighter-rouge">return</code>，下方子树被整片跳过，存在性统计立刻失真。</li>
+    <li>
+<strong>在后序位置更新两个存在标记</strong>。使用引用相等 <code class="language-plaintext highlighter-rouge">node == p</code>，不依赖节点值；若 <code class="language-plaintext highlighter-rouge">p == q</code>，同一个节点会同时点亮两个标记，仍能正确返回自身。</li>
+    <li>
+<strong>合并候选</strong>。若当前节点就是 <code class="language-plaintext highlighter-rouge">p</code> 或 <code class="language-plaintext highlighter-rouge">q</code>，返回当前节点；否则左右结果都非空时返回当前节点，仅一侧非空时上传那一侧，两侧都空时返回 <code class="language-plaintext highlighter-rouge">null</code>。</li>
+    <li>
+<strong>回到入口做最终裁决</strong>：<code class="language-plaintext highlighter-rouge">foundP &amp;&amp; foundQ</code> 为真才返回递归结果，否则返回 <code class="language-plaintext highlighter-rouge">null</code>。这一步不能省，也不能提前到递归内部——存在性是全局结论，只有遍历结束才成立。</li>
+  </ul>
+
+  <p>以这棵树走一遍：根 3，左子树是 5（左 6，右 2），右子树是 1（左 0，右 8）。取 <code class="language-plaintext highlighter-rouge">p = 5</code>、<code class="language-plaintext highlighter-rouge">q = 4</code>，其中 4 不在树中。</p>
+
+  <p>后序访问到节点 5 时命中 <code class="language-plaintext highlighter-rouge">p</code>，设置 <code class="language-plaintext highlighter-rouge">foundP</code> 并返回节点 5；其余子树都找不到目标，候选 5 一路上传到根。因此 <code class="language-plaintext highlighter-rouge">dfs(root)</code> 的候选看起来是 5。</p>
+
+  <p>但遍历结束时 <code class="language-plaintext highlighter-rouge">foundQ</code> 仍是假，入口最终返回 <code class="language-plaintext highlighter-rouge">null</code>。若改成 <code class="language-plaintext highlighter-rouge">p = 5</code>、<code class="language-plaintext highlighter-rouge">q = 6</code>，由于 DFS 先走完节点 5 的子树，两个标记都为真，节点 5 作为祖先返回；这正是不能在命中 5 时提前结束的原因。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">TreeNode</span> <span class="nf">lowestCommonAncestor</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">p</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">q</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">boolean</span><span class="o">[]</span> <span class="n">found</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+        <span class="nc">TreeNode</span> <span class="n">candidate</span> <span class="o">=</span> <span class="n">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">,</span> <span class="n">p</span><span class="o">,</span> <span class="n">q</span><span class="o">,</span> <span class="n">found</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">found</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">found</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">?</span> <span class="n">candidate</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">TreeNode</span> <span class="nf">dfs</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">node</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">p</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">q</span><span class="o">,</span> <span class="kt">boolean</span><span class="o">[]</span> <span class="n">found</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">TreeNode</span> <span class="n">left</span> <span class="o">=</span> <span class="n">dfs</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">p</span><span class="o">,</span> <span class="n">q</span><span class="o">,</span> <span class="n">found</span><span class="o">);</span>
+        <span class="nc">TreeNode</span> <span class="n">right</span> <span class="o">=</span> <span class="n">dfs</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">p</span><span class="o">,</span> <span class="n">q</span><span class="o">,</span> <span class="n">found</span><span class="o">);</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">==</span> <span class="n">p</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">found</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">==</span> <span class="n">q</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">found</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">==</span> <span class="n">p</span> <span class="o">||</span> <span class="n">node</span> <span class="o">==</span> <span class="n">q</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">left</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">right</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">left</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">?</span> <span class="n">left</span> <span class="o">:</span> <span class="n">right</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">lowestCommonAncestor</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">,</span> <span class="n">p</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">,</span> <span class="n">q</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="n">TreeNode</span> <span class="p">{</span>
+	<span class="n">foundP</span><span class="p">,</span> <span class="n">foundQ</span> <span class="o">:=</span> <span class="no">false</span><span class="p">,</span> <span class="no">false</span>
+
+	<span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="n">TreeNode</span>
+	<span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="n">TreeNode</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="no">nil</span>
+		<span class="p">}</span>
+		<span class="n">left</span> <span class="o">:=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Left</span><span class="p">)</span>
+		<span class="n">right</span> <span class="o">:=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Right</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="n">p</span> <span class="p">{</span>
+			<span class="n">foundP</span> <span class="o">=</span> <span class="no">true</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="n">q</span> <span class="p">{</span>
+			<span class="n">foundQ</span> <span class="o">=</span> <span class="no">true</span>
+		<span class="p">}</span>
+
+		<span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="n">p</span> <span class="o">||</span> <span class="n">node</span> <span class="o">==</span> <span class="n">q</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">node</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">left</span> <span class="o">!=</span> <span class="no">nil</span> <span class="o">&amp;&amp;</span> <span class="n">right</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">node</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">left</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">left</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="n">right</span>
+	<span class="p">}</span>
+
+	<span class="n">res</span> <span class="o">:=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">foundP</span> <span class="o">&amp;&amp;</span> <span class="n">foundQ</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">res</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="no">nil</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$，$n$ 为节点数。后序遍历访问每个节点恰好一次，节点内部只做常数次引用比较与分支判断，没有任何提前退出也没有重复访问。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(h)$，<code class="language-plaintext highlighter-rouge">h</code> 为树高，来自递归调用栈；平衡树为 $O(\log n)$，退化树为 $O(n)$。存在性状态只占常数空间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「目标可能不存在」是 LCA 家族的核心变式信号，它直接否决了 236 的提前返回优化，必须换成全树遍历。识别这个信号比记住模板更重要。</li>
+    <li>把「位置」和「合法性」拆成两个信息通道：递归返回值负责候选位置，本次调用的局部布尔状态负责存在性，最后在入口合并。</li>
+    <li>后序位置是「需要子树信息才能决策」的标志。本题把目标判定放到后序，纯粹是为了保证遍历完整，这是一个值得记住的调整手法。</li>
+    <li>递归返回值的语义要写死并全程遵守：本题定义为「子树内含有的目标或它们的 LCA」，任何一层偏离这个定义都会破坏上层合并逻辑。</li>
+    <li>用引用比较而非值比较，既贴合题目给的是节点对象这一事实，也在节点值可能重复的变式里天然正确。</li>
+    <li>调用级状态不要留在 <code class="language-plaintext highlighter-rouge">Solution</code> 字段中；局部数组或闭包捕获可让连续调用彼此隔离，不需要依赖手动重置。</li>
+    <li>面试视角：先主动指出「和 236 的唯一差别是不保证存在」，再解释「所以不能提前返回」，然后给出一趟后序遍历同时完成两件事的方案。面试官常追问「为什么不先跑两趟确认存在性」，答案是三趟遍历同为 $O(n)$ 但常数更差、代码更长；再追问「如果要求返回 <code class="language-plaintext highlighter-rouge">p</code>、<code class="language-plaintext highlighter-rouge">q</code> 分别是否存在」，只要把两个布尔量暴露出去即可，说明这个设计是可扩展的。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：照抄 236，在递归开头写 <code class="language-plaintext highlighter-rouge">if (node == p || node == q) return node;</code></strong>。用例：树为 <code class="language-plaintext highlighter-rouge">3 → 左 5 → 左 6</code>，<code class="language-plaintext highlighter-rouge">p = 5</code>、<code class="language-plaintext highlighter-rouge">q = 6</code> → 访问到 5 立即返回，节点 6 从未被访问，<code class="language-plaintext highlighter-rouge">foundQ</code> 为假，最终返回 <code class="language-plaintext highlighter-rouge">null</code>，正确答案是节点 5。</li>
+    <li>
+<strong>错误写法：最终判断写成 <code class="language-plaintext highlighter-rouge">foundP || foundQ</code></strong>。用例：树为 <code class="language-plaintext highlighter-rouge">3 → 左 5 → 左 6</code>，<code class="language-plaintext highlighter-rouge">p = 5</code>、<code class="language-plaintext highlighter-rouge">q</code> 是不在树中的节点 → <code class="language-plaintext highlighter-rouge">foundP</code> 为真使条件成立，返回节点 5，正确答案是 <code class="language-plaintext highlighter-rouge">null</code>。</li>
+    <li>
+<strong>错误写法：合并时只判断左右结果，忘记当前节点也可能是目标</strong>。树为 <code class="language-plaintext highlighter-rouge">3 → 左 5 → 左 6</code>，<code class="language-plaintext highlighter-rouge">p = 5</code>、<code class="language-plaintext highlighter-rouge">q = 6</code> 时，若节点 5 直接上传左侧结果 6，最终会错误返回 6；当前节点命中目标时应返回自身。</li>
+    <li>
+<strong>错误写法：最后返回 <code class="language-plaintext highlighter-rouge">res</code> 而不判 <code class="language-plaintext highlighter-rouge">foundP &amp;&amp; foundQ</code></strong>。用例：树为单节点 <code class="language-plaintext highlighter-rouge">1</code>，<code class="language-plaintext highlighter-rouge">p = 1</code>、<code class="language-plaintext highlighter-rouge">q</code> 是一个不在树中的节点 → <code class="language-plaintext highlighter-rouge">dfs</code> 返回节点 1，直接返回它，正确答案是 <code class="language-plaintext highlighter-rouge">null</code>。</li>
+    <li>
+<strong>错误写法：用节点值代替引用比较</strong>。若 <code class="language-plaintext highlighter-rouge">q</code> 是不在树中的新节点、但值恰好与树内某节点相同，值比较会把它误判为存在并返回非空答案；应直接比较 <code class="language-plaintext highlighter-rouge">node == q</code>。</li>
+    <li>
+<strong>错误写法：漏掉 <code class="language-plaintext highlighter-rouge">node == null</code> 的递归基</strong>。用例：任意树的叶子节点 → 递归下探到空孩子时访问 <code class="language-plaintext highlighter-rouge">node.left</code> 触发空指针异常。</li>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">foundP</code> / <code class="language-plaintext highlighter-rouge">foundQ</code> 声明成方法内的局部变量再传值给递归</strong>。用例：树为 <code class="language-plaintext highlighter-rouge">3 → 左 5 → 左 6</code>，<code class="language-plaintext highlighter-rouge">p = 5</code>、<code class="language-plaintext highlighter-rouge">q = 6</code> → Java 中基本类型按值传递，深层递归里的赋值不会反映到调用方，两个标记恒为假，永远返回 <code class="language-plaintext highlighter-rouge">null</code>。</li>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">p</code> 与 <code class="language-plaintext highlighter-rouge">q</code> 是同一个节点时，只用一个标记记录「找到了目标」并要求计数达到 2</strong>。用例：树为单节点 <code class="language-plaintext highlighter-rouge">1</code>，<code class="language-plaintext highlighter-rouge">p = q = 1</code> → 计数只会加到 1，返回 <code class="language-plaintext highlighter-rouge">null</code>，而正确答案是节点 1，因为一个节点是它自己的祖先。</li>
+    <li>
+<strong>错误写法：把 <code class="language-plaintext highlighter-rouge">foundP</code>、<code class="language-plaintext highlighter-rouge">foundQ</code> 存为成员变量且入口不重置</strong>。同一个 <code class="language-plaintext highlighter-rouge">Solution</code> 第一次查询两点都存在、第二次查询缺失节点时，旧标记仍为真，第二次可能错误返回非空候选。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/">236. 二叉树的最近公共祖先</a></td>
+      <td>中等</td>
+      <td>保证两点都存在，因此可以碰到目标就提前返回，是本题去掉存在性校验后的形态</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/">235. 二叉搜索树的最近公共祖先</a></td>
+      <td>中等</td>
+      <td>有序性把递归换成一路比较值大小的下探，$O(h)$ 且无需回溯</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree-iii/">1650. 二叉树的最近公共祖先 III</a></td>
+      <td>中等</td>
+      <td>拿不到根但每个节点有 <code class="language-plaintext highlighter-rouge">parent</code>，转成两条链表求交点，$O(1)$ 额外空间</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree-iv/">1676. 二叉树的最近公共祖先 IV</a></td>
+      <td>中等</td>
+      <td>目标从两个扩展到一组，用集合判定命中，但保证全部存在，反而比本题简单</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lowest-common-ancestor-of-deepest-leaves/">1123. 最深叶节点的最近公共祖先</a></td>
+      <td>中等</td>
+      <td>目标集合不是给定的而要自己求出，递归需同时返回子树深度与 LCA</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/kth-ancestor-of-a-tree-node/">1483. 树节点的第 K 个祖先</a></td>
+      <td>困难</td>
+      <td>多次查询下需要倍增预处理，是把祖先问题从单次遍历升级为可重复查询的数据结构</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/er-cha-shu-de-zui-jin-gong-gong-zu-xian-lcof/">剑指 Offer 68 - II. 二叉树的最近公共祖先</a></td>
+      <td>简单</td>
+      <td>与 236 同题，可直接套用提前返回的精简模板</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/first-common-ancestor-lcci/">面试题 04.08. 首个共同祖先</a></td>
+      <td>中等</td>
+      <td>与 236 同题，面试中常被要求额外说明节点不存在时该如何补救</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2024/74255171" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1135. 最低成本连通所有城市</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2024/96117663" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1650. 二叉树的最近公共祖先 III</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2024/85327356">https://hgnulb.github.io/blog/2024/85327356</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 689. 三个无重叠子数组的最大和 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,前缀和,动态规划,字节跳动,数组,滑动窗口" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 689. 三个无重叠子数组的最大和" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/11776921" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/11776921" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-08-06T22:09:19+08:00" />
+<meta property="article:modified_time" content="2021-08-06T22:09:19+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 689. 三个无重叠子数组的最大和" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-08-06T22:09:19+08:00","datePublished":"2021-08-06T22:09:19+08:00","description":"题目描述","headline":"LeetCode 689. 三个无重叠子数组的最大和","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/11776921"},"url":"https://hgnulb.github.io/blog/2021/11776921"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法滑动窗口--leftright-预处理">解法：滑动窗口 + left/right 预处理</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 689. 三个无重叠子数组的最大和">LeetCode 689. 三个无重叠子数组的最大和</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-08-06 22:09:19"
+                    datetime="2021-08-06T22:09:19+08:00"
+            >
+                2021-08-06
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2247 字 · 英文 57 词 · 代码 90 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2247 字 · 英文 57 词 · 代码 90 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5692196181/" title="滑动窗口">
+        滑动窗口
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7488286296/" title="前缀和">
+        前缀和
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法滑动窗口--leftright-预处理">解法：滑动窗口 + left/right 预处理</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/maximum-sum-of-3-non-overlapping-subarrays/">689. 三个无重叠子数组的最大和</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p><strong>要什么</strong>：从数组中挑出三个<strong>长度都恰为 <code class="language-plaintext highlighter-rouge">k</code></strong>、<strong>互不重叠</strong>的连续子数组，使三者元素之和最大，返回它们的起始下标（升序排列）。若有多组方案取得同样的最大和，返回<strong>字典序最小</strong>的那一组下标。<br>
+<strong>约束透露的信号</strong>：三个窗口长度相同且固定，说明第一步一定是把「每个起点的窗口和」预处理出来，把问题从「在原数组上选区间」压缩成「在窗口和数组上选三个下标」。窗口互不重叠翻译成下标语言就是：若三个起点为 <code class="language-plaintext highlighter-rouge">l &lt; j &lt; r</code>，必须满足 <code class="language-plaintext highlighter-rouge">l + k ≤ j</code> 且 <code class="language-plaintext highlighter-rouge">j + k ≤ r</code>。「字典序最小」这个附加要求决定了并列时必须取更小的下标，而且左中右三处的取舍规则要各自对齐。数组规模到 $10^4$ 以上，需要线性做法。<br>
+<strong>边界</strong>：数组长度至少是 <code class="language-plaintext highlighter-rouge">3k</code> 才有解，题目已保证；元素均为非负整数，所以窗口和非负，但答案变量仍不该随意初始化；三个窗口可以首尾紧贴（<code class="language-plaintext highlighter-rouge">l + k == j</code> 合法），不需要留空隙。</p>
+</blockquote>
+
+<h2 id="解法滑动窗口--leftright-预处理">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3--leftright-%E9%A2%84%E5%A4%84%E7%90%86" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：滑动窗口 + left/right 预处理</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力是三重循环枚举三个起点，每次再求三段和，$O(n^3)$ 甚至 $O(n^3 k)$，完全不可行。先用定长滑动窗口把 <code class="language-plaintext highlighter-rouge">sums[i]</code>（以 <code class="language-plaintext highlighter-rouge">i</code> 开头、长度 <code class="language-plaintext highlighter-rouge">k</code> 的窗口和）预处理出来，暴力降到 $O(n^3)$，仍然太慢。<br>
+瓶颈在于：一旦固定中间窗口的起点 <code class="language-plaintext highlighter-rouge">j</code>，左窗口只能在 <code class="language-plaintext highlighter-rouge">[0, j-k]</code> 里选、右窗口只能在 <code class="language-plaintext highlighter-rouge">[j+k, 末尾]</code> 里选，而这两侧的最优选择与 <code class="language-plaintext highlighter-rouge">j</code> 具体是多少无关，只与「可选区间的边界」有关。暴力却对每个 <code class="language-plaintext highlighter-rouge">j</code> 都把两侧重新扫了一遍。<br>
+于是<strong>枚举中间窗口</strong>，把两侧的最优解预先算好：</p>
+
+  <ul>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">left[i]</code> = 在 <code class="language-plaintext highlighter-rouge">sums[0..i]</code> 中窗口和最大的下标，并列时取最小下标</strong>（前缀最大值的位置）。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">right[i]</code> = 在 <code class="language-plaintext highlighter-rouge">sums[i..末尾]</code> 中窗口和最大的下标，并列时取最小下标</strong>（后缀最大值的位置）。<br>
+这两个数组就是要维护的不变量，各自一趟线性扫描即可求出。之后枚举 <code class="language-plaintext highlighter-rouge">j</code>，答案的三元组直接是 <code class="language-plaintext highlighter-rouge">(left[j-k], j, right[j+k])</code>，取三者和最大的那次。<br>
+字典序怎么保证？三个位置的并列规则要分别处理。<code class="language-plaintext highlighter-rouge">left</code> 从左往右扫，只在<strong>严格大于</strong>时更新，于是同和的最靠左下标被保留；<code class="language-plaintext highlighter-rouge">right</code> 从右往左扫，在<strong>大于等于</strong>时更新，由于是逆序推进，最后留下的同样是同和中最靠左的下标；主循环也只在总和<strong>严格大于</strong>当前最大值时才改写答案，<code class="language-plaintext highlighter-rouge">j</code> 从小到大枚举，同和时保留更小的 <code class="language-plaintext highlighter-rouge">j</code>。三处规则叠加，得到的下标三元组即字典序最小。</li>
+  </ul>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>先用定长滑动窗口构造 <code class="language-plaintext highlighter-rouge">sums</code>，长度为 <code class="language-plaintext highlighter-rouge">n - k + 1</code>。<strong>为什么先做这一步</strong>：把「区间求和」这个 $O(k)$ 的操作变成 $O(1)$ 的查表，后续所有推理都在这个更短的数组上进行，问题从二维（起点 + 长度）降到一维。</li>
+    <li>正向扫描构造 <code class="language-plaintext highlighter-rouge">left</code>：维护 <code class="language-plaintext highlighter-rouge">bestLeft</code>，只在 <code class="language-plaintext highlighter-rouge">sums[i] &gt; sums[bestLeft]</code> 时更新，然后写 <code class="language-plaintext highlighter-rouge">left[i] = bestLeft</code>。<strong>为什么用严格大于</strong>：并列时不更新，<code class="language-plaintext highlighter-rouge">bestLeft</code> 就停在更早的位置，满足字典序最小。</li>
+    <li>反向扫描构造 <code class="language-plaintext highlighter-rouge">right</code>：维护 <code class="language-plaintext highlighter-rouge">bestRight</code>，在 <code class="language-plaintext highlighter-rouge">sums[i] &gt;= sums[bestRight]</code> 时更新，然后写 <code class="language-plaintext highlighter-rouge">right[i] = bestRight</code>。<strong>为什么这里反而用大于等于</strong>：扫描方向是从右往左，后被访问的下标更小，用 <code class="language-plaintext highlighter-rouge">&gt;=</code> 才能让同和时的更小下标覆盖掉更大下标；如果照抄 <code class="language-plaintext highlighter-rouge">left</code> 的严格大于，留下的会是靠右的下标，字典序变大。</li>
+    <li>枚举中间起点 <code class="language-plaintext highlighter-rouge">j</code>，范围是 <code class="language-plaintext highlighter-rouge">k &lt;= j</code> 且 <code class="language-plaintext highlighter-rouge">j + k &lt; sums.length</code>。<strong>为什么下界是 <code class="language-plaintext highlighter-rouge">k</code></strong>：左边必须放得下一个完整窗口，最小的左起点是 0，故 <code class="language-plaintext highlighter-rouge">j</code> 至少为 <code class="language-plaintext highlighter-rouge">k</code>。<strong>为什么上界是 <code class="language-plaintext highlighter-rouge">j + k &lt; sums.length</code></strong>：右起点至少是 <code class="language-plaintext highlighter-rouge">j + k</code>，它必须是 <code class="language-plaintext highlighter-rouge">sums</code> 的合法下标。</li>
+    <li>取 <code class="language-plaintext highlighter-rouge">l = left[j - k]</code>、<code class="language-plaintext highlighter-rouge">r = right[j + k]</code>，算总和并在严格更大时更新答案。<strong>为什么左边查的是 <code class="language-plaintext highlighter-rouge">left[j-k]</code> 而不是 <code class="language-plaintext highlighter-rouge">left[j-1]</code></strong>：左窗口覆盖 <code class="language-plaintext highlighter-rouge">[l, l+k-1]</code>，要与中间窗口 <code class="language-plaintext highlighter-rouge">[j, j+k-1]</code> 不重叠就必须 <code class="language-plaintext highlighter-rouge">l + k - 1 &lt; j</code>，即 <code class="language-plaintext highlighter-rouge">l ≤ j - k</code>。写成 <code class="language-plaintext highlighter-rouge">left[j-1]</code> 会允许 <code class="language-plaintext highlighter-rouge">l</code> 大到 <code class="language-plaintext highlighter-rouge">j-1</code>，此时两个窗口重叠 <code class="language-plaintext highlighter-rouge">k-1</code> 个元素，算出的「最大和」根本不对应任何合法方案。</li>
+    <li>返回三元组。</li>
+    <li>以 <code class="language-plaintext highlighter-rouge">nums = [1, 2, 1, 2, 6, 7, 5, 1]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> 走一遍。先算窗口和：<code class="language-plaintext highlighter-rouge">sums = [3, 3, 3, 8, 13, 12, 6]</code>（例如 <code class="language-plaintext highlighter-rouge">sums[4] = 6 + 7 = 13</code>）。正向构造 <code class="language-plaintext highlighter-rouge">left</code>：<code class="language-plaintext highlighter-rouge">sums[0] = 3</code> 起手，下标 1、2 的值同为 3 不触发严格大于，故 <code class="language-plaintext highlighter-rouge">left[0..2] = 0</code>；<code class="language-plaintext highlighter-rouge">sums[3] = 8 &gt; 3</code> 使 <code class="language-plaintext highlighter-rouge">left[3] = 3</code>；<code class="language-plaintext highlighter-rouge">sums[4] = 13 &gt; 8</code> 使 <code class="language-plaintext highlighter-rouge">left[4] = 4</code>；后面 12、6 都不更大，<code class="language-plaintext highlighter-rouge">left[5] = left[6] = 4</code>。得 <code class="language-plaintext highlighter-rouge">left = [0, 0, 0, 3, 4, 4, 4]</code>。反向构造 <code class="language-plaintext highlighter-rouge">right</code>：从 <code class="language-plaintext highlighter-rouge">i = 6</code> 起 <code class="language-plaintext highlighter-rouge">bestRight = 6</code>；<code class="language-plaintext highlighter-rouge">i = 5</code> 时 <code class="language-plaintext highlighter-rouge">12 &gt;= 6</code> 更新为 5；<code class="language-plaintext highlighter-rouge">i = 4</code> 时 <code class="language-plaintext highlighter-rouge">13 &gt;= 12</code> 更新为 4；<code class="language-plaintext highlighter-rouge">i = 3</code> 时 <code class="language-plaintext highlighter-rouge">8 &gt;= 13</code> 不成立，保持 4；再往左都保持 4。得 <code class="language-plaintext highlighter-rouge">right = [4, 4, 4, 4, 4, 5, 6]</code>。主循环 <code class="language-plaintext highlighter-rouge">j</code> 取 2、3、4：<code class="language-plaintext highlighter-rouge">j = 2</code> 时 <code class="language-plaintext highlighter-rouge">l = left[0] = 0</code>、<code class="language-plaintext highlighter-rouge">r = right[4] = 4</code>，总和 <code class="language-plaintext highlighter-rouge">3 + 3 + 13 = 19</code>，记下 <code class="language-plaintext highlighter-rouge">[0, 2, 4]</code>；<code class="language-plaintext highlighter-rouge">j = 3</code> 时 <code class="language-plaintext highlighter-rouge">l = left[1] = 0</code>、<code class="language-plaintext highlighter-rouge">r = right[5] = 5</code>，总和 <code class="language-plaintext highlighter-rouge">3 + 8 + 12 = 23</code> 更大，答案更新为 <code class="language-plaintext highlighter-rouge">[0, 3, 5]</code>；<code class="language-plaintext highlighter-rouge">j = 4</code> 时 <code class="language-plaintext highlighter-rouge">l = left[2] = 0</code>、<code class="language-plaintext highlighter-rouge">r = right[6] = 6</code>，总和 <code class="language-plaintext highlighter-rouge">3 + 13 + 6 = 22</code> 不超过 23，不更新。返回 <code class="language-plaintext highlighter-rouge">[0, 3, 5]</code>，对应三段 <code class="language-plaintext highlighter-rouge">[1,2]</code>、<code class="language-plaintext highlighter-rouge">[2,6]</code>、<code class="language-plaintext highlighter-rouge">[7,5]</code>，和为 23。顺带看一眼错误写法的后果：若把 <code class="language-plaintext highlighter-rouge">l</code> 取成 <code class="language-plaintext highlighter-rouge">left[j-1]</code>，<code class="language-plaintext highlighter-rouge">j = 4</code> 时会拿到 <code class="language-plaintext highlighter-rouge">left[3] = 3</code>，得到 <code class="language-plaintext highlighter-rouge">8 + 13 + 6 = 27</code> 这个看似更大的值，但下标 3 的窗口是 <code class="language-plaintext highlighter-rouge">[2,6]</code>、下标 4 的窗口是 <code class="language-plaintext highlighter-rouge">[6,7]</code>，它们共用了元素 6，方案非法。</li>
+  </ul>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 核心实现：滑动窗口 + left/right 预处理，维护必要状态并避免重复处理。</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">maxSumOfThreeSubarrays</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">sums</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">-</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+
+        <span class="kt">int</span> <span class="n">windowSum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">windowSum</span> <span class="o">+=</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="n">sums</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">windowSum</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">k</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">windowSum</span> <span class="o">+=</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">-</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+            <span class="n">sums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">windowSum</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">left</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">sums</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">bestLeft</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">sums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">sums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">sums</span><span class="o">[</span><span class="n">bestLeft</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">bestLeft</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">left</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">bestLeft</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">right</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">sums</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">bestRight</span> <span class="o">=</span> <span class="n">sums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">sums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">sums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">sums</span><span class="o">[</span><span class="n">bestRight</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">bestRight</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">right</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">bestRight</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">answer</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{-</span><span class="mi">1</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">};</span>
+        <span class="kt">int</span> <span class="n">maxSum</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">k</span><span class="o">;</span> <span class="n">j</span> <span class="o">+</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">sums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="n">left</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">k</span><span class="o">];</span>
+            <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">right</span><span class="o">[</span><span class="n">j</span> <span class="o">+</span> <span class="n">k</span><span class="o">];</span>
+            <span class="kt">int</span> <span class="n">total</span> <span class="o">=</span> <span class="n">sums</span><span class="o">[</span><span class="n">l</span><span class="o">]</span> <span class="o">+</span> <span class="n">sums</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">+</span> <span class="n">sums</span><span class="o">[</span><span class="n">r</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">total</span> <span class="o">&gt;</span> <span class="n">maxSum</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">maxSum</span> <span class="o">=</span> <span class="n">total</span><span class="o">;</span>
+                <span class="n">answer</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">l</span><span class="o">;</span>
+                <span class="n">answer</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">j</span><span class="o">;</span>
+                <span class="n">answer</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="n">r</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 核心实现：滑动窗口 + left/right 预处理，维护必要状态并避免重复处理。</span>
+<span class="k">func</span> <span class="n">maxSumOfThreeSubarrays</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+    <span class="n">sums</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="n">k</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+
+    <span class="n">windowSum</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">windowSum</span> <span class="o">+=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="n">sums</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">windowSum</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">-</span><span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">windowSum</span> <span class="o">+=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">k</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+        <span class="n">sums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">windowSum</span>
+    <span class="p">}</span>
+
+    <span class="n">left</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sums</span><span class="p">))</span>
+    <span class="n">bestLeft</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">sums</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">sums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">sums</span><span class="p">[</span><span class="n">bestLeft</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">bestLeft</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="p">}</span>
+        <span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">bestLeft</span>
+    <span class="p">}</span>
+
+    <span class="n">right</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sums</span><span class="p">))</span>
+    <span class="n">bestRight</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sums</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sums</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">sums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">sums</span><span class="p">[</span><span class="n">bestRight</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">bestRight</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="p">}</span>
+        <span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">bestRight</span>
+    <span class="p">}</span>
+
+    <span class="n">result</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">}</span>
+    <span class="n">maxSum</span> <span class="o">:=</span> <span class="o">-</span><span class="m">1</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">k</span><span class="p">;</span> <span class="n">j</span><span class="o">+</span><span class="n">k</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">sums</span><span class="p">);</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">l</span> <span class="o">:=</span> <span class="n">left</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">r</span> <span class="o">:=</span> <span class="n">right</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">total</span> <span class="o">:=</span> <span class="n">sums</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">+</span> <span class="n">sums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">sums</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">total</span> <span class="o">&gt;</span> <span class="n">maxSum</span> <span class="p">{</span>
+            <span class="n">maxSum</span> <span class="o">=</span> <span class="n">total</span>
+            <span class="n">result</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span>
+            <span class="n">result</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span>
+            <span class="n">result</span><span class="p">[</span><span class="m">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。凭什么：构造 <code class="language-plaintext highlighter-rouge">sums</code> 用定长滑窗一趟；<code class="language-plaintext highlighter-rouge">left</code> 与 <code class="language-plaintext highlighter-rouge">right</code> 各一趟；主循环再一趟，每轮只做常数次查表和加法，四趟线性扫描相加仍是线性。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。凭什么：<code class="language-plaintext highlighter-rouge">sums</code>、<code class="language-plaintext highlighter-rouge">left</code>、<code class="language-plaintext highlighter-rouge">right</code> 三条数组长度都是 <code class="language-plaintext highlighter-rouge">n - k + 1</code>；答案只占常数空间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>「选多段互不重叠区间」的通用套路是固定中间一段、把两侧压成前后缀极值</strong>。当段数是 3 时这招最划算；段数变多（比如 <code class="language-plaintext highlighter-rouge">m</code> 段）就该换成 <code class="language-plaintext highlighter-rouge">dp[i][t]</code> 表示前 <code class="language-plaintext highlighter-rouge">i</code> 个窗口里选 <code class="language-plaintext highlighter-rouge">t</code> 段的最优值。识别段数决定选哪种模板。</li>
+    <li>
+<strong>不重叠约束必须换算成下标不等式再落地</strong>：<code class="language-plaintext highlighter-rouge">l + k ≤ j</code> 与 <code class="language-plaintext highlighter-rouge">j + k ≤ r</code>。本题最经典的错误就是凭直觉写成 <code class="language-plaintext highlighter-rouge">left[j-1]</code>，看起来「左边取到 j 之前的最大值」很合理，实则允许窗口重叠。写下标类代码时，务必把区间端点显式写出来验算一次。</li>
+    <li>
+<strong>字典序最小要在每个决策点分别落实</strong>，而且并列规则与扫描方向绑定：正扫用严格大于、逆扫用大于等于，才能都保留更小的下标。三处规则不一致就会得到「和正确但下标不是最小」的答案。</li>
+    <li>定长窗口和数组 <code class="language-plaintext highlighter-rouge">sums</code> 是一层很有价值的抽象：它把原问题从「二维区间选择」降成「一维点选择」，之后所有推理都变得干净。遇到「若干个定长子数组」的题，先建 <code class="language-plaintext highlighter-rouge">sums</code> 几乎总是对的第一步。</li>
+    <li>面试视角：先说三重暴力，再说「固定中间、两侧取前后缀最优」的降维思路，最后单独强调「不重叠约束怎么落到下标上」和「字典序怎么保证」。这两点正是面试官会拿反例追问的地方，主动讲清楚比写完代码等着被 hack 好得多。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>错误写法：左侧取 <code class="language-plaintext highlighter-rouge">left[j - 1]</code>；用例 <code class="language-plaintext highlighter-rouge">nums = [1,2,1,2,6,7,5,1]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → <code class="language-plaintext highlighter-rouge">j = 4</code> 时取到 <code class="language-plaintext highlighter-rouge">left[3] = 3</code>，左窗口 <code class="language-plaintext highlighter-rouge">[2,6]</code> 与中间窗口 <code class="language-plaintext highlighter-rouge">[6,7]</code> 共用元素 6，算出非法的 27 并返回 <code class="language-plaintext highlighter-rouge">[3,4,6]</code>，正确答案是 <code class="language-plaintext highlighter-rouge">[0,3,5]</code>。</li>
+    <li>错误写法：右侧取 <code class="language-plaintext highlighter-rouge">right[j + 1]</code>；用例 <code class="language-plaintext highlighter-rouge">nums = [1,2,1,2,6,7,5,1]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → 中间与右侧窗口重叠，同样得到偏大的伪最优解。</li>
+    <li>错误写法：构造 <code class="language-plaintext highlighter-rouge">right</code> 时用严格大于；用例 <code class="language-plaintext highlighter-rouge">nums = [1,2,1,2,1,2,1,2,1]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → 所有窗口和相等，<code class="language-plaintext highlighter-rouge">right</code> 保留的是最靠右的下标，返回 <code class="language-plaintext highlighter-rouge">[0,2,6]</code> 之类，正确答案是字典序最小的 <code class="language-plaintext highlighter-rouge">[0,2,4]</code>。</li>
+    <li>错误写法：构造 <code class="language-plaintext highlighter-rouge">left</code> 时用大于等于；用例 全等元素数组 → <code class="language-plaintext highlighter-rouge">left</code> 保留最靠右的下标，左窗口起点被推大，字典序不再最小。</li>
+    <li>错误写法：主循环更新答案时用 <code class="language-plaintext highlighter-rouge">total &gt;= maxSum</code>；用例 全等元素数组 → 同和时不断被更大的 <code class="language-plaintext highlighter-rouge">j</code> 覆盖，返回的中间下标偏大。</li>
+    <li>错误写法：主循环上界写成 <code class="language-plaintext highlighter-rouge">j &lt; sums.length</code>；用例 任意输入 → <code class="language-plaintext highlighter-rouge">right[j+k]</code> 越界，抛数组下标异常。</li>
+    <li>错误写法：主循环下界写成 <code class="language-plaintext highlighter-rouge">j = 0</code> 或 <code class="language-plaintext highlighter-rouge">j = 1</code>；用例 <code class="language-plaintext highlighter-rouge">k = 2</code> → <code class="language-plaintext highlighter-rouge">left[j-k]</code> 的下标为负，直接越界。</li>
+    <li>错误写法：<code class="language-plaintext highlighter-rouge">sums</code> 数组长度开成 <code class="language-plaintext highlighter-rouge">n - k</code>；用例 <code class="language-plaintext highlighter-rouge">nums</code> 长度恰为 <code class="language-plaintext highlighter-rouge">3k</code> → 最后一个合法窗口起点被截掉，右侧最优解丢失，答案偏小。</li>
+    <li>错误写法：滑窗递推写成 <code class="language-plaintext highlighter-rouge">windowSum += nums[i + k] - nums[i]</code>；用例 <code class="language-plaintext highlighter-rouge">nums = [1,2,3,4]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → 进出的元素各错一位，<code class="language-plaintext highlighter-rouge">sums</code> 整体偏移，后续全部基于错误数据。</li>
+    <li>错误写法：改用「先选全局最大的窗口，再在剩余区域各选一个」的贪心；用例 <code class="language-plaintext highlighter-rouge">nums = [1,2,1,2,6,7,5,1]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → 先选走和为 13 的 <code class="language-plaintext highlighter-rouge">[6,7]</code> 后，左右两侧被切碎，得到的总和小于 23，贪心在这里不成立。</li>
+    <li>错误写法：把三个窗口的和用原数组重新累加而不是查 <code class="language-plaintext highlighter-rouge">sums</code>；用例 <code class="language-plaintext highlighter-rouge">n = 2 \times 10^4</code>、<code class="language-plaintext highlighter-rouge">k = 5000</code> → 每轮多花 $O(k)$，总代价退化到 $O(nk)$，超时。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-sum-of-two-non-overlapping-subarrays/">1031. 两个无重叠子数组的最大和</a></td>
+      <td>中等</td>
+      <td>只有两段且长度可以不同，一趟扫描维护「另一段的前缀最优」即可，无需预处理数组</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-average-subarray-i/">643. 子数组最大平均数 I</a></td>
+      <td>简单</td>
+      <td>只选一段定长窗口，是本题第一步预处理的独立版本</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-subarray/">53. 最大子数组和</a></td>
+      <td>中等</td>
+      <td>段长不再固定，滑窗失效，改用「要么接上前面要么另起一段」的线性 DP</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2021/34987661" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 126. 单词接龙 II</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/78944750" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 932. 漂亮数组</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/11776921">https://hgnulb.github.io/blog/2021/11776921</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

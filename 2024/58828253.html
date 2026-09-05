@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 889. 从前序与后序遍历序列构造二叉树 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,二叉树,二叉树构造问题,分治,哈希表,字节跳动,快手,数组,树,猿辅导,美团" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 889. 从前序与后序遍历序列构造二叉树" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2024/58828253" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2024/58828253" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-09-12T14:30:55+08:00" />
+<meta property="article:modified_time" content="2024-09-12T14:30:55+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 889. 从前序与后序遍历序列构造二叉树" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2024-09-12T14:30:55+08:00","datePublished":"2024-09-12T14:30:55+08:00","description":"题目描述","headline":"LeetCode 889. 从前序与后序遍历序列构造二叉树","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2024/58828253"},"url":"https://hgnulb.github.io/blog/2024/58828253"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法递归切分遍历区间">解法：递归切分遍历区间</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 889. 从前序与后序遍历序列构造二叉树">LeetCode 889. 从前序与后序遍历序列构造二叉树</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2024-09-12 14:30:55"
+                    datetime="2024-09-12T14:30:55+08:00"
+            >
+                2024-09-12
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1410 字 · 英文 38 词 · 代码 58 行"
+            aria-label="预计阅读时间约 6 分钟，正文 1410 字 · 英文 38 词 · 代码 58 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 6 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    10 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/1587990752/" title="5-10">
+        5-10
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1259449732/" title="快手">
+        快手
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0416977247/" title="美团">
+        美团
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7733424420/" title="猿辅导">
+        猿辅导
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2805463697/" title="树">
+        树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3241866243/" title="二叉树">
+        二叉树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5147323714/" title="分治">
+        分治
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1771780689/" title="二叉树构造问题">
+        二叉树构造问题
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法递归切分遍历区间">解法：递归切分遍历区间</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-postorder-traversal/">889. 根据前序和后序遍历构造二叉树</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给出同一棵二叉树的前序遍历和后序遍历两个数组，要求还原出这棵树并返回根节点。题目明确说明：如果存在多棵满足条件的树，返回其中任意一棵即可。</p>
+
+  <p>「任意一棵」这四个字是本题与 105、106 最本质的差别，也是必须先想明白的地方。前序的形状是 <code class="language-plaintext highlighter-rouge">[根][左子树][右子树]</code>，后序的形状是 <code class="language-plaintext highlighter-rouge">[左子树][右子树][根]</code>。当某个节点<strong>同时拥有左右孩子</strong>时，前序里紧跟着根的那个元素一定是左子树的根，后序里紧挨着根之前的那个元素一定是右子树的根，两个序列联手就能把左右子树切开。但当某个节点<strong>只有一个孩子</strong>时，无论这个孩子挂在左边还是右边，产生的前序和后序完全一样，信息在这里天然丢失了——这就是答案不唯一的根源，而不是题目出得不严谨。</p>
+
+  <p>约束方面：节点数最多 30，值互不相同且都在 1 到 30 之间。「值互不相同」是能靠值反查位置的前提，一旦允许重复，按值定位就会串到别的子树上去。「最多 30 个节点」说明数据规模极小，$O(n^2)$ 甚至更差的写法都能通过，但这恰恰意味着面试官考的不是能不能过，而是能不能讲清楚切分的依据和不唯一的原因。</p>
+
+  <p>边界有两个：当前处理的区间为空，此时返回空；当前区间只剩一个节点，此时它是一片叶子，绝不能再去读「根后面的那个元素」，因为那个位置已经属于兄弟子树了。</p>
+</blockquote>
+
+<h2 id="解法递归切分遍历区间">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E9%80%92%E5%BD%92%E5%88%87%E5%88%86%E9%81%8D%E5%8E%86%E5%8C%BA%E9%97%B4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：递归切分遍历区间</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>前序遍历是 <code class="language-plaintext highlighter-rouge">[根][左子树][右子树]</code>，后序遍历是 <code class="language-plaintext highlighter-rouge">[左子树][右子树][根]</code>。当前子树的根可由前序首元素确定；若子树不止一个节点，就把 <code class="language-plaintext highlighter-rouge">preorder[preLeft + 1]</code> 视为左子树根，在后序中找到它的位置，便能得到左子树大小。</p>
+
+  <p>这里要先说明答案为何不唯一：若某个节点只有一个孩子，把它放在左边或右边，前序和后序都不变。本解法统一把这个孩子放到左侧，题目允许返回任意合法树。</p>
+
+  <p>递归状态使用 <code class="language-plaintext highlighter-rouge">build(preLeft, postLeft, size)</code>，表示两个遍历数组从各自起点开始的 <code class="language-plaintext highlighter-rouge">size</code> 个元素描述同一棵子树。设左子树大小为 <code class="language-plaintext highlighter-rouge">leftSize</code>，则：</p>
+
+  <ul>
+    <li>左子树：前序起点 <code class="language-plaintext highlighter-rouge">preLeft + 1</code>，后序起点 <code class="language-plaintext highlighter-rouge">postLeft</code>，长度 <code class="language-plaintext highlighter-rouge">leftSize</code>；</li>
+    <li>右子树：前序起点 <code class="language-plaintext highlighter-rouge">preLeft + 1 + leftSize</code>，后序起点 <code class="language-plaintext highlighter-rouge">postLeft + leftSize</code>，长度 <code class="language-plaintext highlighter-rouge">size - 1 - leftSize</code>。</li>
+  </ul>
+
+  <p>用哈希表记录后序遍历的“节点值到下标”，每次切分只需 $O(1)$ 查询。节点值互不相同，是按值定位能够成立的前提。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ol>
+    <li>扫描 <code class="language-plaintext highlighter-rouge">postorder</code>，建立节点值到下标的映射。</li>
+    <li>若当前 <code class="language-plaintext highlighter-rouge">size == 0</code>，返回空节点；否则以前序首元素创建根节点。</li>
+    <li>若 <code class="language-plaintext highlighter-rouge">size == 1</code>，当前节点是叶子，直接返回，避免访问不存在的 <code class="language-plaintext highlighter-rouge">preLeft + 1</code>。</li>
+    <li>将前序中的下一个节点视为左子树根，在后序中找到它；闭区间长度为 <code class="language-plaintext highlighter-rouge">leftRootIndex - postLeft + 1</code>。</li>
+    <li>按左右子树的起点和长度递归构造，再返回根节点。</li>
+  </ol>
+
+  <p>例如 <code class="language-plaintext highlighter-rouge">preorder = [1,2,4,5,3]</code>、<code class="language-plaintext highlighter-rouge">postorder = [4,5,2,3,1]</code>：节点 <code class="language-plaintext highlighter-rouge">1</code> 的左子树根是 <code class="language-plaintext highlighter-rouge">2</code>，它在后序下标 <code class="language-plaintext highlighter-rouge">2</code>，所以左子树有 <code class="language-plaintext highlighter-rouge">3</code> 个节点，左右子树自然切成 <code class="language-plaintext highlighter-rouge">[2,4,5]</code> 与 <code class="language-plaintext highlighter-rouge">[3]</code>。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">preorder</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">postIndex</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">TreeNode</span> <span class="nf">constructFromPrePost</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">preorder</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">postorder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">preorder</span> <span class="o">=</span> <span class="n">preorder</span><span class="o">;</span>
+        <span class="n">postIndex</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">postorder</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">postIndex</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">postorder</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="nf">build</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">preorder</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">TreeNode</span> <span class="nf">build</span><span class="o">(</span><span class="kt">int</span> <span class="n">preLeft</span><span class="o">,</span> <span class="kt">int</span> <span class="n">postLeft</span><span class="o">,</span> <span class="kt">int</span> <span class="n">size</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nc">TreeNode</span> <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TreeNode</span><span class="o">(</span><span class="n">preorder</span><span class="o">[</span><span class="n">preLeft</span><span class="o">]);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">root</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">leftRootIndex</span> <span class="o">=</span> <span class="n">postIndex</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">preorder</span><span class="o">[</span><span class="n">preLeft</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]);</span>
+        <span class="kt">int</span> <span class="n">leftSize</span> <span class="o">=</span> <span class="n">leftRootIndex</span> <span class="o">-</span> <span class="n">postLeft</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">build</span><span class="o">(</span><span class="n">preLeft</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">postLeft</span><span class="o">,</span> <span class="n">leftSize</span><span class="o">);</span>
+        <span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">build</span><span class="o">(</span>
+                <span class="n">preLeft</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">leftSize</span><span class="o">,</span>
+                <span class="n">postLeft</span> <span class="o">+</span> <span class="n">leftSize</span><span class="o">,</span>
+                <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">leftSize</span>
+        <span class="o">);</span>
+        <span class="k">return</span> <span class="n">root</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">constructFromPrePost</span><span class="p">(</span><span class="n">preorder</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">postorder</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">TreeNode</span> <span class="p">{</span>
+    <span class="n">postIndex</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">postorder</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">postorder</span> <span class="p">{</span>
+        <span class="n">postIndex</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="p">}</span>
+
+    <span class="k">var</span> <span class="n">build</span> <span class="k">func</span><span class="p">(</span><span class="n">preLeft</span><span class="p">,</span> <span class="n">postLeft</span><span class="p">,</span> <span class="n">size</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">TreeNode</span>
+    <span class="n">build</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">preLeft</span><span class="p">,</span> <span class="n">postLeft</span><span class="p">,</span> <span class="n">size</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">TreeNode</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="no">nil</span>
+        <span class="p">}</span>
+
+        <span class="n">root</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">TreeNode</span><span class="p">{</span><span class="n">Val</span><span class="o">:</span> <span class="n">preorder</span><span class="p">[</span><span class="n">preLeft</span><span class="p">]}</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">root</span>
+        <span class="p">}</span>
+
+        <span class="n">leftRootIndex</span> <span class="o">:=</span> <span class="n">postIndex</span><span class="p">[</span><span class="n">preorder</span><span class="p">[</span><span class="n">preLeft</span><span class="o">+</span><span class="m">1</span><span class="p">]]</span>
+        <span class="n">leftSize</span> <span class="o">:=</span> <span class="n">leftRootIndex</span> <span class="o">-</span> <span class="n">postLeft</span> <span class="o">+</span> <span class="m">1</span>
+        <span class="n">root</span><span class="o">.</span><span class="n">Left</span> <span class="o">=</span> <span class="n">build</span><span class="p">(</span><span class="n">preLeft</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">postLeft</span><span class="p">,</span> <span class="n">leftSize</span><span class="p">)</span>
+        <span class="n">root</span><span class="o">.</span><span class="n">Right</span> <span class="o">=</span> <span class="n">build</span><span class="p">(</span>
+            <span class="n">preLeft</span><span class="o">+</span><span class="m">1</span><span class="o">+</span><span class="n">leftSize</span><span class="p">,</span>
+            <span class="n">postLeft</span><span class="o">+</span><span class="n">leftSize</span><span class="p">,</span>
+            <span class="n">size</span><span class="o">-</span><span class="m">1</span><span class="o">-</span><span class="n">leftSize</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">root</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">build</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">preorder</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。建表与构造各扫描所有节点一次。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。索引表占 $O(n)$；递归栈为 $O(h)$，最坏树高 $h=n$。返回的树不计入额外空间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>前序确定根，后序中“左子树根的位置”确定左子树长度。</li>
+    <li>用“起点 + 长度”表示子树，可直接保证前序区间与后序区间等长。</li>
+    <li>只有一个孩子时无法判断左右归属；统一构造成左孩子即可。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">size == 1</code> 必须提前返回，否则会越界读取下一节点。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>把后序末元素当作左子树根：它其实是当前根。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">leftSize</code> 忘记加 <code class="language-plaintext highlighter-rouge">1</code>：后序切片是闭区间，会少算一个节点。</li>
+    <li>右子树长度仍写成 <code class="language-plaintext highlighter-rouge">size - leftSize</code>：没有扣掉当前根。</li>
+    <li>认为前序加后序总能唯一还原二叉树：单孩子节点就是反例。</li>
+    <li>每层在线性扫描后序找位置：正确但最坏会退化到 $O(n^2)$。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/">105. 从前序与中序遍历序列构造二叉树</a></td>
+      <td>中等</td>
+      <td>中序直接给出左右分界，答案唯一，不存在单孩子歧义</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/">106. 从中序与后序遍历序列构造二叉树</a></td>
+      <td>中等</td>
+      <td>根取自后序末位，切分方向从右往左，同样答案唯一</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/construct-binary-search-tree-from-preorder-traversal/">1008. 前序遍历构造二叉搜索树</a></td>
+      <td>中等</td>
+      <td>只给一个序列，靠搜索树的值域上下界代替第二个序列来定分界</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-binary-tree/">654. 最大二叉树</a></td>
+      <td>中等</td>
+      <td>分界点由「区间最大值位置」决定，可用单调栈做到线性</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/">108. 将有序数组转换为二叉搜索树</a></td>
+      <td>简单</td>
+      <td>分界点自己选取中点即可，目标是平衡而非还原某棵特定的树</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/convert-sorted-list-to-binary-search-tree/">109. 有序链表转换二叉搜索树</a></td>
+      <td>中等</td>
+      <td>同上但只能顺序访问，要用快慢指针找中点或改成中序模拟构建</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/">297. 二叉树的序列化与反序列化</a></td>
+      <td>困难</td>
+      <td>反过来设计序列，用空节点占位补齐信息，从而做到还原唯一</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/zhong-jian-er-cha-shu-lcof/">剑指 Offer 07. 重建二叉树</a></td>
+      <td>中等</td>
+      <td>与 105 同题，可直接套用</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-height-tree-lcci/">面试题 04.02. 最小高度树</a></td>
+      <td>简单</td>
+      <td>与 108 同题，可直接套用</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2024/47592196" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1171. 从链表中删去总和值为零的连续节点</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2024/19921752" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1209. 删除字符串中的所有相邻重复项 II</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2024/58828253">https://hgnulb.github.io/blog/2024/58828253</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

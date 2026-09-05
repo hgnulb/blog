@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode LCR 113. 课程表 II | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,LCR,图,广度优先搜索,拓扑排序,深度优先搜索" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode LCR 113. 课程表 II" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/29135590" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/29135590" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-29T01:59:06+08:00" />
+<meta property="article:modified_time" content="2026-03-29T01:59:06+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode LCR 113. 课程表 II" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-03-29T01:59:06+08:00","datePublished":"2026-03-29T01:59:06+08:00","description":"题目描述","headline":"LeetCode LCR 113. 课程表 II","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/29135590"},"url":"https://hgnulb.github.io/blog/2026/29135590"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法bfs-拓扑排序">解法：BFS 拓扑排序</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode LCR 113. 课程表 II">LeetCode LCR 113. 课程表 II</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-03-29 01:59:06"
+                    datetime="2026-03-29T01:59:06+08:00"
+            >
+                2026-03-29
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2523 字 · 英文 60 词 · 代码 65 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2523 字 · 英文 60 词 · 代码 65 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3007053882/" title="119 经典题变种挑战">
+        119 经典题变种挑战
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3355311990/" title="剑指 Offer">
+        剑指 Offer
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7450658006/" title="剑指 Offer（专项突击版）">
+        剑指 Offer（专项突击版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6142931175/" title="LCR">
+        LCR
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5789791753/" title="图">
+        图
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1845450306/" title="拓扑排序">
+        拓扑排序
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法bfs-拓扑排序">解法：BFS 拓扑排序</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/QA2IGt/">LCR 113. 课程表 II</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>有编号 <code class="language-plaintext highlighter-rouge">0</code> 到 <code class="language-plaintext highlighter-rouge">numCourses - 1</code> 的若干门课，<code class="language-plaintext highlighter-rouge">prerequisites[i] = [a, b]</code> 表示想学 <code class="language-plaintext highlighter-rouge">a</code> 就必须先学完 <code class="language-plaintext highlighter-rouge">b</code>。要求返回一种能学完全部课程的学习顺序；如果根本学不完，返回空数组。答案不唯一，只要满足所有先修约束即可。</p>
+
+  <p>这里和「课程表 I」的差别要先摆清楚：I 只问能不能学完，返回布尔值；II 要求把顺序本身交出来。也就是说，判定环的能力仍然需要，但还要在判定过程中把一条合法序列记录下来。</p>
+
+  <p>约束透露的信号有几层。课程用连续整数编号，说明所有的「表」都可以用数组而不是哈希；课程数最多两千、先修关系数量上限约为课程数的平方，说明 $O(n + m)$ 或 $O(n \log n)$ 级别都能过，但枚举顺序的指数级做法一定不行；题目没有承诺图是连通的，也没有承诺先修关系不重复。</p>
+
+  <p>边界有四类：<code class="language-plaintext highlighter-rouge">prerequisites</code> 为空时任意顺序都合法；只有一门课时直接返回 <code class="language-plaintext highlighter-rouge">[0]</code>；出现形如 <code class="language-plaintext highlighter-rouge">[a, a]</code> 的自我依赖时必然无解；多个互不相连的分量要一起输出，不能只走出发点所在的那一块。</p>
+</blockquote>
+
+<h2 id="解法bfs-拓扑排序">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95bfs-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：BFS 拓扑排序</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最朴素的想法是枚举全部 <code class="language-plaintext highlighter-rouge">n!</code> 种学习顺序，逐个检查是否违反先修约束，显然不可行。稍微聪明一点的做法是每一轮扫描所有还没学的课程，找出「先修课都学完了」的那些学掉，这样虽然正确，但每轮都要重扫全部课程和全部边，最坏是 $O(n \cdot m)$。瓶颈很清楚：一门课的可学状态只会因为「它的某个先修课刚被学完」而改变，全量重扫做了大量无效检查。</p>
+
+  <p>关键观察是把先修关系画成有向边 <code class="language-plaintext highlighter-rouge">b -&gt; a</code>（先修课指向后续课），那么「课程 <code class="language-plaintext highlighter-rouge">a</code> 现在可学」等价于「<code class="language-plaintext highlighter-rouge">a</code> 在图中所有指向它的边的起点都已被学完」，也就是等价于「<code class="language-plaintext highlighter-rouge">a</code> 的剩余入度为 <code class="language-plaintext highlighter-rouge">0</code>」。于是完全不必重扫：每学完一门课，只需沿着它的出边把后继课程的剩余入度各减一，恰好只有减到 <code class="language-plaintext highlighter-rouge">0</code> 的那些课变成新的可学课程，其余状态不受影响。这把每轮全扫压成了「每条边只被处理一次」。</p>
+
+  <p>由此得到贯穿全程的不变量：<strong>在任何时刻，<code class="language-plaintext highlighter-rouge">indegree[x]</code> 恰好等于「课程 <code class="language-plaintext highlighter-rouge">x</code> 的先修课中尚未写入结果序列的数量」，而结果序列 <code class="language-plaintext highlighter-rouge">order</code> 中的每一门课，其所有先修课都已经排在它前面</strong>。初始化时结果序列为空，<code class="language-plaintext highlighter-rouge">indegree[x]</code> 就是 <code class="language-plaintext highlighter-rouge">x</code> 的原始入度，不变量成立；每次从队列取出一门入度为 <code class="language-plaintext highlighter-rouge">0</code> 的课写入序列，它的每个后继的未完成先修数正好少一个，所以对应减一，不变量继续保持。</p>
+
+  <p>终止情况也由不变量直接推出：队列空意味着所有未写入的课程剩余入度都大于等于 <code class="language-plaintext highlighter-rouge">1</code>，即每个点都还有一个未完成的先修课。在有限点集里，沿着「未完成先修」一直往回走必然重复访问某个点，也就是必然存在环，所以此时无解。反过来，如果写入数量等于课程总数，序列本身就是一个合法的学习顺序。判环和产序在这里是同一次遍历的两个副产品，这正是本题相对课程表 I 只需多一个 <code class="language-plaintext highlighter-rouge">order</code> 数组的原因。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>建邻接表 <code class="language-plaintext highlighter-rouge">graph</code> 和入度数组 <code class="language-plaintext highlighter-rouge">indegree</code>。对每条 <code class="language-plaintext highlighter-rouge">[a, b]</code> 执行 <code class="language-plaintext highlighter-rouge">graph[b].add(a)</code> 与 <code class="language-plaintext highlighter-rouge">indegree[a]++</code>，方向必须是先修课指向后续课，因为后面要「学完一门课去释放它的后继」。</li>
+    <li>扫描所有课程，把入度为 <code class="language-plaintext highlighter-rouge">0</code> 的全部入队。这些课没有任何先修要求，是唯一能作为起点的候选；必须一次全放进去，否则会漏掉不连通的分量。</li>
+    <li>循环取出队首课程，写入结果数组并让下标前移。出队顺序就是学习顺序，这一步是本题与只判环的版本唯一的实质差别。</li>
+    <li>遍历该课程的所有后继，各自入度减一；只有减到 <code class="language-plaintext highlighter-rouge">0</code> 的才入队。减不到 <code class="language-plaintext highlighter-rouge">0</code> 说明它还有别的先修课没学，现在入队会破坏顺序合法性。</li>
+    <li>循环结束后比较写入数量与课程总数：相等则返回结果数组，否则说明剩余课程互相成环，返回空数组。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">numCourses = 4</code>、<code class="language-plaintext highlighter-rouge">prerequisites = [[1,0],[2,0],[3,1],[3,2]]</code> 走一遍</strong>：建图后 <code class="language-plaintext highlighter-rouge">graph[0] = [1,2]</code>、<code class="language-plaintext highlighter-rouge">graph[1] = [3]</code>、<code class="language-plaintext highlighter-rouge">graph[2] = [3]</code>、<code class="language-plaintext highlighter-rouge">graph[3] = []</code>，入度为 <code class="language-plaintext highlighter-rouge">indegree = [0,1,1,2]</code>。初始化时只有课程 <code class="language-plaintext highlighter-rouge">0</code> 入度为 <code class="language-plaintext highlighter-rouge">0</code>，队列为 <code class="language-plaintext highlighter-rouge">[0]</code>，<code class="language-plaintext highlighter-rouge">order = []</code>。第一轮取出 <code class="language-plaintext highlighter-rouge">0</code>，<code class="language-plaintext highlighter-rouge">order = [0]</code>；遍历后继 <code class="language-plaintext highlighter-rouge">1</code>，入度由 <code class="language-plaintext highlighter-rouge">1</code> 减到 <code class="language-plaintext highlighter-rouge">0</code>，入队；遍历后继 <code class="language-plaintext highlighter-rouge">2</code>，入度由 <code class="language-plaintext highlighter-rouge">1</code> 减到 <code class="language-plaintext highlighter-rouge">0</code>，入队；此时队列为 <code class="language-plaintext highlighter-rouge">[1,2]</code>，<code class="language-plaintext highlighter-rouge">indegree = [0,0,0,2]</code>。第二轮取出 <code class="language-plaintext highlighter-rouge">1</code>，<code class="language-plaintext highlighter-rouge">order = [0,1]</code>；后继 <code class="language-plaintext highlighter-rouge">3</code> 的入度由 <code class="language-plaintext highlighter-rouge">2</code> 减到 <code class="language-plaintext highlighter-rouge">1</code>，未到 <code class="language-plaintext highlighter-rouge">0</code> 不入队。第三轮取出 <code class="language-plaintext highlighter-rouge">2</code>，<code class="language-plaintext highlighter-rouge">order = [0,1,2]</code>；后继 <code class="language-plaintext highlighter-rouge">3</code> 的入度由 <code class="language-plaintext highlighter-rouge">1</code> 减到 <code class="language-plaintext highlighter-rouge">0</code>，入队。第四轮取出 <code class="language-plaintext highlighter-rouge">3</code>，<code class="language-plaintext highlighter-rouge">order = [0,1,2,3]</code>，它没有后继。队列空，写入数量 <code class="language-plaintext highlighter-rouge">4</code> 等于课程总数，返回 <code class="language-plaintext highlighter-rouge">[0,1,2,3]</code>。若把 <code class="language-plaintext highlighter-rouge">[1,0]</code> 改成 <code class="language-plaintext highlighter-rouge">[0,3]</code>，则 <code class="language-plaintext highlighter-rouge">0</code> 的入度变为 <code class="language-plaintext highlighter-rouge">1</code>，四门课入度全部大于 <code class="language-plaintext highlighter-rouge">0</code>，初始队列为空，一轮都进不去，写入数量 <code class="language-plaintext highlighter-rouge">0</code> 小于 <code class="language-plaintext highlighter-rouge">4</code>，返回空数组。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">findOrder</span><span class="o">(</span><span class="kt">int</span> <span class="n">numCourses</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">prerequisites</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">graph</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numCourses</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">graph</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;());</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">indegree</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">numCourses</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">edge</span> <span class="o">:</span> <span class="n">prerequisites</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">graph</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">edge</span><span class="o">[</span><span class="mi">1</span><span class="o">]).</span><span class="na">add</span><span class="o">(</span><span class="n">edge</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+            <span class="n">indegree</span><span class="o">[</span><span class="n">edge</span><span class="o">[</span><span class="mi">0</span><span class="o">]]++;</span>
+        <span class="o">}</span>
+
+        <span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">course</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">course</span> <span class="o">&lt;</span> <span class="n">numCourses</span><span class="o">;</span> <span class="n">course</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">indegree</span><span class="o">[</span><span class="n">course</span><span class="o">]</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">course</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">order</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">numCourses</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">queue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">course</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+            <span class="n">order</span><span class="o">[</span><span class="n">idx</span><span class="o">++]</span> <span class="o">=</span> <span class="n">course</span><span class="o">;</span>
+            <span class="c1">// 学完当前课程后，释放所有依赖它的后续课程。</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">next</span> <span class="o">:</span> <span class="n">graph</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">course</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">indegree</span><span class="o">[</span><span class="n">next</span><span class="o">]--;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">indegree</span><span class="o">[</span><span class="n">next</span><span class="o">]</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">next</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">idx</span> <span class="o">==</span> <span class="n">numCourses</span> <span class="o">?</span> <span class="n">order</span> <span class="o">:</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">findOrder</span><span class="p">(</span><span class="n">numCourses</span> <span class="kt">int</span><span class="p">,</span> <span class="n">prerequisites</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="n">graph</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">numCourses</span><span class="p">)</span>
+    <span class="n">indegree</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">numCourses</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">edge</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">prerequisites</span> <span class="p">{</span>
+        <span class="n">course</span> <span class="o">:=</span> <span class="n">edge</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+        <span class="n">pre</span> <span class="o">:=</span> <span class="n">edge</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+        <span class="n">graph</span><span class="p">[</span><span class="n">pre</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">graph</span><span class="p">[</span><span class="n">pre</span><span class="p">],</span> <span class="n">course</span><span class="p">)</span>
+        <span class="n">indegree</span><span class="p">[</span><span class="n">course</span><span class="p">]</span><span class="o">++</span>
+    <span class="p">}</span>
+
+    <span class="n">queue</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">course</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">course</span> <span class="o">&lt;</span> <span class="n">numCourses</span><span class="p">;</span> <span class="n">course</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">indegree</span><span class="p">[</span><span class="n">course</span><span class="p">]</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="n">queue</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">course</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">order</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">numCourses</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">head</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">head</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">);</span> <span class="n">head</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">course</span> <span class="o">:=</span> <span class="n">queue</span><span class="p">[</span><span class="n">head</span><span class="p">]</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">course</span><span class="p">)</span>
+        <span class="c">// 入度降为 0 时，说明该课程的先修课已经全部完成。</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">next</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">graph</span><span class="p">[</span><span class="n">course</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">indegree</span><span class="p">[</span><span class="n">next</span><span class="p">]</span><span class="o">--</span>
+            <span class="k">if</span> <span class="n">indegree</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+                <span class="n">queue</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">next</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">order</span><span class="p">)</span> <span class="o">!=</span> <span class="n">numCourses</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">order</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n + m)$，<code class="language-plaintext highlighter-rouge">n</code> 为课程数、<code class="language-plaintext highlighter-rouge">m</code> 为先修关系数。建图遍历每条边一次，初始化扫描每个点一次；主循环中每个点最多入队出队一次（入度只减不增，减到 <code class="language-plaintext highlighter-rouge">0</code> 仅发生一次），每条边在其起点出队时被处理一次。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n + m)$。邻接表存下全部 <code class="language-plaintext highlighter-rouge">m</code> 条边，入度数组与队列各占 $O(n)$，结果数组同为 $O(n)$。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「找一个满足偏序约束的线性顺序」这类问题，通用建模是把约束变成有向边、把「可执行」变成「剩余入度为 <code class="language-plaintext highlighter-rouge">0</code>」，任务调度、编译依赖、事件排期都能套这一层抽象。</li>
+    <li>增量维护优于全量重扫：状态只在相邻元素变化时才可能改变，就该沿边推送更新，而不是每轮重新判断所有对象。</li>
+    <li>判环与产序可以合并：入度法在同一次遍历里既得到序列，又通过「写入数量是否等于点数」得到有环判定，不需要额外跑一次环检测。</li>
+    <li>初始队列必须放入全部零入度点，这是保证不连通分量都被覆盖的唯一入口。</li>
+    <li>面试视角：本题最常见的追问是「和课程表 I 有什么区别」，标准回答是算法框架完全相同，只是把计数器换成记录出队序列；其次是「BFS 和 DFS 两种拓扑排序怎么选」，可以答 DFS 需要三色标记判环并把结果逆序输出，边界更易写错，而 BFS 的入度法状态直观、天然给出正序，白板上更稳；若追问「要求字典序最小的顺序」，把队列换成小根堆即可，代价是复杂度升到 $O(n \log n + m)$。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：把边建成 <code class="language-plaintext highlighter-rouge">graph[a].add(b)</code>，即后续课指向先修课 → 对 <code class="language-plaintext highlighter-rouge">numCourses = 2</code>、<code class="language-plaintext highlighter-rouge">prerequisites = [[1,0]]</code>，入度为 <code class="language-plaintext highlighter-rouge">0</code> 的会变成课程 <code class="language-plaintext highlighter-rouge">1</code>，输出 <code class="language-plaintext highlighter-rouge">[1,0]</code>，恰好把先修顺序整个颠倒。</li>
+    <li>
+<strong>错误写法</strong>：只把「某一个」入度为 <code class="language-plaintext highlighter-rouge">0</code> 的课程入队就开始循环 → 输入 <code class="language-plaintext highlighter-rouge">numCourses = 4</code>、<code class="language-plaintext highlighter-rouge">prerequisites = [[1,0],[3,2]]</code> 时，只放入 <code class="language-plaintext highlighter-rouge">0</code> 会漏掉另一条链的起点 <code class="language-plaintext highlighter-rouge">2</code>，写入数量小于课程总数，被误判成有环并返回空数组。</li>
+    <li>
+<strong>错误写法</strong>：后继入度减一后无条件入队 → 该课程会在剩余先修课学完前就被写入序列，且可能被重复写入多次，结果数组越界或顺序非法。</li>
+    <li>
+<strong>错误写法</strong>：循环结束后直接返回 <code class="language-plaintext highlighter-rouge">order</code> 而不比较数量 → 存在环时数组尾部留着未填的默认值 <code class="language-plaintext highlighter-rouge">0</code>，会返回一串带有重复 <code class="language-plaintext highlighter-rouge">0</code> 的非法序列，而不是要求的空数组。</li>
+    <li>
+<strong>错误写法</strong>：用「<code class="language-plaintext highlighter-rouge">prerequisites</code> 长度是否为 <code class="language-plaintext highlighter-rouge">0</code>」之类的条件判断有没有环 → 环的存在与边数多少无关，<code class="language-plaintext highlighter-rouge">[[0,1],[1,0]]</code> 只有两条边却无解。</li>
+    <li>
+<strong>错误写法</strong>：把 Java 的判环条件写成 <code class="language-plaintext highlighter-rouge">queue.isEmpty() &amp;&amp; idx &lt; numCourses</code> 之外的启发式判断，例如统计剩余入度之和是否为 <code class="language-plaintext highlighter-rouge">0</code> 之后又忘记返回空数组 → 有环用例下仍然返回了部分序列，判定为答案不完整。</li>
+    <li>
+<strong>错误写法</strong>：邻接表按课程数分配，却用先修关系的下标去索引，或忘记为每门课初始化空列表 → Java 侧访问未初始化的元素抛空指针，Go 侧则会因为切片长度不足而越界。</li>
+    <li>
+<strong>错误写法</strong>：假设图连通、只从课程 <code class="language-plaintext highlighter-rouge">0</code> 出发做一次遍历 → 多个独立分量时只输出了一部分课程，数量校验失败。</li>
+    <li>
+<strong>错误写法</strong>：认为答案唯一，据此写死某个期望序列去自测 → 本题接受任意合法顺序，用固定字符串比对会把正确实现误判成错误。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/course-schedule/">207. 课程表</a></td>
+      <td>中等</td>
+      <td>同一套入度法，但只需返回能否学完，不必记录出队顺序</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/alien-dictionary/">269. 火星词典</a></td>
+      <td>困难</td>
+      <td>难点在从相邻单词的首个差异字符推出边，建图本身就是主要工作量</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-height-trees/">310. 最小高度树</a></td>
+      <td>中等</td>
+      <td>无向图上按度为 <code class="language-plaintext highlighter-rouge">1</code> 逐层剥叶子，是入度法在树上的对称变形</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/sequence-reconstruction/">444. 序列重建</a></td>
+      <td>中等</td>
+      <td>要求拓扑序唯一，判定条件变成队列中始终最多只有一个元素</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/course-schedule-iii/">630. 课程表 III</a></td>
+      <td>困难</td>
+      <td>与依赖无关，是按截止时间排序加大根堆反悔的贪心</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/course-schedule-iv/">1462. 课程表 IV</a></td>
+      <td>中等</td>
+      <td>回答任意两点的可达性查询，需要传递闭包或在拓扑过程中传播祖先集</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/Jf1JuT/">LCR 114. 火星词典</a></td>
+      <td>困难</td>
+      <td>269 的 LCR 版本，同样要处理前缀更长的非法输入</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/ur2n8P/">LCR 115. 序列重建</a></td>
+      <td>中等</td>
+      <td>444 的 LCR 版本，判定唯一性的写法一致</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/route-between-nodes-lcci/">面试题 04.01. 节点间通路</a></td>
+      <td>中等</td>
+      <td>只判断有向图中两点是否可达，用搜索即可，不需要排出全序</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/23350850" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode LCR 112. 矩阵中的最长递增路径</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/95537875" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode LCR 114. 火星词典</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/29135590">https://hgnulb.github.io/blog/2026/29135590</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 813. 最大平均值和的分组 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,前缀和,动态规划,字节跳动,数组,腾讯" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 813. 最大平均值和的分组" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2025/79044994" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2025/79044994" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-03-06T00:00:00+08:00" />
+<meta property="article:modified_time" content="2025-03-06T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 813. 最大平均值和的分组" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2025-03-06T00:00:00+08:00","datePublished":"2025-03-06T00:00:00+08:00","description":"题目描述","headline":"LeetCode 813. 最大平均值和的分组","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2025/79044994"},"url":"https://hgnulb.github.io/blog/2025/79044994"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法前缀和--分组动态规划">解法：前缀和 + 分组动态规划</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 813. 最大平均值和的分组">LeetCode 813. 最大平均值和的分组</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2025-03-06 00:00:00"
+                    datetime="2025-03-06T00:00:00+08:00"
+            >
+                2025-03-06
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1749 字 · 英文 81 词 · 代码 54 行"
+            aria-label="预计阅读时间约 7 分钟，正文 1749 字 · 英文 81 词 · 代码 54 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 7 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2381712535/" title="腾讯">
+        腾讯
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7488286296/" title="前缀和">
+        前缀和
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法前缀和--分组动态规划">解法：前缀和 + 分组动态规划</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/largest-sum-of-averages/">813. 最大平均值和的分组</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个非负整数数组和上限 <code class="language-plaintext highlighter-rouge">k</code>，要把它切成至多 <code class="language-plaintext highlighter-rouge">k</code> 个连续且非空的子数组，让「每组的平均数之和」最大。</p>
+
+  <p>「连续」是最强的约束信号：不能重排、不能跳着挑元素，能做的只是在相邻元素之间选若干个切点。</p>
+
+  <p>「至多 <code class="language-plaintext highlighter-rouge">k</code> 组」看似要在 1 到 <code class="language-plaintext highlighter-rouge">k</code> 之间再枚举一层，但元素非负时多切一刀不会变差 —— 把一组拆成两半，两个平均数之和不小于两者中较大的那个，而后者又不小于原来的加权平均。所以直接按「恰好 <code class="language-plaintext highlighter-rouge">min(k, n)</code> 组」计算即可。</p>
+
+  <p>约束很宽松：<code class="language-plaintext highlighter-rouge">n</code> 最多 100、<code class="language-plaintext highlighter-rouge">k</code> 不超过 <code class="language-plaintext highlighter-rouge">n</code>、元素在 $[0, 10^4]$，即使三重循环也只有 $10^6$ 量级。答案是浮点数，允许 $10^{-5}$ 的误差，但中间运算必须走浮点，不能用整除。</p>
+</blockquote>
+
+<h2 id="解法前缀和--分组动态规划">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%89%8D%E7%BC%80%E5%92%8C--%E5%88%86%E7%BB%84%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：前缀和 + 分组动态规划</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是枚举所有切点组合，从 <code class="language-plaintext highlighter-rouge">n - 1</code> 个空隙里选 <code class="language-plaintext highlighter-rouge">k - 1</code> 个，方案数是 $\binom{n-1}{k-1}$，<code class="language-plaintext highlighter-rouge">n = 100</code> 时是天文数字。</p>
+
+  <p>瓶颈在于大量方案共享同一个前缀结构：「前 <code class="language-plaintext highlighter-rouge">j</code> 个元素切成 <code class="language-plaintext highlighter-rouge">g</code> 组的最优值」会在指数级的方案里被反复重算。</p>
+
+  <p>关键观察是最优子结构：无论前面怎么切，最后一组一定是某个后缀 <code class="language-plaintext highlighter-rouge">nums[j .. i-1]</code>，它对答案的贡献 <code class="language-plaintext highlighter-rouge">(prefix[i] - prefix[j]) / (i - j)</code> 只由 <code class="language-plaintext highlighter-rouge">j</code> 和 <code class="language-plaintext highlighter-rouge">i</code> 决定，与前面的切法完全无关；而前面那部分只需要取「前 <code class="language-plaintext highlighter-rouge">j</code> 个元素切成 <code class="language-plaintext highlighter-rouge">g - 1</code> 组的最大值」。两段互不干扰，可以分别取最优。</p>
+
+  <p>于是定义状态：<code class="language-plaintext highlighter-rouge">dp[g][i]</code> 表示把前 <code class="language-plaintext highlighter-rouge">i</code> 个元素恰好切成 <code class="language-plaintext highlighter-rouge">g</code> 个非空连续组时，各组平均数之和的最大值。转移是 <code class="language-plaintext highlighter-rouge">dp[g][i] = max{ dp[g-1][j] + (prefix[i] - prefix[j]) / (i - j) }</code>，<code class="language-plaintext highlighter-rouge">j</code> 取遍 <code class="language-plaintext highlighter-rouge">[g-1, i-1]</code>；下界 <code class="language-plaintext highlighter-rouge">g-1</code> 保证前面那 <code class="language-plaintext highlighter-rouge">g - 1</code> 组每组至少一个元素。边界是 <code class="language-plaintext highlighter-rouge">dp[1][i] = prefix[i] / i</code>，即前 <code class="language-plaintext highlighter-rouge">i</code> 个元素独占一组。答案是 <code class="language-plaintext highlighter-rouge">dp[k][n]</code>。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>先做 <code class="language-plaintext highlighter-rouge">k = min(k, n)</code>。<code class="language-plaintext highlighter-rouge">k</code> 大于 <code class="language-plaintext highlighter-rouge">n</code> 时根本切不出这么多非空组，不修正的话最终读到的 <code class="language-plaintext highlighter-rouge">dp[k][n]</code> 是从未被写过的初值。</li>
+    <li>预处理前缀和 <code class="language-plaintext highlighter-rouge">prefix</code>，其中 <code class="language-plaintext highlighter-rouge">prefix[t]</code> 是前 <code class="language-plaintext highlighter-rouge">t</code> 个元素之和。有了它，任意区间 <code class="language-plaintext highlighter-rouge">[j, i-1]</code> 的和是 <code class="language-plaintext highlighter-rouge">prefix[i] - prefix[j]</code>，把转移里的求和从 $O(n)$ 降到 $O(1)$。<code class="language-plaintext highlighter-rouge">prefix</code> 直接用 <code class="language-plaintext highlighter-rouge">double</code> 存，从源头上避免整数除法。</li>
+    <li>初始化 <code class="language-plaintext highlighter-rouge">dp[1][i] = prefix[i] / i</code>。这是唯一不依赖其他状态的一层，必须先填好，否则整个递推没有起点。</li>
+    <li>外层枚举组数 <code class="language-plaintext highlighter-rouge">group</code> 从 2 到 <code class="language-plaintext highlighter-rouge">k</code>，中层枚举前缀长度 <code class="language-plaintext highlighter-rouge">i</code> 从 <code class="language-plaintext highlighter-rouge">group</code> 到 <code class="language-plaintext highlighter-rouge">n</code>。<code class="language-plaintext highlighter-rouge">i</code> 从 <code class="language-plaintext highlighter-rouge">group</code> 起步是因为不足 <code class="language-plaintext highlighter-rouge">group</code> 个元素凑不出 <code class="language-plaintext highlighter-rouge">group</code> 个非空组，这些状态不可达也不该参与转移。</li>
+    <li>内层枚举上一段的结束位置 <code class="language-plaintext highlighter-rouge">j</code> 从 <code class="language-plaintext highlighter-rouge">group - 1</code> 到 <code class="language-plaintext highlighter-rouge">i - 1</code>，用 <code class="language-plaintext highlighter-rouge">dp[group-1][j] + (prefix[i] - prefix[j]) / (i - j)</code> 更新最大值。<code class="language-plaintext highlighter-rouge">j</code> 的上界取 <code class="language-plaintext highlighter-rouge">i - 1</code> 而非 <code class="language-plaintext highlighter-rouge">i</code>，保证最后一组至少含一个元素，否则除数为 0。</li>
+    <li>返回 <code class="language-plaintext highlighter-rouge">dp[k][n]</code>。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">nums = [9, 1, 2, 3, 9]</code>、<code class="language-plaintext highlighter-rouge">k = 3</code> 走一遍</strong>（<code class="language-plaintext highlighter-rouge">n = 5</code>，<code class="language-plaintext highlighter-rouge">prefix = [0, 9, 10, 12, 15, 24]</code>）：</p>
+
+  <p>第一层：<code class="language-plaintext highlighter-rouge">dp[1][1] = 9</code>，<code class="language-plaintext highlighter-rouge">dp[1][2] = 10 / 2 = 5</code>，<code class="language-plaintext highlighter-rouge">dp[1][3] = 12 / 3 = 4</code>，<code class="language-plaintext highlighter-rouge">dp[1][4] = 15 / 4 = 3.75</code>，<code class="language-plaintext highlighter-rouge">dp[1][5] = 24 / 5 = 4.8</code>。</p>
+
+  <p>第二层 <code class="language-plaintext highlighter-rouge">group = 2</code>。<code class="language-plaintext highlighter-rouge">dp[2][2]</code> 只有 <code class="language-plaintext highlighter-rouge">j = 1</code> 一个选择：<code class="language-plaintext highlighter-rouge">9 + (10 - 9) / 1 = 10</code>。<code class="language-plaintext highlighter-rouge">dp[2][3]</code> 取 <code class="language-plaintext highlighter-rouge">j = 1</code> 的 <code class="language-plaintext highlighter-rouge">9 + 3 / 2 = 10.5</code> 与 <code class="language-plaintext highlighter-rouge">j = 2</code> 的 <code class="language-plaintext highlighter-rouge">5 + 2 / 1 = 7</code>，得 10.5。<code class="language-plaintext highlighter-rouge">dp[2][4]</code> 取 <code class="language-plaintext highlighter-rouge">j = 1</code> 的 <code class="language-plaintext highlighter-rouge">9 + 6 / 3 = 11</code>、<code class="language-plaintext highlighter-rouge">j = 2</code> 的 <code class="language-plaintext highlighter-rouge">5 + 5 / 2 = 7.5</code>、<code class="language-plaintext highlighter-rouge">j = 3</code> 的 <code class="language-plaintext highlighter-rouge">4 + 3 / 1 = 7</code>，得 11。<code class="language-plaintext highlighter-rouge">dp[2][5]</code> 取 <code class="language-plaintext highlighter-rouge">j = 1</code> 的 <code class="language-plaintext highlighter-rouge">9 + 15 / 4 = 12.75</code>、<code class="language-plaintext highlighter-rouge">j = 2</code> 的 <code class="language-plaintext highlighter-rouge">5 + 14 / 3 \approx 9.67</code>、<code class="language-plaintext highlighter-rouge">j = 3</code> 的 <code class="language-plaintext highlighter-rouge">4 + 12 / 2 = 10</code>、<code class="language-plaintext highlighter-rouge">j = 4</code> 的 <code class="language-plaintext highlighter-rouge">3.75 + 9 / 1 = 12.75</code>，得 12.75。</p>
+
+  <p>第三层 <code class="language-plaintext highlighter-rouge">group = 3</code>，只需要 <code class="language-plaintext highlighter-rouge">dp[3][5]</code>：<code class="language-plaintext highlighter-rouge">j = 2</code> 给出 <code class="language-plaintext highlighter-rouge">10 + 14 / 3 \approx 14.67</code>，<code class="language-plaintext highlighter-rouge">j = 3</code> 给出 <code class="language-plaintext highlighter-rouge">10.5 + 12 / 2 = 16.5</code>，<code class="language-plaintext highlighter-rouge">j = 4</code> 给出 <code class="language-plaintext highlighter-rouge">11 + 9 / 1 = 20</code>。取最大得 20。</p>
+
+  <p>返回 20。回溯这条路径：<code class="language-plaintext highlighter-rouge">j = 4</code> 说明最后一组是 <code class="language-plaintext highlighter-rouge">[9]</code>，而 <code class="language-plaintext highlighter-rouge">dp[2][4] = 11</code> 来自 <code class="language-plaintext highlighter-rouge">j = 1</code>，说明前面切成 <code class="language-plaintext highlighter-rouge">[9]</code> 和 <code class="language-plaintext highlighter-rouge">[1, 2, 3]</code>。完整方案是 <code class="language-plaintext highlighter-rouge">[9] [1,2,3] [9]</code>，平均数之和为 $9 + 2 + 9 = 20$，与递推结果一致。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// 只要能快速算出任意区间平均值，动态规划就能转成标准的状态转移问题。</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">largestSumOfAverages</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">k</span><span class="o">,</span> <span class="n">n</span><span class="o">);</span>
+
+        <span class="kt">double</span><span class="o">[]</span> <span class="n">prefix</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">prefix</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+        <span class="o">}</span>
+
+        <span class="kt">double</span><span class="o">[][]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="o">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">dp</span><span class="o">[</span><span class="mi">1</span><span class="o">][</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">/</span> <span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">group</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span> <span class="n">group</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="o">;</span> <span class="n">group</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">group</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">group</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                    <span class="kt">double</span> <span class="n">avg</span> <span class="o">=</span> <span class="o">(</span><span class="n">prefix</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">-</span> <span class="n">prefix</span><span class="o">[</span><span class="n">j</span><span class="o">])</span> <span class="o">/</span> <span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="o">);</span>
+                    <span class="n">dp</span><span class="o">[</span><span class="n">group</span><span class="o">][</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">group</span><span class="o">][</span><span class="n">i</span><span class="o">],</span> <span class="n">dp</span><span class="o">[</span><span class="n">group</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">+</span> <span class="n">avg</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="n">k</span><span class="o">][</span><span class="n">n</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">largestSumOfAverages</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
+    <span class="c">// 只要能快速算出任意区间平均值，动态规划就能转成标准的状态转移问题。</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">n</span> <span class="p">{</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">n</span>
+    <span class="p">}</span>
+
+    <span class="n">prefix</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">float64</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">prefix</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">prefix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="kt">float64</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="p">}</span>
+
+    <span class="n">dp</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">float64</span><span class="p">,</span> <span class="n">k</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">float64</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">dp</span><span class="p">[</span><span class="m">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">prefix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="kt">float64</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">group</span> <span class="o">:=</span> <span class="m">2</span><span class="p">;</span> <span class="n">group</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="n">group</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">group</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">group</span> <span class="o">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+                <span class="n">avg</span> <span class="o">:=</span> <span class="p">(</span><span class="n">prefix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">prefix</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="kt">float64</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">val</span> <span class="o">:=</span> <span class="n">dp</span><span class="p">[</span><span class="n">group</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">avg</span>
+                <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">group</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">group</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">n</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(k \cdot n^2)$，状态数是 $k \times n$，每个状态要枚举上一段的结束位置，即 $O(n)$ 次转移；前缀和让每次转移里的区间求和降到常数。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(kn)$，二维 <code class="language-plaintext highlighter-rouge">dp</code> 表按组数与前缀长度各开一维。由于 <code class="language-plaintext highlighter-rouge">dp[group]</code> 只依赖 <code class="language-plaintext highlighter-rouge">dp[group-1]</code>，用两行滚动即可压到 $O(n)$。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「连续分段求最优」几乎必然对应「枚举最后一段的起点」这一转移形态。认准最后一段是某个后缀之后，状态定义和转移方程基本是被逼出来的。</li>
+    <li>状态定义里的「恰好」还是「至多」要一开始就钉死。本题因为元素非负、多切不亏，才敢把「至多 <code class="language-plaintext highlighter-rouge">k</code> 组」直接当成「恰好 <code class="language-plaintext highlighter-rouge">min(k, n)</code> 组」；这个前提说不出来，边界处理就是碰运气。</li>
+    <li>前缀和是分段 dp 的标配。它把「求某段的和」从 $O(n)$ 降到 $O(1)$，正好抵消枚举切点多出来的那一层循环。</li>
+    <li>循环下界承担着「排除不可达状态」的职责。<code class="language-plaintext highlighter-rouge">i</code> 从 <code class="language-plaintext highlighter-rouge">group</code> 起、<code class="language-plaintext highlighter-rouge">j</code> 从 <code class="language-plaintext highlighter-rouge">group - 1</code> 起，都是在保证每组非空，随手写成从 1 开始就等于默许空组存在。</li>
+    <li>面试视角：写完 $O(kn^2)$ 后主动提一句「<code class="language-plaintext highlighter-rouge">dp[group]</code> 只依赖上一行，可以滚动到 $O(n)$ 空间」，是成本极低的加分点；再顺手说明「本题 $n \le 100$，不优化也够」，能体现你在权衡而不是背优化。</li>
+    <li>面试视角：这题最容易被追问的是「如果元素可以为负呢」。答案是「至多 <code class="language-plaintext highlighter-rouge">k</code> 组」不再等价于「恰好 <code class="language-plaintext highlighter-rouge">k</code> 组」，需要在所有 <code class="language-plaintext highlighter-rouge">dp[g][n]</code>（<code class="language-plaintext highlighter-rouge">g</code> 从 1 到 <code class="language-plaintext highlighter-rouge">k</code>）里取最大值。能答上这一问，说明你真的想过前提而不是套模板。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：不做 <code class="language-plaintext highlighter-rouge">k = min(k, n)</code>。用 <code class="language-plaintext highlighter-rouge">nums = [1, 2]</code>、<code class="language-plaintext highlighter-rouge">k = 5</code> 试：<code class="language-plaintext highlighter-rouge">dp[5][2]</code> 这个状态永远进不了循环体，保持初值 0，函数返回 0 而正确答案是 3。</li>
+    <li>
+<strong>错误写法</strong>：把 <code class="language-plaintext highlighter-rouge">dp[1][i]</code> 初始化成 <code class="language-plaintext highlighter-rouge">nums[i - 1]</code> 而不是 <code class="language-plaintext highlighter-rouge">prefix[i] / i</code>。用 <code class="language-plaintext highlighter-rouge">nums = [4, 2]</code>、<code class="language-plaintext highlighter-rouge">k = 1</code> 试：<code class="language-plaintext highlighter-rouge">dp[1][2]</code> 应是 <code class="language-plaintext highlighter-rouge">(4 + 2) / 2 = 3</code>，写成 <code class="language-plaintext highlighter-rouge">nums[1] = 2</code> 后直接返回 2。</li>
+    <li>
+<strong>错误写法</strong>：区间平均用整数除法。用 <code class="language-plaintext highlighter-rouge">nums = [9, 1, 2, 3, 9]</code>、<code class="language-plaintext highlighter-rouge">k = 3</code> 试：<code class="language-plaintext highlighter-rouge">(24 - 10) / 3</code> 在整型下截断成 4 而不是 4.6667，误差沿着转移层层放大，最终答案对不上。前缀和数组要直接用 <code class="language-plaintext highlighter-rouge">double</code>，或在除法处显式转型。</li>
+    <li>
+<strong>错误写法</strong>：以为「组数越少平均和越大」而直接返回 <code class="language-plaintext highlighter-rouge">dp[1][n]</code>。同一组用例里整体平均只有 4.8，而 <code class="language-plaintext highlighter-rouge">[9] [1,2,3] [9]</code> 能拿到 20，差了四倍。</li>
+    <li>
+<strong>错误写法</strong>：滚动优化时只留一维 <code class="language-plaintext highlighter-rouge">dp[i]</code> 并按 <code class="language-plaintext highlighter-rouge">i</code> 递增原地更新。<code class="language-plaintext highlighter-rouge">dp[j]</code>（<code class="language-plaintext highlighter-rouge">j &lt; i</code>）在本轮已经被刷成第 <code class="language-plaintext highlighter-rouge">group</code> 层的值，转移读到的不再是 <code class="language-plaintext highlighter-rouge">group - 1</code> 层，等价于允许总组数超过 <code class="language-plaintext highlighter-rouge">k</code>，结果偏大。滚动必须按 <code class="language-plaintext highlighter-rouge">i</code> 倒序，或者老实用两行。</li>
+    <li>
+<strong>错误写法</strong>：区间和写成 <code class="language-plaintext highlighter-rouge">prefix[i] - prefix[j - 1]</code>。本题约定 <code class="language-plaintext highlighter-rouge">prefix[t]</code> 是前 <code class="language-plaintext highlighter-rouge">t</code> 个元素之和，<code class="language-plaintext highlighter-rouge">[j, i-1]</code> 的和只能是 <code class="language-plaintext highlighter-rouge">prefix[i] - prefix[j]</code>，端点错位一格会把邻组的元素算进当前组的平均数里。</li>
+    <li>
+<strong>错误写法</strong>：内层 <code class="language-plaintext highlighter-rouge">j</code> 的上界写成 <code class="language-plaintext highlighter-rouge">i</code> 而不是 <code class="language-plaintext highlighter-rouge">i - 1</code>，允许最后一组为空。除数 <code class="language-plaintext highlighter-rouge">i - j</code> 变成 0，分子也是 0，<code class="language-plaintext highlighter-rouge">double</code> 下 <code class="language-plaintext highlighter-rouge">0.0 / 0</code> 得到 <code class="language-plaintext highlighter-rouge">NaN</code>，而 <code class="language-plaintext highlighter-rouge">Math.max</code> 一旦碰上 <code class="language-plaintext highlighter-rouge">NaN</code> 就会把它传播下去，最终返回 <code class="language-plaintext highlighter-rouge">NaN</code>。</li>
+    <li>
+<strong>错误写法</strong>：为了保险，在返回时把 <code class="language-plaintext highlighter-rouge">dp[1][n]</code> 到 <code class="language-plaintext highlighter-rouge">dp[k][n]</code> 全部取一遍最大值。本题结果不会变错，但这说明没意识到「元素非负时多分一组不会更差」这个前提；一旦面试官把值域改成可负，这层遮掩就会暴露成真正的漏洞。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/palindrome-partitioning-ii/">132. 分割回文串 II</a></td>
+      <td>困难</td>
+      <td>同为连续分段 dp，段的代价换成「是否回文」</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/burst-balloons/">312. 戳气球</a></td>
+      <td>困难</td>
+      <td>区间 dp，决策是最后戳哪个而非在哪里下刀</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/split-array-largest-sum/">410. 分割数组的最大值</a></td>
+      <td>困难</td>
+      <td>目标是最小化最大段和，可改用二分答案</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-average-subarray-ii/">644. 子数组最大平均数 II</a></td>
+      <td>困难</td>
+      <td>同样围绕平均数，但用二分答案配前缀和判定</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/partition-to-k-equal-sum-subsets/">698. 划分为k个相等的子集</a></td>
+      <td>中等</td>
+      <td>分组不要求连续，退化成带剪枝的搜索</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2025/12124492" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 541. 反转字符串 II</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2025/61612197" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1115. 交替打印 FooBar</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2025/79044994">https://hgnulb.github.io/blog/2025/79044994</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

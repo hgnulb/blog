@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1092. 最短公共超序列 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,动态规划,字符串,快手,最长公共子序列,百度,阿里巴巴" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1092. 最短公共超序列" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2023/43827621" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2023/43827621" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-04-15T11:20:05+08:00" />
+<meta property="article:modified_time" content="2023-04-15T11:20:05+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1092. 最短公共超序列" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2023-04-15T11:20:05+08:00","datePublished":"2023-04-15T11:20:05+08:00","description":"题目描述","headline":"LeetCode 1092. 最短公共超序列","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2023/43827621"},"url":"https://hgnulb.github.io/blog/2023/43827621"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法lcs-辅助重建">解法：LCS 辅助重建</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1092. 最短公共超序列">LeetCode 1092. 最短公共超序列</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2023-04-15 11:20:05"
+                    datetime="2023-04-15T11:20:05+08:00"
+            >
+                2023-04-15
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2350 字 · 英文 132 词 · 代码 73 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2350 字 · 英文 132 词 · 代码 73 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8699249851/" title="阿里巴巴">
+        阿里巴巴
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1259449732/" title="快手">
+        快手
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9879723011/" title="百度">
+        百度
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2043531191/" title="最长公共子序列">
+        最长公共子序列
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法lcs-辅助重建">解法：LCS 辅助重建</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/shortest-common-supersequence/">1092. 最短公共超序列</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给定两个字符串 <code class="language-plaintext highlighter-rouge">str1</code> 和 <code class="language-plaintext highlighter-rouge">str2</code>，要构造一个尽可能短的字符串，使得 <code class="language-plaintext highlighter-rouge">str1</code> 和 <code class="language-plaintext highlighter-rouge">str2</code> 都是它的子序列。子序列允许不连续但必须保序，所以答案里两个串的字符相对次序都不能被打乱。</p>
+
+  <p>题目要的是字符串本身，不是长度。这一点决定了只算出一个数值是不够的，必须保留足够的信息把答案一个字符一个字符地拼出来。</p>
+
+  <p>约束里两个串长度都不超过 $1000$，且只含小写字母。平方级的做法完全能过，而指数级地枚举「哪些位置共用」则不可能。同时题目明确说明答案可能不唯一，只要长度最短即可，这意味着遇到并列的选择时可以任取一支。</p>
+
+  <p>边界要提前想清楚：两串完全相同时答案就是它本身；两串没有任何公共字符时答案只能是两串首尾相接；某个串是另一个串的子序列时答案就是较长的那个串。这三种情况必须都能被同一套逻辑覆盖。</p>
+</blockquote>
+
+<h2 id="解法lcs-辅助重建">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95lcs-%E8%BE%85%E5%8A%A9%E9%87%8D%E5%BB%BA" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：LCS 辅助重建</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最直接的想法是枚举所有可能的超序列并取最短，但长度上限就是 $m + n$，候选数量随长度指数增长，无法承受。瓶颈在于「哪些字符被两个串共用」这件事被当成了自由组合去枚举。</p>
+
+  <p>换个角度看长度。设答案长度为 $L$，答案里的每个字符要么只服务 <code class="language-plaintext highlighter-rouge">str1</code>，要么只服务 <code class="language-plaintext highlighter-rouge">str2</code>，要么被两者共用。把共用的字符按出现顺序取出来，它在 <code class="language-plaintext highlighter-rouge">str1</code> 中保序出现，在 <code class="language-plaintext highlighter-rouge">str2</code> 中也保序出现，所以它必然是两串的一个公共子序列。反过来，任意一个公共子序列都能用来拼一个合法的超序列。于是 $L = m + n - (\text{共用字符数})$，要让 $L$ 最小，就要让共用字符数最大，也就是求最长公共子序列。</p>
+
+  <p>状态定义如下：<code class="language-plaintext highlighter-rouge">dp[i][j]</code> 表示 <code class="language-plaintext highlighter-rouge">str1</code> 从下标 i 开始的后缀与 <code class="language-plaintext highlighter-rouge">str2</code> 从下标 j 开始的后缀的最长公共子序列长度。这里刻意选后缀而不是前缀，是因为重建阶段要从头往后逐字符输出，站在位置 (i, j) 时需要知道的是「往后还能共享多少」，后缀定义正好回答这个问题。</p>
+
+  <p>转移遵循两条：若 <code class="language-plaintext highlighter-rouge">str1[i] == str2[j]</code>，这个字符一定可以被共用，<code class="language-plaintext highlighter-rouge">dp[i][j] = dp[i + 1][j + 1] + 1</code>；否则这两个字符至少有一个不能被共用，<code class="language-plaintext highlighter-rouge">dp[i][j]</code> 取跳过其中之一的较大值。边界是任一串走完时后缀公共子序列长度为 $0$。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>建立 $(m + 1) \times (n + 1)$ 的二维数组 <code class="language-plaintext highlighter-rouge">dp</code>，多出来的一行一列天然为 $0$，正好承担「某个串已经走完」的边界，省掉了单独的判空分支。</li>
+    <li>双层循环让 i 从 $m - 1$ 递减到 $0$、j 从 $n - 1$ 递减到 $0$。必须倒序，因为 <code class="language-plaintext highlighter-rouge">dp[i][j]</code> 依赖 <code class="language-plaintext highlighter-rouge">dp[i + 1][j + 1]</code>、<code class="language-plaintext highlighter-rouge">dp[i + 1][j]</code>、<code class="language-plaintext highlighter-rouge">dp[i][j + 1]</code>，这三个都是下标更大的格子，正序会读到尚未计算的零值。</li>
+    <li>从 i = 0、j = 0 开始重建。之所以能贪心地一步步定，是因为 <code class="language-plaintext highlighter-rouge">dp</code> 已经把「从当前位置往后的最优解」全部算好，每一步的局部选择不会影响后续的最优性。</li>
+    <li>若 <code class="language-plaintext highlighter-rouge">str1[i] == str2[j]</code>，说明这个字符可以被两个串共用，只往结果里追加一次，然后 i 和 j 同时前进，共用一个字符正好省下一格长度。</li>
+    <li>若两字符不同，就必须先输出其中一个。比较 <code class="language-plaintext highlighter-rouge">dp[i + 1][j]</code> 和 <code class="language-plaintext highlighter-rouge">dp[i][j + 1]</code>：前者代表消耗掉 <code class="language-plaintext highlighter-rouge">str1[i]</code> 之后剩余部分还能共享的字符数。哪一侧留下的共享空间更大就走哪一侧，这样才不会为了眼前少写一个字符而破坏后面更长的共用段。</li>
+    <li>循环退出时至少有一个串已走完，把 <code class="language-plaintext highlighter-rouge">str1</code> 和 <code class="language-plaintext highlighter-rouge">str2</code> 各自的剩余后缀都追加到结果末尾。两者中必有一个为空串，所以直接都追加不会出错，也省掉了判断是哪一侧走完。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">str1 = "abac"</code>、<code class="language-plaintext highlighter-rouge">str2 = "cab"</code> 走一遍</strong>：先填 <code class="language-plaintext highlighter-rouge">dp</code>，第 4 行与第 3 列全为 $0$。i = 3 时字符是 <code class="language-plaintext highlighter-rouge">c</code>，<code class="language-plaintext highlighter-rouge">dp[3][2] = 0</code>、<code class="language-plaintext highlighter-rouge">dp[3][1] = 0</code>、<code class="language-plaintext highlighter-rouge">dp[3][0] = dp[4][1] + 1 = 1</code>。i = 2 时字符是 <code class="language-plaintext highlighter-rouge">a</code>，<code class="language-plaintext highlighter-rouge">dp[2][2] = 0</code>、<code class="language-plaintext highlighter-rouge">dp[2][1] = dp[3][2] + 1 = 1</code>、<code class="language-plaintext highlighter-rouge">dp[2][0] = max(1, 1) = 1</code>。i = 1 时字符是 <code class="language-plaintext highlighter-rouge">b</code>，<code class="language-plaintext highlighter-rouge">dp[1][2] = dp[2][3] + 1 = 1</code>、<code class="language-plaintext highlighter-rouge">dp[1][1] = max(1, 1) = 1</code>、<code class="language-plaintext highlighter-rouge">dp[1][0] = max(1, 1) = 1</code>。i = 0 时字符是 <code class="language-plaintext highlighter-rouge">a</code>，<code class="language-plaintext highlighter-rouge">dp[0][2] = max(1, 0) = 1</code>、<code class="language-plaintext highlighter-rouge">dp[0][1] = dp[1][2] + 1 = 2</code>、<code class="language-plaintext highlighter-rouge">dp[0][0] = max(dp[1][0], dp[0][1]) = max(1, 2) = 2</code>。所以最长公共子序列长度为 $2$，答案长度应为 $4 + 3 - 2 = 5$。</p>
+
+  <p>接着重建。i = 0、j = 0 时 <code class="language-plaintext highlighter-rouge">a</code> 与 <code class="language-plaintext highlighter-rouge">c</code> 不同，<code class="language-plaintext highlighter-rouge">dp[1][0] = 1</code> 小于 <code class="language-plaintext highlighter-rouge">dp[0][1] = 2</code>，走 <code class="language-plaintext highlighter-rouge">str2</code> 一侧，追加 <code class="language-plaintext highlighter-rouge">c</code>，j 变为 $1$，结果为 <code class="language-plaintext highlighter-rouge">"c"</code>。i = 0、j = 1 时 <code class="language-plaintext highlighter-rouge">a</code> 与 <code class="language-plaintext highlighter-rouge">a</code> 相同，追加 <code class="language-plaintext highlighter-rouge">a</code>，i 变为 $1$、j 变为 $2$，结果为 <code class="language-plaintext highlighter-rouge">"ca"</code>。i = 1、j = 2 时 <code class="language-plaintext highlighter-rouge">b</code> 与 <code class="language-plaintext highlighter-rouge">b</code> 相同，追加 <code class="language-plaintext highlighter-rouge">b</code>，i 变为 $2$、j 变为 $3$，结果为 <code class="language-plaintext highlighter-rouge">"cab"</code>。此时 j 已达 n，循环结束。追加 <code class="language-plaintext highlighter-rouge">str1</code> 的剩余后缀 <code class="language-plaintext highlighter-rouge">"ac"</code> 得到 <code class="language-plaintext highlighter-rouge">"cabac"</code>，追加 <code class="language-plaintext highlighter-rouge">str2</code> 的剩余后缀为空串。最终返回 <code class="language-plaintext highlighter-rouge">"cabac"</code>，长度为 $5$，且 <code class="language-plaintext highlighter-rouge">str1</code> 与 <code class="language-plaintext highlighter-rouge">str2</code> 都是它的子序列。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// 先用 DP 求 LCS 长度，再沿着 DP 表重建答案，可以决定当前应该追加哪个字符串的字符。</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">shortestCommonSupersequence</span><span class="o">(</span><span class="nc">String</span> <span class="n">str1</span><span class="o">,</span> <span class="nc">String</span> <span class="n">str2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">str1</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">str2</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span><span class="o">--)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">str1</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="n">str2</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">],</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="nc">StringBuilder</span> <span class="n">answer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">str1</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="n">str2</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">answer</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">str1</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+                <span class="n">i</span><span class="o">++;</span>
+                <span class="n">j</span><span class="o">++;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">answer</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">str1</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+                <span class="n">i</span><span class="o">++;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">answer</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">str2</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">));</span>
+                <span class="n">j</span><span class="o">++;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="n">answer</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">str1</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+        <span class="n">answer</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">str2</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">j</span><span class="o">));</span>
+        <span class="k">return</span> <span class="n">answer</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">shortestCommonSupersequence</span><span class="p">(</span><span class="n">str1</span> <span class="kt">string</span><span class="p">,</span> <span class="n">str2</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="c">// 先用 DP 求 LCS 长度，再沿着 DP 表重建答案，可以决定当前应该追加哪个字符串的字符。</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">str1</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">str2</span><span class="p">)</span>
+    <span class="n">dp</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">dp</span> <span class="p">{</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">m</span> <span class="o">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">n</span> <span class="o">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span><span class="o">--</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">str1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">str2</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">{</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="o">+</span> <span class="m">1</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">+</span><span class="m">1</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">answer</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">str1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">str2</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">str1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">i</span><span class="o">++</span>
+            <span class="n">j</span><span class="o">++</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">+</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">str1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">i</span><span class="o">++</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">str2</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">j</span><span class="o">++</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">answer</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">str1</span><span class="p">[</span><span class="n">i</span><span class="o">:</span><span class="p">]</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">str2</span><span class="p">[</span><span class="n">j</span><span class="o">:</span><span class="p">]</span><span class="o">...</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kt">string</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(mn)$，其中 m、n 是两个字符串的长度。填表阶段每个格子做常数次比较与取最大值，共 $mn$ 个格子；重建阶段每一步至少让 i 或 j 前进一格，最多走 $m + n$ 步，相比填表可以忽略。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(mn)$，二维表必须整张保留才能在重建时反查每个位置的后缀最优值，因此不能压缩成滚动数组；返回的结果串另占 $O(m + n)$，不计入辅助空间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>把「最短超序列」翻译成「最长公共子序列」是本题的核心一跃：长度关系 $L = m + n - \text{LCS}$ 把一个构造问题转化成了标准的计数型动态规划，最小化目标变成了最大化目标。</li>
+    <li>需要输出方案而不只是数值时，动态规划表要按「便于回溯的方向」定义。这里选后缀而非前缀，就是为了让从前往后的重建能直接查表，避免先算前缀再倒着回溯、还要把结果反转的额外一步。</li>
+    <li>用 $(m + 1) \times (n + 1)$ 的表把边界并入数组，是二维字符串动态规划的通用技巧，能把「某串已走完」的特判彻底消灭在初始化里。</li>
+    <li>重建时并列的分支任取一支即可，这类「答案不唯一」的题目要先确认判题方式，避免把自己的输出和示例逐字符比对而误以为写错了。</li>
+    <li>面试视角：面试官问这题，真正想看的是你能否说出长度公式的推导，而不是背下转移方程。先讲清「共用字符必是公共子序列」，再自然过渡到需要输出方案、所以要留整张表，最后才写代码，这个叙述顺序比直接默写更有说服力。</li>
+    <li>面试视角：被追问优化时，要能准确指出只求长度可以压成一维滚动数组做到 $O(\min(m, n))$ 空间，但本题要输出方案就必须保留整张表，这个取舍点是常见的加分回答。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：把 <code class="language-plaintext highlighter-rouge">dp</code> 定义成前缀的最长公共子序列，却仍从 i = 0、j = 0 正向重建 → 此时 <code class="language-plaintext highlighter-rouge">dp[i + 1][j]</code> 描述的是前缀信息，和「往后还能共享多少」无关，重建的分支判断失去依据，<code class="language-plaintext highlighter-rouge">"abac"</code> 与 <code class="language-plaintext highlighter-rouge">"cab"</code> 会输出长度大于 $5$ 的串。</li>
+    <li>
+<strong>错误写法</strong>：填表时让 i、j 从 $0$ 递增 → <code class="language-plaintext highlighter-rouge">dp[i][j]</code> 依赖的 <code class="language-plaintext highlighter-rouge">dp[i + 1][j + 1]</code> 等格子还没算，全部读到 $0$，最终 <code class="language-plaintext highlighter-rouge">dp[0][0]</code> 恒为 <code class="language-plaintext highlighter-rouge">str1[0] == str2[0] ? 1 : 0</code>，长度公式直接失效。</li>
+    <li>
+<strong>错误写法</strong>：数组只开成 <code class="language-plaintext highlighter-rouge">int[m][n]</code> → 循环里访问 <code class="language-plaintext highlighter-rouge">dp[i + 1][j + 1]</code>，当 i 取 $m - 1$ 时立即数组越界，抛出下标异常。</li>
+    <li>
+<strong>错误写法</strong>：两字符相同时往结果里追加两次 → 共用字符被重复写入，<code class="language-plaintext highlighter-rouge">"abac"</code> 与 <code class="language-plaintext highlighter-rouge">"cab"</code> 得到的串长度大于 $5$，虽然仍是合法超序列但不是最短，判题会失败。</li>
+    <li>
+<strong>错误写法</strong>：循环结束后只追加 <code class="language-plaintext highlighter-rouge">str1</code> 的剩余后缀，忘了 <code class="language-plaintext highlighter-rouge">str2</code> → 当 <code class="language-plaintext highlighter-rouge">str1</code> 先走完时 <code class="language-plaintext highlighter-rouge">str2</code> 的尾部整段丢失，返回的串不再包含 <code class="language-plaintext highlighter-rouge">str2</code> 作为子序列。</li>
+    <li>
+<strong>错误写法</strong>：两字符不同时比较 <code class="language-plaintext highlighter-rouge">dp[i][j]</code> 与某个相邻值来决定方向 → <code class="language-plaintext highlighter-rouge">dp[i][j]</code> 已经是两条分支的最大值，和自己的子项比较无法区分该消耗哪一侧，方向选择退化成固定偏好，长度不再最短。</li>
+    <li>
+<strong>错误写法</strong>：只算出最长公共子序列长度就返回 <code class="language-plaintext highlighter-rouge">m + n - len</code> → 题目要求返回超序列字符串本身，返回长度会直接判类型错误。</li>
+    <li>
+<strong>错误写法</strong>：在循环中用字符串加法拼接结果 → 每次追加都复制一遍已有内容，长度上千时产生大量中间字符串，运行时间成倍上升，应当用可变的字符缓冲区累积。</li>
+    <li>
+<strong>错误写法</strong>：假设某个串为空要单独返回另一个串 → 题目保证两串长度都至少为 $1$，多写的特判本身无害，但若把判空条件写成长度为 $0$ 之外的形式反而会误触发，返回不完整的答案。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-common-subsequence/">1143. 最长公共子序列</a></td>
+      <td>中等</td>
+      <td>本题的内核，只求长度不需重建，可压成一维滚动数组</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/edit-distance/">72. 编辑距离</a></td>
+      <td>中等</td>
+      <td>同样的二维格局，但转移里多出替换操作，求最小代价而非最大共享</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/delete-operation-for-two-strings/">583. 两个字符串的删除操作</a></td>
+      <td>中等</td>
+      <td>求删除步数，答案是 $m + n - 2 \times \text{LCS}$，与本题公式互为镜像</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/uncrossed-lines/">1035. 不相交的线</a></td>
+      <td>中等</td>
+      <td>把连线不交叉的几何约束翻译成公共子序列，考察问题建模</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-ascii-delete-sum-for-two-strings/">712. 两个字符串的最小ASCII删除和</a></td>
+      <td>中等</td>
+      <td>从计数改为按字符权重求和，不能再套长度公式</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2023/17055425" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 644. 子数组最大平均数 II</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2023/83286395" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1052. 爱生气的书店老板</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2023/43827621">https://hgnulb.github.io/blog/2023/43827621</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 433. 最小基因变化 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,双向搜索,哈希表,字符串,广度优先搜索" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 433. 最小基因变化" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/44549667" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/44549667" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-29T06:15:05+08:00" />
+<meta property="article:modified_time" content="2026-03-29T06:15:05+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 433. 最小基因变化" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-03-29T06:15:05+08:00","datePublished":"2026-03-29T06:15:05+08:00","description":"题目描述","headline":"LeetCode 433. 最小基因变化","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/44549667"},"url":"https://hgnulb.github.io/blog/2026/44549667"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希表统计状态">解法：哈希表统计状态</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 433. 最小基因变化">LeetCode 433. 最小基因变化</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-03-29 06:15:05"
+                    datetime="2026-03-29T06:15:05+08:00"
+            >
+                2026-03-29
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3290 字 · 英文 179 词 · 代码 59 行"
+            aria-label="预计阅读时间约 11 分钟，正文 3290 字 · 英文 179 词 · 代码 59 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 11 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    3 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3017352688/" title="面试经典 150 题">
+        面试经典 150 题
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1430553855/" title="双向搜索">
+        双向搜索
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希表统计状态">解法：哈希表统计状态</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/minimum-genetic-mutation/">433. 最小基因变化</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p><strong>题目目标</strong>：基因串是长度为 8、字符取自 <code class="language-plaintext highlighter-rouge">A/C/G/T</code> 的字符串。一次变化只能改动<strong>一个</strong>字符，且变化后的串必须出现在基因库 <code class="language-plaintext highlighter-rouge">bank</code> 中。求从 <code class="language-plaintext highlighter-rouge">startGene</code> 变到 <code class="language-plaintext highlighter-rouge">endGene</code> 的最少变化次数，无法到达返回 -1。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>核心约束</strong>：三条约束共同决定了算法。第一，每次只改一个字符 → 两个串之间「相邻」的定义是汉明距离为 1。第二，中间产物必须在 <code class="language-plaintext highlighter-rouge">bank</code> 里 → 图的顶点集是 <code class="language-plaintext highlighter-rouge">bank</code>（加上起点），而不是全部 $4^8$ 种串。第三，求「最少变化次数」且每次变化代价相同 → 边权全为 1 的无权图最短路，BFS 是标准答案，不需要优先队列。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>边界处理</strong>：<code class="language-plaintext highlighter-rouge">endGene</code> 可能不在 <code class="language-plaintext highlighter-rouge">bank</code> 里，此时必然无解（除非它恰好等于 <code class="language-plaintext highlighter-rouge">startGene</code>）；<code class="language-plaintext highlighter-rouge">startGene</code> 本身<strong>不要求</strong>在 <code class="language-plaintext highlighter-rouge">bank</code> 里，所以不能拿 <code class="language-plaintext highlighter-rouge">bank</code> 的成员资格当作起点的前提；<code class="language-plaintext highlighter-rouge">startGene == endGene</code> 时答案是 0；<code class="language-plaintext highlighter-rouge">bank</code> 可能为空。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>实现取舍</strong>：邻居的生成方式有两种。一是「从 <code class="language-plaintext highlighter-rouge">bank</code> 里挑」——拿当前串与 <code class="language-plaintext highlighter-rouge">bank</code> 的每个串比一遍汉明距离，单次 $O(mL)$；二是「主动构造」——对 8 个位置各尝试换成另外 3 个字符，得到 24 个候选再查 <code class="language-plaintext highlighter-rouge">bank</code> 是否包含，单次 $O(L \cdot 4 \cdot L)$。本题 <code class="language-plaintext highlighter-rouge">bank</code> 长度不超过 10，两者都很快，第一种写法更短。</p>
+</blockquote>
+
+<h2 id="解法哈希表统计状态">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%93%88%E5%B8%8C%E8%A1%A8%E7%BB%9F%E8%AE%A1%E7%8A%B6%E6%80%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：哈希表统计状态</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先把题目翻译成图论语言：<strong>顶点是基因串，边连接汉明距离为 1 的两个串，求 <code class="language-plaintext highlighter-rouge">startGene</code> 到 <code class="language-plaintext highlighter-rouge">endGene</code> 的最短路径长度</strong>。一旦完成这次翻译，剩下的就是把 BFS 模板套上去，难点只剩「顶点集怎么定」和「访问标记什么时候打」。</p>
+</blockquote>
+
+<blockquote>
+  <p>顶点集只能是 <code class="language-plaintext highlighter-rouge">bank</code> 加起点。这是因为题目规定每次变化后的串必须出现在 <code class="language-plaintext highlighter-rouge">bank</code> 中——换句话说，<code class="language-plaintext highlighter-rouge">bank</code> 之外的串是不存在的中间态，哪怕它离终点只差一步。很多人第一反应是「枚举所有 $4^8 = 65536$ 种串建图」，那是在解一道更难的题，且忽略了题目给的强约束。</p>
+</blockquote>
+
+<blockquote>
+  <p>为什么用 BFS 而不是 DFS 或 Dijkstra：每次变化的代价都是 1，边权相同，BFS 的层数天然就是最短距离；DFS 找到的第一条路径不保证最短，还要遍历全部路径才能取最小；Dijkstra 在等权图上退化成 BFS，白白多一个堆。</p>
+</blockquote>
+
+<blockquote>
+  <p>不变量写清楚：<strong>队列中同一层的所有基因串，到起点的最短变化次数相同，等于当前的 <code class="language-plaintext highlighter-rouge">depth</code></strong>。代码用「按层扩展」的写法——外层循环开始时先记下队列大小 <code class="language-plaintext highlighter-rouge">m</code>，然后恰好弹出 <code class="language-plaintext highlighter-rouge">m</code> 个元素作为一层，处理完这一层再 <code class="language-plaintext highlighter-rouge">++depth</code>。这样 <code class="language-plaintext highlighter-rouge">depth</code> 与层号严格对应，不需要给每个元素单独存距离（Go 版则选择了另一种等价写法：把 <code class="language-plaintext highlighter-rouge">depth</code> 打包进队列元素，两种写法二选一即可）。</p>
+</blockquote>
+
+<blockquote>
+  <p>访问标记必须在<strong>入队时</strong>打，而不是出队时。理由是：同一层里可能有多个串都能变到同一个邻居，若等到出队才标记，这个邻居会被重复入队多次，队列规模可能指数膨胀。入队即标记保证每个串最多进队一次，总工作量才有界。</p>
+</blockquote>
+
+<blockquote>
+  <p>最后是终止判断的位置。代码在<strong>出队时</strong>检查是否等于 <code class="language-plaintext highlighter-rouge">endGene</code>，而不是在入队时检查。这个选择的好处是自动处理了 <code class="language-plaintext highlighter-rouge">startGene == endGene</code> 的情形——起点在第 0 层出队时立刻命中，返回 0；若放在入队时判断，起点从未经过「入队检查」这一步，会漏掉这个边界。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <p><strong>第一步：起点入队，同时放进 <code class="language-plaintext highlighter-rouge">vis</code> 集合，<code class="language-plaintext highlighter-rouge">depth = 0</code>。</strong> 为什么起点也要标记：否则某条路径可能绕回起点，造成重复展开甚至死循环。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第二步：外层 <code class="language-plaintext highlighter-rouge">while</code> 每轮处理一整层。进入时先取 <code class="language-plaintext highlighter-rouge">m = q.size()</code>，然后循环恰好 <code class="language-plaintext highlighter-rouge">m</code> 次。</strong> 为什么要先取出大小再循环：循环体内会往队列里追加下一层的元素，如果直接用 <code class="language-plaintext highlighter-rouge">q.size()</code> 作为循环条件，新元素会混进当前层，<code class="language-plaintext highlighter-rouge">depth</code> 与实际距离脱钩。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第三步：出队一个基因串，若等于 <code class="language-plaintext highlighter-rouge">endGene</code>，立即返回 <code class="language-plaintext highlighter-rouge">depth</code>。</strong> 为什么此时返回的一定是最短：由不变量，出队元素所在层号就是它到起点的最短距离，而 BFS 逐层推进，第一次遇到终点必然是最短路。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第四步：遍历 <code class="language-plaintext highlighter-rouge">bank</code> 中每个候选 <code class="language-plaintext highlighter-rouge">next</code>，统计它与当前串的字符差异个数。</strong> 代码用一个从 2 开始递减的计数器 <code class="language-plaintext highlighter-rouge">c</code>：每遇到一个不同字符就 <code class="language-plaintext highlighter-rouge">--c</code>，一旦 <code class="language-plaintext highlighter-rouge">c</code> 归零就靠循环条件 <code class="language-plaintext highlighter-rouge">c &gt; 0</code> 提前退出。为什么这样写：我们只关心「差异是否 ≤ 1」，差异数超过 1 之后继续比较毫无意义，提前退出省掉无谓的字符比较。循环结束后 <code class="language-plaintext highlighter-rouge">c &gt; 0</code> 即等价于「差异不超过 1」。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第五步：<code class="language-plaintext highlighter-rouge">c &gt; 0 &amp;&amp; !vis.contains(next)</code> 时把 <code class="language-plaintext highlighter-rouge">next</code> 入队并立刻标记。</strong> 为什么差异为 0 的情形不需要额外排除：差异为 0 意味着 <code class="language-plaintext highlighter-rouge">next</code> 就是当前串本身，而当前串已经在 <code class="language-plaintext highlighter-rouge">vis</code> 里（入队时就标记了），第二个条件会把它挡掉。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第六步：一层处理完毕后 <code class="language-plaintext highlighter-rouge">++depth</code>；队列耗尽仍未命中终点，返回 -1。</strong> 为什么队列耗尽就等于无解：BFS 会访问到起点连通分量内的全部顶点，走不到终点说明它们根本不连通。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">startGene = "AACCGGTT"</code>、<code class="language-plaintext highlighter-rouge">endGene = "AAACGGTA"</code>、<code class="language-plaintext highlighter-rouge">bank = ["AACCGGTA", "AACCGCTA", "AAACGGTA"]</code> 走一遍</strong>：</p>
+</blockquote>
+
+<blockquote>
+  <p>初始队列 <code class="language-plaintext highlighter-rouge">["AACCGGTT"]</code>，<code class="language-plaintext highlighter-rouge">vis = {"AACCGGTT"}</code>，<code class="language-plaintext highlighter-rouge">depth = 0</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第 0 层</strong>：出队 <code class="language-plaintext highlighter-rouge">"AACCGGTT"</code>，不等于终点。逐个考察 <code class="language-plaintext highlighter-rouge">bank</code>：与 <code class="language-plaintext highlighter-rouge">"AACCGGTA"</code> 只在第 7 位（<code class="language-plaintext highlighter-rouge">T</code> vs <code class="language-plaintext highlighter-rouge">A</code>）不同，差异 1，未访问 → 入队并标记；与 <code class="language-plaintext highlighter-rouge">"AACCGCTA"</code> 在第 5 位（<code class="language-plaintext highlighter-rouge">G</code> vs <code class="language-plaintext highlighter-rouge">C</code>）和第 7 位（<code class="language-plaintext highlighter-rouge">T</code> vs <code class="language-plaintext highlighter-rouge">A</code>）都不同，计数器减到 0 后提前退出，<code class="language-plaintext highlighter-rouge">c = 0</code> 被拒；与 <code class="language-plaintext highlighter-rouge">"AAACGGTA"</code> 在第 2 位（<code class="language-plaintext highlighter-rouge">C</code> vs <code class="language-plaintext highlighter-rouge">A</code>）和第 7 位不同，同样被拒。这一层结束，<code class="language-plaintext highlighter-rouge">depth</code> 变成 1，队列是 <code class="language-plaintext highlighter-rouge">["AACCGGTA"]</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第 1 层</strong>：层大小为 1。出队 <code class="language-plaintext highlighter-rouge">"AACCGGTA"</code>，不等于终点 <code class="language-plaintext highlighter-rouge">"AAACGGTA"</code>（注意这两个串很像，只差第 2 位与第 3 位的排布，实际差异为 2 位）。考察 <code class="language-plaintext highlighter-rouge">bank</code>：<code class="language-plaintext highlighter-rouge">"AACCGGTA"</code> 是自己且已在 <code class="language-plaintext highlighter-rouge">vis</code>，被第二个条件挡掉；与 <code class="language-plaintext highlighter-rouge">"AACCGCTA"</code> 只在第 5 位不同，差异 1 → 入队标记；与 <code class="language-plaintext highlighter-rouge">"AAACGGTA"</code> 只在第 2 位不同，差异 1 → 入队标记。这一层结束，<code class="language-plaintext highlighter-rouge">depth</code> 变成 2，队列是 <code class="language-plaintext highlighter-rouge">["AACCGCTA", "AAACGGTA"]</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第 2 层</strong>：层大小为 2。先出队 <code class="language-plaintext highlighter-rouge">"AACCGCTA"</code>，不是终点，它的邻居要么已访问要么差异过大，不产生新元素；再出队 <code class="language-plaintext highlighter-rouge">"AAACGGTA"</code>，<strong>等于 <code class="language-plaintext highlighter-rouge">endGene</code></strong>，返回当前 <code class="language-plaintext highlighter-rouge">depth = 2</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p>验证：<code class="language-plaintext highlighter-rouge">AACCGGTT → AACCGGTA → AAACGGTA</code>，两次变化，每次只改一个字符，且中间产物都在 <code class="language-plaintext highlighter-rouge">bank</code> 中，与期望一致。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>再看无解用例 <code class="language-plaintext highlighter-rouge">startGene = "AACCGGTT"</code>、<code class="language-plaintext highlighter-rouge">endGene = "AACCGGTA"</code>、<code class="language-plaintext highlighter-rouge">bank = []</code></strong>：起点入队后第 0 层出队，不等于终点，<code class="language-plaintext highlighter-rouge">bank</code> 为空没有任何邻居可入队；这一层结束后队列已空，<code class="language-plaintext highlighter-rouge">while</code> 退出，返回 -1，正确。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">minMutation</span><span class="o">(</span><span class="nc">String</span> <span class="n">startGene</span><span class="o">,</span> <span class="nc">String</span> <span class="n">endGene</span><span class="o">,</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">bank</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">startGene</span><span class="o">);</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">vis</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="n">vis</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">startGene</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">q</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span> <span class="o">--</span><span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nc">String</span> <span class="n">gene</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">gene</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">endGene</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="n">depth</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">next</span> <span class="o">:</span> <span class="n">bank</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+                    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">8</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span> <span class="o">++</span><span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">gene</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">k</span><span class="o">)</span> <span class="o">!=</span> <span class="n">next</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">k</span><span class="o">))</span> <span class="o">{</span>
+                            <span class="o">--</span><span class="n">c</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">vis</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">next</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">next</span><span class="o">);</span>
+                        <span class="n">vis</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">next</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="o">++</span><span class="n">depth</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">minMutation</span><span class="p">(</span><span class="n">startGene</span> <span class="kt">string</span><span class="p">,</span> <span class="n">endGene</span> <span class="kt">string</span><span class="p">,</span> <span class="n">bank</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">type</span> <span class="n">pair</span> <span class="k">struct</span> <span class="p">{</span>
+        <span class="n">s</span>     <span class="kt">string</span>
+        <span class="n">depth</span> <span class="kt">int</span>
+    <span class="p">}</span>
+    <span class="n">q</span> <span class="o">:=</span> <span class="p">[]</span><span class="n">pair</span><span class="p">{</span><span class="n">pair</span><span class="p">{</span><span class="n">startGene</span><span class="p">,</span> <span class="m">0</span><span class="p">}}</span>
+    <span class="n">vis</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">{</span><span class="n">startGene</span><span class="o">:</span> <span class="no">true</span><span class="p">}</span>
+    <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="n">p</span> <span class="o">:=</span> <span class="n">q</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">s</span> <span class="o">==</span> <span class="n">endGene</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">depth</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">next</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">bank</span> <span class="p">{</span>
+            <span class="n">diff</span> <span class="o">:=</span> <span class="m">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">startGene</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+                    <span class="n">diff</span><span class="o">++</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">diff</span> <span class="o">==</span> <span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">vis</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="p">{</span>
+                <span class="n">vis</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+                <span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">pair</span><span class="p">{</span><span class="n">next</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">depth</span> <span class="o">+</span> <span class="m">1</span><span class="p">})</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(m^2 L)$，其中 $m$ 是 <code class="language-plaintext highlighter-rouge">bank</code> 的长度、$L = 8$ 是基因串长度。凭什么：由于入队即标记，每个基因串最多出队一次，共 $O(m)$ 次；每次出队都要把 <code class="language-plaintext highlighter-rouge">bank</code> 扫一遍（$m$ 个候选），每个候选比较至多 $L$ 个字符。本题 $m \le 10$，实际运算量极小。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(m)$。凭什么：<code class="language-plaintext highlighter-rouge">vis</code> 集合与队列各自最多容纳 $m + 1$ 个基因串（<code class="language-plaintext highlighter-rouge">bank</code> 全部加起点），每个串长度固定为 8 视作常数；没有递归栈。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>看到「每步代价相同 + 求最少步数」就锁定 BFS。</strong> 边权等值是 BFS 层数等于最短距离的唯一前提，一旦代价不等（如迷宫滚动、带权图）必须换 Dijkstra。</li>
+    <li>
+<strong>顶点集由题目约束决定，不要自作主张扩大。</strong> 本题的中间态必须在 <code class="language-plaintext highlighter-rouge">bank</code> 里，枚举全部 $4^8$ 种串是在解一道不存在的题。</li>
+    <li>
+<strong>访问标记必须在入队时打，不能等到出队。</strong> 出队才标记会让同一层的多个前驱重复入队，队列规模失控，这是 BFS 最常见的性能陷阱。</li>
+    <li>
+<strong>终止判断放在出队处，可以顺手兼容「起点即终点」。</strong> 放在入队处会漏掉起点自身，需要额外特判。</li>
+    <li>
+<strong>按层扩展时先固化层大小。</strong> <code class="language-plaintext highlighter-rouge">for (int m = q.size(); m &gt; 0; --m)</code> 这个写法把当前层与下一层隔开，是 <code class="language-plaintext highlighter-rouge">depth</code> 语义正确的保证。</li>
+    <li>
+<strong>面试视角</strong>：先把题目显式翻译成「无权图最短路」，说明顶点、边、起终点分别是什么，再套 BFS 模板。写完主动提两个优化：一是可以先把 <code class="language-plaintext highlighter-rouge">bank</code> 放进哈希集合，然后主动构造 24 个邻居候选（$L \times 3$）并 $O(1)$ 查表，当 <code class="language-plaintext highlighter-rouge">bank</code> 很大时优于两两比较；二是可以用双向 BFS 从起点和终点同时扩展，把搜索规模从 $b^d$ 降到 $2b^{d/2}$。这两句是本题和 127 题的通用加分点。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>错误写法：出队时才把元素加入 <code class="language-plaintext highlighter-rouge">vis</code> → 用例 <code class="language-plaintext highlighter-rouge">startGene = "AACCGGTT"</code>、<code class="language-plaintext highlighter-rouge">bank = ["AACCGGTA", "AACCGCTA", "AAACGGTA"]</code>，第 1 层的 <code class="language-plaintext highlighter-rouge">"AACCGGTA"</code> 会把 <code class="language-plaintext highlighter-rouge">"AACCGCTA"</code> 和 <code class="language-plaintext highlighter-rouge">"AAACGGTA"</code> 各入队，而它们彼此又互为距离 2 不产生重复；但换成 <code class="language-plaintext highlighter-rouge">bank</code> 中存在多个到同一邻居距离为 1 的串时，该邻居会被重复入队，队列规模成倍增长，大数据下超时。</li>
+    <li>错误写法：忘记把 <code class="language-plaintext highlighter-rouge">startGene</code> 放进 <code class="language-plaintext highlighter-rouge">vis</code> → 用例 <code class="language-plaintext highlighter-rouge">bank</code> 中恰好包含 <code class="language-plaintext highlighter-rouge">startGene</code> 时，起点会被自己的邻居重新入队，<code class="language-plaintext highlighter-rouge">depth</code> 多算一层甚至陷入起点与邻居之间的来回震荡。</li>
+    <li>错误写法：层循环写成 <code class="language-plaintext highlighter-rouge">for (int m = 0; m &lt; q.size(); ++m)</code> → 用例 <code class="language-plaintext highlighter-rouge">bank = ["AACCGGTA", "AACCGCTA", "AAACGGTA"]</code>，<code class="language-plaintext highlighter-rouge">q.size()</code> 在循环中随着入队不断变大，当前层与下一层混在一起，<code class="language-plaintext highlighter-rouge">depth</code> 只增加一次，返回值恒为 1 或 0。</li>
+    <li>错误写法：在入队时判断是否等于 <code class="language-plaintext highlighter-rouge">endGene</code> 并返回 <code class="language-plaintext highlighter-rouge">depth + 1</code> → 用例 <code class="language-plaintext highlighter-rouge">startGene == endGene</code>，起点从未走过入队判断，队列耗尽后返回 -1，而期望是 0。</li>
+    <li>错误写法：差异计数写成 <code class="language-plaintext highlighter-rouge">c</code> 从 1 开始递减、条件为 <code class="language-plaintext highlighter-rouge">c &gt;= 0</code> → 用例 <code class="language-plaintext highlighter-rouge">gene = "AACCGGTT"</code>、<code class="language-plaintext highlighter-rouge">next = "AACCGCTA"</code>（差异 2），第一次不同后 <code class="language-plaintext highlighter-rouge">c</code> 变 0，循环条件 <code class="language-plaintext highlighter-rouge">c &gt;= 0</code> 仍成立，第二次不同后 <code class="language-plaintext highlighter-rouge">c</code> 变 -1，最终 <code class="language-plaintext highlighter-rouge">c &gt;= 0</code> 为假被正确拒绝；但若把最终判断也写成 <code class="language-plaintext highlighter-rouge">c &gt;= 0</code>，差异为 2 的串会在 <code class="language-plaintext highlighter-rouge">c = 0</code> 时被误判为合法邻居，得到偏小的答案。</li>
+    <li>错误写法：Go 版把 <code class="language-plaintext highlighter-rouge">diff == 1</code> 写成 <code class="language-plaintext highlighter-rouge">diff &lt;= 1</code> 且没有 <code class="language-plaintext highlighter-rouge">vis</code> 保护 → 用例任意，<code class="language-plaintext highlighter-rouge">diff == 0</code> 表示自己，会把当前串重新入队，<code class="language-plaintext highlighter-rouge">depth</code> 无限增长直到内存耗尽。</li>
+    <li>错误写法：假定 <code class="language-plaintext highlighter-rouge">endGene</code> 一定在 <code class="language-plaintext highlighter-rouge">bank</code> 中而提前 <code class="language-plaintext highlighter-rouge">return -1</code> 做剪枝，却漏了 <code class="language-plaintext highlighter-rouge">startGene == endGene</code> → 用例 <code class="language-plaintext highlighter-rouge">startGene = endGene = "AACCGGTT"</code>、<code class="language-plaintext highlighter-rouge">bank = []</code>，剪枝直接返回 -1，期望 0。</li>
+    <li>错误写法：把顶点集扩大为全部 $4^8$ 种基因串，忽略「中间产物必须在 bank 中」 → 用例 <code class="language-plaintext highlighter-rouge">bank = ["AAACGGTA"]</code>、<code class="language-plaintext highlighter-rouge">startGene = "AACCGGTT"</code>、<code class="language-plaintext highlighter-rouge">endGene = "AAACGGTA"</code>，两串差异为 2，真实答案是 -1（没有合法中间态），但按全串图搜索会找到一条经过 bank 外中间串的路径返回 2。</li>
+    <li>错误写法：用 DFS 递归求解并返回第一条到达终点的路径长度 → 用例存在多条路径时，先探到的未必最短，返回值偏大；要正确必须遍历所有路径取最小，复杂度爆炸。</li>
+    <li>错误写法：字符比较循环的上界写成 <code class="language-plaintext highlighter-rouge">k &lt; gene.length()</code> 但 <code class="language-plaintext highlighter-rouge">bank</code> 中混有长度不同的串（自造测试数据时） → <code class="language-plaintext highlighter-rouge">next.charAt(k)</code> 越界抛异常；本题保证长度均为 8，但迁移到 127 题时单词长度由输入决定，必须用变量而非硬编码。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/word-ladder/">127. 单词接龙</a></td>
+      <td>困难</td>
+      <td>词表规模大到无法两两比较，需要用通配符桶建立邻接关系，且返回的是节点数而非边数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/01-matrix/">542. 01 矩阵</a></td>
+      <td>中等</td>
+      <td>多源 BFS：把所有 0 一次性入队作为第 0 层</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/open-the-lock/">752. 打开转盘锁</a></td>
+      <td>中等</td>
+      <td>邻居由每位数字正反转动产生，还要把死亡列表并入访问集合</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/sliding-puzzle/">773. 滑动谜题</a></td>
+      <td>困难</td>
+      <td>状态是整个棋盘排列，需要序列化成字符串才能放进访问集合</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/k-similar-strings/">854. 相似度为 K 的字符串</a></td>
+      <td>困难</td>
+      <td>邻居由交换两个位置产生，必须只交换第一个失配位来剪枝，否则分支数爆炸</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/snakes-and-ladders/">909. 蛇梯棋</a></td>
+      <td>中等</td>
+      <td>顶点是编号而非字符串，邻居来自骰子的 1~6 步跳跃并叠加蛇梯传送</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/rotting-oranges/">994. 腐烂的橘子</a></td>
+      <td>中等</td>
+      <td>多源 BFS 且结束后要回扫是否仍有未腐烂的橘子来决定返回 -1</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-path-in-binary-matrix/">1091. 二进制矩阵中的最短路径</a></td>
+      <td>中等</td>
+      <td>邻居是八方向而非四方向，且起点终点自身可能是障碍</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-path-with-alternating-colors/">1129. 颜色交替的最短路径</a></td>
+      <td>中等</td>
+      <td>状态需要扩维记录「上一条边的颜色」，同一个点会被访问两次</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/as-far-from-land-as-possible/">1162. 地图分析</a></td>
+      <td>中等</td>
+      <td>多源 BFS 但求的是最大距离，答案取最后一层的层号</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-path-in-a-grid-with-obstacles-elimination/">1293. 网格中的最短路径</a></td>
+      <td>困难</td>
+      <td>状态扩维记录剩余可消除障碍数，访问标记是三维的</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-candies-you-can-get-from-boxes/">1298. 你能从盒子里获得的最大糖果数</a></td>
+      <td>困难</td>
+      <td>顶点之间存在钥匙依赖，拿到新钥匙后要回头重新检查此前打不开的盒子</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/jump-game-iv/">1345. 跳跃游戏 IV</a></td>
+      <td>困难</td>
+      <td>同值下标互为邻居，展开一次后必须清空该值的邻接表，否则退化成 $O(n^2)$</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-jumps-to-reach-home/">1654. 到家的最少跳跃次数</a></td>
+      <td>中等</td>
+      <td>前进与后退不对称，状态要带「上一步是否后退」，还需自行推导搜索上界</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/zui-xiao-tiao-yue-ci-shu/">LCP 09. 最小跳跃次数</a></td>
+      <td>困难</td>
+      <td>回退边数量巨大，需要维护「已访问的最右前缀」把这类边压成均摊 $O(1)$</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/2bCMpM/">LCR 107. 01 矩阵</a></td>
+      <td>中等</td>
+      <td>专题版同题，适合对照「两次方向扫描的动态规划」这一非 BFS 解法</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/om3reC/">LCR 108. 单词接龙</a></td>
+      <td>困难</td>
+      <td>专题版同题，适合练双向 BFS 的实现细节</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/zlDJc7/">LCR 109. 打开转盘锁</a></td>
+      <td>中等</td>
+      <td>专题版同题，适合练双向 BFS 中两侧集合何时交换、何时判交</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/35940830" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 427. 建立四叉树</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/89174011" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 909. 蛇梯棋</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/44549667">https://hgnulb.github.io/blog/2026/44549667</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

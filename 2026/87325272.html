@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode LCR 031. LRU 缓存 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,LCR,双向链表,哈希表,设计,链表" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode LCR 031. LRU 缓存" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/87325272" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/87325272" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-29T01:59:06+08:00" />
+<meta property="article:modified_time" content="2026-03-29T01:59:06+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode LCR 031. LRU 缓存" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-03-29T01:59:06+08:00","datePublished":"2026-03-29T01:59:06+08:00","description":"题目描述","headline":"LeetCode LCR 031. LRU 缓存","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/87325272"},"url":"https://hgnulb.github.io/blog/2026/87325272"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希表统计状态">解法：哈希表统计状态</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode LCR 031. LRU 缓存">LeetCode LCR 031. LRU 缓存</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-03-29 01:59:06"
+                    datetime="2026-03-29T01:59:06+08:00"
+            >
+                2026-03-29
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2455 字 · 英文 76 词 · 代码 137 行"
+            aria-label="预计阅读时间约 11 分钟，正文 2455 字 · 英文 76 词 · 代码 137 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 11 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3007053882/" title="119 经典题变种挑战">
+        119 经典题变种挑战
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3355311990/" title="剑指 Offer">
+        剑指 Offer
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7450658006/" title="剑指 Offer（专项突击版）">
+        剑指 Offer（专项突击版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6142931175/" title="LCR">
+        LCR
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6005735281/" title="链表">
+        链表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0407173734/" title="双向链表">
+        双向链表
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希表统计状态">解法：哈希表统计状态</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/OrIXps/">LCR 031. LRU 缓存</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>设计一个固定容量的缓存，支持 <code class="language-plaintext highlighter-rouge">get(key)</code> 与 <code class="language-plaintext highlighter-rouge">put(key, value)</code>，容量满时淘汰<strong>最久未使用</strong>的那个键。题目要求两个操作的时间复杂度都是 $O(1)$。</p>
+
+  <p>「最久未使用」需要精确定义：<code class="language-plaintext highlighter-rouge">get</code> 命中和 <code class="language-plaintext highlighter-rouge">put</code>（无论新增还是覆盖）都算一次使用，都要把该键提升为最近使用；<code class="language-plaintext highlighter-rouge">get</code> 未命中不算。所以缓存内部必须维护一个<strong>按最近使用时间排序的序列</strong>，队首是最新的，队尾是最旧的。</p>
+
+  <p>$O(1)$ 这条约束把可选结构压得很窄。逐条拆需求：按键查值要求哈希；把任意一个已存在的元素「提到最前」要求能在常数时间内把它从当前位置摘下来并插到头部；淘汰要求能在常数时间内拿到最尾的元素。</p>
+
+  <p>「从中间摘除一个节点」这件事，只有在<strong>已知该节点本身且它有前驱指针</strong>时才是 $O(1)$。数组做不到（要搬移），单链表也做不到（拿不到前驱），只有双向链表可以。而「已知该节点」这一前提，恰好可以由哈希表提供——让哈希表的值直接存节点引用。</p>
+
+  <p>边界：容量为正数，<code class="language-plaintext highlighter-rouge">get</code> 未命中返回 -1；<code class="language-plaintext highlighter-rouge">put</code> 已存在的键只更新值并提升位置，不增加计数、也不触发淘汰；淘汰时要同时从链表和哈希表里清理，两处漏一处就会内存泄漏或读到脏数据。</p>
+</blockquote>
+
+<h2 id="解法哈希表统计状态">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%93%88%E5%B8%8C%E8%A1%A8%E7%BB%9F%E8%AE%A1%E7%8A%B6%E6%80%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：哈希表统计状态</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先看单结构方案的瓶颈。只用哈希表：查值 $O(1)$，但无法知道谁最久未用。哈希表配数组记录使用顺序：提升位置要搬移元素，$O(n)$。哈希表配单链表：能 $O(1)$ 插头，但从中间摘除节点必须先找前驱，仍是 $O(n)$。</p>
+
+  <p>于是组合出标准解：<strong>哈希表 + 双向链表</strong>。链表按最近使用顺序排列，头部最新、尾部最旧；哈希表存「键 → 链表节点引用」，让任意一次查找都能直接跳到对应节点。</p>
+
+  <p>核心不变量是：<strong>哈希表的键集恰好等于链表中节点的键集，链表长度等于缓存中的元素个数，且链表从头到尾严格按最近使用时间递减排列</strong>。每个公开方法返回前都必须恢复这条不变量。</p>
+
+  <p>有了这两份结构，三个基本动作都成了常数时间。查找：哈希一次命中拿到节点。提升：靠节点自身的 <code class="language-plaintext highlighter-rouge">prev</code> 与 <code class="language-plaintext highlighter-rouge">next</code> 把它从原位置摘下（<code class="language-plaintext highlighter-rouge">node.prev.next = node.next; node.next.prev = node.prev;</code>），再接到头部。淘汰：直接取尾部节点，摘除并用它的 <code class="language-plaintext highlighter-rouge">key</code> 反查哈希表删除——<strong>节点里必须同时存 <code class="language-plaintext highlighter-rouge">key</code> 和 <code class="language-plaintext highlighter-rouge">val</code></strong>，只存 <code class="language-plaintext highlighter-rouge">val</code> 的话拿到尾节点也不知道该删哈希表里的哪个键，这是本题最容易漏的设计点。</p>
+
+  <p>链表两端各放一个哨兵节点 <code class="language-plaintext highlighter-rouge">head</code> 与 <code class="language-plaintext highlighter-rouge">tail</code>，初始时互相指向。这样任何真实节点都必然有前驱和后继，摘除与插入的四行指针操作不需要任何判空分支，「链表为空」「只有一个元素」「插在头部」全都走同一条路径。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">get</code> 的逻辑是：查不到返回 -1；查到就把节点提升到头部再返回值。<code class="language-plaintext highlighter-rouge">put</code> 分两种情况：键已存在则更新值并提升；键不存在则新建节点、插到头部、写入哈希表，然后检查是否超容，超了就摘掉尾部节点并从哈希表里删掉它的键。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>定义节点</strong>：<code class="language-plaintext highlighter-rouge">Node</code> 同时保存 <code class="language-plaintext highlighter-rouge">key</code>、<code class="language-plaintext highlighter-rouge">val</code>、<code class="language-plaintext highlighter-rouge">prev</code>、<code class="language-plaintext highlighter-rouge">next</code>。存 <code class="language-plaintext highlighter-rouge">key</code> 是为了淘汰时能反查哈希表，这一步在写代码之前就要想清楚。</li>
+    <li>
+<strong>构造函数建哨兵</strong>：<code class="language-plaintext highlighter-rouge">head.next = tail; tail.prev = head;</code>。两个哨兵不存任何真实数据，只用来消灭边界判断；<code class="language-plaintext highlighter-rouge">size</code> 从 0 开始单独计数（Go 版直接用 <code class="language-plaintext highlighter-rouge">len(cache)</code> 等价）。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">removeNode</code></strong>：<code class="language-plaintext highlighter-rouge">node.prev.next = node.next; node.next.prev = node.prev;</code>。两句成对出现，双向链表任何一次改动都必须同时修好正反两个方向。因为有哨兵，<code class="language-plaintext highlighter-rouge">node.prev</code> 与 <code class="language-plaintext highlighter-rouge">node.next</code> 永远非空。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">addToHead</code></strong>：<code class="language-plaintext highlighter-rouge">node.next = head.next; node.prev = head; head.next = node; node.next.prev = node;</code>。四句的顺序必须保证「在覆盖掉 <code class="language-plaintext highlighter-rouge">head.next</code> 之前先把它接到 <code class="language-plaintext highlighter-rouge">node.next</code> 上」，否则原来的首节点会丢失。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">moveToHead</code> = 先摘再插</strong>：复用上面两个私有方法，避免把八行指针操作重复写两遍——把原子操作拆成小函数，白板上出错概率显著下降。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">get</code></strong>：<code class="language-plaintext highlighter-rouge">cache.containsKey(key)</code> 为假直接返回 -1；否则取节点、<code class="language-plaintext highlighter-rouge">moveToHead</code>、返回 <code class="language-plaintext highlighter-rouge">node.val</code>。返回值必须取自节点，别忘了提升这一步，否则顺序不再反映真实使用情况。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">put</code> 命中分支</strong>：更新 <code class="language-plaintext highlighter-rouge">node.val</code> 后 <code class="language-plaintext highlighter-rouge">moveToHead</code>，<strong>不要</strong>新增节点也不要动 <code class="language-plaintext highlighter-rouge">size</code>，覆盖不是插入。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">put</code> 未命中分支</strong>：新建节点 → 写哈希 → <code class="language-plaintext highlighter-rouge">addToHead</code> → <code class="language-plaintext highlighter-rouge">++size</code> → 若 <code class="language-plaintext highlighter-rouge">size &gt; capacity</code> 则 <code class="language-plaintext highlighter-rouge">removeTail</code>，用返回的节点的 <code class="language-plaintext highlighter-rouge">key</code> 从哈希表删除，并 <code class="language-plaintext highlighter-rouge">--size</code>。淘汰必须同时清理链表和哈希表两处。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">removeTail</code></strong>：取 <code class="language-plaintext highlighter-rouge">tail.prev</code>（真正的最旧节点，而不是哨兵 <code class="language-plaintext highlighter-rouge">tail</code> 本身），摘除后返回它。</li>
+  </ul>
+
+  <p>以容量 2 的缓存走一遍标准序列。初始链表是 <code class="language-plaintext highlighter-rouge">head ↔ tail</code>，哈希为空。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">put(1,1)</code>：未命中，新建节点插到头部，链表为 <code class="language-plaintext highlighter-rouge">head ↔ 1 ↔ tail</code>，哈希 <code class="language-plaintext highlighter-rouge">{1}</code>，<code class="language-plaintext highlighter-rouge">size = 1</code>，未超容。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">put(2,2)</code>：未命中，插头，链表为 <code class="language-plaintext highlighter-rouge">head ↔ 2 ↔ 1 ↔ tail</code>，哈希 <code class="language-plaintext highlighter-rouge">{1,2}</code>，<code class="language-plaintext highlighter-rouge">size = 2</code>，仍未超容。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">get(1)</code>：命中节点 1，先摘除（此时链表变成 <code class="language-plaintext highlighter-rouge">head ↔ 2 ↔ tail</code>），再插到头部得 <code class="language-plaintext highlighter-rouge">head ↔ 1 ↔ 2 ↔ tail</code>，返回 1。注意这一步把 2 变成了最旧的。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">put(3,3)</code>：未命中，插头得 <code class="language-plaintext highlighter-rouge">head ↔ 3 ↔ 1 ↔ 2 ↔ tail</code>，<code class="language-plaintext highlighter-rouge">size = 3</code> 超过容量 2，触发淘汰：<code class="language-plaintext highlighter-rouge">tail.prev</code> 是节点 2，摘除它得 <code class="language-plaintext highlighter-rouge">head ↔ 3 ↔ 1 ↔ tail</code>，再用它的 <code class="language-plaintext highlighter-rouge">key = 2</code> 删哈希，得 <code class="language-plaintext highlighter-rouge">{1,3}</code>，<code class="language-plaintext highlighter-rouge">size = 2</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">get(2)</code>：哈希里没有 2，返回 -1，链表不动。<code class="language-plaintext highlighter-rouge">put(4,4)</code>：未命中，插头后超容，淘汰 <code class="language-plaintext highlighter-rouge">tail.prev</code> 即节点 1，链表变成 <code class="language-plaintext highlighter-rouge">head ↔ 4 ↔ 3 ↔ tail</code>，哈希 <code class="language-plaintext highlighter-rouge">{3,4}</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">get(1)</code> 返回 -1；<code class="language-plaintext highlighter-rouge">get(3)</code> 命中，提升后链表为 <code class="language-plaintext highlighter-rouge">head ↔ 3 ↔ 4 ↔ tail</code>，返回 3；<code class="language-plaintext highlighter-rouge">get(4)</code> 命中，提升后为 <code class="language-plaintext highlighter-rouge">head ↔ 4 ↔ 3 ↔ tail</code>，返回 4。全部结果与 LRU 语义一致。</p>
+
+  <p>再看覆盖的情形：在 <code class="language-plaintext highlighter-rouge">head ↔ 4 ↔ 3 ↔ tail</code> 上执行 <code class="language-plaintext highlighter-rouge">put(3, 30)</code>，命中分支只更新值并提升，链表变成 <code class="language-plaintext highlighter-rouge">head ↔ 3 ↔ 4 ↔ tail</code>，<code class="language-plaintext highlighter-rouge">size</code> 仍是 2，不触发淘汰。如果误走了未命中分支，链表里会出现两个 key 为 3 的节点，且会错误淘汰掉 4。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Node</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">key</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">val</span><span class="o">;</span>
+    <span class="nc">Node</span> <span class="n">prev</span><span class="o">;</span>
+    <span class="nc">Node</span> <span class="n">next</span><span class="o">;</span>
+
+    <span class="nc">Node</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="nc">Node</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">,</span> <span class="kt">int</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">LRUCache</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Node</span><span class="o">&gt;</span> <span class="n">cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="c1">// 头尾哨兵：任何真实节点都有前驱后继，摘除与插入无需判空。</span>
+    <span class="kd">private</span> <span class="nc">Node</span> <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="nc">Node</span> <span class="n">tail</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">capacity</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">size</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">LRUCache</span><span class="o">(</span><span class="kt">int</span> <span class="n">capacity</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">capacity</span> <span class="o">=</span> <span class="n">capacity</span><span class="o">;</span>
+        <span class="n">head</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">tail</span><span class="o">;</span>
+        <span class="n">tail</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">get</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">cache</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">key</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="c1">// 命中也算一次使用，必须提升。</span>
+        <span class="n">moveToHead</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="na">val</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">,</span> <span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">cache</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">key</span><span class="o">))</span> <span class="o">{</span>
+            <span class="c1">// 覆盖不是插入：不新增节点，也不改 size。</span>
+            <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">val</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+            <span class="n">moveToHead</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+            <span class="n">cache</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">node</span><span class="o">);</span>
+            <span class="n">addToHead</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+            <span class="o">++</span><span class="n">size</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">capacity</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// 节点里存了 key，才能反查哈希表把它一并删掉。</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">removeTail</span><span class="o">();</span>
+                <span class="n">cache</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">key</span><span class="o">);</span>
+                <span class="o">--</span><span class="n">size</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">moveToHead</span><span class="o">(</span><span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">removeNode</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+        <span class="n">addToHead</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">removeNode</span><span class="o">(</span><span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">prev</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">prev</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">addToHead</span><span class="o">(</span><span class="nc">Node</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="n">head</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">node</span><span class="o">;</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">node</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">Node</span> <span class="nf">removeTail</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">tail</span><span class="o">.</span><span class="na">prev</span><span class="o">;</span>
+        <span class="n">removeNode</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">node</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">key</span><span class="p">,</span> <span class="n">val</span>   <span class="kt">int</span>
+    <span class="n">prev</span><span class="p">,</span> <span class="n">next</span> <span class="o">*</span><span class="n">node</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">LRUCache</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">capacity</span>   <span class="kt">int</span>
+    <span class="n">cache</span>      <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="o">*</span><span class="n">node</span>
+    <span class="n">head</span><span class="p">,</span> <span class="n">tail</span> <span class="o">*</span><span class="n">node</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">(</span><span class="n">capacity</span> <span class="kt">int</span><span class="p">)</span> <span class="n">LRUCache</span> <span class="p">{</span>
+    <span class="c">// 头尾哨兵：任何真实节点都有前驱后继，摘除与插入无需判空。</span>
+    <span class="n">head</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="n">tail</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="n">head</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">tail</span>
+    <span class="n">tail</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">head</span>
+    <span class="k">return</span> <span class="n">LRUCache</span><span class="p">{</span>
+        <span class="n">capacity</span><span class="o">:</span> <span class="n">capacity</span><span class="p">,</span>
+        <span class="n">cache</span><span class="o">:</span>    <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="o">*</span><span class="n">node</span><span class="p">,</span> <span class="n">capacity</span><span class="p">),</span>
+        <span class="n">head</span><span class="o">:</span>     <span class="n">head</span><span class="p">,</span>
+        <span class="n">tail</span><span class="o">:</span>     <span class="n">tail</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">LRUCache</span><span class="p">)</span> <span class="n">Get</span><span class="p">(</span><span class="n">key</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">this</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="k">if</span> <span class="o">!</span><span class="n">ok</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+    <span class="p">}</span>
+    <span class="c">// 命中也算一次使用，必须提升。</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">moveToFront</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">n</span><span class="o">.</span><span class="n">val</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">LRUCache</span><span class="p">)</span> <span class="n">Put</span><span class="p">(</span><span class="n">key</span> <span class="kt">int</span><span class="p">,</span> <span class="n">value</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">this</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">ok</span> <span class="p">{</span>
+        <span class="c">// 覆盖不是插入：不新增节点。</span>
+        <span class="n">n</span><span class="o">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">moveToFront</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">cache</span><span class="p">)</span> <span class="o">==</span> <span class="n">this</span><span class="o">.</span><span class="n">capacity</span> <span class="p">{</span>
+        <span class="c">// 节点里存了 key，才能反查哈希表把它一并删掉。</span>
+        <span class="n">back</span> <span class="o">:=</span> <span class="n">this</span><span class="o">.</span><span class="n">tail</span><span class="o">.</span><span class="n">prev</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">back</span><span class="p">)</span>
+        <span class="nb">delete</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">cache</span><span class="p">,</span> <span class="n">back</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">node</span><span class="p">{</span><span class="n">key</span><span class="o">:</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="o">:</span> <span class="n">value</span><span class="p">}</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">pushFront</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">LRUCache</span><span class="p">)</span> <span class="n">moveToFront</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">pushFront</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">LRUCache</span><span class="p">)</span> <span class="n">remove</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">n</span><span class="o">.</span><span class="n">prev</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">next</span>
+    <span class="n">n</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">prev</span>
+    <span class="n">n</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="no">nil</span>
+    <span class="n">n</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="no">nil</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">LRUCache</span><span class="p">)</span> <span class="n">pushFront</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">n</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">head</span>
+    <span class="n">n</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">next</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">n</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">n</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：<code class="language-plaintext highlighter-rouge">get</code> 与 <code class="language-plaintext highlighter-rouge">put</code> 均为平均 $O(1)$。哈希查找是常数时间，摘除与插头各是固定四次指针赋值，淘汰只访问 <code class="language-plaintext highlighter-rouge">tail.prev</code> 一个节点，全程没有任何遍历。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(capacity)$。哈希表与双向链表各存不超过 <code class="language-plaintext highlighter-rouge">capacity</code> 个元素，且两者存的是同一批节点的引用而非拷贝，因此常数因子很小，与总的访问次数无关。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「$O(1)$ 定位 + $O(1)$ 调整顺序」这对需求，标准答案就是哈希表加双向链表；选双向而非单向的唯一理由是「从中间摘除需要前驱」，面试时要把这句话说出来。</li>
+    <li>链表节点必须同时保存 <code class="language-plaintext highlighter-rouge">key</code> 和 <code class="language-plaintext highlighter-rouge">val</code>，否则淘汰时拿到尾节点却无法反查哈希表，会留下永远清不掉的脏键——这是设计阶段就要定好的细节，写到一半才发现往往要推倒重来。</li>
+    <li>头尾哨兵把「空链表」「单元素」「插在头部」统一成同一条路径，四行指针操作里一个判空都不需要，这是双向链表题的通用套路。</li>
+    <li>把 <code class="language-plaintext highlighter-rouge">removeNode</code> 与 <code class="language-plaintext highlighter-rouge">addToHead</code> 拆成独立小函数，<code class="language-plaintext highlighter-rouge">moveToHead</code> 直接复用，比在两处各抄一遍八行指针操作可靠得多。</li>
+    <li>「覆盖已有键」不能走插入分支，它不改变元素个数也不触发淘汰，这条语义区分是判题用例的常客。</li>
+    <li>面试视角：面试官通常会追问「能不能直接用语言自带的有序哈希结构」。可以答 Java 的 <code class="language-plaintext highlighter-rouge">LinkedHashMap</code> 继承后重写 <code class="language-plaintext highlighter-rouge">removeEldestEntry</code> 三行就能实现，但那等于跳过考点；本题考的就是手写双向链表，所以现场应当手写，同时点明库实现的内部原理与手写版完全一致。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>节点里不存 <code class="language-plaintext highlighter-rouge">key</code></strong>：容量 2 的缓存执行 <code class="language-plaintext highlighter-rouge">put(1,1)</code>、<code class="language-plaintext highlighter-rouge">put(2,2)</code>、<code class="language-plaintext highlighter-rouge">put(3,3)</code> 时，淘汰拿到尾节点却不知道该删哈希表里的哪个键，<code class="language-plaintext highlighter-rouge">get(1)</code> 会返回一个已被摘出链表的脏值。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">get</code> 命中后不提升</strong>：容量 2 时 <code class="language-plaintext highlighter-rouge">put(1,1)</code>、<code class="language-plaintext highlighter-rouge">put(2,2)</code>、<code class="language-plaintext highlighter-rouge">get(1)</code>、<code class="language-plaintext highlighter-rouge">put(3,3)</code> 会淘汰掉 1 而不是 2，后续 <code class="language-plaintext highlighter-rouge">get(1)</code> 错误返回 -1。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">put</code> 覆盖已有键时走了插入分支</strong>：容量 2 时 <code class="language-plaintext highlighter-rouge">put(1,1)</code>、<code class="language-plaintext highlighter-rouge">put(2,2)</code>、<code class="language-plaintext highlighter-rouge">put(2,20)</code> 会让 <code class="language-plaintext highlighter-rouge">size</code> 变成 3 并淘汰掉 1，而正确行为是缓存里仍有 1 和 2。</li>
+    <li>
+<strong>淘汰时只摘链表不删哈希</strong>：哈希里残留旧键，<code class="language-plaintext highlighter-rouge">put(1,1)</code>、<code class="language-plaintext highlighter-rouge">put(2,2)</code>、<code class="language-plaintext highlighter-rouge">put(3,3)</code> 后 <code class="language-plaintext highlighter-rouge">get(1)</code> 会命中一个已经脱离链表的节点，返回旧值而非 -1。</li>
+    <li>
+<strong>淘汰取的是 <code class="language-plaintext highlighter-rouge">tail</code> 而不是 <code class="language-plaintext highlighter-rouge">tail.prev</code></strong>：摘掉的是哨兵本身，链表结构被破坏，之后任何一次 <code class="language-plaintext highlighter-rouge">addToHead</code> 或 <code class="language-plaintext highlighter-rouge">removeNode</code> 都会空指针。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">addToHead</code> 先写 <code class="language-plaintext highlighter-rouge">head.next = node</code> 再接 <code class="language-plaintext highlighter-rouge">node.next</code></strong>：原首节点丢失，容量 2 时 <code class="language-plaintext highlighter-rouge">put(1,1)</code>、<code class="language-plaintext highlighter-rouge">put(2,2)</code> 之后链表里只剩节点 2。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">removeNode</code> 只改一个方向</strong>：只写 <code class="language-plaintext highlighter-rouge">node.prev.next = node.next</code> 而漏掉反向那句，反向遍历时链表断裂，淘汰阶段会取到已被摘除的节点。</li>
+    <li>
+<strong>构造函数忘记把两个哨兵互相连接</strong>：第一次 <code class="language-plaintext highlighter-rouge">addToHead</code> 访问 <code class="language-plaintext highlighter-rouge">head.next.prev</code> 直接空指针异常。</li>
+    <li>
+<strong>用单链表加哈希实现</strong>：<code class="language-plaintext highlighter-rouge">moveToHead</code> 必须从头遍历找前驱，<code class="language-plaintext highlighter-rouge">get</code> 退化成 $O(n)$，大量操作的用例会超时。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">size</code> 与实际元素个数不同步</strong>：例如淘汰后忘记 <code class="language-plaintext highlighter-rouge">--size</code>，容量 2 的缓存会在第三次插入后每次都触发淘汰，缓存实际只留得住一个元素。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lru-cache/">146. LRU 缓存</a></td>
+      <td>中等</td>
+      <td>与本题同题，可直接套用哈希加双向链表</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lru-cache-lcci/">面试题 16.25. LRU 缓存</a></td>
+      <td>中等</td>
+      <td>与本题同题，可直接套用</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lfu-cache/">460. LFU 缓存</a></td>
+      <td>困难</td>
+      <td>淘汰依据从「最久未用」变成「使用次数最少」，需要按频次再分一层桶</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/all-oone-data-structure/">432. 全 O(1) 的数据结构</a></td>
+      <td>困难</td>
+      <td>同样用哈希加双向链表，但链表按计数值分组，还要支持查最大最小键</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-linked-list/">707. 设计链表</a></td>
+      <td>中等</td>
+      <td>双向链表增删改的基本功，本题四行指针操作的手感来源</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-browser-history/">1472. 设计浏览器历史记录</a></td>
+      <td>中等</td>
+      <td>同样用双向链表维护访问序列，但需要前进后退而非淘汰</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/27146301" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode LCR 030. O(1) 时间插入、删除和获取随机元素</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/50102030" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode LCR 032. 有效的字母异位词</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/87325272">https://hgnulb.github.io/blog/2026/87325272</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

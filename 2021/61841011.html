@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 609. 在系统中查找重复文件 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,哈希表,字符串,字节跳动,数组" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 609. 在系统中查找重复文件" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/61841011" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/61841011" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-02-20T00:01:13+08:00" />
+<meta property="article:modified_time" content="2021-02-20T00:01:13+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 609. 在系统中查找重复文件" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-02-20T00:01:13+08:00","datePublished":"2021-02-20T00:01:13+08:00","description":"题目描述","headline":"LeetCode 609. 在系统中查找重复文件","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/61841011"},"url":"https://hgnulb.github.io/blog/2021/61841011"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希表按内容分组">解法：哈希表按内容分组</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 609. 在系统中查找重复文件">LeetCode 609. 在系统中查找重复文件</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-02-20 00:01:13"
+                    datetime="2021-02-20T00:01:13+08:00"
+            >
+                2021-02-20
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3285 字 · 英文 57 词 · 代码 54 行"
+            aria-label="预计阅读时间约 10 分钟，正文 3285 字 · 英文 57 词 · 代码 54 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 10 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希表按内容分组">解法：哈希表按内容分组</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/find-duplicate-file-in-system/">609. 在系统中查找重复文件</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个字符串数组 <code class="language-plaintext highlighter-rouge">paths</code>，每个元素形如 <code class="language-plaintext highlighter-rouge">"根目录 文件1(内容1) 文件2(内容2) ..."</code>——<strong>用空格分隔</strong>，第一段是目录路径，之后每一段都是一个「文件名紧跟着一对括号包住的内容」。要求找出所有<strong>内容完全相同</strong>的文件，把它们的完整路径按组返回；只含一个文件的内容不算重复，不要输出。</p>
+
+  <p>判断重复的依据是<strong>内容</strong>，与文件名和所在目录完全无关。这句话直接决定了数据结构：需要一个「内容 → 该内容对应的所有完整路径」的映射，也就是按内容做分组。</p>
+
+  <p>输出要求的是<strong>完整路径</strong>，格式是 <code class="language-plaintext highlighter-rouge">目录 + "/" + 文件名</code>——注意不带括号里的内容。所以解析时必须把每一段拆成文件名和内容两部分，前者拼进路径、后者当作分组的键。</p>
+
+  <p>约束方面，输入总字符量是线性规模，而分组本身只需要一趟扫描 + 哈希查找，所以目标复杂度是 $O(L)$（<code class="language-plaintext highlighter-rouge">L</code> 为所有输入字符串的总长度）。题目没有暗示任何排序或比较需求，也就排除了「两两比较内容」的 $O(k^2)$ 做法——那不仅慢，而且分组结果还要额外去重。</p>
+
+  <p>边界与陷阱：括号内的内容<strong>可能包含空格</strong>吗？题目保证不会，所以可以放心用空格切分；但文件名和内容都可能包含除空格和括号外的任意字符，因此定位括号必须用「第一个 <code class="language-plaintext highlighter-rouge">(</code>」和「最后一个字符是 <code class="language-plaintext highlighter-rouge">)</code>」这两个锚点，而不能假设长度。另外某条记录可能只有目录没有文件（<code class="language-plaintext highlighter-rouge">parts.length == 1</code>），此时内层循环一次都不进，天然安全。</p>
+
+  <p>最后一处容易读漏：<strong>只输出组大小大于 1 的分组</strong>。所有内容各不相同时应返回空列表而不是一堆单元素组。</p>
+
+  <p>题目末尾的追问也值得先想一遍：真实文件系统里内容可能极大，不适合整份读进内存当键——那时应先比长度、再比内容哈希，最后才做逐字节比对。</p>
+</blockquote>
+
+<h2 id="解法哈希表按内容分组">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%93%88%E5%B8%8C%E8%A1%A8%E6%8C%89%E5%86%85%E5%AE%B9%E5%88%86%E7%BB%84" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：哈希表按内容分组</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>朴素做法是把所有文件解析出来放进一个列表，然后两两比较内容，相同的归到一组。设文件总数为 <code class="language-plaintext highlighter-rouge">k</code>、内容平均长度为 <code class="language-plaintext highlighter-rouge">c</code>，代价是 $O(k^2 c)$；更麻烦的是「归组」本身要处理传递性（A 与 B 同、B 与 C 同 ⇒ 三者一组），实现上还得配一个并查集或访问标记，既慢又绕。</p>
+
+  <p>瓶颈在于<strong>用「比较」来发现相等</strong>。而「相等」这件事有更好的表达方式：把内容本身当作<strong>键</strong>，扔进哈希表。相同内容自动落到同一个桶里，分组一步到位，既不需要两两比较，也不需要处理传递性——哈希表的键天然满足等价类划分。</p>
+
+  <p>于是整个算法定型为两个阶段。<strong>解析并分组</strong>：逐条扫描 <code class="language-plaintext highlighter-rouge">paths</code>，按空格切分，第一段是目录，其余每一段解析出文件名与内容，把 <code class="language-plaintext highlighter-rouge">目录 + "/" + 文件名</code> 追加到以内容为键的列表里。<strong>筛选并输出</strong>：遍历哈希表的所有值，只保留长度大于 1 的列表。</p>
+
+  <p>解析单个文件段是唯一需要小心的地方。段的形态是 <code class="language-plaintext highlighter-rouge">文件名(内容)</code>，其中文件名不含括号、内容不含右括号，所以可以用<strong>第一个 <code class="language-plaintext highlighter-rouge">(</code> 的下标 <code class="language-plaintext highlighter-rouge">idx</code></strong> 把它一刀两断：<code class="language-plaintext highlighter-rouge">[0, idx)</code> 是文件名，<code class="language-plaintext highlighter-rouge">(idx, 长度-1)</code> 是内容——右端取 <code class="language-plaintext highlighter-rouge">长度 - 1</code> 正是为了剥掉结尾的 <code class="language-plaintext highlighter-rouge">)</code>。这两个下标必须成对推导，任何一个偏一位都会把括号或最后一个字符混进结果。</p>
+
+  <p>不变量：<strong>扫描进行到任意时刻，哈希表里每个键是一份文件内容，对应的列表恰好是「到目前为止已扫描过的、内容等于该键的全部文件的完整路径」</strong>。因为每个文件只被解析一次、只被追加一次，列表里不会出现重复路径，也不会遗漏。</p>
+
+  <p>最后一步的筛选条件是 <code class="language-plaintext highlighter-rouge">size() &gt; 1</code>：组内只有一个文件说明这份内容独一无二，不构成重复。这一步不能省，否则输出会混入大量单元素组。</p>
+
+  <p>输出顺序题目不作要求，所以直接遍历哈希表的值即可，不需要额外排序。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>建一个 <code class="language-plaintext highlighter-rouge">Map&lt;String, List&lt;String&gt;&gt; contentMap</code>，键是文件内容、值是完整路径列表</strong>。<strong>为什么</strong>：题目判定重复的唯一依据是内容，把它当键就让「相同内容自动同组」成为哈希表的天然性质，省掉了两两比较和传递性合并；值用列表而不是计数，是因为最终要输出路径本身。</li>
+    <li>
+<strong>遍历 <code class="language-plaintext highlighter-rouge">paths</code> 的每一条记录，按空格切分成 <code class="language-plaintext highlighter-rouge">parts</code></strong>。<strong>为什么</strong>：输入格式规定目录与各文件之间以空格分隔，且题目保证文件名与内容都不含空格，所以空格是安全的分隔符。</li>
+    <li>
+<strong>取 <code class="language-plaintext highlighter-rouge">parts[0]</code> 作为目录 <code class="language-plaintext highlighter-rouge">dir</code></strong>。<strong>为什么</strong>：格式规定第一段固定是目录路径，后面才是文件；把它单独拎出来，内层循环就可以从下标 <code class="language-plaintext highlighter-rouge">1</code> 开始。</li>
+    <li>
+<strong>内层从下标 <code class="language-plaintext highlighter-rouge">1</code> 开始遍历剩余各段</strong>。<strong>为什么</strong>：跳过已被取走的目录段；若某条记录只有目录（<code class="language-plaintext highlighter-rouge">parts.length == 1</code>），循环一次都不进，边界自然成立，不需要特判。</li>
+    <li>
+<strong>对每段先定位第一个 <code class="language-plaintext highlighter-rouge">(</code> 的下标 <code class="language-plaintext highlighter-rouge">idx</code></strong>。<strong>为什么</strong>：文件名中不含括号，所以第一个 <code class="language-plaintext highlighter-rouge">(</code> 就是文件名与内容的分界；用「查找」而不是「假设固定长度」，才能适配任意长度的文件名。</li>
+    <li>
+<strong>文件名取 <code class="language-plaintext highlighter-rouge">[0, idx)</code>，内容取 <code class="language-plaintext highlighter-rouge">(idx, len - 1)</code></strong>。<strong>为什么</strong>：文件名是括号之前的全部字符；内容从 <code class="language-plaintext highlighter-rouge">idx + 1</code> 开始（跳过左括号），到 <code class="language-plaintext highlighter-rouge">len - 1</code> 结束（<code class="language-plaintext highlighter-rouge">substring</code> 右端开区间，正好剥掉结尾的 <code class="language-plaintext highlighter-rouge">)</code>）。两个端点必须一起推导，少减一个 1 就会把 <code class="language-plaintext highlighter-rouge">)</code> 混进内容，导致所有内容都带上多余字符——虽然此时分组结果碰巧仍然正确，但键的语义已经错了。</li>
+    <li>
+<strong>拼出 <code class="language-plaintext highlighter-rouge">fullPath = dir + "/" + fileName</code>，追加到 <code class="language-plaintext highlighter-rouge">contentMap[content]</code> 对应的列表</strong>。<strong>为什么</strong>：题目要求输出完整路径；用 <code class="language-plaintext highlighter-rouge">computeIfAbsent</code>（Go 里直接 <code class="language-plaintext highlighter-rouge">append</code> 到零值切片）可以在键首次出现时自动建列表，避免「先查后建」的两段式写法。</li>
+    <li>
+<strong>遍历哈希表的值，把 <code class="language-plaintext highlighter-rouge">size() &gt; 1</code> 的列表加进结果</strong>。<strong>为什么</strong>：组内只有一个路径说明该内容不重复，按题意不能输出；条件是严格大于 1，写成 <code class="language-plaintext highlighter-rouge">&gt;= 1</code> 会把所有文件都输出。</li>
+    <li>
+<strong>返回结果列表</strong>。<strong>为什么</strong>：题目不要求任何顺序，直接返回哈希表遍历产生的顺序即可。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">paths = ["root/a 1.txt(abcd) 2.txt(efgh)", "root/c 3.txt(abcd)", "root 4.txt(efgh)"]</code> 走一遍</strong>。</p>
+
+  <p>第一条记录切分得 <code class="language-plaintext highlighter-rouge">["root/a", "1.txt(abcd)", "2.txt(efgh)"]</code>，<code class="language-plaintext highlighter-rouge">dir = "root/a"</code>。</p>
+
+  <p>处理 <code class="language-plaintext highlighter-rouge">"1.txt(abcd)"</code>：第一个 <code class="language-plaintext highlighter-rouge">(</code> 在下标 <code class="language-plaintext highlighter-rouge">5</code>，文件名取 <code class="language-plaintext highlighter-rouge">[0, 5)</code> 得 <code class="language-plaintext highlighter-rouge">"1.txt"</code>，内容取 <code class="language-plaintext highlighter-rouge">[6, 10)</code>——总长 11，右端 <code class="language-plaintext highlighter-rouge">11 - 1 = 10</code>——得 <code class="language-plaintext highlighter-rouge">"abcd"</code>。完整路径 <code class="language-plaintext highlighter-rouge">"root/a/1.txt"</code>，追加到键 <code class="language-plaintext highlighter-rouge">"abcd"</code> 下，此时 <code class="language-plaintext highlighter-rouge">contentMap["abcd"] = ["root/a/1.txt"]</code>。</p>
+
+  <p>处理 <code class="language-plaintext highlighter-rouge">"2.txt(efgh)"</code>：同理得内容 <code class="language-plaintext highlighter-rouge">"efgh"</code>、路径 <code class="language-plaintext highlighter-rouge">"root/a/2.txt"</code>，<code class="language-plaintext highlighter-rouge">contentMap["efgh"] = ["root/a/2.txt"]</code>。</p>
+
+  <p>第二条记录 <code class="language-plaintext highlighter-rouge">dir = "root/c"</code>，解析出内容 <code class="language-plaintext highlighter-rouge">"abcd"</code>、路径 <code class="language-plaintext highlighter-rouge">"root/c/3.txt"</code>。键 <code class="language-plaintext highlighter-rouge">"abcd"</code> 已存在，直接追加，变成 <code class="language-plaintext highlighter-rouge">["root/a/1.txt", "root/c/3.txt"]</code>——<strong>两个来自不同目录、文件名也不同的文件，仅因内容相同就自动落进了同一个桶，这就是用内容当键的全部价值</strong>。</p>
+
+  <p>第三条记录 <code class="language-plaintext highlighter-rouge">dir = "root"</code>，解析出内容 <code class="language-plaintext highlighter-rouge">"efgh"</code>、路径 <code class="language-plaintext highlighter-rouge">"root/4.txt"</code>，键 <code class="language-plaintext highlighter-rouge">"efgh"</code> 的列表变成 <code class="language-plaintext highlighter-rouge">["root/a/2.txt", "root/4.txt"]</code>。</p>
+
+  <p>扫描结束，哈希表有两个键，两个列表长度都是 2，都大于 1，全部进入结果：<code class="language-plaintext highlighter-rouge">[["root/a/1.txt", "root/c/3.txt"], ["root/a/2.txt", "root/4.txt"]]</code>。</p>
+
+  <p>若把第二条记录去掉，键 <code class="language-plaintext highlighter-rouge">"abcd"</code> 的列表只剩一个元素，<code class="language-plaintext highlighter-rouge">size() &gt; 1</code> 不成立而被过滤掉，输出只剩一组——这正是「单个文件不算重复」那条规则的体现。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="nf">findDuplicate</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">paths</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 以内容为键：相同内容自动落入同一桶，无需两两比较。</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">contentMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">path</span> <span class="o">:</span> <span class="n">paths</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">String</span><span class="o">[]</span> <span class="n">parts</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">" "</span><span class="o">);</span>
+            <span class="nc">String</span> <span class="n">dir</span> <span class="o">=</span> <span class="n">parts</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+            <span class="c1">// 从 1 开始跳过目录段；只有目录时循环不进，边界自然成立。</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">parts</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="c1">// 文件名不含括号，第一个 '(' 即分界点。</span>
+                <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">parts</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">indexOf</span><span class="o">(</span><span class="sc">'('</span><span class="o">);</span>
+                <span class="nc">String</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">parts</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">idx</span><span class="o">);</span>
+                <span class="c1">// 右端取 length - 1，正好剥掉结尾的 ')'。</span>
+                <span class="nc">String</span> <span class="n">content</span> <span class="o">=</span> <span class="n">parts</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">substring</span><span class="o">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">parts</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+                <span class="nc">String</span> <span class="n">fullPath</span> <span class="o">=</span> <span class="n">dir</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">fileName</span><span class="o">;</span>
+                <span class="n">contentMap</span><span class="o">.</span><span class="na">computeIfAbsent</span><span class="o">(</span><span class="n">content</span><span class="o">,</span> <span class="n">key</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;()).</span><span class="na">add</span><span class="o">(</span><span class="n">fullPath</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">group</span> <span class="o">:</span> <span class="n">contentMap</span><span class="o">.</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>
+            <span class="c1">// 只有一个路径说明内容不重复，按题意不输出。</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">group</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">group</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">findDuplicate</span><span class="p">(</span><span class="n">paths</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">[][]</span><span class="kt">string</span> <span class="p">{</span>
+    <span class="c">// 以内容为键：相同内容自动落入同一桶，无需两两比较。</span>
+    <span class="n">contentMap</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">][]</span><span class="kt">string</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">path</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">paths</span> <span class="p">{</span>
+        <span class="n">parts</span> <span class="o">:=</span> <span class="n">strings</span><span class="o">.</span><span class="n">Split</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">" "</span><span class="p">)</span>
+        <span class="n">dir</span> <span class="o">:=</span> <span class="n">parts</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+
+        <span class="c">// 跳过目录段；只有目录时切片为空，循环不进。</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">file</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">parts</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">]</span> <span class="p">{</span>
+            <span class="c">// 文件名不含括号，第一个 '(' 即分界点。</span>
+            <span class="n">idx</span> <span class="o">:=</span> <span class="n">strings</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s">"("</span><span class="p">)</span>
+            <span class="n">fileName</span> <span class="o">:=</span> <span class="n">file</span><span class="p">[</span><span class="o">:</span><span class="n">idx</span><span class="p">]</span>
+            <span class="c">// 右端取 len(file)-1，正好剥掉结尾的 ')'。</span>
+            <span class="n">content</span> <span class="o">:=</span> <span class="n">file</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="m">1</span> <span class="o">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+
+            <span class="n">fullPath</span> <span class="o">:=</span> <span class="n">dir</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">fileName</span>
+            <span class="n">contentMap</span><span class="p">[</span><span class="n">content</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">contentMap</span><span class="p">[</span><span class="n">content</span><span class="p">],</span> <span class="n">fullPath</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">res</span> <span class="o">:=</span> <span class="p">[][]</span><span class="kt">string</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">group</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">contentMap</span> <span class="p">{</span>
+        <span class="c">// 只有一个路径说明内容不重复，按题意不输出。</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">1</span> <span class="p">{</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(L)$，<code class="language-plaintext highlighter-rouge">L</code> 为所有输入字符串的总字符数。凭什么：每条记录被切分一次、每个文件段被解析一次，切分与截取的代价都与字符数成正比；哈希表的插入需要对内容串求一次哈希（同样是 $O(内容长度)$）并在冲突时做一次比较，所有文件的内容长度之和不超过 <code class="language-plaintext highlighter-rouge">L</code>；最后一趟遍历哈希表只与分组数有关，不超过文件数。相比两两比较的 $O(k^2 c)$，这里彻底消掉了平方项。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(L)$。凭什么：哈希表的键是全部不同的内容串，值是全部完整路径，两者之和与输入总量同阶；切分产生的中间数组同样是 $O(单条记录长度)$，逐条释放。结果列表复用了值列表的引用（Java 中直接 <code class="language-plaintext highlighter-rouge">add</code> 同一个 <code class="language-plaintext highlighter-rouge">List</code>），没有额外拷贝。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「按某个属性把元素归类」的需求，第一反应就该是<strong>用该属性做哈希表的键</strong>，而不是两两比较。哈希表的键天然完成等价类划分，连传递性都不用自己处理——这是「分组类」问题的通用起手式，49 题字母异位词分组是同一个模子。</li>
+    <li>键的选择直接体现对题意的理解。本题判重依据是内容而非文件名或路径，所以键必须是内容；如果误把文件名当键，题目就被做成了另一道题。动手前先问一句「什么相同算重复」。</li>
+    <li>值存什么取决于输出要什么。这里要输出路径，所以值是路径列表；如果只问「有多少组重复」，值可以退化成计数器，空间会小很多。</li>
+    <li>字符串解析要用<strong>锚点定位</strong>而非固定长度假设。第一个 <code class="language-plaintext highlighter-rouge">(</code> 和结尾的 <code class="language-plaintext highlighter-rouge">)</code> 就是本题的两个锚点，<code class="language-plaintext highlighter-rouge">substring(idx + 1, len - 1)</code> 的两个端点必须一起推导，任何一处偏移都会污染键。</li>
+    <li>筛选条件写 <code class="language-plaintext highlighter-rouge">&gt; 1</code> 而不是 <code class="language-plaintext highlighter-rouge">&gt;= 1</code>，是「重复」这个词的直接翻译。这类差一错误在测试样例较小时很难暴露，读题时就要把它标出来。</li>
+    <li>面试延伸：题目自带的追问值得主动展开——真实系统中文件内容可能是 GB 级，不适合整份当键。工程做法是<strong>分层过滤</strong>：先按文件大小分桶（大小不同必不相同），再对同桶文件取内容哈希（如 MD5 / SHA-1）二次分桶，最后只对哈希相同的少数候选做逐字节比对，以规避哈希碰撞。若还要考虑 IO，可以先只读文件头尾各若干字节做快速排除。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>用文件名当哈希表的键</strong>：<code class="language-plaintext highlighter-rouge">["root/a 1.txt(aaa)", "root/b 1.txt(bbb)"]</code> → 两个同名但内容不同的文件被归为一组，返回一组重复，正确答案是空列表。</li>
+    <li>
+<strong>内容截取时右端写成 <code class="language-plaintext highlighter-rouge">parts[i].length()</code></strong>：<code class="language-plaintext highlighter-rouge">"1.txt(abcd)"</code> → 内容变成 <code class="language-plaintext highlighter-rouge">"abcd)"</code>，虽然分组结果碰巧仍正确（所有键都多一个 <code class="language-plaintext highlighter-rouge">)</code>），但键的语义已错；一旦后续要用内容做别的判断就会全线出问题。</li>
+    <li>
+<strong>用 <code class="language-plaintext highlighter-rouge">lastIndexOf('(')</code> 定位分界</strong>：文件名保证不含括号，但若内容中出现 <code class="language-plaintext highlighter-rouge">(</code> → 分界点跑到内容内部，文件名和内容都被切错。应当用第一个 <code class="language-plaintext highlighter-rouge">(</code>。</li>
+    <li>
+<strong>假设文件名长度固定、用魔法数字截取</strong>：<code class="language-plaintext highlighter-rouge">"12345.txt(x)"</code> → 文件名长度不同的输入立刻错位，解析出乱七八糟的键。</li>
+    <li>
+<strong>内层循环从下标 <code class="language-plaintext highlighter-rouge">0</code> 开始</strong>：<code class="language-plaintext highlighter-rouge">parts[0]</code> 是目录不含括号 → <code class="language-plaintext highlighter-rouge">indexOf('(')</code> 返回 <code class="language-plaintext highlighter-rouge">-1</code>，<code class="language-plaintext highlighter-rouge">substring(0, -1)</code> 直接抛异常。</li>
+    <li>
+<strong>筛选条件写成 <code class="language-plaintext highlighter-rouge">size() &gt;= 1</code></strong>：所有文件内容互不相同 → 每个单元素组都被输出，正确答案是空列表。</li>
+    <li>
+<strong>拼接路径时漏掉 <code class="language-plaintext highlighter-rouge">/</code></strong>：<code class="language-plaintext highlighter-rouge">dir = "root/a"</code>、<code class="language-plaintext highlighter-rouge">fileName = "1.txt"</code> → 得到 <code class="language-plaintext highlighter-rouge">"root/a1.txt"</code>，路径格式错误。</li>
+    <li>
+<strong>拼接路径时把内容也带上</strong>：<code class="language-plaintext highlighter-rouge">"root/a/1.txt(abcd)"</code> → 输出格式与期望不符，判题失败。</li>
+    <li>
+<strong>两两比较所有文件的内容来分组</strong>：文件数上万时 → $O(k^2)$ 次比较直接超时，而且还要额外处理「A 与 B 同、B 与 C 同」的合并。</li>
+    <li>
+<strong>用 <code class="language-plaintext highlighter-rouge">path.split(" ")</code> 却没意识到目录必须单独取</strong>：把 <code class="language-plaintext highlighter-rouge">parts</code> 整体当作文件列表 → 目录被当成文件解析，同上抛异常或产生垃圾键。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/group-anagrams/">49. 字母异位词分组</a></td>
+      <td>中等</td>
+      <td>同为「按属性分组」，但键需要先归一化（排序或计数）才能让异位词落进同桶</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/find-duplicate-subtrees/">652. 寻找重复的子树</a></td>
+      <td>中等</td>
+      <td>键是子树的序列化结果，考的是如何把树结构压成可比较的字符串</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/repeated-dna-sequences/">187. 重复的DNA序列</a></td>
+      <td>中等</td>
+      <td>键是定长滑动窗口的子串，可用滚动哈希把每次取键降到 $O(1)$</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/contains-duplicate/">217. 存在重复元素</a></td>
+      <td>简单</td>
+      <td>只判断有无重复而不必分组，用哈希集合即可，是本题的最简形态</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/contains-duplicate-ii/">219. 存在重复元素 II</a></td>
+      <td>简单</td>
+      <td>重复还要满足下标距离限制，哈希表的值从列表退化成「最近一次出现的下标」</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/valid-anagram/">242. 有效的字母异位词</a></td>
+      <td>简单</td>
+      <td>只比较两个串是否同组，用计数数组直接对比，不需要建表</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/sort-characters-by-frequency/">451. 根据字符出现频率排序</a></td>
+      <td>中等</td>
+      <td>先用哈希表统计再按值排序，重点在「统计完之后怎么用」而非分组本身</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/word-pattern/">290. 单词规律</a></td>
+      <td>简单</td>
+      <td>需要双向映射保证一一对应，单向哈希表会漏掉「两个模式字符映射到同一词」</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2021/10418518" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 面试题 17.21. 直方图的水量</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/67002729" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 549. 二叉树最长连续序列 II</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/61841011">https://hgnulb.github.io/blog/2021/61841011</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

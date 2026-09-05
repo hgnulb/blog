@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 736. Lisp 语法解析 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,哈希表,字符串,字节跳动,拼多多,栈,递归" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 736. Lisp 语法解析" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2025/79643494" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2025/79643494" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-05-13T00:00:00+08:00" />
+<meta property="article:modified_time" content="2025-05-13T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 736. Lisp 语法解析" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2025-05-13T00:00:00+08:00","datePublished":"2025-05-13T00:00:00+08:00","description":"题目描述","headline":"LeetCode 736. Lisp 语法解析","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2025/79643494"},"url":"https://hgnulb.github.io/blog/2025/79643494"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法递归下降解析">解法：递归下降解析</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 736. Lisp 语法解析">LeetCode 736. Lisp 语法解析</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2025-05-13 00:00:00"
+                    datetime="2025-05-13T00:00:00+08:00"
+            >
+                2025-05-13
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 4069 字 · 英文 107 词 · 代码 216 行"
+            aria-label="预计阅读时间约 17 分钟，正文 4069 字 · 英文 107 词 · 代码 216 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 17 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7041841112/" title="拼多多">
+        拼多多
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2907113006/" title="递归">
+        递归
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法递归下降解析">解法：递归下降解析</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/parse-lisp-expression/">736. Lisp 语法解析</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个用类 Lisp 语法写成的表达式字符串，求它的整数值。表达式有三类形态：整数字面量（可带负号）、变量名（小写字母开头，后面可跟字母和数字），以及三种带括号的调用——<code class="language-plaintext highlighter-rouge">(add e1 e2)</code> 求两个子表达式之和，<code class="language-plaintext highlighter-rouge">(mult e1 e2)</code> 求积，<code class="language-plaintext highlighter-rouge">(let v1 e1 v2 e2 ... expr)</code> 依次把变量绑定到子表达式的值，最后返回 <code class="language-plaintext highlighter-rouge">expr</code> 的值。</p>
+
+  <p>语法信号非常明确：<strong>表达式是自嵌套的</strong>——<code class="language-plaintext highlighter-rouge">add</code> 和 <code class="language-plaintext highlighter-rouge">mult</code> 的操作数本身可以是任意表达式，<code class="language-plaintext highlighter-rouge">let</code> 的绑定值和返回体也可以是任意表达式。凡是「结构可以无限嵌套且用括号界定边界」的输入，一律要按照语法规则逐层展开来处理，而不是用一个扁平的栈去凑。</p>
+
+  <p>第二个关键信号来自 <code class="language-plaintext highlighter-rouge">let</code> 的语义细节。题面强调：绑定是<strong>顺序生效</strong>的，后面的表达式能看见前面刚绑定的变量（如 <code class="language-plaintext highlighter-rouge">(let x 2 y x z 3 x)</code> 中的 <code class="language-plaintext highlighter-rouge">y</code> 取到 $2$）；而且<strong>内层的同名变量会遮蔽外层</strong>，内层作用域一结束，外层的绑定必须原样恢复（如 <code class="language-plaintext highlighter-rouge">(let x 2 (let x 3 x) x)</code> 的答案是 $2$ 而不是 $3$）。这两条合起来说明：变量环境不是一张全局的表，而是一叠<strong>有生命周期的作用域</strong>，进入 <code class="language-plaintext highlighter-rouge">let</code> 时压入一层，离开时弹出一层，查找时从内向外逐层找。</p>
+
+  <p>约束方面：表达式长度不超过 $2000$，保证语法合法、变量在使用前一定已被绑定、所有中间结果和最终结果都落在 $32$ 位有符号整数范围内。这些保证很重要——它们意味着不需要做错误处理、不需要判断未定义变量、也不用担心溢出，可以把全部精力放在语法结构的正确翻译上。</p>
+
+  <p>边界上要覆盖：单个数字或单个负数（如 <code class="language-plaintext highlighter-rouge">"-12"</code>）；<code class="language-plaintext highlighter-rouge">let</code> 一个绑定都没有只有返回体（如 <code class="language-plaintext highlighter-rouge">(let x 5 x)</code> 是最小形式，但 <code class="language-plaintext highlighter-rouge">(let a1 3 b2 (add a1 1) b2)</code> 才体现顺序依赖）；<code class="language-plaintext highlighter-rouge">let</code> 的返回体是一个数字而不是变量（如 <code class="language-plaintext highlighter-rouge">(let x 3 x 4 x)</code> 里最后的 <code class="language-plaintext highlighter-rouge">x</code> 是返回体，而不是新一轮绑定的变量名）；变量名含数字（如 <code class="language-plaintext highlighter-rouge">x2</code>）；嵌套遮蔽。其中最难缠的是<strong>如何判断 <code class="language-plaintext highlighter-rouge">let</code> 参数列表里当前读到的 token 是「又一个绑定的变量名」还是「最后的返回体」</strong>，这是整道题的核心歧义点。</p>
+</blockquote>
+
+<h2 id="解法递归下降解析">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E9%80%92%E5%BD%92%E4%B8%8B%E9%99%8D%E8%A7%A3%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：递归下降解析</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先排除两条走不通的路。第一条是用正则或字符串切分预处理成 token 数组再处理——括号嵌套无法用正则匹配，切分之后还是要重建树结构，白做一遍。第二条是用单个显式栈做「遇到 <code class="language-plaintext highlighter-rouge">)</code> 就归约」的经典计算器写法——它对 <code class="language-plaintext highlighter-rouge">add</code> / <code class="language-plaintext highlighter-rouge">mult</code> 尚可，但 <code class="language-plaintext highlighter-rouge">let</code> 的作用域需要在<strong>进入括号时</strong>就建立环境，而栈式归约只在<strong>离开括号时</strong>才动手，时机对不上，会让变量遮蔽极难实现。</p>
+
+  <p>瓶颈在于：这道题的语法是<strong>递归定义</strong>的，而作用域的生命周期恰好与递归调用的生命周期重合。既然如此，最自然的做法就是让函数调用栈直接充当语法树——这就是递归下降。</p>
+
+  <p>于是设计一个带游标的解析器，把状态定死为三样东西：待解析的字符串 <code class="language-plaintext highlighter-rouge">s</code>、当前读到的位置 <code class="language-plaintext highlighter-rouge">idx</code>、以及一叠作用域 <code class="language-plaintext highlighter-rouge">scopes</code>（每层是一张 <code class="language-plaintext highlighter-rouge">变量名 -&gt; 值</code> 的哈希表）。核心函数 <code class="language-plaintext highlighter-rouge">eval()</code> 的语义是：<strong>从 <code class="language-plaintext highlighter-rouge">idx</code> 开始读出一个完整的表达式，返回它的值，并把 <code class="language-plaintext highlighter-rouge">idx</code> 推进到这个表达式结束的下一个位置</strong>。</p>
+
+  <p>这条语义就是整个解法的不变量。它有两个半边，缺一不可：「返回正确的值」和「游标恰好停在该表达式之后」。所有子函数（<code class="language-plaintext highlighter-rouge">parseAtom</code>、<code class="language-plaintext highlighter-rouge">parseToken</code>、<code class="language-plaintext highlighter-rouge">skipSpaces</code>）都必须遵守同样的契约——<strong>只消费自己该消费的字符，一个不多一个不少</strong>。一旦某个分支多吃或少吃一个字符（尤其是右括号），后续解析全部错位，且错误往往在很远的地方才暴露出来，这是本题最难调试的部分。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">eval()</code> 的分支结构由第一个非空格字符决定：不是 <code class="language-plaintext highlighter-rouge">'('</code> 就说明是原子（数字或变量），交给 <code class="language-plaintext highlighter-rouge">parseAtom</code>；是 <code class="language-plaintext highlighter-rouge">'('</code> 就吃掉左括号，读出操作符 token，再分三路：</p>
+
+  <ul>
+    <li>
+<code class="language-plaintext highlighter-rouge">add</code> / <code class="language-plaintext highlighter-rouge">mult</code>：连续调用两次 <code class="language-plaintext highlighter-rouge">eval()</code> 取两个操作数（递归天然处理了任意嵌套），跳过空格后吃掉配对的 <code class="language-plaintext highlighter-rouge">')'</code>，返回和或积。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">let</code>：先 <code class="language-plaintext highlighter-rouge">scopes.push(new HashMap&lt;&gt;())</code> 开一层新作用域，然后进入一个循环反复读取。</li>
+  </ul>
+
+  <p><code class="language-plaintext highlighter-rouge">let</code> 循环里的歧义判断是关键。循环每轮先看当前字符：如果是 <code class="language-plaintext highlighter-rouge">')'</code>，说明括号提前结束（在合法输入下不会走到，作为兜底返回 $0$）；如果是 <code class="language-plaintext highlighter-rouge">'('</code>、<code class="language-plaintext highlighter-rouge">'-'</code> 或数字，说明这一项<strong>不可能是变量名</strong>，只能是返回体表达式，于是求值、吃掉右括号、弹出作用域、返回该值；否则先用 <code class="language-plaintext highlighter-rouge">parseToken()</code> 读出一个标识符，<strong>再往后偷看一眼</strong>：若跳过空格后紧跟的是 <code class="language-plaintext highlighter-rouge">')'</code>，说明这个标识符就是返回体（形如 <code class="language-plaintext highlighter-rouge">... x)</code>），解析它的值后收尾返回；若不是 <code class="language-plaintext highlighter-rouge">')'</code>，说明它是一个变量名，后面还跟着绑定值，于是 <code class="language-plaintext highlighter-rouge">eval()</code> 求出值并写进<strong>栈顶</strong>作用域，继续下一轮循环。</p>
+
+  <p>「读一个 token 再偷看下一个字符」这一步就是消解「变量名 vs 返回体」歧义的全部手段——因为绑定总是成对出现，只有返回体是孤零零地贴着右括号的那一个。</p>
+
+  <p>变量查找 <code class="language-plaintext highlighter-rouge">resolve</code> 从栈顶向栈底逐层找，第一个命中即返回，这就实现了内层遮蔽外层。作用域在返回前 <code class="language-plaintext highlighter-rouge">pop</code>，恰好与 <code class="language-plaintext highlighter-rouge">let</code> 表达式的词法范围对齐，实现了「离开即恢复」。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+      <p>把解析器封装成一个持有 <code class="language-plaintext highlighter-rouge">s</code>、<code class="language-plaintext highlighter-rouge">idx</code>、<code class="language-plaintext highlighter-rouge">scopes</code> 的对象，而不是用一堆全局变量或到处传参。理由：递归下降的每个函数都要读写同一个游标，把它做成成员变量能让所有函数共享推进进度；如果用参数传递 <code class="language-plaintext highlighter-rouge">idx</code> 就必须同时返回「值」和「新位置」，签名会变得很难看。</p>
+    </li>
+    <li>
+      <p>写 <code class="language-plaintext highlighter-rouge">skipSpaces()</code>，把 <code class="language-plaintext highlighter-rouge">idx</code> 推过所有连续空格。理由：题目允许 token 之间有空格，但空格本身没有语义；把跳过空格集中成一个函数，在每个「即将读取下一个语法单元」的位置调用一次，能避免在十几处手写 <code class="language-plaintext highlighter-rouge">while</code> 且漏掉某处。</p>
+    </li>
+    <li>
+      <p>写 <code class="language-plaintext highlighter-rouge">parseToken()</code>：从当前位置读到遇见空格或 <code class="language-plaintext highlighter-rouge">')'</code> 为止，返回中间的子串。理由：token 的终止符只有这两个（左括号只会出现在 token 之前），把边界条件收敛成一处，操作符名和变量名就能共用同一个读取函数。</p>
+    </li>
+    <li>
+      <p>写 <code class="language-plaintext highlighter-rouge">parseAtom()</code>：跳空格后看首字符，若是 <code class="language-plaintext highlighter-rouge">'-'</code> 或数字则按符号加逐位累加解析出整数；否则读一个 token 当作变量名，交给 <code class="language-plaintext highlighter-rouge">resolve</code> 查值。理由：负号只可能出现在数字最前面（题目没有一元减运算），所以「首字符是 <code class="language-plaintext highlighter-rouge">-</code>」是判定数字的充分条件之一；逐位累加而不是 <code class="language-plaintext highlighter-rouge">Integer.parseInt</code> 是为了让游标推进和解析同步完成，符合前面定下的契约。</p>
+    </li>
+    <li>
+      <p><code class="language-plaintext highlighter-rouge">eval()</code> 先跳空格，看首字符是否为 <code class="language-plaintext highlighter-rouge">'('</code>：不是就直接返回 <code class="language-plaintext highlighter-rouge">parseAtom()</code>。理由：这是递归出口，把「原子表达式」这一最简形态单独剥离，后面就只需处理括号形态。</p>
+    </li>
+    <li>
+      <p>是 <code class="language-plaintext highlighter-rouge">'('</code> 时先 <code class="language-plaintext highlighter-rouge">idx++</code> 吃掉左括号，跳空格后 <code class="language-plaintext highlighter-rouge">parseToken()</code> 读出操作符。理由：三种操作符长度不同（<code class="language-plaintext highlighter-rouge">add</code>、<code class="language-plaintext highlighter-rouge">mult</code>、<code class="language-plaintext highlighter-rouge">let</code>），用 token 读取而不是固定长度截取才安全。</p>
+    </li>
+    <li>
+      <p><code class="language-plaintext highlighter-rouge">add</code> 分支：<code class="language-plaintext highlighter-rouge">int a = eval(); int b = eval();</code> 然后跳空格、<code class="language-plaintext highlighter-rouge">idx++</code> 吃掉右括号，返回 <code class="language-plaintext highlighter-rouge">a + b</code>。理由：两次 <code class="language-plaintext highlighter-rouge">eval()</code> 的调用顺序保证了游标按左到右推进；结尾必须显式吃掉自己这一层的右括号，否则外层看到的将是多余的 <code class="language-plaintext highlighter-rouge">)</code>。<code class="language-plaintext highlighter-rouge">mult</code> 分支同理，只把加号换成乘号。</p>
+    </li>
+    <li>
+      <p><code class="language-plaintext highlighter-rouge">let</code> 分支先压入一个空作用域，再进入循环。理由：必须在解析任何绑定值之前就建好新层，否则第一个绑定会写进外层作用域，污染上层环境。</p>
+    </li>
+    <li>
+      <p>循环内先跳空格取当前字符 <code class="language-plaintext highlighter-rouge">c</code>：若 <code class="language-plaintext highlighter-rouge">c</code> 是 <code class="language-plaintext highlighter-rouge">'('</code>、<code class="language-plaintext highlighter-rouge">'-'</code> 或数字，说明是返回体，求值后吃右括号、弹作用域、返回。理由：变量名必须以小写字母开头，所以这三类首字符能百分之百排除「变量名」的可能，判定是确定性的而非启发式的。</p>
+    </li>
+    <li>
+      <p>否则 <code class="language-plaintext highlighter-rouge">parseToken()</code> 读出标识符后跳空格，检查下一个字符是不是 <code class="language-plaintext highlighter-rouge">')'</code>：是则该标识符是返回体，<code class="language-plaintext highlighter-rouge">resolve</code> 取值后吃右括号、弹作用域、返回；不是则它是变量名，调用 <code class="language-plaintext highlighter-rouge">eval()</code> 求出绑定值并写入栈顶作用域，进入下一轮。理由：这是消解歧义的唯一手段，「后面还有东西」等价于「这是个待绑定的变量」。写入栈顶而非某个固定层，保证了顺序绑定对后续表达式立刻可见。</p>
+    </li>
+    <li>
+      <p><code class="language-plaintext highlighter-rouge">resolve(var)</code> 从栈顶向栈底遍历，命中即返回。理由：内层作用域在栈顶，先查内层就自动实现了遮蔽；Java 的 <code class="language-plaintext highlighter-rouge">ArrayDeque</code> 配合 <code class="language-plaintext highlighter-rouge">push</code> 时迭代顺序正好是从头（最新压入）到尾，天然满足要求，Go 里则要显式用下标从 <code class="language-plaintext highlighter-rouge">len-1</code> 递减。</p>
+    </li>
+    <li>
+      <p>以 <code class="language-plaintext highlighter-rouge">expression = "(let x 2 (mult x (let x 3 y 4 (add x y))))"</code> 走一遍。<code class="language-plaintext highlighter-rouge">eval</code> 见 <code class="language-plaintext highlighter-rouge">'('</code>，吃掉后读到 <code class="language-plaintext highlighter-rouge">let</code>，压入作用域 $S_1$。循环第一轮：字符是 <code class="language-plaintext highlighter-rouge">x</code>，是字母，<code class="language-plaintext highlighter-rouge">parseToken</code> 读出 <code class="language-plaintext highlighter-rouge">"x"</code>，偷看下一个非空格字符是 <code class="language-plaintext highlighter-rouge">2</code> 不是 <code class="language-plaintext highlighter-rouge">')'</code>，所以 <code class="language-plaintext highlighter-rouge">x</code> 是变量名；<code class="language-plaintext highlighter-rouge">eval()</code> 解析出 $2$，写入 $S_1$，此时 $S_1 = {x: 2}$。第二轮：字符是 <code class="language-plaintext highlighter-rouge">'('</code>，命中「返回体」分支，调用 <code class="language-plaintext highlighter-rouge">eval()</code>。这个内层 <code class="language-plaintext highlighter-rouge">eval</code> 读到 <code class="language-plaintext highlighter-rouge">mult</code>，两次递归求操作数：第一次 <code class="language-plaintext highlighter-rouge">eval()</code> 读到变量 <code class="language-plaintext highlighter-rouge">x</code>，<code class="language-plaintext highlighter-rouge">resolve</code> 在 $S_1$ 找到 $2$；第二次 <code class="language-plaintext highlighter-rouge">eval()</code> 见 <code class="language-plaintext highlighter-rouge">'('</code> 读到 <code class="language-plaintext highlighter-rouge">let</code>，压入 $S_2$，循环第一轮读 <code class="language-plaintext highlighter-rouge">"x"</code> 后偷看是 <code class="language-plaintext highlighter-rouge">3</code>，绑定 $x = 3$ 到 $S_2$（<strong>遮蔽</strong>了 $S_1$ 的 $x$），第二轮读 <code class="language-plaintext highlighter-rouge">"y"</code> 后偷看是 <code class="language-plaintext highlighter-rouge">4</code>，绑定 $y = 4$，第三轮字符是 <code class="language-plaintext highlighter-rouge">'('</code> 走返回体分支，<code class="language-plaintext highlighter-rouge">eval()</code> 求 <code class="language-plaintext highlighter-rouge">(add x y)</code>：<code class="language-plaintext highlighter-rouge">resolve("x")</code> 从栈顶 $S_2$ 找到 $3$（不是 $S_1$ 的 $2$），<code class="language-plaintext highlighter-rouge">resolve("y")</code> 找到 $4$，和为 $7$；随后吃掉 <code class="language-plaintext highlighter-rouge">let</code> 的右括号、<strong>弹出 $S_2$</strong>，返回 $7$。回到 <code class="language-plaintext highlighter-rouge">mult</code>，两个操作数是 $2$ 和 $7$，吃掉右括号返回 $14$。回到最外层 <code class="language-plaintext highlighter-rouge">let</code> 的返回体分支，吃掉右括号、弹出 $S_1$，返回 $14$。最终答案 $14$——过程中 $S_2$ 的弹出使得 <code class="language-plaintext highlighter-rouge">x</code> 的遮蔽在内层结束时准确失效。</p>
+    </li>
+  </ul>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">evaluate</span><span class="o">(</span><span class="nc">String</span> <span class="n">expression</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Parser</span> <span class="n">parser</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Parser</span><span class="o">(</span><span class="n">expression</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="na">eval</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Parser</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">s</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">idx</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">scopes</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+
+        <span class="nc">Parser</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="nf">eval</span><span class="o">()</span> <span class="o">{</span>
+            <span class="n">skipSpaces</span><span class="o">();</span>
+            <span class="kt">char</span> <span class="n">ch</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">idx</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">'('</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">idx</span><span class="o">++;</span>
+                <span class="n">skipSpaces</span><span class="o">();</span>
+                <span class="nc">String</span> <span class="n">op</span> <span class="o">=</span> <span class="n">parseToken</span><span class="o">();</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">op</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"add"</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">eval</span><span class="o">();</span>
+                    <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">eval</span><span class="o">();</span>
+                    <span class="n">skipSpaces</span><span class="o">();</span>
+                    <span class="n">idx</span><span class="o">++;</span>
+                    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">op</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"mult"</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">eval</span><span class="o">();</span>
+                    <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">eval</span><span class="o">();</span>
+                    <span class="n">skipSpaces</span><span class="o">();</span>
+                    <span class="n">idx</span><span class="o">++;</span>
+                    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="n">scopes</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;());</span>
+                <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">skipSpaces</span><span class="o">();</span>
+                    <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">idx</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">')'</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">idx</span><span class="o">++;</span>
+                        <span class="n">scopes</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+                        <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+                    <span class="o">}</span>
+
+                    <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">'('</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'-'</span> <span class="o">||</span> <span class="nc">Character</span><span class="o">.</span><span class="na">isDigit</span><span class="o">(</span><span class="n">c</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">eval</span><span class="o">();</span>
+                        <span class="n">skipSpaces</span><span class="o">();</span>
+                        <span class="n">idx</span><span class="o">++;</span>
+                        <span class="n">scopes</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+                        <span class="k">return</span> <span class="n">val</span><span class="o">;</span>
+                    <span class="o">}</span>
+
+                    <span class="nc">String</span> <span class="kt">var</span> <span class="o">=</span> <span class="n">parseToken</span><span class="o">();</span>
+                    <span class="n">skipSpaces</span><span class="o">();</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">idx</span><span class="o">)</span> <span class="o">==</span> <span class="sc">')'</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">resolve</span><span class="o">(</span><span class="kt">var</span><span class="o">);</span>
+                        <span class="n">idx</span><span class="o">++;</span>
+                        <span class="n">scopes</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+                        <span class="k">return</span> <span class="n">val</span><span class="o">;</span>
+                    <span class="o">}</span>
+
+                    <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">eval</span><span class="o">();</span>
+                    <span class="n">scopes</span><span class="o">.</span><span class="na">peek</span><span class="o">().</span><span class="na">put</span><span class="o">(</span><span class="kt">var</span><span class="o">,</span> <span class="n">val</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="nf">parseAtom</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="kt">int</span> <span class="nf">parseAtom</span><span class="o">()</span> <span class="o">{</span>
+            <span class="n">skipSpaces</span><span class="o">();</span>
+            <span class="kt">char</span> <span class="n">ch</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">idx</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">'-'</span> <span class="o">||</span> <span class="nc">Character</span><span class="o">.</span><span class="na">isDigit</span><span class="o">(</span><span class="n">ch</span><span class="o">))</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">sign</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">'-'</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">sign</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+                    <span class="n">idx</span><span class="o">++;</span>
+                <span class="o">}</span>
+
+                <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                <span class="k">while</span> <span class="o">(</span><span class="n">idx</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="nc">Character</span><span class="o">.</span><span class="na">isDigit</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">idx</span><span class="o">)))</span> <span class="o">{</span>
+                    <span class="n">num</span> <span class="o">=</span> <span class="n">num</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">idx</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'0'</span><span class="o">);</span>
+                    <span class="n">idx</span><span class="o">++;</span>
+                <span class="o">}</span>
+                <span class="k">return</span> <span class="n">sign</span> <span class="o">*</span> <span class="n">num</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nc">String</span> <span class="kt">var</span> <span class="o">=</span> <span class="n">parseToken</span><span class="o">();</span>
+            <span class="k">return</span> <span class="nf">resolve</span><span class="o">(</span><span class="kt">var</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="kt">int</span> <span class="nf">resolve</span><span class="o">(</span><span class="nc">String</span> <span class="kt">var</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">scope</span> <span class="o">:</span> <span class="n">scopes</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">scope</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="kt">var</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="n">scope</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kt">var</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="nc">String</span> <span class="nf">parseToken</span><span class="o">()</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="n">idx</span><span class="o">;</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">idx</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">())</span> <span class="o">{</span>
+                <span class="kt">char</span> <span class="n">ch</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">idx</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">' '</span> <span class="o">||</span> <span class="n">ch</span> <span class="o">==</span> <span class="sc">')'</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">idx</span><span class="o">++;</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">start</span><span class="o">,</span> <span class="n">idx</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">skipSpaces</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">idx</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">idx</span><span class="o">)</span> <span class="o">==</span> <span class="sc">' '</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">idx</span><span class="o">++;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Parser</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">s</span>      <span class="kt">string</span>
+    <span class="n">idx</span>    <span class="kt">int</span>
+    <span class="n">scopes</span> <span class="p">[]</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">expression</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">p</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">Parser</span><span class="p">{</span><span class="n">s</span><span class="o">:</span> <span class="n">expression</span><span class="p">,</span> <span class="n">idx</span><span class="o">:</span> <span class="m">0</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">p</span> <span class="o">*</span><span class="n">Parser</span><span class="p">)</span> <span class="n">eval</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">skipSpaces</span><span class="p">()</span>
+    <span class="n">ch</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">s</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">ch</span> <span class="o">==</span> <span class="sc">'('</span> <span class="p">{</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="o">++</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">skipSpaces</span><span class="p">()</span>
+        <span class="n">op</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">parseToken</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s">"add"</span> <span class="p">{</span>
+            <span class="n">a</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+            <span class="n">b</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">skipSpaces</span><span class="p">()</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="o">++</span>
+            <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s">"mult"</span> <span class="p">{</span>
+            <span class="n">a</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+            <span class="n">b</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">skipSpaces</span><span class="p">()</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="o">++</span>
+            <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+        <span class="p">}</span>
+
+        <span class="n">p</span><span class="o">.</span><span class="n">scopes</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">scopes</span><span class="p">,</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{})</span>
+        <span class="k">for</span> <span class="p">{</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">skipSpaces</span><span class="p">()</span>
+            <span class="n">c</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">s</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">')'</span> <span class="p">{</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="o">++</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">scopes</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">scopes</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">scopes</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+                <span class="k">return</span> <span class="m">0</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'('</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'-'</span> <span class="o">||</span> <span class="p">(</span><span class="n">c</span> <span class="o">&gt;=</span> <span class="sc">'0'</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">&lt;=</span> <span class="sc">'9'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">val</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">skipSpaces</span><span class="p">()</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="o">++</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">scopes</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">scopes</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">scopes</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">val</span>
+            <span class="p">}</span>
+
+            <span class="n">varName</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">parseToken</span><span class="p">()</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">skipSpaces</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">s</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="sc">')'</span> <span class="p">{</span>
+                <span class="n">val</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">varName</span><span class="p">)</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="o">++</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">scopes</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">scopes</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">scopes</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">val</span>
+            <span class="p">}</span>
+
+            <span class="n">val</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">scopes</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">scopes</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">varName</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">parseAtom</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">p</span> <span class="o">*</span><span class="n">Parser</span><span class="p">)</span> <span class="n">parseAtom</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">skipSpaces</span><span class="p">()</span>
+    <span class="n">ch</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">s</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">ch</span> <span class="o">==</span> <span class="sc">'-'</span> <span class="o">||</span> <span class="p">(</span><span class="n">ch</span> <span class="o">&gt;=</span> <span class="sc">'0'</span> <span class="o">&amp;&amp;</span> <span class="n">ch</span> <span class="o">&lt;=</span> <span class="sc">'9'</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">sign</span> <span class="o">:=</span> <span class="m">1</span>
+        <span class="k">if</span> <span class="n">ch</span> <span class="o">==</span> <span class="sc">'-'</span> <span class="p">{</span>
+            <span class="n">sign</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="o">++</span>
+        <span class="p">}</span>
+
+        <span class="n">num</span> <span class="o">:=</span> <span class="m">0</span>
+        <span class="k">for</span> <span class="n">p</span><span class="o">.</span><span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">c</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">s</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="sc">'0'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="sc">'9'</span> <span class="p">{</span>
+                <span class="k">break</span>
+            <span class="p">}</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="n">num</span><span class="o">*</span><span class="m">10</span> <span class="o">+</span> <span class="kt">int</span><span class="p">(</span><span class="n">c</span><span class="o">-</span><span class="sc">'0'</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="o">++</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">sign</span> <span class="o">*</span> <span class="n">num</span>
+    <span class="p">}</span>
+
+    <span class="n">varName</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">parseToken</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">varName</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">p</span> <span class="o">*</span><span class="n">Parser</span><span class="p">)</span> <span class="n">resolve</span><span class="p">(</span><span class="n">name</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">scopes</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">val</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">scopes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">name</span><span class="p">];</span> <span class="n">ok</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">val</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="m">0</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">p</span> <span class="o">*</span><span class="n">Parser</span><span class="p">)</span> <span class="n">parseToken</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="n">start</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">idx</span>
+    <span class="k">for</span> <span class="n">p</span><span class="o">.</span><span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ch</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">s</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">ch</span> <span class="o">==</span> <span class="sc">' '</span> <span class="o">||</span> <span class="n">ch</span> <span class="o">==</span> <span class="sc">')'</span> <span class="p">{</span>
+            <span class="k">break</span>
+        <span class="p">}</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="o">++</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">s</span><span class="p">[</span><span class="n">start</span><span class="o">:</span><span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">p</span> <span class="o">*</span><span class="n">Parser</span><span class="p">)</span> <span class="n">skipSpaces</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">p</span><span class="o">.</span><span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">s</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">p</span><span class="o">.</span><span class="n">s</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="sc">' '</span> <span class="p">{</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">idx</span><span class="o">++</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n \cdot d)$，其中 $n$ 是表达式长度、$d$ 是 <code class="language-plaintext highlighter-rouge">let</code> 的最大嵌套深度。游标 <code class="language-plaintext highlighter-rouge">idx</code> 只单调前进从不回退，因此字符扫描总量是 $O(n)$；额外开销来自 <code class="language-plaintext highlighter-rouge">resolve</code>，每次查变量最坏要沿作用域栈走 $d$ 层，而变量引用次数不超过 $O(n)$。由于 $n \le 2000$ 且嵌套深度受括号数限制，实际运算量很小。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。递归深度与表达式的括号嵌套深度同阶，最坏是 $O(n)$；作用域栈的层数等于 <code class="language-plaintext highlighter-rouge">let</code> 嵌套深度，所有层中存储的变量总数也不超过表达式中出现的绑定次数，同样是 $O(n)$；解析过程本身不复制字符串，只做子串截取。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>面对递归定义的语法，递归下降几乎总是最优选择：<strong>让函数调用栈充当语法树</strong>，语法规则一条对应一个分支，代码结构和文法定义一一对应，可读性远超手工维护的显式栈。判断标准是「输入是否可以无限嵌套」，一旦是，就不要试图用扁平的栈去凑。</li>
+    <li>递归下降的生命线是<strong>游标契约</strong>：每个解析函数「只消费自己那一段，返回时游标停在段尾之后」。写代码时逐个函数确认这条契约，比写完之后调试要高效一个量级——因为游标错位的症状会在很远处才显现，几乎无法通过打断点定位。</li>
+    <li>变量作用域天然对应「进入时压栈、离开时弹栈」的结构，而在递归下降里这个时机与函数的进入/返回完全重合，所以直接把 <code class="language-plaintext highlighter-rouge">push</code> 放在分支开头、<code class="language-plaintext highlighter-rouge">pop</code> 放在每个 <code class="language-plaintext highlighter-rouge">return</code> 之前即可。查找从栈顶向栈底走就实现了遮蔽语义，无需任何额外机制。</li>
+    <li>语法歧义要靠<strong>前瞻</strong>消解，而不是靠猜。本题「变量名 vs 返回体」的区分手段是「读完 token 后偷看下一个非空格字符是否为右括号」，这是一个确定性的 LL(1) 判断；用「计数绑定对数的奇偶」之类的间接推断则会在嵌套时失效。</li>
+    <li>首字符能提供强判定信息时要充分利用。本题里 <code class="language-plaintext highlighter-rouge">'('</code>、<code class="language-plaintext highlighter-rouge">'-'</code> 和数字三者都不可能是变量名的开头，所以看一眼就能立刻走返回体分支，省掉一次 token 读取和回退。</li>
+    <li>面试视角：字节考这题主要看<strong>能否把非平凡文法翻译成结构清晰的代码</strong>，而不是看你能不能想出巧思。答题的正确姿势是先在白板上把文法写出来（<code class="language-plaintext highlighter-rouge">expr := int | var | (add expr expr) | (mult expr expr) | (let (var expr)* expr)</code>），指着它说明每条产生式对应哪个分支，再写代码。写之前主动声明游标契约，写完主动举 <code class="language-plaintext highlighter-rouge">(let x 2 (let x 3 x) x)</code> 这个遮蔽用例验证作用域弹出，能极大提升说服力。若被追问「怎么支持更多操作符」，回答是把分支表改成 <code class="language-plaintext highlighter-rouge">Map&lt;String, 处理函数&gt;</code> 即可扩展，不影响主框架。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>错误写法：<code class="language-plaintext highlighter-rouge">add</code> / <code class="language-plaintext highlighter-rouge">mult</code> 分支求完两个操作数后忘记吃掉自己的右括号（漏掉 <code class="language-plaintext highlighter-rouge">idx++</code>）→ 用例 <code class="language-plaintext highlighter-rouge">"(add 1 2)"</code> → 外层解析器随后读到多余的 <code class="language-plaintext highlighter-rouge">')'</code>，在嵌套场景如 <code class="language-plaintext highlighter-rouge">"(mult (add 1 2) 3)"</code> 中会把 <code class="language-plaintext highlighter-rouge">)</code> 当成 token 起点，解析彻底错位。</li>
+    <li>错误写法：<code class="language-plaintext highlighter-rouge">let</code> 分支的 <code class="language-plaintext highlighter-rouge">pop</code> 只写在其中一个返回路径上 → 用例 <code class="language-plaintext highlighter-rouge">"(let x 2 (let x 3 x) x)"</code> → 内层 <code class="language-plaintext highlighter-rouge">let</code> 通过「首字符是 <code class="language-plaintext highlighter-rouge">(</code>」路径返回时若漏了 <code class="language-plaintext highlighter-rouge">pop</code>，外层再查 <code class="language-plaintext highlighter-rouge">x</code> 会先命中残留的内层作用域返回 $3$，正确答案是 $2$。</li>
+    <li>错误写法：用一张全局哈希表代替作用域栈，<code class="language-plaintext highlighter-rouge">let</code> 结束时不恢复 → 用例 <code class="language-plaintext highlighter-rouge">"(let x 2 (let x 3 x) x)"</code> → 内层把 <code class="language-plaintext highlighter-rouge">x</code> 改成 $3$ 之后再没改回来，最终返回 $3$，正确答案是 $2$。</li>
+    <li>错误写法：<code class="language-plaintext highlighter-rouge">resolve</code> 从作用域栈底向栈顶查找（Java 里误用 <code class="language-plaintext highlighter-rouge">descendingIterator</code>，或 Go 里下标从 $0$ 递增）→ 用例 <code class="language-plaintext highlighter-rouge">"(let x 2 (let x 3 x))"</code> → 先命中外层的 $2$，返回 $2$，正确答案是 $3$，遮蔽方向完全反了。</li>
+    <li>错误写法：把 <code class="language-plaintext highlighter-rouge">let</code> 的绑定值写进栈底或某个固定作用域而不是栈顶 → 用例 <code class="language-plaintext highlighter-rouge">"(let x 2 (let y 3 (add x y)))"</code> → 内层的 <code class="language-plaintext highlighter-rouge">y</code> 被写到外层，虽然本例侥幸能算对，但换成 <code class="language-plaintext highlighter-rouge">"(let x 1 (let x 2 x) x)"</code> 时内层绑定污染外层，最终返回 $2$ 而非 $1$。</li>
+    <li>错误写法：判断「返回体」时只检查首字符是不是 <code class="language-plaintext highlighter-rouge">'('</code>，忘记数字和负号 → 用例 <code class="language-plaintext highlighter-rouge">"(let x 2 5)"</code> → 读到 <code class="language-plaintext highlighter-rouge">5</code> 时把它当成变量名，<code class="language-plaintext highlighter-rouge">parseToken</code> 读出 <code class="language-plaintext highlighter-rouge">"5"</code> 后偷看是 <code class="language-plaintext highlighter-rouge">')'</code>，走 <code class="language-plaintext highlighter-rouge">resolve("5")</code> 返回默认值 $0$，正确答案是 $5$。</li>
+    <li>错误写法：读 token 的终止条件只判空格不判 <code class="language-plaintext highlighter-rouge">')'</code> → 用例 <code class="language-plaintext highlighter-rouge">"(let x 2 x)"</code> → 最后的 <code class="language-plaintext highlighter-rouge">x)</code> 被整体读成 token <code class="language-plaintext highlighter-rouge">"x)"</code>，<code class="language-plaintext highlighter-rouge">resolve</code> 查不到返回 $0$，且游标已经越过右括号导致后续全乱。</li>
+    <li>错误写法：解析数字时不处理前导负号，或把 <code class="language-plaintext highlighter-rouge">'-'</code> 当成减法运算符 → 用例 <code class="language-plaintext highlighter-rouge">"(add 1 -2)"</code> → 要么解析出 $2$ 得到答案 $3$，要么试图找第三个操作数而崩溃，正确答案是 $-1$。</li>
+    <li>错误写法：用 <code class="language-plaintext highlighter-rouge">Integer.parseInt(s.substring(start, end))</code> 解析数字却没有同步推进 <code class="language-plaintext highlighter-rouge">idx</code> → 用例 <code class="language-plaintext highlighter-rouge">"(add 12 3)"</code> → 游标仍停在 <code class="language-plaintext highlighter-rouge">1</code> 上，下一次读取重复消费同一段字符，陷入死循环或读出错误的 token。</li>
+    <li>错误写法：<code class="language-plaintext highlighter-rouge">let</code> 循环里读完变量名后不跳空格就检查下一个字符是否为 <code class="language-plaintext highlighter-rouge">')'</code> → 用例 <code class="language-plaintext highlighter-rouge">"(let x 2 x )"</code>（右括号前有空格）→ 检查到的是空格不是 <code class="language-plaintext highlighter-rouge">')'</code>，误判 <code class="language-plaintext highlighter-rouge">x</code> 为变量名并调用 <code class="language-plaintext highlighter-rouge">eval()</code> 去读 <code class="language-plaintext highlighter-rouge">)</code>，解析崩溃。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/parsing-a-boolean-expression/">1106. 解析布尔表达式</a></td>
+      <td>困难</td>
+      <td>同为括号嵌套的递归下降，但操作数个数可变且没有变量作用域</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/basic-calculator-iii/">772. 基本计算器 III</a></td>
+      <td>困难</td>
+      <td>中缀表达式带运算符优先级，需在递归下降中分层处理加减与乘除</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/decode-string/">394. 字符串解码</a></td>
+      <td>中等</td>
+      <td>嵌套结构更简单，可用显式栈归约，是理解「递归 vs 栈」两种写法的入门对照</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-atoms/">726. 原子的数量</a></td>
+      <td>困难</td>
+      <td>括号带乘数因子，返回的是计数表而非单值，考察递归返回复合结果的合并</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/mini-parser/">385. 迷你语法分析器</a></td>
+      <td>中等</td>
+      <td>解析嵌套列表并构造对象树，重点在游标推进与容器构造的配合</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2025/77387514" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 剑指 Offer 49. 丑数</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2025/49521905" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 382. 链表随机节点</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2025/79643494">https://hgnulb.github.io/blog/2025/79643494</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

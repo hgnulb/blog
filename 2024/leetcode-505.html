@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 505. 迷宫 II | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,A* 搜索,BFS,Dijkstra 算法,Heuristic Search,图,堆（优先队列）,字节跳动,广度优先搜索,数组,最短路,深度优先搜索,矩阵,腾讯,阿里巴巴" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 505. 迷宫 II" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2024/leetcode-505" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2024/leetcode-505" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-03-05T00:00:00+08:00" />
+<meta property="article:modified_time" content="2024-03-05T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 505. 迷宫 II" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2024-03-05T00:00:00+08:00","datePublished":"2024-03-05T00:00:00+08:00","description":"题目描述","headline":"LeetCode 505. 迷宫 II","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2024/leetcode-505"},"url":"https://hgnulb.github.io/blog/2024/leetcode-505"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法线性-dijkstra--滚动模拟">解法：线性 Dijkstra + 滚动模拟</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 505. 迷宫 II">LeetCode 505. 迷宫 II</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2024-03-05 00:00:00"
+                    datetime="2024-03-05T00:00:00+08:00"
+            >
+                2024-03-05
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2483 字 · 英文 136 词 · 代码 119 行"
+            aria-label="预计阅读时间约 11 分钟，正文 2483 字 · 英文 136 词 · 代码 119 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 11 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    14 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2381712535/" title="腾讯">
+        腾讯
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8699249851/" title="阿里巴巴">
+        阿里巴巴
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9242240291/" title="矩阵">
+        矩阵
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7037379732/" title="堆（优先队列）">
+        堆（优先队列）
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5789791753/" title="图">
+        图
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7618789166/" title="最短路">
+        最短路
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8629310514/" title="Dijkstra 算法">
+        Dijkstra 算法
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9340277132/" title="A* 搜索">
+        A* 搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9471640639/" title="Heuristic Search">
+        Heuristic Search
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8043676264/" title="BFS">
+        BFS
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法线性-dijkstra--滚动模拟">解法：线性 Dijkstra + 滚动模拟</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/the-maze-ii/">505. 迷宫 II</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>迷宫是一张 0 表示空地、1 表示墙的网格。球从起点出发，每次只能选一个方向，然后一直滚到撞墙或撞到边界才停下，中途不能主动刹车。要求返回从起点滚到终点所经过的最少空地格数，无法停在终点就返回 -1。</p>
+
+  <p>「不能中途停」这一条彻底改变了问题的性质：球在滚动途中经过的格子并不是可选的落脚点，只有撞墙前的最后一格才算一个真正的状态。所以相邻状态之间的距离不是 1，而是这一段滚动的长度。</p>
+
+  <p>计数口径要看清：题目数的是「经过的空地格数」，也就是滚动的格子数，起点本身不计入。终点必须是球停下来的位置，路过终点但没停下不算到达。</p>
+
+  <p>边界情况有几处：起点就是终点时答案为 0；球在某个方向上贴着墙，一格也滚不动，这个方向不产生任何新状态；终点可能在一条通道的中间，球只能路过无法停留，这时应当返回 -1。</p>
+</blockquote>
+
+<h2 id="解法线性-dijkstra--滚动模拟">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E7%BA%BF%E6%80%A7-dijkstra--%E6%BB%9A%E5%8A%A8%E6%A8%A1%E6%8B%9F" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：线性 Dijkstra + 滚动模拟</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先看能不能沿用普通的网格广度优先搜索。不能——广度优先搜索给出最短路的前提是每条边权重相同，而这里一次滚动的代价是可变的：可能滚 1 格，也可能滚 10 格。用它会得到「滚动次数最少」的路径，而不是「格子数最少」的路径。</p>
+
+  <p>正确的建模是把问题抽象成带权图：<strong>节点是所有可以停下来的格子，一条边表示从某个停点朝某个方向滚到下一个停点，边权就是这次滚动经过的格数</strong>。这样问题就变成了标准的单源最短路，而且边权全为非负整数，Dijkstra 适用。</p>
+
+  <p>Dijkstra 维持的不变量是：<strong>每一轮从尚未定型的节点中挑出当前距离最小的那个，它的距离此刻就已是最终值</strong>。这一点靠边权非负保证——任何绕道经过其他未定型节点的路径，长度都不会比它当前的值更小。定型之后再用它去松弛四个方向的邻居。</p>
+
+  <p>实现上不必手写二叉堆。网格总共只有 $m \cdot n$ 个节点，每轮线性扫描一遍找最小值，总代价是节点数的平方，在题目给定的网格规模下完全够用，代码也短得多，白板上不容易写错。距离数组用一个足够大的哨兵表示不可达，最后判断终点是否仍是哨兵即可。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>把距离矩阵全部填成哨兵大值，起点置 0。哨兵要选得比任何真实路径都大，但又不能大到与步数相加时溢出，所以取整型上界的四分之一或按网格规模算一个上界，而不是直接用整型最大值。</li>
+    <li>循环最多 $m \cdot n$ 轮，每轮全表扫描出「未定型且距离最小」的格子。找不到（说明剩下的全是不可达的哨兵）就提前退出，避免用哨兵距离去松弛出更离谱的值。</li>
+    <li>把选中的格子标记为已定型。这一步是 Dijkstra 的核心，标记之后它的距离不再改变，也不会被重复展开。</li>
+    <li>对四个方向各做一次滚动模拟：从当前格出发沿该方向一格一格试探，直到下一格越界或是墙才停，同时累计走过的格数。用「先算下一格、越界或撞墙就退出」的写法，退出时手里的坐标自然就是合法停点。</li>
+    <li>用「当前距离 + 本次滚动格数」去松弛停点。只有严格更小才更新，这样距离数组始终保存的是已发现路径中的最小值。注意贴墙时滚动格数为 0、停点就是自己，松弛条件自然不成立，不需要额外特判。</li>
+    <li>全部轮次结束后读终点距离，仍是哨兵说明球无法停在终点，返回 -1，否则返回该距离。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">maze = [[0,0,0],[1,1,0],[0,0,0]]</code>、<code class="language-plaintext highlighter-rouge">start = [0,0]</code>、<code class="language-plaintext highlighter-rouge">destination = [2,0]</code> 走一遍</strong>：距离矩阵初始为全哨兵，<code class="language-plaintext highlighter-rouge">dist[0][0] = 0</code>。方向顺序取下、上、右、左。</p>
+
+  <p>第一轮选中 (0,0)，距离 0，标记定型。向下：下一格 (1,0) 是墙，一格没滚，停点仍是 (0,0)，格数 0，松弛不成立。向上、向左都立刻越界，同样无效。向右：(0,1) 是空地、(0,2) 是空地、再往右越界，停在 (0,2)，格数 2，于是 <code class="language-plaintext highlighter-rouge">dist[0][2] = 0 + 2 = 2</code>。</p>
+
+  <p>第二轮未定型格子里最小的是 (0,2)，距离 2，标记定型。向下：(1,2) 空地、(2,2) 空地、再往下越界，停在 (2,2)，格数 2，<code class="language-plaintext highlighter-rouge">dist[2][2] = 2 + 2 = 4</code>。向左：滚回 (0,0)，格数 2，候选值 4 不小于 (0,0) 已定型的 0，不更新。向上、向右越界无效。</p>
+
+  <p>第三轮选中 (2,2)，距离 4，标记定型。向左：(2,1)、(2,0)、再往左越界，停在 (2,0)，格数 2，<code class="language-plaintext highlighter-rouge">dist[2][0] = 4 + 2 = 6</code>。向上滚回 (0,2)，候选值 6 不小于 2，不更新。向下、向右越界。</p>
+
+  <p>第四轮选中 (2,0)，距离 6，标记定型。向上撞墙 (1,0) 滚不动；向右滚回 (2,2)，候选值 8 不小于 4；其余越界。</p>
+
+  <p>第五轮剩下的格子距离全是哨兵，扫描找不到有效最小值，循环提前退出。读 <code class="language-plaintext highlighter-rouge">dist[2][0]</code> 得 6，即路径「右滚 2 格 → 下滚 2 格 → 左滚 2 格」，答案为 6。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// 节点是可停靠的格子，边权是滚动步数。</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">shortestDistance</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">maze</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">destination</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">maze</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">maze</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">inf</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span> <span class="o">/</span> <span class="mi">4</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">dist</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">m</span><span class="o">][</span><span class="n">n</span><span class="o">];</span>
+        <span class="kt">boolean</span><span class="o">[][]</span> <span class="n">used</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">m</span><span class="o">][</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">dist</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">inf</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">dist</span><span class="o">[</span><span class="n">start</span><span class="o">[</span><span class="mi">0</span><span class="o">]][</span><span class="n">start</span><span class="o">[</span><span class="mi">1</span><span class="o">]]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">dx</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="mi">1</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">};</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">dy</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">};</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">round</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">round</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">*</span> <span class="n">n</span><span class="o">;</span> <span class="n">round</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">bestX</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">bestY</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">bestDist</span> <span class="o">=</span> <span class="n">inf</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="n">x</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">y</span><span class="o">++)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(!</span><span class="n">used</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">dist</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">bestDist</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">bestDist</span> <span class="o">=</span> <span class="n">dist</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">];</span>
+                        <span class="n">bestX</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+                        <span class="n">bestY</span> <span class="o">=</span> <span class="n">y</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">bestX</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">used</span><span class="o">[</span><span class="n">bestX</span><span class="o">][</span><span class="n">bestY</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">;</span> <span class="n">d</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">bestX</span><span class="o">;</span>
+                <span class="kt">int</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">bestY</span><span class="o">;</span>
+                <span class="kt">int</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">tx</span> <span class="o">=</span> <span class="n">nx</span> <span class="o">+</span> <span class="n">dx</span><span class="o">[</span><span class="n">d</span><span class="o">];</span>
+                    <span class="kt">int</span> <span class="n">ty</span> <span class="o">=</span> <span class="n">ny</span> <span class="o">+</span> <span class="n">dy</span><span class="o">[</span><span class="n">d</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">tx</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">ty</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">tx</span> <span class="o">&gt;=</span> <span class="n">m</span> <span class="o">||</span> <span class="n">ty</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="n">maze</span><span class="o">[</span><span class="n">tx</span><span class="o">][</span><span class="n">ty</span><span class="o">]</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="n">nx</span> <span class="o">=</span> <span class="n">tx</span><span class="o">;</span>
+                    <span class="n">ny</span> <span class="o">=</span> <span class="n">ty</span><span class="o">;</span>
+                    <span class="n">step</span><span class="o">++;</span>
+                <span class="o">}</span>
+                <span class="kt">int</span> <span class="n">nd</span> <span class="o">=</span> <span class="n">dist</span><span class="o">[</span><span class="n">bestX</span><span class="o">][</span><span class="n">bestY</span><span class="o">]</span> <span class="o">+</span> <span class="n">step</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">nd</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="o">[</span><span class="n">nx</span><span class="o">][</span><span class="n">ny</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">dist</span><span class="o">[</span><span class="n">nx</span><span class="o">][</span><span class="n">ny</span><span class="o">]</span> <span class="o">=</span> <span class="n">nd</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">answer</span> <span class="o">=</span> <span class="n">dist</span><span class="o">[</span><span class="n">destination</span><span class="o">[</span><span class="mi">0</span><span class="o">]][</span><span class="n">destination</span><span class="o">[</span><span class="mi">1</span><span class="o">]];</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">answer</span> <span class="o">&gt;=</span> <span class="n">inf</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">shortestDistance</span><span class="p">(</span><span class="n">maze</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">start</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">destination</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="c">// 节点是可停靠的格子，边权是滚动步数。</span>
+    <span class="n">m</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">maze</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">maze</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+    <span class="n">inf</span> <span class="o">:=</span> <span class="n">m</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="m">1</span>
+    <span class="n">dist</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="n">used</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">inf</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">dist</span><span class="p">[</span><span class="n">start</span><span class="p">[</span><span class="m">0</span><span class="p">]][</span><span class="n">start</span><span class="p">[</span><span class="m">1</span><span class="p">]]</span> <span class="o">=</span> <span class="m">0</span>
+
+    <span class="n">dx</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">}</span>
+    <span class="n">dy</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">round</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">round</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">*</span><span class="n">n</span><span class="p">;</span> <span class="n">round</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">bestX</span><span class="p">,</span> <span class="n">bestY</span> <span class="o">:=</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span>
+        <span class="n">best</span> <span class="o">:=</span> <span class="n">inf</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="o">!</span><span class="n">used</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">dist</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">best</span> <span class="p">{</span>
+                    <span class="n">best</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span>
+                    <span class="n">bestX</span> <span class="o">=</span> <span class="n">x</span>
+                    <span class="n">bestY</span> <span class="o">=</span> <span class="n">y</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">bestX</span> <span class="o">==</span> <span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+            <span class="k">break</span>
+        <span class="p">}</span>
+        <span class="n">used</span><span class="p">[</span><span class="n">bestX</span><span class="p">][</span><span class="n">bestY</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+
+        <span class="k">for</span> <span class="n">d</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="m">4</span><span class="p">;</span> <span class="n">d</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">nx</span> <span class="o">:=</span> <span class="n">bestX</span>
+            <span class="n">ny</span> <span class="o">:=</span> <span class="n">bestY</span>
+            <span class="n">step</span> <span class="o">:=</span> <span class="m">0</span>
+            <span class="k">for</span> <span class="p">{</span>
+                <span class="n">tx</span> <span class="o">:=</span> <span class="n">nx</span> <span class="o">+</span> <span class="n">dx</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+                <span class="n">ty</span> <span class="o">:=</span> <span class="n">ny</span> <span class="o">+</span> <span class="n">dy</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">tx</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="n">ty</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="n">tx</span> <span class="o">&gt;=</span> <span class="n">m</span> <span class="o">||</span> <span class="n">ty</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="n">maze</span><span class="p">[</span><span class="n">tx</span><span class="p">][</span><span class="n">ty</span><span class="p">]</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+                    <span class="k">break</span>
+                <span class="p">}</span>
+                <span class="n">nx</span> <span class="o">=</span> <span class="n">tx</span>
+                <span class="n">ny</span> <span class="o">=</span> <span class="n">ty</span>
+                <span class="n">step</span><span class="o">++</span>
+            <span class="p">}</span>
+            <span class="n">next</span> <span class="o">:=</span> <span class="n">dist</span><span class="p">[</span><span class="n">bestX</span><span class="p">][</span><span class="n">bestY</span><span class="p">]</span> <span class="o">+</span> <span class="n">step</span>
+            <span class="k">if</span> <span class="n">next</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="p">{</span>
+                <span class="n">dist</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="o">=</span> <span class="n">next</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">answer</span> <span class="o">:=</span> <span class="n">dist</span><span class="p">[</span><span class="n">destination</span><span class="p">[</span><span class="m">0</span><span class="p">]][</span><span class="n">destination</span><span class="p">[</span><span class="m">1</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="n">answer</span> <span class="o">&gt;=</span> <span class="n">inf</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">answer</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O((m \cdot n)^2)$，共至多 $m \cdot n$ 轮，每轮为了找当前最小距离要全表扫描 $m \cdot n$ 个格子；每轮内部的四次滚动模拟最多走过 $m + n$ 格，这一项被平方项吸收。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(m \cdot n)$，距离矩阵和定型标记矩阵各占一份网格大小，滚动模拟本身只用常数个临时变量。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>建图先于选算法。看清「一次移动的代价不固定」之后，节点和边的定义就自然浮出水面：节点是停点，边是一次完整滚动，边权是滚动格数。</li>
+    <li>边权是否相等决定了用广度优先搜索还是 Dijkstra。这条判据适用于所有网格最短路变体，是面试里最常被追问的一点。</li>
+    <li>Dijkstra 的正确性依赖边权非负，其表现形式就是「每轮取出的最小距离节点可以立即定型」。能说清这一句，就说明你不是在背模板。</li>
+    <li>数据规模允许时，用线性扫描代替优先队列是白板上的实用取舍：把复杂度从 $O(mn \log mn)$ 放宽到 $O((mn)^2)$，换来的是十几行不会写错的代码。</li>
+    <li>哨兵值要选在「大于任何真实答案」和「加法不溢出」之间，直接用整型最大值会在松弛时溢出成负数。</li>
+    <li>面试视角：先主动说明为什么普通广度优先搜索不对，再给出建图方案，最后才谈实现选择。如果面试官追问网格很大怎么办，答「把线性扫描换成优先队列」即可，两者的算法骨架完全一致。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：直接套用四方向单步广度优先搜索。<code class="language-plaintext highlighter-rouge">maze = [[0,0,0],[1,1,0],[0,0,0]]</code>、起点 (0,0)、终点 (2,0) → 得到的是滚动次数最少的方案，而题目要的是经过格数最少，两者的最优路径并不一定相同。</li>
+    <li>
+<strong>错误写法</strong>：把边权当成 1（滚动一次记一步）。同一用例 → 返回 3（三次滚动），正确答案是 6（六个格子）。</li>
+    <li>
+<strong>错误写法</strong>：滚动时先移动再判断越界。球贴着上边界向上滚 → 读到下标 -1 直接抛出数组越界异常。</li>
+    <li>
+<strong>错误写法</strong>：把滚动途中经过的每个格子都当成可停靠节点入队。终点位于通道中间的迷宫 → 会返回一个正数，而正确答案是 -1，因为球根本停不下来。</li>
+    <li>
+<strong>错误写法</strong>：哨兵取 <code class="language-plaintext highlighter-rouge">Integer.MAX_VALUE</code>，松弛时直接算「哨兵 + 步数」。存在不可达区域的迷宫 → 加法溢出成负数，这个负值随后被当作最小距离选中，输出一个负数答案。</li>
+    <li>
+<strong>错误写法</strong>：选中最小距离节点后不打定型标记，或者标记打在松弛之后。任意用例 → 同一个格子被反复选中，外层循环耗尽 $m \cdot n$ 轮却只处理了少数几个节点，远处的格子拿不到正确距离。</li>
+    <li>
+<strong>错误写法</strong>：扫描不到有效最小值时不提前退出，而是继续用哨兵距离松弛。含不可达区域的迷宫 → 不可达格子被赋上「哨兵 + 步数」这种伪距离，最后的可达性判断随之失效。</li>
+    <li>
+<strong>错误写法</strong>：起点等于终点时没走通用流程就返回 -1，或误以为必须至少滚动一次。<code class="language-plaintext highlighter-rouge">start</code> 与 <code class="language-plaintext highlighter-rouge">destination</code> 相同 → 应当返回 0，而不是 -1 或某个正数。</li>
+    <li>
+<strong>错误写法</strong>：最后只判断终点距离是否等于哨兵。若中途发生过「哨兵 + 步数」的松弛，距离会变成比哨兵稍大的值，用等号判断会漏掉，应当用「大于等于哨兵」。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/the-maze/">490. 迷宫</a></td>
+      <td>中等</td>
+      <td>同样的滚动模型，但只问可达性，无需带权最短路</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/the-maze-iii/">499. 迷宫 III</a></td>
+      <td>困难</td>
+      <td>在最短距离之上再按移动指令的字典序排序</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/network-delay-time/">743. 网络延迟时间</a></td>
+      <td>中等</td>
+      <td>显式邻接表上的裸 Dijkstra，答案取所有距离的最大值</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/swim-in-rising-water/">778. 水位上升的泳池中游泳</a></td>
+      <td>困难</td>
+      <td>路径代价是沿途最大值而非求和，松弛式换成取较大者</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/path-with-minimum-effort/">1631. 最小体力消耗路径</a></td>
+      <td>中等</td>
+      <td>同为瓶颈路，也可用并查集按边权升序合并求解</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/cheapest-flights-within-k-stops/">787. K 站中转内最便宜的航班</a></td>
+      <td>中等</td>
+      <td>多出中转次数这一维约束，Dijkstra 的定型性质会失效</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/">1334. 阈值距离内邻居最少的城市</a></td>
+      <td>中等</td>
+      <td>需要全源最短路，点数很小时直接上 Floyd 更省事</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2024/93085311" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 967. 连续差相同的数字</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2024/64893995" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1464. 数组中两元素的最大乘积</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2024/leetcode-505">https://hgnulb.github.io/blog/2024/leetcode-505</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

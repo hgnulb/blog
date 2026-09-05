@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1381. 设计一个支持增量操作的栈 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,字节跳动,数组,栈,设计" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1381. 设计一个支持增量操作的栈" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/59237989" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/59237989" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-04-10T19:14:38+08:00" />
+<meta property="article:modified_time" content="2026-04-10T19:14:38+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1381. 设计一个支持增量操作的栈" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-04-10T19:14:38+08:00","datePublished":"2026-04-10T19:14:38+08:00","description":"题目描述","headline":"LeetCode 1381. 设计一个支持增量操作的栈","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/59237989"},"url":"https://hgnulb.github.io/blog/2026/59237989"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法栈--延迟增量数组">解法：栈 + 延迟增量数组</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1381. 设计一个支持增量操作的栈">LeetCode 1381. 设计一个支持增量操作的栈</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-04-10 19:14:38"
+                    datetime="2026-04-10T19:14:38+08:00"
+            >
+                2026-04-10
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2156 字 · 英文 113 词 · 代码 77 行"
+            aria-label="预计阅读时间约 8 分钟，正文 2156 字 · 英文 113 词 · 代码 77 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 8 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法栈--延迟增量数组">解法：栈 + 延迟增量数组</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/design-a-stack-with-increment-operation/">1381. 设计一个支持增量操作的栈</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>要求实现一个容量上限为 <code class="language-plaintext highlighter-rouge">maxSize</code> 的栈，支持三个操作：<code class="language-plaintext highlighter-rouge">push(x)</code> 在未满时压入元素、已满时静默丢弃；<code class="language-plaintext highlighter-rouge">pop()</code> 弹出并返回栈顶，空栈返回 $-1$；<code class="language-plaintext highlighter-rouge">increment(k, val)</code> 把<strong>栈底起最靠下的 $k$ 个元素</strong>每个都加上 <code class="language-plaintext highlighter-rouge">val</code>，若栈内不足 $k$ 个则全部加。</p>
+
+  <p>三个操作里只有 <code class="language-plaintext highlighter-rouge">increment</code> 是非平凡的。它作用的对象是「栈底方向的一段前缀」，而 <code class="language-plaintext highlighter-rouge">pop</code> 只从栈顶方向取元素——<strong>修改端和读取端在栈的两头</strong>，这个错位就是本题的全部设计空间。</p>
+
+  <p>约束给出的信号很直接：三种操作的调用总次数不超过 $1000$，<code class="language-plaintext highlighter-rouge">maxSize</code> 也不超过 $1000$。$10^6$ 的暴力量级其实能过，但题目把 <code class="language-plaintext highlighter-rouge">increment</code> 单列出来当作卖点，面试官期待的显然是<strong>把 $O(k)$ 的批量加法摊到出栈时结算</strong>，做到三个操作全 $O(1)$。答不出这个就等于没答。</p>
+
+  <p>边界要盯住四处：栈满时 <code class="language-plaintext highlighter-rouge">push</code> 必须无声返回而不是抛异常或覆盖；空栈 <code class="language-plaintext highlighter-rouge">pop</code> 返回 $-1$；<code class="language-plaintext highlighter-rouge">increment</code> 的 $k$ 可能大于当前元素数量，要截断；$k$ 也可能是 $0$，此时什么都不做。</p>
+</blockquote>
+
+<h2 id="解法栈--延迟增量数组">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%A0%88--%E5%BB%B6%E8%BF%9F%E5%A2%9E%E9%87%8F%E6%95%B0%E7%BB%84" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：栈 + 延迟增量数组</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是用数组当栈，<code class="language-plaintext highlighter-rouge">increment(k, val)</code> 时循环前 $\min(k, size)$ 个位置逐个加 <code class="language-plaintext highlighter-rouge">val</code>。瓶颈在于同一个元素可能被反复加：连续 $m$ 次 <code class="language-plaintext highlighter-rouge">increment(1000, 1)</code> 要做 $10^6$ 次加法，而这些加法的结果直到那个元素被 <code class="language-plaintext highlighter-rouge">pop</code> 出来才真正被观察到。</p>
+
+  <p>关键观察是：<strong>元素的值只在 <code class="language-plaintext highlighter-rouge">pop</code> 的那一刻才需要是正确的</strong>。中间过程谁也看不见。既然如此，就不必立刻把增量摊到每个元素身上，只要在出栈时能把「这个元素一共欠了多少」算出来即可。</p>
+
+  <p>于是引入一个与栈等长的辅助数组 <code class="language-plaintext highlighter-rouge">inc</code>，它的语义是本解法的核心定义：<strong><code class="language-plaintext highlighter-rouge">inc[i]</code> 表示「栈底到下标 $i$ 的这整段前缀」还各欠一次 <code class="language-plaintext highlighter-rouge">inc[i]</code> 的加值</strong>。注意它是打在<strong>区间右端点</strong>上的标记，而不是每个元素各自的欠账。<code class="language-plaintext highlighter-rouge">increment(k, val)</code> 因此只需一次写入——把 <code class="language-plaintext highlighter-rouge">val</code> 累加到 <code class="language-plaintext highlighter-rouge">inc[min(k, size) - 1]</code> 上，$O(1)$ 完成。</p>
+
+  <p>由此得到贯穿始终的不变量：<strong>下标 $i$ 处元素的真实值等于 <code class="language-plaintext highlighter-rouge">stack[i] + inc[i] + inc[i+1] + ... + inc[size-1]</code></strong>，即它自身及其之上所有标记的后缀和。栈顶下标 <code class="language-plaintext highlighter-rouge">size - 1</code> 是特例——它上面没有别的标记，真实值就是 <code class="language-plaintext highlighter-rouge">stack[size-1] + inc[size-1]</code>，可以 $O(1)$ 直接取出。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">pop</code> 正是利用这个特例：先按 <code class="language-plaintext highlighter-rouge">stack[idx] + inc[idx]</code> 结算栈顶，然后必须把 <code class="language-plaintext highlighter-rouge">inc[idx]</code> <strong>下推</strong>给新的栈顶 <code class="language-plaintext highlighter-rouge">inc[idx-1]</code>。因为 <code class="language-plaintext highlighter-rouge">inc[idx]</code> 这个标记覆盖的是 $[0, idx]$ 整段，元素 <code class="language-plaintext highlighter-rouge">idx</code> 走了，标记对剩下的 $[0, idx-1]$ 依然有效，把它并入 <code class="language-plaintext highlighter-rouge">inc[idx-1]</code> 就恰好保持了不变量。这一步是整个设计的枢纽，漏掉它下方元素的增量就凭空蒸发。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>构造函数开两个长度为 <code class="language-plaintext highlighter-rouge">maxSize</code> 的数组 <code class="language-plaintext highlighter-rouge">stack</code> 和 <code class="language-plaintext highlighter-rouge">inc</code>，并置 <code class="language-plaintext highlighter-rouge">size = 0</code></strong>。用定长数组而不是动态容器，是因为容量上限已知，且 <code class="language-plaintext highlighter-rouge">inc</code> 必须与栈位置一一对应；<code class="language-plaintext highlighter-rouge">inc</code> 全为 $0$ 表示没有任何欠账。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">push(x)</code>：若 <code class="language-plaintext highlighter-rouge">size == maxSize</code> 直接 <code class="language-plaintext highlighter-rouge">return</code></strong>，题目明确要求满栈丢弃；否则 <code class="language-plaintext highlighter-rouge">stack[size++] = x</code>。这里<strong>不需要</strong>给 <code class="language-plaintext highlighter-rouge">inc[size]</code> 清零，因为该槽位上一次被 <code class="language-plaintext highlighter-rouge">pop</code> 时已经归零了（见下一条），这个清零责任的归属要固定，否则会出现脏数据。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">pop()</code>：空栈返回 $-1$</strong>；否则取 <code class="language-plaintext highlighter-rouge">idx = size - 1</code>，答案为 <code class="language-plaintext highlighter-rouge">stack[idx] + inc[idx]</code>，把栈顶自身的欠账当场结清。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">pop()</code> 中把 <code class="language-plaintext highlighter-rouge">inc[idx]</code> 下推：<code class="language-plaintext highlighter-rouge">if (idx &gt; 0) inc[idx - 1] += inc[idx];</code></strong>。这是维持不变量的关键一步——标记覆盖的是前缀而非单点，元素出栈后标记要留给新的栈顶继承。<code class="language-plaintext highlighter-rouge">idx == 0</code> 时下面已经没有元素，标记随之作废。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">pop()</code> 中把 <code class="language-plaintext highlighter-rouge">inc[idx]</code> 置 $0$ 再 <code class="language-plaintext highlighter-rouge">size--</code></strong>。归零是为了让这个槽位下次被 <code class="language-plaintext highlighter-rouge">push</code> 复用时是干净的，把清零责任放在 <code class="language-plaintext highlighter-rouge">pop</code> 而不是 <code class="language-plaintext highlighter-rouge">push</code>，两处只能选一处，选定后不能摇摆。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">increment(k, val)</code>：算出 <code class="language-plaintext highlighter-rouge">idx = min(k, size) - 1</code>，若 <code class="language-plaintext highlighter-rouge">idx &gt;= 0</code> 则 <code class="language-plaintext highlighter-rouge">inc[idx] += val</code></strong>。取 <code class="language-plaintext highlighter-rouge">min</code> 是因为 $k$ 可能超过实际元素数；减一是把「前 $k$ 个」转成「右端点下标」；<code class="language-plaintext highlighter-rouge">idx &lt; 0</code> 对应 $k = 0$ 或空栈，什么都不做。注意是 <code class="language-plaintext highlighter-rouge">+=</code> 而不是 <code class="language-plaintext highlighter-rouge">=</code>，多次 <code class="language-plaintext highlighter-rouge">increment</code> 落在同一右端点时要叠加。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">CustomStack(3)</code> 走一遍 <code class="language-plaintext highlighter-rouge">push(1) → push(2) → increment(2, 100) → increment(1, 100) → pop() → pop() → pop()</code>：</p>
+
+  <p><code class="language-plaintext highlighter-rouge">push(1)</code>：<code class="language-plaintext highlighter-rouge">stack = [1, _, _]</code>，<code class="language-plaintext highlighter-rouge">inc = [0, 0, 0]</code>，<code class="language-plaintext highlighter-rouge">size = 1</code>。<br>
+<code class="language-plaintext highlighter-rouge">push(2)</code>：<code class="language-plaintext highlighter-rouge">stack = [1, 2, _]</code>，<code class="language-plaintext highlighter-rouge">size = 2</code>。<br>
+<code class="language-plaintext highlighter-rouge">increment(2, 100)</code>：<code class="language-plaintext highlighter-rouge">idx = min(2, 2) - 1 = 1</code>，<code class="language-plaintext highlighter-rouge">inc = [0, 100, 0]</code>。语义是「$[0,1]$ 这两个元素各欠 100」。<br>
+<code class="language-plaintext highlighter-rouge">increment(1, 100)</code>：<code class="language-plaintext highlighter-rouge">idx = min(1, 2) - 1 = 0</code>，<code class="language-plaintext highlighter-rouge">inc = [100, 100, 0]</code>。语义是「$[0,0]$ 再欠 100」，所以元素 0 共欠 200、元素 1 共欠 100。<br>
+<code class="language-plaintext highlighter-rouge">pop()</code>：<code class="language-plaintext highlighter-rouge">idx = 1</code>，返回 <code class="language-plaintext highlighter-rouge">stack[1] + inc[1] = 2 + 100 = 102</code>。下推 <code class="language-plaintext highlighter-rouge">inc[0] += inc[1]</code> 得 <code class="language-plaintext highlighter-rouge">inc = [200, 0, 0]</code>，再置 <code class="language-plaintext highlighter-rouge">inc[1] = 0</code>（已是 0），<code class="language-plaintext highlighter-rouge">size = 1</code>。此刻元素 0 的欠账 200 完整保留。<br>
+<code class="language-plaintext highlighter-rouge">pop()</code>：<code class="language-plaintext highlighter-rouge">idx = 0</code>，返回 <code class="language-plaintext highlighter-rouge">stack[0] + inc[0] = 1 + 200 = 201</code>。<code class="language-plaintext highlighter-rouge">idx == 0</code> 不下推，置 <code class="language-plaintext highlighter-rouge">inc[0] = 0</code>，<code class="language-plaintext highlighter-rouge">size = 0</code>。<br>
+<code class="language-plaintext highlighter-rouge">pop()</code>：空栈，返回 $-1$。</p>
+
+  <p>输出序列 <code class="language-plaintext highlighter-rouge">102, 201, -1</code>，与逐个加值的暴力结果一致。若第一次 <code class="language-plaintext highlighter-rouge">pop</code> 忘了下推，<code class="language-plaintext highlighter-rouge">inc[0]</code> 停在 100，第二次 <code class="language-plaintext highlighter-rouge">pop</code> 会错答成 $101$——那 100 正是第一次 <code class="language-plaintext highlighter-rouge">increment</code> 本该留给元素 0 的那份。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">CustomStack</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">stack</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">inc</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">size</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">CustomStack</span><span class="o">(</span><span class="kt">int</span> <span class="n">maxSize</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">maxSize</span><span class="o">];</span>
+        <span class="n">inc</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">maxSize</span><span class="o">];</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">push</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">==</span> <span class="n">stack</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">stack</span><span class="o">[</span><span class="n">size</span><span class="o">++]</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">pop</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">answer</span> <span class="o">=</span> <span class="n">stack</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">+</span> <span class="n">inc</span><span class="o">[</span><span class="n">idx</span><span class="o">];</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">idx</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">inc</span><span class="o">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">+=</span> <span class="n">inc</span><span class="o">[</span><span class="n">idx</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="n">inc</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="n">size</span><span class="o">--;</span>
+        <span class="k">return</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">increment</span><span class="o">(</span><span class="kt">int</span> <span class="n">k</span><span class="o">,</span> <span class="kt">int</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">k</span><span class="o">,</span> <span class="n">size</span><span class="o">)</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">idx</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">inc</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">+=</span> <span class="n">val</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">CustomStack</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">stack</span> <span class="p">[]</span><span class="kt">int</span>
+    <span class="n">inc</span>   <span class="p">[]</span><span class="kt">int</span>
+    <span class="n">size</span>  <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">(</span><span class="n">maxSize</span> <span class="kt">int</span><span class="p">)</span> <span class="n">CustomStack</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">CustomStack</span><span class="p">{</span>
+        <span class="n">stack</span><span class="o">:</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">maxSize</span><span class="p">),</span>
+        <span class="n">inc</span><span class="o">:</span>   <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">maxSize</span><span class="p">),</span>
+        <span class="n">size</span><span class="o">:</span>  <span class="m">0</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">cs</span> <span class="o">*</span><span class="n">CustomStack</span><span class="p">)</span> <span class="n">Push</span><span class="p">(</span><span class="n">x</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">cs</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">cs</span><span class="o">.</span><span class="n">stack</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="n">cs</span><span class="o">.</span><span class="n">stack</span><span class="p">[</span><span class="n">cs</span><span class="o">.</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="n">cs</span><span class="o">.</span><span class="n">size</span><span class="o">++</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">cs</span> <span class="o">*</span><span class="n">CustomStack</span><span class="p">)</span> <span class="n">Pop</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">cs</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+    <span class="p">}</span>
+
+    <span class="n">idx</span> <span class="o">:=</span> <span class="n">cs</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="m">1</span>
+    <span class="n">answer</span> <span class="o">:=</span> <span class="n">cs</span><span class="o">.</span><span class="n">stack</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">cs</span><span class="o">.</span><span class="n">inc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">idx</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="n">cs</span><span class="o">.</span><span class="n">inc</span><span class="p">[</span><span class="n">idx</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">cs</span><span class="o">.</span><span class="n">inc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="n">cs</span><span class="o">.</span><span class="n">inc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="m">0</span>
+    <span class="n">cs</span><span class="o">.</span><span class="n">size</span><span class="o">--</span>
+    <span class="k">return</span> <span class="n">answer</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">cs</span> <span class="o">*</span><span class="n">CustomStack</span><span class="p">)</span> <span class="n">Increment</span><span class="p">(</span><span class="n">k</span> <span class="kt">int</span><span class="p">,</span> <span class="n">val</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">idx</span> <span class="o">:=</span> <span class="n">k</span>
+    <span class="k">if</span> <span class="n">idx</span> <span class="o">&gt;</span> <span class="n">cs</span><span class="o">.</span><span class="n">size</span> <span class="p">{</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">size</span>
+    <span class="p">}</span>
+    <span class="n">idx</span><span class="o">--</span>
+    <span class="k">if</span> <span class="n">idx</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="n">cs</span><span class="o">.</span><span class="n">inc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">+=</span> <span class="n">val</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：三个操作均为 $O(1)$。<code class="language-plaintext highlighter-rouge">push</code> 是一次数组写入；<code class="language-plaintext highlighter-rouge">pop</code> 是一次读、一次加法、一次下推、一次归零；<code class="language-plaintext highlighter-rouge">increment</code> 是一次取最小值和一次累加。构造函数为 $O(maxSize)$，用于分配并清零两个数组。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(maxSize)$。<code class="language-plaintext highlighter-rouge">stack</code> 与 <code class="language-plaintext highlighter-rouge">inc</code> 各占一份定长空间，与实际压入的元素个数无关，只取决于声明的容量上限。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>懒惰求值的通用套路：当中间状态外部不可见时，把批量修改压缩成一个标记，推迟到读取的那一刻再结算。这条原则在线段树的懒标记、差分数组、并查集路径压缩里反复出现。</li>
+    <li>标记的语义必须一次性定死并写在注释里。本题 <code class="language-plaintext highlighter-rouge">inc[i]</code> 是「$[0, i]$ 整段的欠账」而非「元素 $i$ 自己的欠账」，两种定义会导出完全不同的下推逻辑，中途混用必错。</li>
+    <li>修改端与读取端错位时，找那个「唯一能 $O(1)$ 求值的位置」。这里栈顶恰好没有更上层的标记压着，于是 <code class="language-plaintext highlighter-rouge">pop</code> 能直接结算，而下推保证了下一个栈顶继续享有这个性质。</li>
+    <li>责任归属要单点化：<code class="language-plaintext highlighter-rouge">inc</code> 槽位的清零只在 <code class="language-plaintext highlighter-rouge">pop</code> 里做，<code class="language-plaintext highlighter-rouge">push</code> 不再重复清零。任何一份状态由谁维护，设计题里必须唯一。</li>
+    <li>面试视角：面试官几乎必问「不用 <code class="language-plaintext highlighter-rouge">inc</code> 数组直接循环加行不行」。要主动给出复杂度对比——暴力是 <code class="language-plaintext highlighter-rouge">increment</code> $O(k)$、其余 $O(1)$，本解法三者全 $O(1)$——并说明数据范围虽小但设计题考的就是摊还思想。追问「能不能不下推」时，答「因为标记覆盖前缀区间，元素出栈只是区间右端点左移，标记本身没有失效」。</li>
+    <li>这是差分思想的栈上变体：<code class="language-plaintext highlighter-rouge">inc</code> 存的是区间右端点的增量，<code class="language-plaintext highlighter-rouge">pop</code> 时的下推等价于从右向左做后缀累加，与差分数组还原前缀和是同一件事。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">pop</code> 时忘记 <code class="language-plaintext highlighter-rouge">inc[idx - 1] += inc[idx]</code></strong>：<code class="language-plaintext highlighter-rouge">push(1) → push(2) → increment(2, 100) → pop() → pop()</code> 会返回 <code class="language-plaintext highlighter-rouge">102, 1</code>，第二个值丢掉了 100 的增量，正确应为 <code class="language-plaintext highlighter-rouge">102, 101</code>。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">increment</code> 里写 <code class="language-plaintext highlighter-rouge">inc[idx] = val</code> 而非 <code class="language-plaintext highlighter-rouge">+=</code></strong>：<code class="language-plaintext highlighter-rouge">increment(1, 100)</code> 后再 <code class="language-plaintext highlighter-rouge">increment(1, 50)</code>，<code class="language-plaintext highlighter-rouge">pop</code> 只加 50 而不是 150。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">increment</code> 忘记对 <code class="language-plaintext highlighter-rouge">size</code> 取 <code class="language-plaintext highlighter-rouge">min</code></strong>：栈内只有 2 个元素却调用 <code class="language-plaintext highlighter-rouge">increment(5, 1)</code>，<code class="language-plaintext highlighter-rouge">idx = 4</code> 直接数组越界；即便不越界，写进 <code class="language-plaintext highlighter-rouge">inc[4]</code> 的值也永远不会被结算。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">increment</code> 未判 <code class="language-plaintext highlighter-rouge">idx &gt;= 0</code></strong>：<code class="language-plaintext highlighter-rouge">increment(0, 100)</code> 算出 <code class="language-plaintext highlighter-rouge">idx = -1</code>，<code class="language-plaintext highlighter-rouge">inc[-1]</code> 在 Java 抛 <code class="language-plaintext highlighter-rouge">ArrayIndexOutOfBoundsException</code>，Go 直接 panic。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">pop</code> 后不把 <code class="language-plaintext highlighter-rouge">inc[idx]</code> 归零</strong>：<code class="language-plaintext highlighter-rouge">push(1) → increment(1, 100) → pop() → push(5) → pop()</code> 第二次会返回 $105$，那 100 是上一轮的残留欠账，正确应为 $5$。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">push</code> 满栈时抛异常或强行覆盖栈顶</strong>：<code class="language-plaintext highlighter-rouge">CustomStack(1)</code> 上执行 <code class="language-plaintext highlighter-rouge">push(1) → push(2) → pop()</code>，覆盖写法会返回 $2$，题目要求返回 $1$。</li>
+    <li>
+<strong>空栈 <code class="language-plaintext highlighter-rouge">pop</code> 返回 $0$ 或访问 <code class="language-plaintext highlighter-rouge">stack[-1]</code></strong>：新建栈直接 <code class="language-plaintext highlighter-rouge">pop()</code> 应返回 $-1$，返回 $0$ 会与「栈里真的存了 $0$」的合法情况混淆。</li>
+    <li>
+<strong>把 <code class="language-plaintext highlighter-rouge">inc</code> 数组开成 <code class="language-plaintext highlighter-rouge">size</code> 长度而非 <code class="language-plaintext highlighter-rouge">maxSize</code></strong>：<code class="language-plaintext highlighter-rouge">size</code> 是动态的，构造时为 $0$，第一次 <code class="language-plaintext highlighter-rouge">increment</code> 就越界。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">pop</code> 里先 <code class="language-plaintext highlighter-rouge">size--</code> 再用 <code class="language-plaintext highlighter-rouge">idx = size - 1</code></strong>：<code class="language-plaintext highlighter-rouge">push(1) → push(2) → pop()</code> 会取到下标 $0$，返回 $1$ 而不是栈顶 $2$。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">increment</code> 理解成给栈顶 $k$ 个加值</strong>：<code class="language-plaintext highlighter-rouge">push(1) → push(2) → increment(1, 100) → pop()</code> 若按栈顶理解会返回 $102$，题目要求加的是栈底方向的第一个元素，正确返回 $2$。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/min-stack/">155. 最小栈</a></td>
+      <td>中等</td>
+      <td>同为栈上附加信息，但辅助栈存的是历史最小值快照，不涉及延迟结算</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/corporate-flight-bookings/">1109. 航班预订统计</a></td>
+      <td>中等</td>
+      <td>差分数组的标准形态，区间加法离线批处理后一次性前缀和还原</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/range-addition/">370. 区间加法</a></td>
+      <td>中等</td>
+      <td>同样把区间加压成端点标记，但只需最终快照，无需支持中途读取</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/implement-queue-using-stacks/">232. 用栈实现队列</a></td>
+      <td>简单</td>
+      <td>另一种摊还设计：元素在两栈间搬运，均摊 $O(1)$ 而非严格 $O(1)$</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-circular-queue/">622. 设计循环队列</a></td>
+      <td>中等</td>
+      <td>定长数组 + 容量边界判定，考的是下标回绕而非附加状态</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/insert-delete-getrandom-o1/">380. O(1) 时间插入、删除和获取随机元素</a></td>
+      <td>中等</td>
+      <td>用数组与哈希表互补达成全 $O(1)$，靠尾部交换删除而非延迟标记</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-browser-history/">1472. 设计浏览器历史记录</a></td>
+      <td>中等</td>
+      <td>同为定长数组模拟栈，难点在前进指针的失效范围而非增量传递</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/range-sum-query-mutable/">307. 区域和检索 - 数组可修改</a></td>
+      <td>中等</td>
+      <td>单点改 + 区间查，需树状数组或线段树，是懒标记思想的完整版</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/00553978" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 540. 有序数组中的单一元素</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/52347962" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1661. 每台机器的进程平均运行时间</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/59237989">https://hgnulb.github.io/blog/2026/59237989</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

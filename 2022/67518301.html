@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1080. 根到叶路径上的不足节点 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,二叉树,华为,树,深度优先搜索" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1080. 根到叶路径上的不足节点" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/67518301" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/67518301" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-04-14T11:52:20+08:00" />
+<meta property="article:modified_time" content="2022-04-14T11:52:20+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1080. 根到叶路径上的不足节点" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-04-14T11:52:20+08:00","datePublished":"2022-04-14T11:52:20+08:00","description":"题目描述","headline":"LeetCode 1080. 根到叶路径上的不足节点","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/67518301"},"url":"https://hgnulb.github.io/blog/2022/67518301"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dfs-剪枝">解法：DFS 剪枝</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1080. 根到叶路径上的不足节点">LeetCode 1080. 根到叶路径上的不足节点</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-04-14 11:52:20"
+                    datetime="2022-04-14T11:52:20+08:00"
+            >
+                2022-04-14
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3187 字 · 英文 59 词 · 代码 44 行"
+            aria-label="预计阅读时间约 9 分钟，正文 3187 字 · 英文 59 词 · 代码 44 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0106759788/" title="华为">
+        华为
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2805463697/" title="树">
+        树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3241866243/" title="二叉树">
+        二叉树
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dfs-剪枝">解法：DFS 剪枝</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/insufficient-nodes-in-root-to-leaf-paths/">1080. 根到叶路径上的不足节点</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一棵二叉树和一个阈值 <code class="language-plaintext highlighter-rouge">limit</code>。若<strong>经过某个节点的每一条根到叶路径</strong>，其节点值之和都严格小于 <code class="language-plaintext highlighter-rouge">limit</code>，这个节点就是「不足节点」，需要被删除。删除是反复进行的，返回删干净之后的树。</p>
+
+  <p>定义里最关键的是「<strong>经过它的所有路径</strong>」这个全称量词。一个节点只要还有<strong>任意一条</strong>经过它的路径达到了 <code class="language-plaintext highlighter-rouge">limit</code>，它就必须保留；只有当所有路径都不达标时才删。等价的否定形式更好写代码：<strong>保留 ⟺ 存在一条经过它的根到叶路径，其和不小于 <code class="language-plaintext highlighter-rouge">limit</code>。</strong></p>
+
+  <p>「反复删除」听起来需要多轮迭代——删掉一批叶子后，原来的内部节点可能变成新叶子，又要重新判断。但只要换个角度就能一次搞定：一个内部节点被删，当且仅当它的左右子树都被删光；而子树是否删光，只取决于子树内部的路径，与外部无关。于是<strong>一趟自底向上的后序遍历</strong>就能完成全部删除，不需要循环到不动点。</p>
+
+  <p>判断某条路径是否达标，需要知道「从根到当前节点已经累积了多少」。有两种等价的传参方式：向下传「已累积和」，到叶子处与 <code class="language-plaintext highlighter-rouge">limit</code> 比较；或者向下传「还差多少」，即 <code class="language-plaintext highlighter-rouge">limit - node.val</code>，到叶子处与 0 比较。本题代码采用后者——传剩余额度，叶子处判 <code class="language-plaintext highlighter-rouge">node.val &lt; limit</code> 即可，减法在下传时一次完成，读起来更贴近「额度」的语义。</p>
+
+  <p>约束是节点数在 <code class="language-plaintext highlighter-rouge">[1, 5000]</code>，节点值在 <code class="language-plaintext highlighter-rouge">[-10^5, 10^5]</code>，<code class="language-plaintext highlighter-rouge">limit</code> 在 <code class="language-plaintext highlighter-rouge">[-10^9, 10^9]</code>。<strong>节点值可以为负</strong>，这意味着路径和不随深度单调增加，不能中途「提前判定这条路已经没救了」而剪枝——必须走到叶子才能结算。递归深度最坏 5000 层，在 Java 与 Go 的默认栈下是安全的。</p>
+
+  <p>边界：根节点本身可能被删，此时返回空；叶子节点的判据是 <code class="language-plaintext highlighter-rouge">node.val &lt; limit</code>（严格小于才删，等于要保留）；空树直接返回空。</p>
+</blockquote>
+
+<h2 id="解法dfs-剪枝">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95dfs-%E5%89%AA%E6%9E%9D" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：DFS 剪枝</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>直接做法是枚举每条根到叶路径，达标时再沿路径标记所有节点，最后删除未标记节点。树的叶子数虽不超过节点数，但同一段祖先路径会被许多叶子反复处理；若保存或逐条回扫路径，最坏会达到 $O(nh)$，还要维护路径与标记。真正需要的只有一个结论：<strong>当前子树是否还存在一条达标路径</strong>，它可以在回溯时一次算出。</p>
+
+  <p>换成递归：定义 <code class="language-plaintext highlighter-rouge">dfs(node, need)</code> 的返回值为「<strong>以 <code class="language-plaintext highlighter-rouge">node</code> 为根的子树在剪枝之后剩下什么</strong>」，返回 <code class="language-plaintext highlighter-rouge">null</code> 表示整棵子树都被删光。参数 <code class="language-plaintext highlighter-rouge">need</code> 的含义是「<strong>从 <code class="language-plaintext highlighter-rouge">node</code> 开始还需要凑够的路径和</strong>」，也就是原始阈值减去 <code class="language-plaintext highlighter-rouge">node</code> 之前所有祖先的值。</p>
+
+  <p>三种情形：</p>
+
+  <ul>
+    <li>
+<code class="language-plaintext highlighter-rouge">node == null</code>：空子树，返回 <code class="language-plaintext highlighter-rouge">null</code>。这一支既处理空树输入，也让父层不必逐个判空。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">node</code> 是叶子：经过它的路径只有一条，是否达标就看 <code class="language-plaintext highlighter-rouge">node.val</code> 能不能补上剩余额度。<code class="language-plaintext highlighter-rouge">node.val &lt; need</code> 说明补不上，整条路径不足，删掉自己返回 <code class="language-plaintext highlighter-rouge">null</code>；否则保留。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">node</code> 是内部节点：<strong>先递归</strong>处理左右子树，把返回值直接接回 <code class="language-plaintext highlighter-rouge">node.left</code>、<code class="language-plaintext highlighter-rouge">node.right</code>——这一步同时完成了「删除子节点」的动作。递归时传下去的额度是 <code class="language-plaintext highlighter-rouge">need - node.val</code>，因为 <code class="language-plaintext highlighter-rouge">node</code> 自己已经贡献了 <code class="language-plaintext highlighter-rouge">node.val</code>。递归回来后，若左右都变成 <code class="language-plaintext highlighter-rouge">null</code>，说明经过 <code class="language-plaintext highlighter-rouge">node</code> 的所有路径都不达标（原本的每条路径都被否决了），<code class="language-plaintext highlighter-rouge">node</code> 也要删；否则保留。</li>
+  </ul>
+
+  <p><strong>不变量：<code class="language-plaintext highlighter-rouge">dfs(node, need)</code> 返回非空，当且仅当以 <code class="language-plaintext highlighter-rouge">node</code> 为根的子树中存在一条从 <code class="language-plaintext highlighter-rouge">node</code> 到某个原始叶子的路径，其节点值之和不小于 <code class="language-plaintext highlighter-rouge">need</code>；且返回时该子树内所有不足节点都已被删除。</strong> 叶子情形直接由比较得出；内部节点情形由「左右子树至少有一支保留」推出，而那一支的保留恰好意味着存在一条达标路径。</p>
+
+  <p>这条不变量也解释了为什么一趟后序遍历就够：<strong>「反复删除」的传递性已经被递归的回溯顺序天然覆盖了</strong>——子树先被处理完，父节点看到的已经是最终状态，不会出现「删完子节点后父节点又该删」的遗留。</p>
+
+  <p>用结构归纳即可证明正确性：原始叶子只有一条候选路径，比较后返回值显然正确；假设左右子树的返回值都满足上述语义，那么内部节点在且仅在至少一个孩子非空时保留，也就等价于其子树存在达标路径。由叶子向根归纳，根的返回值就是题目要求的最终树。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>参数传「剩余额度」而不是「已累积和」</strong>：两者等价，但传额度时叶子判据只需 <code class="language-plaintext highlighter-rouge">node.val &lt; need</code> 一次比较，且减法在下传处集中完成，不易写漏。</li>
+    <li>
+<strong>先写 <code class="language-plaintext highlighter-rouge">node == null</code> 返回 <code class="language-plaintext highlighter-rouge">null</code></strong>：既覆盖空树，也让内部节点分支可以无脑递归左右孩子而不必判空。</li>
+    <li>
+<strong>叶子判据用严格小于 <code class="language-plaintext highlighter-rouge">node.val &lt; need</code></strong>：路径和小于原始 <code class="language-plaintext highlighter-rouge">limit</code> 才算不足，恰好等于阈值时必须保留。把 <code class="language-plaintext highlighter-rouge">&lt;</code> 写成 <code class="language-plaintext highlighter-rouge">&lt;=</code> 会多删一批节点。</li>
+    <li>
+<strong>递归结果必须回写到 <code class="language-plaintext highlighter-rouge">node.left</code> / <code class="language-plaintext highlighter-rouge">node.right</code></strong>：<code class="language-plaintext highlighter-rouge">dfs</code> 只返回剪枝后的子树，不回写就等于什么都没删。这是本题最容易漏的一行。</li>
+    <li>
+<strong>递归时传 <code class="language-plaintext highlighter-rouge">need - node.val</code></strong>：把当前节点的贡献从额度里扣掉。注意扣的是 <code class="language-plaintext highlighter-rouge">node.val</code> 而不是子节点的值——子节点的值会在它自己那一层比较或继续向下扣。</li>
+    <li>
+<strong>回溯后再判 <code class="language-plaintext highlighter-rouge">left == null &amp;&amp; right == null</code></strong>：这个判断必须在两次递归<strong>之后</strong>，用的是更新过的孩子指针；写在递归之前判的是原始结构，等于没做剪枝。</li>
+    <li>
+<strong>叶子分支要写在内部节点分支之前</strong>：叶子也满足「左右都为空」，若先执行内部节点逻辑，会对叶子递归两个空孩子并直接判定为「左右都空」而删掉，把所有叶子无条件删光。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">root = [1, 2, 3]</code>、<code class="language-plaintext highlighter-rouge">limit = 4</code> 走一遍：根节点先把剩余额度从 4 减为 3。左叶子 2 满足 <code class="language-plaintext highlighter-rouge">2 &lt; 3</code>，对应路径和 <code class="language-plaintext highlighter-rouge">1 + 2 = 3</code>，被删除；右叶子 3 不满足 <code class="language-plaintext highlighter-rouge">3 &lt; 3</code>，对应路径和恰好为 4，必须保留。回到根节点时右孩子仍非空，因此根也保留，最终得到 <code class="language-plaintext highlighter-rouge">[1, null, 3]</code>。</p>
+
+  <p>再看不能提前剪枝的反例：<code class="language-plaintext highlighter-rouge">root = [10, -100, 5]</code>、<code class="language-plaintext highlighter-rouge">limit = 5</code>。虽然走到根时累计和 10 已经达标，但左路径最终是 -90，左叶子仍应删除；右路径最终是 15，右叶子保留。负数使路径和没有单调性，结论只能在原始叶子处落定。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 若子树返回空，则当前节点对应子树被剪掉。</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">TreeNode</span> <span class="nf">sufficientSubset</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">,</span> <span class="n">limit</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">TreeNode</span> <span class="nf">dfs</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">node</span><span class="o">,</span> <span class="kt">int</span> <span class="n">need</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="na">right</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">need</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">dfs</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">need</span> <span class="o">-</span> <span class="n">node</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+        <span class="n">node</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">dfs</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">need</span> <span class="o">-</span> <span class="n">node</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="na">right</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 若子树返回空，则当前节点对应子树被剪掉。</span>
+<span class="k">func</span> <span class="n">sufficientSubset</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">,</span> <span class="n">limit</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">TreeNode</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">dfsSufficient</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">dfsSufficient</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">,</span> <span class="n">need</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">TreeNode</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">nil</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">Left</span> <span class="o">==</span> <span class="no">nil</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="n">Right</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">Val</span> <span class="o">&lt;</span> <span class="n">need</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="no">nil</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="n">node</span>
+	<span class="p">}</span>
+
+	<span class="n">node</span><span class="o">.</span><span class="n">Left</span> <span class="o">=</span> <span class="n">dfsSufficient</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Left</span><span class="p">,</span> <span class="n">need</span><span class="o">-</span><span class="n">node</span><span class="o">.</span><span class="n">Val</span><span class="p">)</span>
+	<span class="n">node</span><span class="o">.</span><span class="n">Right</span> <span class="o">=</span> <span class="n">dfsSufficient</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Right</span><span class="p">,</span> <span class="n">need</span><span class="o">-</span><span class="n">node</span><span class="o">.</span><span class="n">Val</span><span class="p">)</span>
+
+	<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">Left</span> <span class="o">==</span> <span class="no">nil</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">.</span><span class="n">Right</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">nil</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">node</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$，其中 <code class="language-plaintext highlighter-rouge">n</code> 为节点数。凭的是每个节点恰好被 <code class="language-plaintext highlighter-rouge">dfs</code> 访问一次，函数体内只有常数次比较与指针赋值；「反复删除」不需要多轮迭代，后序回溯天然覆盖了传递效应。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(h)$，其中 <code class="language-plaintext highlighter-rouge">h</code> 为树高。算法原地修改指针，不建新树也不保存路径，额外开销只有递归栈；平衡树时为 $O(\log n)$，退化成链时为 $O(n)$。极深链是否触及栈上限取决于运行环境，复杂度分析不能把递归栈忽略掉。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「删除满足某条件的节点」类问题，把递归函数的返回值定义成「<strong>剪枝后的子树根</strong>」，返回 <code class="language-plaintext highlighter-rouge">null</code> 表示整棵删光。这个约定让「删除」这个动作退化成父层的一次赋值 <code class="language-plaintext highlighter-rouge">node.left = dfs(node.left, ...)</code>，是所有树剪枝题的统一骨架。</li>
+    <li>
+<strong>全称条件要转成存在条件再写代码</strong>：「所有路径都不足才删」不好判，「存在一条路径达标就留」可以由子树的返回值直接给出。遇到「所有 / 任意」的定义先做一次逻辑取反，往往能让递归的返回值语义变得干净。</li>
+    <li>「反复删除直到不动点」这类描述，多数时候可以用<strong>一趟后序遍历</strong>替代——子树先定型，父节点看到的就是最终结果，不存在需要回头修正的情况。看到「重复执行直到无法继续」先想想能不能自底向上一次完成。</li>
+    <li>
+<strong>叶子分支必须先于内部节点分支判断</strong>，因为叶子也满足「左右孩子都为空」；顺序写反会把所有叶子无条件删除，进而删空整棵树。</li>
+    <li>面试视角：本题的三个高频追问分别是「为什么不用反复遍历」「叶子判据为什么是严格小于」「节点值为负会不会影响提前剪枝」。第三个的答案是：值可负则路径和不单调，不能中途判定失败，必须走到叶子结算——这也是本题与 112 路径总和在剪枝上的关键差异。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：叶子分支写在内部节点分支之后（先递归再判叶子）</strong>：<code class="language-plaintext highlighter-rouge">root = [1, 2, 3]</code>、<code class="language-plaintext highlighter-rouge">limit = 4</code> → 叶子 2 和 3 先对两个空孩子递归得到 <code class="language-plaintext highlighter-rouge">null</code>，随即落进「左右都空则删除」的分支被无条件删掉，连锁把整棵树删空返回 <code class="language-plaintext highlighter-rouge">null</code>，正确答案是 <code class="language-plaintext highlighter-rouge">[1, null, 3]</code>。</li>
+    <li>
+<strong>错误写法：递归结果不回写，写成 <code class="language-plaintext highlighter-rouge">dfs(node.left, ...)</code> 而丢弃返回值</strong>：<code class="language-plaintext highlighter-rouge">root = [1, 2, 3]</code>、<code class="language-plaintext highlighter-rouge">limit = 4</code> → 该删的左孩子 2 仍挂在树上，返回 <code class="language-plaintext highlighter-rouge">[1, 2, 3]</code>，正确答案是 <code class="language-plaintext highlighter-rouge">[1, null, 3]</code>。</li>
+    <li>
+<strong>错误写法：叶子判据写成 <code class="language-plaintext highlighter-rouge">node.val &lt;= need</code></strong>：<code class="language-plaintext highlighter-rouge">root = [1, 2]</code>（根 1、左孩子 2）、<code class="language-plaintext highlighter-rouge">limit = 3</code> → 递归到叶子时 <code class="language-plaintext highlighter-rouge">need = 2</code>，路径和恰好等于阈值应当保留；误用 <code class="language-plaintext highlighter-rouge">&lt;=</code> 会把叶子删掉，进而删空整棵树，正确答案是 <code class="language-plaintext highlighter-rouge">[1, 2]</code>。</li>
+    <li>
+<strong>错误写法：递归时传 <code class="language-plaintext highlighter-rouge">limit</code> 而不是 <code class="language-plaintext highlighter-rouge">limit - node.val</code></strong>：<code class="language-plaintext highlighter-rouge">root = [1, 2, 3]</code>、<code class="language-plaintext highlighter-rouge">limit = 4</code> → 祖先的贡献从未被扣除，叶子 3 与 <code class="language-plaintext highlighter-rouge">limit = 4</code> 相比被判为不足而删除，正确答案是保留它（<code class="language-plaintext highlighter-rouge">1 + 3 = 4</code>）。</li>
+    <li>
+<strong>错误写法：递归时扣孩子的值，写成 <code class="language-plaintext highlighter-rouge">dfs(node.left, need - node.left.val)</code></strong>：<code class="language-plaintext highlighter-rouge">root = [1, 2, 3]</code>、<code class="language-plaintext highlighter-rouge">limit = 4</code> → 左叶子的判据变成 <code class="language-plaintext highlighter-rouge">2 &gt;= 4 - 2</code>，相当于把孩子值算了两次、漏掉根值，于是错误保留路径和仅为 3 的左支；而且孩子可能为空，直接访问还会触发空指针异常。</li>
+    <li>
+<strong>错误写法：只在递归前检查孩子是否都为空，递归后不再检查</strong>：<code class="language-plaintext highlighter-rouge">root = [1, 1, 1]</code>、<code class="language-plaintext highlighter-rouge">limit = 3</code> → 两条原始路径和都只有 2，左右叶子会被剪掉；若不在回溯后重新判断，根会作为新叶被错误保留，正确结果是空树。</li>
+    <li>
+<strong>错误写法：为了「提前剪枝」而在累积和已超过 <code class="language-plaintext highlighter-rouge">limit</code> 时直接返回整棵子树</strong>：<code class="language-plaintext highlighter-rouge">root = [10, -100, 5]</code>、<code class="language-plaintext highlighter-rouge">limit = 5</code> → 根的值已达 10 ≥ 5，误以为整棵子树都达标而全部保留；实际上左路径 <code class="language-plaintext highlighter-rouge">10 + (-100) = -90 &lt; 5</code>，节点 -100 必须删除。节点值可为负，路径和不单调，不存在可提前判定的时机。</li>
+    <li>
+<strong>错误写法：把「不足节点」理解成「存在一条不足路径就删」</strong>：<code class="language-plaintext highlighter-rouge">root = [1, 2, 3]</code>、<code class="language-plaintext highlighter-rouge">limit = 4</code> → 经过根的路径有 <code class="language-plaintext highlighter-rouge">1+2=3</code>（不足）与 <code class="language-plaintext highlighter-rouge">1+3=4</code>（达标），按错误理解会把根删掉返回 <code class="language-plaintext highlighter-rouge">null</code>，正确答案是 <code class="language-plaintext highlighter-rouge">[1, null, 3]</code>。定义里是「所有路径都不足」。</li>
+    <li>
+<strong>低效写法：物化每条根到叶路径，达标后再逐个标记路径节点</strong>：同一祖先会被多个叶子反复处理，最坏需要 $O(nh)$ 时间和额外路径/标记空间；后序遍历把子树结论向上传递，只需 $O(n)$ 时间。</li>
+    <li>
+<strong>错误写法：写成「删一轮后若有变化就再删一轮」的循环</strong>：<code class="language-plaintext highlighter-rouge">root</code> 为一条长链 → 每轮只能删掉最深的一个节点，需要 $O(n)$ 轮、每轮 $O(n)$，总共 $O(n^2)$。后序回溯已经把传递删除一次性完成了。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/binary-tree-pruning/">814. 二叉树剪枝</a></td>
+      <td>中等</td>
+      <td>同样是「返回剪枝后子树根」的骨架，判据换成子树是否全为 0，不需要向下传参</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/delete-leaves-with-a-given-value/">1325. 删除给定值的叶子节点</a></td>
+      <td>中等</td>
+      <td>同为「删完可能产生新叶子」的连锁删除，后序遍历一趟完成，可对照本题理解为何无需多轮</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/trim-a-binary-search-tree/">669. 修剪二叉搜索树</a></td>
+      <td>中等</td>
+      <td>利用 BST 的有序性，越界时直接返回某一侧子树的递归结果，剪枝方向由值域决定</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/path-sum/">112. 路径总和</a></td>
+      <td>简单</td>
+      <td>只判断是否存在达标路径，同样向下传剩余额度，但返回布尔且可提前短路</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/path-sum-ii/">113. 路径总和 II</a></td>
+      <td>中等</td>
+      <td>要输出全部达标路径，必须真的维护路径列表并手写回溯撤销</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/path-sum-iii/">437. 路径总和 III</a></td>
+      <td>中等</td>
+      <td>路径不必从根开始，需要用前缀和加哈希表统计，与本题的「必须整条根到叶」形成对照</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/distribute-coins-in-binary-tree/">979. 在二叉树中分配硬币</a></td>
+      <td>中等</td>
+      <td>递归返回的是「子树的净盈余」这一数值语义，展示了同一骨架下返回值可以承载什么</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/89520914" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 面试题 08.12. 八皇后</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/80262493" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 650. 两个键的键盘</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/67518301">https://hgnulb.github.io/blog/2022/67518301</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

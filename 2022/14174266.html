@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1096. 花括号展开 II | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,哈希表,回溯,字符串,广度优先搜索,微软,排序,栈" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1096. 花括号展开 II" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/14174266" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/14174266" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-02-03T21:56:37+08:00" />
+<meta property="article:modified_time" content="2022-02-03T21:56:37+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1096. 花括号展开 II" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-02-03T21:56:37+08:00","datePublished":"2022-02-03T21:56:37+08:00","description":"题目描述","headline":"LeetCode 1096. 花括号展开 II","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/14174266"},"url":"https://hgnulb.github.io/blog/2022/14174266"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法递归解析表达式">解法：递归解析表达式</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1096. 花括号展开 II">LeetCode 1096. 花括号展开 II</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-02-03 21:56:37"
+                    datetime="2022-02-03T21:56:37+08:00"
+            >
+                2022-02-03
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2863 字 · 英文 56 词 · 代码 118 行"
+            aria-label="预计阅读时间约 11 分钟，正文 2863 字 · 英文 56 词 · 代码 118 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 11 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    7 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3320177889/" title="排序">
+        排序
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9755043388/" title="回溯">
+        回溯
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法递归解析表达式">解法：递归解析表达式</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/brace-expansion-ii/">1096. 花括号展开 II</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个由小写字母、逗号、花括号组成的表达式，要求算出它能表示的全部字符串，去重后按字典序返回。表达式里逗号表示「或」（并集），相邻并列表示「拼接」（笛卡尔积），花括号可以任意层嵌套。</p>
+
+  <p>关键是把这门小语言的规则读准：并集与拼接的优先级不同，<strong>拼接比逗号结合得更紧</strong>。<code class="language-plaintext highlighter-rouge">{a,b}c</code> 的意思是 <code class="language-plaintext highlighter-rouge">ac</code> 和 <code class="language-plaintext highlighter-rouge">bc</code>，而不是 <code class="language-plaintext highlighter-rouge">a</code> 和 <code class="language-plaintext highlighter-rouge">bc</code>；只有花括号能改变这个结合顺序。这直接决定了后面必须写一个分层的处理过程，而不能一遍扫到底。</p>
+
+  <p>括号可以嵌套，且嵌套深度不由题目直接给出，说明处理过程必须能「自己调用自己」或者用一个显式的栈来记住外层没处理完的部分——这是所有需要处理任意深度嵌套结构的题目共同的信号。</p>
+
+  <p>结果要求去重且有序。<code class="language-plaintext highlighter-rouge">{a,a}</code> 只算一个 <code class="language-plaintext highlighter-rouge">a</code>，<code class="language-plaintext highlighter-rouge">{{a,b},{b,c}}</code> 里的 <code class="language-plaintext highlighter-rouge">b</code> 也只算一次，所以中间过程就应该用集合承载，最后再统一排序。</p>
+
+  <p>边界：表达式可能根本没有括号（就是一个单词）；也可能是 <code class="language-plaintext highlighter-rouge">{a}</code> 这种只含一个选项的括号；空串不会出现，题目保证表达式合法，因此不需要做语法错误处理。</p>
+
+  <p>数据规模只有 60 个字符，结果集也不会爆炸，所以不需要在集合合并上做特别的优化，把语义写对才是重点。</p>
+</blockquote>
+
+<h2 id="解法递归解析表达式">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E9%80%92%E5%BD%92%E8%A7%A3%E6%9E%90%E8%A1%A8%E8%BE%BE%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：递归解析表达式</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先想暴力：把最内层的一对花括号找出来、展开、替换回原串，再重复。这个做法能出结果，但每次替换都要重建整个字符串，而且展开后又会生成新的可展开位置，代码里到处是下标偏移的修补，写不干净也说不清正确性。瓶颈在于<strong>它把「结构」当成「文本」来处理</strong>。</p>
+
+  <p>换个角度观察：这个表达式其实有一套非常规整的文法，只有三层。</p>
+
+  <ul>
+    <li>
+<code class="language-plaintext highlighter-rouge">expr = term (',' term)*</code>：若干个 term 用逗号并列，语义是<strong>并集</strong>。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">term = factor+</code>：若干个 factor 直接相邻，语义是<strong>笛卡尔积拼接</strong>。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">factor = 小写字母串 | '{' expr '}'</code>：一个 factor 要么是一个单词，要么是一对花括号包住的完整 expr。</li>
+  </ul>
+
+  <p>这三条规则互相引用，恰好构成递归下降解析（recursive descent）的三个函数。文法把优先级写死在结构里：<code class="language-plaintext highlighter-rouge">term</code> 在 <code class="language-plaintext highlighter-rouge">expr</code> 内部被调用，所以拼接天然比逗号绑得紧；<code class="language-plaintext highlighter-rouge">factor</code> 里的 <code class="language-plaintext highlighter-rouge">{ expr }</code> 又让括号内部重新回到最低优先级，嵌套问题自动解决。</p>
+
+  <p>每个函数的返回值统一定义为<strong>该语法片段能展开出的全部字符串的集合</strong>，这是整个解法的不变量。有了它，三个函数各自要做的事就唯一确定了：</p>
+
+  <ul>
+    <li>
+<code class="language-plaintext highlighter-rouge">parseExpr</code> 把各个 <code class="language-plaintext highlighter-rouge">term</code> 的集合求<strong>并</strong>；</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">parseTerm</code> 把各个 <code class="language-plaintext highlighter-rouge">factor</code> 的集合求<strong>笛卡尔积后逐对拼接</strong>，初值是 <code class="language-plaintext highlighter-rouge">{""}</code>（拼接运算的单位元，保证第一个 factor 能正确并入）；</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">parseFactor</code> 遇到字母就返回单元素集合，遇到 <code class="language-plaintext highlighter-rouge">{</code> 就吃掉左括号、递归调用 <code class="language-plaintext highlighter-rouge">parseExpr</code>、再吃掉右括号。</li>
+  </ul>
+
+  <p>三个函数共享同一个游标 <code class="language-plaintext highlighter-rouge">idx</code>，约定是：<strong>进入函数时 <code class="language-plaintext highlighter-rouge">idx</code> 指向本片段的第一个字符，返回时 <code class="language-plaintext highlighter-rouge">idx</code> 指向本片段之后的第一个字符</strong>。这个约定必须严格遵守，否则调用方与被调用方对位置的理解就会错位。Java 里用 <code class="language-plaintext highlighter-rouge">int[1]</code> 模拟引用传递，Go 里用 <code class="language-plaintext highlighter-rouge">*int</code>。</p>
+
+  <p>正确性可以按文法结构归纳：<code class="language-plaintext highlighter-rouge">factor</code> 对单词直接返回唯一展开，对花括号递归得到括号内全部展开；若每个 <code class="language-plaintext highlighter-rouge">factor</code> 都正确，<code class="language-plaintext highlighter-rouge">term</code> 的连续笛卡尔积就恰好枚举所有拼接组合；若每个 <code class="language-plaintext highlighter-rouge">term</code> 都正确，<code class="language-plaintext highlighter-rouge">expr</code> 求并集就恰好覆盖逗号两侧的全部选择。集合消除重复，最外层排序只改变顺序，不改变结果。</p>
+
+  <p>最后把集合倒进 List 排序输出。集合天然完成去重，排序只在最外层做一次。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>定义游标契约</strong>：用一个可被所有递归层共享的下标 <code class="language-plaintext highlighter-rouge">idx</code>。之所以不能用普通的 <code class="language-plaintext highlighter-rouge">int</code> 参数，是因为子函数消耗了多少字符必须让父函数知道，返回值已经被集合占用了，位置只能靠引用带回来。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">parseFactor</code>：识别最小单元</strong>。先看当前字符是不是 <code class="language-plaintext highlighter-rouge">{</code>。是则 <code class="language-plaintext highlighter-rouge">idx++</code> 跳过左括号，递归 <code class="language-plaintext highlighter-rouge">parseExpr</code> 拿到括号内的全部结果，再 <code class="language-plaintext highlighter-rouge">idx++</code> 跳过右括号后返回——两次自增分别对应吃掉一个定界符，缺一个都会让后续解析读到错位的字符。否则一路收集小写字母，直到遇到 <code class="language-plaintext highlighter-rouge">{</code>、<code class="language-plaintext highlighter-rouge">}</code>、<code class="language-plaintext highlighter-rouge">,</code> 三种定界符之一或串尾为止，把这个单词作为唯一元素返回。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">parseTerm</code>：处理拼接</strong>。结果初始化为 <code class="language-plaintext highlighter-rouge">{""}</code> 而不是空集，因为空集与任何集合做笛卡尔积仍是空集，第一个 factor 会被吞掉；<code class="language-plaintext highlighter-rouge">{""}</code> 是拼接的单位元，能让循环从第一轮就正常工作。循环条件是「没到串尾，且当前字符既不是 <code class="language-plaintext highlighter-rouge">}</code> 也不是 <code class="language-plaintext highlighter-rouge">,</code>」——这两个字符正是 term 的两种合法终止符，读到它们就把控制权交还给上层，不能自作主张消耗掉。每轮取一个 factor 的集合，与已有结果做两重循环拼接。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">parseExpr</code>：处理并集</strong>。先解析一个 term，然后只要当前字符是 <code class="language-plaintext highlighter-rouge">,</code> 就 <code class="language-plaintext highlighter-rouge">idx++</code> 跳过逗号、再解析一个 term 并把结果并入。注意这里是 <code class="language-plaintext highlighter-rouge">addAll</code> 求并，不是拼接——这一行就是「逗号优先级最低」的具体体现。</li>
+    <li>
+<strong>收尾</strong>：从下标 0 调用 <code class="language-plaintext highlighter-rouge">parseExpr</code>，把返回的集合转成列表排序。排序放在最外层做一次即可，中间层排序纯属浪费。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">{a,b}{c,{d,e}}</code> 走一遍（记 <code class="language-plaintext highlighter-rouge">idx</code> 为当前位置）：</p>
+
+  <p><code class="language-plaintext highlighter-rouge">parseExpr(0)</code> 调 <code class="language-plaintext highlighter-rouge">parseTerm(0)</code>，结果初值 <code class="language-plaintext highlighter-rouge">{""}</code>。第一轮 <code class="language-plaintext highlighter-rouge">parseFactor</code> 看到 <code class="language-plaintext highlighter-rouge">idx=0</code> 是 <code class="language-plaintext highlighter-rouge">{</code>，跳到 1 后递归 <code class="language-plaintext highlighter-rouge">parseExpr(1)</code>：它解析出 term <code class="language-plaintext highlighter-rouge">a</code>（读到 <code class="language-plaintext highlighter-rouge">,</code> 停下），随后吃掉逗号解析出 term <code class="language-plaintext highlighter-rouge">b</code>，得到 <code class="language-plaintext highlighter-rouge">{a, b}</code>，此时 <code class="language-plaintext highlighter-rouge">idx=4</code> 指向 <code class="language-plaintext highlighter-rouge">}</code>；回到 <code class="language-plaintext highlighter-rouge">parseFactor</code> 吃掉右括号，<code class="language-plaintext highlighter-rouge">idx=5</code>，返回 <code class="language-plaintext highlighter-rouge">{a, b}</code>。term 层做拼接：<code class="language-plaintext highlighter-rouge">{""} × {a,b} = {a, b}</code>。</p>
+
+  <p>第二轮 <code class="language-plaintext highlighter-rouge">parseFactor</code> 看到 <code class="language-plaintext highlighter-rouge">idx=5</code> 是 <code class="language-plaintext highlighter-rouge">{</code>，跳到 6 递归 <code class="language-plaintext highlighter-rouge">parseExpr(6)</code>：先得 term <code class="language-plaintext highlighter-rouge">c</code>（<code class="language-plaintext highlighter-rouge">idx=7</code> 指向 <code class="language-plaintext highlighter-rouge">,</code>），吃掉逗号后 <code class="language-plaintext highlighter-rouge">parseTerm(8)</code> 的第一个 factor 又是 <code class="language-plaintext highlighter-rouge">{</code>，再递归一层解析出 <code class="language-plaintext highlighter-rouge">{d, e}</code>，该层 term 结果为 <code class="language-plaintext highlighter-rouge">{d, e}</code>，并入后得 <code class="language-plaintext highlighter-rouge">{c, d, e}</code>，<code class="language-plaintext highlighter-rouge">idx</code> 停在最外层的 <code class="language-plaintext highlighter-rouge">}</code>；回到 <code class="language-plaintext highlighter-rouge">parseFactor</code> 吃掉它，返回 <code class="language-plaintext highlighter-rouge">{c, d, e}</code>。term 层再做拼接：<code class="language-plaintext highlighter-rouge">{a,b} × {c,d,e}</code> 得到 <code class="language-plaintext highlighter-rouge">{ac, ad, ae, bc, bd, be}</code>。</p>
+
+  <p>此时 <code class="language-plaintext highlighter-rouge">idx</code> 到达串尾，<code class="language-plaintext highlighter-rouge">parseTerm</code> 与 <code class="language-plaintext highlighter-rouge">parseExpr</code> 依次退出，排序后返回 <code class="language-plaintext highlighter-rouge">["ac","ad","ae","bc","bd","be"]</code>。</p>
+
+  <p>若把 <code class="language-plaintext highlighter-rouge">parseTerm</code> 的初值写成空集，第一轮的两重循环一次都不会执行，结果永远是空集；若 <code class="language-plaintext highlighter-rouge">parseTerm</code> 的循环条件忘了判 <code class="language-plaintext highlighter-rouge">,</code>，<code class="language-plaintext highlighter-rouge">parseFactor</code> 会在逗号处返回空字符串且不移动游标，外层循环永远停在同一位置。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Collections</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.HashSet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">braceExpansionII</span><span class="o">(</span><span class="nc">String</span> <span class="n">expression</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">idx</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="n">parseExpr</span><span class="o">(</span><span class="n">expression</span><span class="o">,</span> <span class="n">idx</span><span class="o">);</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">res</span><span class="o">);</span>
+        <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">list</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// expr = term (',' term)*，逗号表示并集。</span>
+    <span class="kd">private</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">parseExpr</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">idx</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="n">parseTerm</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">idx</span><span class="o">);</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">idx</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">idx</span><span class="o">[</span><span class="mi">0</span><span class="o">])</span> <span class="o">==</span> <span class="sc">','</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">idx</span><span class="o">[</span><span class="mi">0</span><span class="o">]++;</span>
+            <span class="n">res</span><span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">parseTerm</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">idx</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// term = factor+，相邻表示笛卡尔积拼接，初值取单位元 {""}。</span>
+    <span class="kd">private</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">parseTerm</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">idx</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">""</span><span class="o">);</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">idx</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">idx</span><span class="o">[</span><span class="mi">0</span><span class="o">])</span> <span class="o">!=</span> <span class="sc">'}'</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">idx</span><span class="o">[</span><span class="mi">0</span><span class="o">])</span> <span class="o">!=</span> <span class="sc">','</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">next</span> <span class="o">=</span> <span class="n">parseFactor</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">idx</span><span class="o">);</span>
+            <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">merged</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">a</span> <span class="o">:</span> <span class="n">res</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">b</span> <span class="o">:</span> <span class="n">next</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">merged</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">merged</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// factor 可能是单词或 {expr}。</span>
+    <span class="kd">private</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">parseFactor</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">idx</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">idx</span><span class="o">[</span><span class="mi">0</span><span class="o">])</span> <span class="o">==</span> <span class="sc">'{'</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">idx</span><span class="o">[</span><span class="mi">0</span><span class="o">]++;</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">parseExpr</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">idx</span><span class="o">);</span>
+            <span class="n">idx</span><span class="o">[</span><span class="mi">0</span><span class="o">]++;</span>
+            <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nc">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">idx</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">idx</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">'{'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'}'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">','</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+            <span class="n">idx</span><span class="o">[</span><span class="mi">0</span><span class="o">]++;</span>
+        <span class="o">}</span>
+        <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="s">"sort"</span>
+
+<span class="k">func</span> <span class="n">braceExpansionII</span><span class="p">(</span><span class="n">expression</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+	<span class="n">idx</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">res</span> <span class="o">:=</span> <span class="n">parseExpr</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">idx</span><span class="p">)</span>
+	<span class="n">list</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+	<span class="k">for</span> <span class="n">k</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">res</span> <span class="p">{</span>
+		<span class="n">list</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Strings</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">list</span>
+<span class="p">}</span>
+
+<span class="c">// expr = term (',' term)*，逗号表示并集。</span>
+<span class="k">func</span> <span class="n">parseExpr</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">,</span> <span class="n">idx</span> <span class="o">*</span><span class="kt">int</span><span class="p">)</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">struct</span><span class="p">{}</span> <span class="p">{</span>
+	<span class="n">res</span> <span class="o">:=</span> <span class="n">parseTerm</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+	<span class="k">for</span> <span class="o">*</span><span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="o">*</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="sc">','</span> <span class="p">{</span>
+		<span class="o">*</span><span class="n">idx</span> <span class="o">=</span> <span class="o">*</span><span class="n">idx</span> <span class="o">+</span> <span class="m">1</span>
+		<span class="n">term</span> <span class="o">:=</span> <span class="n">parseTerm</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">term</span> <span class="p">{</span>
+			<span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="k">struct</span><span class="p">{}{}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+
+<span class="c">// term = factor+，相邻表示笛卡尔积拼接，初值取单位元 {""}。</span>
+<span class="k">func</span> <span class="n">parseTerm</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">,</span> <span class="n">idx</span> <span class="o">*</span><span class="kt">int</span><span class="p">)</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">struct</span><span class="p">{}</span> <span class="p">{</span>
+	<span class="n">res</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">struct</span><span class="p">{}{</span><span class="s">""</span><span class="o">:</span> <span class="p">{}}</span>
+	<span class="k">for</span> <span class="o">*</span><span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="o">*</span><span class="n">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'}'</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="o">*</span><span class="n">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">','</span> <span class="p">{</span>
+		<span class="n">next</span> <span class="o">:=</span> <span class="n">parseFactor</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+		<span class="n">merged</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">struct</span><span class="p">{})</span>
+		<span class="k">for</span> <span class="n">a</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">res</span> <span class="p">{</span>
+			<span class="k">for</span> <span class="n">b</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">next</span> <span class="p">{</span>
+				<span class="n">merged</span><span class="p">[</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="k">struct</span><span class="p">{}{}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="n">merged</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+
+<span class="c">// factor 可能是单词或 {expr}。</span>
+<span class="k">func</span> <span class="n">parseFactor</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">,</span> <span class="n">idx</span> <span class="o">*</span><span class="kt">int</span><span class="p">)</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">struct</span><span class="p">{}</span> <span class="p">{</span>
+	<span class="n">res</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">struct</span><span class="p">{})</span>
+	<span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="o">*</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'{'</span> <span class="p">{</span>
+		<span class="o">*</span><span class="n">idx</span> <span class="o">=</span> <span class="o">*</span><span class="n">idx</span> <span class="o">+</span> <span class="m">1</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="n">parseExpr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+		<span class="o">*</span><span class="n">idx</span> <span class="o">=</span> <span class="o">*</span><span class="n">idx</span> <span class="o">+</span> <span class="m">1</span>
+		<span class="k">return</span> <span class="n">res</span>
+	<span class="p">}</span>
+
+	<span class="n">start</span> <span class="o">:=</span> <span class="o">*</span><span class="n">idx</span>
+	<span class="k">for</span> <span class="o">*</span><span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">c</span> <span class="o">:=</span> <span class="n">s</span><span class="p">[</span><span class="o">*</span><span class="n">idx</span><span class="p">]</span>
+		<span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'{'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">'}'</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">','</span> <span class="p">{</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+		<span class="o">*</span><span class="n">idx</span> <span class="o">=</span> <span class="o">*</span><span class="n">idx</span> <span class="o">+</span> <span class="m">1</span>
+	<span class="p">}</span>
+	<span class="n">res</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">start</span><span class="o">:*</span><span class="n">idx</span><span class="p">]]</span> <span class="o">=</span> <span class="k">struct</span><span class="p">{}{}</span>
+	<span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：这是输出敏感算法。设 <code class="language-plaintext highlighter-rouge">P</code> 为所有笛卡尔积循环累计生成的候选字符串数，<code class="language-plaintext highlighter-rouge">L</code> 为候选字符串最大长度（<code class="language-plaintext highlighter-rouge">L ≤ n</code>），<code class="language-plaintext highlighter-rouge">K</code> 为最终去重后的结果数；字符串拼接与哈希均需按长度计费，因此解析与展开为 $O(n + P L)$，最终排序为 $O(K L \log K)$。最坏情况下 <code class="language-plaintext highlighter-rouge">P</code>、<code class="language-plaintext highlighter-rouge">K</code> 都可随表达式长度指数增长，而仅输出 <code class="language-plaintext highlighter-rouge">K</code> 个答案就已经无法避免这部分代价。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n + U L)$，其中 <code class="language-plaintext highlighter-rouge">U</code> 是递归过程中同时存活的中间字符串与最终字符串数量；<code class="language-plaintext highlighter-rouge">O(n)</code> 来自最坏嵌套深度的调用栈。结果集本身可能是指数级，不能写成只依赖表达式长度的多项式空间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>面对带任意深度嵌套的表达式，第一步永远是<strong>先写出文法</strong>再写代码。文法一旦写清楚，函数划分、优先级、终止条件就全部确定了，这是面试中最该先说出口的一步。</li>
+    <li>递归下降的每个函数都要有明确的返回语义（这里是「该片段能展开的集合」）和明确的游标契约（进来指向头、出去指向尾后一位），两个约定共同保证各层能拼装正确。</li>
+    <li>逗号=并集、相邻=笛卡尔积，两种运算的优先级差异靠<strong>函数调用层次</strong>表达，不靠额外的优先级表。</li>
+    <li>拼接类归并的初值取单位元 <code class="language-plaintext highlighter-rouge">{""}</code>，这是「乘法从 1 开始、加法从 0 开始」在字符串集合上的对应物。</li>
+    <li>用集合承载中间结果，候选字符串插入时同步去重；字典序只影响最终输出，所以排序只在最外层做一次。</li>
+    <li>复杂度必须按输出规模分析：笛卡尔积会真实构造每个组合，结果数可能指数增长；这是题目输出决定的下界，不是递归解析带来的额外浪费。</li>
+    <li>面试视角：这道题与 394 字符串解码、224 基本计算器是同一族。若面试官要求不用递归，可以答「用一个显式栈保存每层未完成的集合，遇到 <code class="language-plaintext highlighter-rouge">{</code> 压栈、遇到 <code class="language-plaintext highlighter-rouge">}</code> 弹栈合并」，本质与递归等价。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">parseTerm</code> 的结果初始化为空集合。用例 <code class="language-plaintext highlighter-rouge">{a,b}</code>：第一轮两重循环因外层为空直接跳过，最终返回空集合，答案变成 <code class="language-plaintext highlighter-rouge">[]</code>。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">parseFactor</code> 处理 <code class="language-plaintext highlighter-rouge">{</code> 时只 <code class="language-plaintext highlighter-rouge">idx++</code> 跳过左括号，忘了返回前再 <code class="language-plaintext highlighter-rouge">idx++</code> 跳过右括号。用例 <code class="language-plaintext highlighter-rouge">{a}b</code>：返回后游标仍停在 <code class="language-plaintext highlighter-rouge">}</code> 上，<code class="language-plaintext highlighter-rouge">parseTerm</code> 的循环条件立刻判定终止，<code class="language-plaintext highlighter-rouge">b</code> 被永久丢弃，答案是 <code class="language-plaintext highlighter-rouge">["a"]</code>。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">parseTerm</code> 的循环条件只写 <code class="language-plaintext highlighter-rouge">idx &lt; n &amp;&amp; s[idx] != '}'</code>，漏了 <code class="language-plaintext highlighter-rouge">!= ','</code>。用例 <code class="language-plaintext highlighter-rouge">{a,b}</code>：游标停在逗号时，<code class="language-plaintext highlighter-rouge">parseFactor</code> 立即返回空字符串且没有推进游标，<code class="language-plaintext highlighter-rouge">parseTerm</code> 因而陷入死循环。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">parseExpr</code> 里把 <code class="language-plaintext highlighter-rouge">res.addAll(parseTerm(...))</code> 写成拼接（两重循环相加）。用例 <code class="language-plaintext highlighter-rouge">{a,b}</code>：得到的是 <code class="language-plaintext highlighter-rouge">["ab"]</code> 而不是 <code class="language-plaintext highlighter-rouge">["a","b"]</code>，并集被误当成了乘积。</li>
+    <li>
+<strong>错误写法</strong>：把 <code class="language-plaintext highlighter-rouge">idx</code> 声明成普通 <code class="language-plaintext highlighter-rouge">int</code> 形参逐层传值。用例 <code class="language-plaintext highlighter-rouge">{a,b}c</code>：子调用消耗的字符数传不回父层，父层仍从 <code class="language-plaintext highlighter-rouge">{</code> 之后一位继续读，游标彻底错乱，输出无意义。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">parseFactor</code> 读单词时只在遇到 <code class="language-plaintext highlighter-rouge">{</code> 时停止，没把 <code class="language-plaintext highlighter-rouge">}</code> 和 <code class="language-plaintext highlighter-rouge">,</code> 也作为终止符。用例 <code class="language-plaintext highlighter-rouge">{ab,c}</code>：单词会一路读到 <code class="language-plaintext highlighter-rouge">,</code>，把定界符吃进字符串里。</li>
+    <li>
+<strong>错误写法</strong>：用 <code class="language-plaintext highlighter-rouge">List</code> 代替 <code class="language-plaintext highlighter-rouge">Set</code> 存中间结果。用例 <code class="language-plaintext highlighter-rouge">{a,a}b</code>：<code class="language-plaintext highlighter-rouge">ab</code> 会出现两次，最终答案含重复项，题目明确要求去重。</li>
+    <li>
+<strong>错误写法</strong>：在每一层 <code class="language-plaintext highlighter-rouge">parseExpr</code> 返回前都排序。功能上不错但白白多做 $O(k \log k)$ 的工作，嵌套深时开销叠加，面试官会追问为什么。</li>
+    <li>
+<strong>错误写法</strong>：直接对 <code class="language-plaintext highlighter-rouge">HashSet</code> 的迭代顺序抱有期望，不做最终排序。用例 <code class="language-plaintext highlighter-rouge">{b,a}</code>：哈希顺序可能输出 <code class="language-plaintext highlighter-rouge">["b","a"]</code>，不满足字典序要求。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/brace-expansion/">1087. 花括号展开</a></td>
+      <td>中等</td>
+      <td>本题的简化版，括号不嵌套且只在顶层并列，一次遍历分组后回溯即可</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/decode-string/">394. 字符串解码</a></td>
+      <td>中等</td>
+      <td>括号带重复次数前缀，栈里要同时压数字与已拼前缀，语义是重复不是并集</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/basic-calculator/">224. 基本计算器</a></td>
+      <td>困难</td>
+      <td>同为递归下降，但要处理带符号数与括号取负，返回值是数值而非集合</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-atoms/">726. 原子的数量</a></td>
+      <td>困难</td>
+      <td>括号后带倍数，返回值是「元素到个数」的映射，合并时做计数相加</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/parse-lisp-expression/">736. Lisp 语法解析</a></td>
+      <td>困难</td>
+      <td>文法更复杂且带变量作用域，递归时要额外携带一层符号表</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/mini-parser/">385. 迷你语法分析器</a></td>
+      <td>中等</td>
+      <td>解析嵌套列表结构，练习同样的游标契约，但输出是树形对象</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/16028851" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 171. Excel 表列序号</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/53048755" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 181. 超过经理收入的员工</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/14174266">https://hgnulb.github.io/blog/2022/14174266</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

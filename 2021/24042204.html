@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 743. 网络延迟时间 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,Dijkstra 算法,华为,图,堆（优先队列）,字节跳动,广度优先搜索,微软,最短路,深度优先搜索,腾讯" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 743. 网络延迟时间" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/24042204" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/24042204" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-12-08T15:39:05+08:00" />
+<meta property="article:modified_time" content="2021-12-08T15:39:05+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 743. 网络延迟时间" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-12-08T15:39:05+08:00","datePublished":"2021-12-08T15:39:05+08:00","description":"题目描述","headline":"LeetCode 743. 网络延迟时间","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/24042204"},"url":"https://hgnulb.github.io/blog/2021/24042204"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dijkstra-最短路">解法：Dijkstra 最短路</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 743. 网络延迟时间">LeetCode 743. 网络延迟时间</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-12-08 15:39:05"
+                    datetime="2021-12-08T15:39:05+08:00"
+            >
+                2021-12-08
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3064 字 · 英文 140 词 · 代码 100 行"
+            aria-label="预计阅读时间约 11 分钟，正文 3064 字 · 英文 140 词 · 代码 100 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 11 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    10 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2381712535/" title="腾讯">
+        腾讯
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0106759788/" title="华为">
+        华为
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7037379732/" title="堆（优先队列）">
+        堆（优先队列）
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5789791753/" title="图">
+        图
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7618789166/" title="最短路">
+        最短路
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8629310514/" title="Dijkstra 算法">
+        Dijkstra 算法
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dijkstra-最短路">解法：Dijkstra 最短路</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/network-delay-time/">743. 网络延迟时间</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>有 <code class="language-plaintext highlighter-rouge">n</code> 个编号从 1 到 <code class="language-plaintext highlighter-rouge">n</code> 的节点，<code class="language-plaintext highlighter-rouge">times[i] = [u, v, w]</code> 表示信号从 <code class="language-plaintext highlighter-rouge">u</code> 传到 <code class="language-plaintext highlighter-rouge">v</code> 需要 <code class="language-plaintext highlighter-rouge">w</code> 的时间。从节点 <code class="language-plaintext highlighter-rouge">k</code> 同时向外发出信号，问所有节点都收到信号需要多久；若存在收不到的节点，返回 -1。</p>
+
+  <p>「同时发出」这四个字要读透。信号沿所有路径并行传播，某个节点收到信号的时刻，就是它从 <code class="language-plaintext highlighter-rouge">k</code> 出发的<strong>最短路径长度</strong>——先到的那份信号定下时刻，后到的没有意义。而「所有节点都收到」意味着要等最慢的那一个，所以答案是<strong>所有节点最短路的最大值</strong>。这两句合起来把题目翻译成了一个完全标准的问题：单源最短路，再取全体最大。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">times[i] = [u, v, w]</code> 的三元组是<strong>有向</strong>的，信号只能从 <code class="language-plaintext highlighter-rouge">u</code> 流向 <code class="language-plaintext highlighter-rouge">v</code>。这一点在建图时最容易疏忽——反向加边会得到一张完全不同的图，而且往往还能跑出答案，只是答案是错的。</p>
+
+  <p>权重 <code class="language-plaintext highlighter-rouge">w</code> 的取值范围是 $[0, 100]$，<strong>非负</strong>。这是全题最关键的算法信号：非负边权是贪心式最短路算法成立的前提。如果题目允许负权，就必须换成基于松弛轮次的算法。</p>
+
+  <p>规模上，节点数 $n \le 100$，边数最多 6000。这个规模其实很小，$O(n^3)$ 的全源最短路也能过，但边数远小于 $n^2$ 的稀疏图更适合用堆优化的写法，而且这个写法在 $n$ 放大到 $10^5$ 时依然成立，是面试中该给出的版本。</p>
+
+  <p>边界有三处：起点 <code class="language-plaintext highlighter-rouge">k</code> 自己的时刻是 0，必须计入最大值的比较（当 <code class="language-plaintext highlighter-rouge">n = 1</code> 时答案就是 0）；节点编号从 1 开始，数组要开 <code class="language-plaintext highlighter-rouge">n + 1</code> 长以免下标错位；存在不可达节点时不能返回一个巨大的数，必须识别出来返回 -1。</p>
+</blockquote>
+
+<h2 id="解法dijkstra-最短路">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95dijkstra-%E6%9C%80%E7%9F%AD%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：Dijkstra 最短路</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先看朴素做法：从 <code class="language-plaintext highlighter-rouge">k</code> 出发做深度优先搜索，枚举所有路径，对每个节点记录见过的最小总权。图里有环时路径数量爆炸，同一个节点会被反复以更差的路径重新访问，复杂度不可控。</p>
+
+  <p>瓶颈在于「不知道什么时候一个节点的答案已经定死了」，所以每条路径都得试。而边权非负给出了一个决定性的性质：<strong>沿着一条路径继续走下去，总长度只会变大不会变小</strong>。由此可以推出一个贪心结论——在所有「尚未确定」的节点中，当前估计距离最小的那一个，它的估计值已经就是最终答案。理由是任何想要改进它的新路径，都必须先经过另一个尚未确定的节点，而那个节点的距离不小于它，再叠加一段非负权，只会更长。</p>
+
+  <p>这个结论把问题从「枚举路径」变成了「每轮定死一个节点」：反复取出未确定节点里距离最小的，宣布它定稿，然后用它去松弛（尝试缩短）它的出边邻居。每个节点定稿一次，总共 <code class="language-plaintext highlighter-rouge">n</code> 轮，就得到了全部最短路。</p>
+
+  <p>「取出最小值」这个操作用小顶堆实现，就是堆优化版本。堆里存的是 <code class="language-plaintext highlighter-rouge">(距离, 节点)</code> 二元组，按距离排序。</p>
+
+  <p>需要维护的核心不变量是：<strong><code class="language-plaintext highlighter-rouge">dist[v]</code> 始终等于「只经过已定稿节点作为中转」时，从 <code class="language-plaintext highlighter-rouge">k</code> 到 <code class="language-plaintext highlighter-rouge">v</code> 的最短长度；而每次从堆顶弹出的、且未过期的节点，其 <code class="language-plaintext highlighter-rouge">dist</code> 值就是它真正的最短路</strong>。前半句由每次定稿后立即松弛全部出边来保证，后半句由上面的贪心论证保证。</p>
+
+  <p>实现上有个细节：一个节点的距离可能被松弛多次，于是堆里会残留同一节点的多个旧记录。与其去堆中删除，不如让它们留着，弹出时用 <code class="language-plaintext highlighter-rouge">d &gt; dist[node]</code> 判断——若弹出的距离比当前记录的距离大，说明这是一条被更优路径淘汰过的<strong>过期记录</strong>，直接跳过即可。这种「懒删除」是堆优化 Dijkstra 的标准写法，比手写可减堆简单得多，也是面试时该选的实现。</p>
+
+  <p>最后一步是收尾：扫一遍 <code class="language-plaintext highlighter-rouge">dist</code>，若还有节点保持初始的无穷大，说明它压根不在 <code class="language-plaintext highlighter-rouge">k</code> 的可达集合里，返回 -1；否则取最大值作为答案。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>建有向带权邻接表</strong>：<code class="language-plaintext highlighter-rouge">graph[u]</code> 里存 <code class="language-plaintext highlighter-rouge">(v, w)</code>。用邻接表而不是邻接矩阵，是因为边数 6000 远小于 $100^2$，而且邻接表让「遍历某点的出边」这一操作正比于出度而非 <code class="language-plaintext highlighter-rouge">n</code>。只加 <code class="language-plaintext highlighter-rouge">u → v</code> 一条边，不能顺手加反向边。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">dist</code> 数组开 <code class="language-plaintext highlighter-rouge">n + 1</code> 长，全部填成无穷大，再置 <code class="language-plaintext highlighter-rouge">dist[k] = 0</code></strong>。开 <code class="language-plaintext highlighter-rouge">n + 1</code> 是为了让编号 1 到 <code class="language-plaintext highlighter-rouge">n</code> 直接当下标用，省掉全篇的 ±1 换算。无穷大既是「尚未找到任何路径」的初值，也是收尾阶段识别不可达的标志，所以不能用 0 或 -1 代替。Java 里用 <code class="language-plaintext highlighter-rouge">Integer.MAX_VALUE</code>，Go 里用 <code class="language-plaintext highlighter-rouge">1 &lt;&lt; 60</code>，两者都远大于任何可能的真实路径长（最多 $100 \times 100$）。</li>
+    <li>
+<strong>把 <code class="language-plaintext highlighter-rouge">(0, k)</code> 压入小顶堆</strong>，作为唯一的搜索起点。</li>
+    <li>
+<strong>循环弹出堆顶 <code class="language-plaintext highlighter-rouge">(d, node)</code>，先判 <code class="language-plaintext highlighter-rouge">d &gt; dist[node]</code> 则 <code class="language-plaintext highlighter-rouge">continue</code></strong>。这一句是懒删除的判定，跳过的是被后来更优路径淘汰的过期记录。缺了它虽然不影响正确性（旧记录松弛不出更小的值），但会白白多做一轮出边遍历。</li>
+    <li>
+<strong>遍历 <code class="language-plaintext highlighter-rouge">node</code> 的每条出边 <code class="language-plaintext highlighter-rouge">(next, w)</code>，若 <code class="language-plaintext highlighter-rouge">dist[node] + w &lt; dist[next]</code> 则更新 <code class="language-plaintext highlighter-rouge">dist[next]</code> 并把新的 <code class="language-plaintext highlighter-rouge">(dist[next], next)</code> 入堆</strong>。入堆的必须是<strong>更新后</strong>的新距离，让它在堆里按新值排序；只有真正缩短了才入堆，否则堆会被无效记录撑爆。</li>
+    <li>
+<strong>循环直到堆空</strong>。堆空意味着再没有可以扩展的节点，<code class="language-plaintext highlighter-rouge">k</code> 的可达集合已经全部定稿。</li>
+    <li>
+<strong>收尾扫描 1 到 <code class="language-plaintext highlighter-rouge">n</code></strong>：遇到仍是无穷大的立即返回 -1；否则用 <code class="language-plaintext highlighter-rouge">max</code> 累计最大值返回。累计的起点取 0 而不是负数，这样 <code class="language-plaintext highlighter-rouge">n = 1</code> 时（只有起点自己、<code class="language-plaintext highlighter-rouge">dist[k] = 0</code>）能正确返回 0。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">times = [[2,1,1],[2,3,1],[3,4,1]]</code>、<code class="language-plaintext highlighter-rouge">n = 4</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> 走一遍。</p>
+
+  <p>建图后 <code class="language-plaintext highlighter-rouge">graph[2] = [(1,1), (3,1)]</code>，<code class="language-plaintext highlighter-rouge">graph[3] = [(4,1)]</code>，节点 1 和 4 没有出边。<code class="language-plaintext highlighter-rouge">dist = [_, ∞, 0, ∞, ∞]</code>（下标 0 不用），堆里是 <code class="language-plaintext highlighter-rouge">{(0,2)}</code>。</p>
+
+  <p>第一轮：弹出 <code class="language-plaintext highlighter-rouge">(0, 2)</code>，<code class="language-plaintext highlighter-rouge">0 == dist[2]</code> 不过期。松弛出边：<code class="language-plaintext highlighter-rouge">dist[2] + 1 = 1 &lt; ∞</code>，于是 <code class="language-plaintext highlighter-rouge">dist[1] = 1</code> 并压入 <code class="language-plaintext highlighter-rouge">(1,1)</code>；同理 <code class="language-plaintext highlighter-rouge">dist[3] = 1</code> 并压入 <code class="language-plaintext highlighter-rouge">(1,3)</code>。此时 <code class="language-plaintext highlighter-rouge">dist = [_, 1, 0, 1, ∞]</code>，堆里是 <code class="language-plaintext highlighter-rouge">{(1,1), (1,3)}</code>。</p>
+
+  <p>第二轮：弹出距离最小的记录之一，设为 <code class="language-plaintext highlighter-rouge">(1, 1)</code>，不过期。节点 1 没有出边，什么都不做。堆里剩 <code class="language-plaintext highlighter-rouge">{(1,3)}</code>。</p>
+
+  <p>第三轮：弹出 <code class="language-plaintext highlighter-rouge">(1, 3)</code>，不过期。松弛 <code class="language-plaintext highlighter-rouge">3 → 4</code>：<code class="language-plaintext highlighter-rouge">dist[3] + 1 = 2 &lt; ∞</code>，于是 <code class="language-plaintext highlighter-rouge">dist[4] = 2</code> 并压入 <code class="language-plaintext highlighter-rouge">(2,4)</code>。堆里是 <code class="language-plaintext highlighter-rouge">{(2,4)}</code>。</p>
+
+  <p>第四轮：弹出 <code class="language-plaintext highlighter-rouge">(2, 4)</code>，不过期，节点 4 无出边。堆空，循环结束。</p>
+
+  <p>收尾扫描 <code class="language-plaintext highlighter-rouge">dist[1..4] = [1, 0, 1, 2]</code>，无穷大不存在，最大值为 2，返回 2。</p>
+
+  <p>再看不可达的情形：同样的 <code class="language-plaintext highlighter-rouge">times</code>，但取 <code class="language-plaintext highlighter-rouge">k = 1</code>。节点 1 没有出边，第一轮弹出 <code class="language-plaintext highlighter-rouge">(0, 1)</code> 后堆立刻空掉，<code class="language-plaintext highlighter-rouge">dist = [_, 0, ∞, ∞, ∞]</code>。收尾扫描到 <code class="language-plaintext highlighter-rouge">dist[2] == ∞</code>，返回 -1。</p>
+
+  <p>若建图时把方向写反（写成 <code class="language-plaintext highlighter-rouge">graph[t[1]].add(t[0], t[2])</code>），<code class="language-plaintext highlighter-rouge">k = 2</code> 这组的边会变成 <code class="language-plaintext highlighter-rouge">1 → 2</code>、<code class="language-plaintext highlighter-rouge">3 → 2</code>、<code class="language-plaintext highlighter-rouge">4 → 3</code>，从 2 出发一条边都走不出去，<code class="language-plaintext highlighter-rouge">dist[1]</code>、<code class="language-plaintext highlighter-rouge">dist[3]</code>、<code class="language-plaintext highlighter-rouge">dist[4]</code> 全是无穷大，返回 -1 而不是 2。方向搞反时代码不会报任何错，只会静默给出错误答案。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// 用优先队列维护当前可扩展的最小距离节点。</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">networkDelayTime</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">times</span><span class="o">,</span> <span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;[]</span> <span class="n">graph</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">List</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">graph</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">t</span> <span class="o">:</span> <span class="n">times</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">graph</span><span class="o">[</span><span class="n">t</span><span class="o">[</span><span class="mi">0</span><span class="o">]].</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">t</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span> <span class="n">t</span><span class="o">[</span><span class="mi">2</span><span class="o">]});</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">dist</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">dist</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">);</span>
+        <span class="n">dist</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">pq</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;((</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">-</span> <span class="n">b</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+        <span class="n">pq</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="mi">0</span><span class="o">,</span> <span class="n">k</span><span class="o">});</span>
+
+        <span class="k">while</span> <span class="o">(!</span><span class="n">pq</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+            <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">cur</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+            <span class="kt">int</span> <span class="n">node</span> <span class="o">=</span> <span class="n">cur</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">d</span> <span class="o">&gt;</span> <span class="n">dist</span><span class="o">[</span><span class="n">node</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">edge</span> <span class="o">:</span> <span class="n">graph</span><span class="o">[</span><span class="n">node</span><span class="o">])</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">next</span> <span class="o">=</span> <span class="n">edge</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+                <span class="kt">int</span> <span class="n">w</span> <span class="o">=</span> <span class="n">edge</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">dist</span><span class="o">[</span><span class="n">node</span><span class="o">]</span> <span class="o">+</span> <span class="n">w</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="o">[</span><span class="n">next</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">dist</span><span class="o">[</span><span class="n">next</span><span class="o">]</span> <span class="o">=</span> <span class="n">dist</span><span class="o">[</span><span class="n">node</span><span class="o">]</span> <span class="o">+</span> <span class="n">w</span><span class="o">;</span>
+                    <span class="n">pq</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">dist</span><span class="o">[</span><span class="n">next</span><span class="o">],</span> <span class="n">next</span><span class="o">});</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">answer</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">dist</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">answer</span><span class="o">,</span> <span class="n">dist</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Edge</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="c">// 用优先队列维护当前可扩展的最小距离节点。</span>
+    <span class="n">to</span>   <span class="kt">int</span>
+    <span class="n">cost</span> <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">Item</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">node</span> <span class="kt">int</span>
+    <span class="n">dist</span> <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">MinHeap</span> <span class="p">[]</span><span class="n">Item</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">MinHeap</span><span class="p">)</span> <span class="n">Len</span><span class="p">()</span> <span class="kt">int</span>            <span class="p">{</span> <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">MinHeap</span><span class="p">)</span> <span class="n">Less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span>  <span class="p">{</span> <span class="k">return</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dist</span> <span class="o">&lt;</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">dist</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">MinHeap</span><span class="p">)</span> <span class="n">Swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span>       <span class="p">{</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">MinHeap</span><span class="p">)</span> <span class="n">Push</span><span class="p">(</span><span class="n">x</span> <span class="n">any</span><span class="p">)</span> <span class="p">{</span> <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="o">*</span><span class="n">h</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="p">(</span><span class="n">Item</span><span class="p">))</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">MinHeap</span><span class="p">)</span> <span class="n">Pop</span><span class="p">()</span> <span class="n">any</span> <span class="p">{</span>
+    <span class="n">old</span> <span class="o">:=</span> <span class="o">*</span><span class="n">h</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">old</span><span class="p">)</span>
+    <span class="n">item</span> <span class="o">:=</span> <span class="n">old</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+    <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="n">old</span><span class="p">[</span><span class="o">:</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">item</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">networkDelayTime</span><span class="p">(</span><span class="n">times</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">graph</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="n">Edge</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">times</span> <span class="p">{</span>
+        <span class="n">graph</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="m">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">graph</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="m">0</span><span class="p">]],</span> <span class="n">Edge</span><span class="p">{</span><span class="n">to</span><span class="o">:</span> <span class="n">t</span><span class="p">[</span><span class="m">1</span><span class="p">],</span> <span class="n">cost</span><span class="o">:</span> <span class="n">t</span><span class="p">[</span><span class="m">2</span><span class="p">]})</span>
+    <span class="p">}</span>
+
+    <span class="k">const</span> <span class="n">inf</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">60</span><span class="p">)</span>
+    <span class="n">dist</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">inf</span>
+    <span class="p">}</span>
+    <span class="n">dist</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="m">0</span>
+
+    <span class="n">h</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">MinHeap</span><span class="p">{}</span>
+    <span class="n">heap</span><span class="o">.</span><span class="n">Init</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+    <span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">Item</span><span class="p">{</span><span class="n">node</span><span class="o">:</span> <span class="n">k</span><span class="p">,</span> <span class="n">dist</span><span class="o">:</span> <span class="m">0</span><span class="p">})</span>
+
+    <span class="k">for</span> <span class="n">h</span><span class="o">.</span><span class="n">Len</span><span class="p">()</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="n">cur</span> <span class="o">:=</span> <span class="n">heap</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="n">Item</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cur</span><span class="o">.</span><span class="n">dist</span> <span class="o">&gt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">cur</span><span class="o">.</span><span class="n">node</span><span class="p">]</span> <span class="p">{</span>
+            <span class="k">continue</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">graph</span><span class="p">[</span><span class="n">cur</span><span class="o">.</span><span class="n">node</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">nd</span> <span class="o">:=</span> <span class="n">cur</span><span class="o">.</span><span class="n">dist</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">cost</span>
+            <span class="k">if</span> <span class="n">nd</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">to</span><span class="p">]</span> <span class="p">{</span>
+                <span class="n">dist</span><span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">to</span><span class="p">]</span> <span class="o">=</span> <span class="n">nd</span>
+                <span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">Item</span><span class="p">{</span><span class="n">node</span><span class="o">:</span> <span class="n">e</span><span class="o">.</span><span class="n">to</span><span class="p">,</span> <span class="n">dist</span><span class="o">:</span> <span class="n">nd</span><span class="p">})</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">answer</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">inf</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">answer</span> <span class="p">{</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">answer</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(E \log E)$，其中 $E$ 是边数。凭的是每条边最多触发一次成功松弛、也就最多向堆里塞进一条记录，堆的规模上界是 $O(E)$，而每次入堆和出堆各是 $O(\log E)$。因为 $E \le V^2$，$\log E \le 2 \log V$，所以常写作 $O(E \log V)$。懒删除让堆里存在冗余记录，但它们只会被弹出后立刻跳过，不改变量级。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(V + E)$。邻接表存下全部边是 $O(V + E)$，<code class="language-plaintext highlighter-rouge">dist</code> 数组是 $O(V)$，堆最坏装下 $O(E)$ 条记录。全程没有递归，不占调用栈。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「同时出发、等最后一个到达」这类措辞的标准翻译是「单源最短路，然后取全体最大值」。识别出这层翻译，题目就退化成了模板；识别不出，很容易误当成遍历题或 DP。</li>
+    <li>边权非负是贪心式最短路成立的唯一前提，也是选型的分水岭。面试时主动说一句「因为权值非负所以用 Dijkstra，若含负权要改 Bellman-Ford 或 SPFA」，等于把算法选择的理由讲透了。</li>
+    <li>堆优化的懒删除写法（弹出时用 <code class="language-plaintext highlighter-rouge">d &gt; dist[node]</code> 判过期）是工程上的标准做法，比维护可减堆简单得多。凡是「堆里的元素会被更优值取代」的场景，都可以套这个模式。</li>
+    <li>距离数组的初值必须是一个真正的哨兵值，它同时承担「未访问」和「不可达」两个语义；收尾时靠它区分「路径长度为 0」和「根本走不到」，用 0 或 -1 当初值会让这两种情况混淆。</li>
+    <li>编号从 1 开始的图题，数组一律开 <code class="language-plaintext highlighter-rouge">n + 1</code> 长并让下标与编号对齐，比全篇写 <code class="language-plaintext highlighter-rouge">-1</code> 换算更不容易出错——图题里 0/1 下标混用是最高频的低级错误来源。</li>
+    <li>面试视角：这题几乎必被追问「$n$ 很小时还能怎么做」和「如果边权可能为负呢」。前者答 Floyd（$O(n^3)$，代码只有三重循环，$n \le 100$ 时完全够用），后者答 Bellman-Ford（松弛 $n-1$ 轮，$O(VE)$，还能顺带判负环）。能把三种最短路算法的适用边界一次说清，是这题的最高得分点。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>建图方向写反</strong>：写成 <code class="language-plaintext highlighter-rouge">graph[t[1]].add(new int[]{t[0], t[2]})</code>，对 <code class="language-plaintext highlighter-rouge">times = [[2,1,1],[2,3,1],[3,4,1]]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> 会从 2 出发无路可走，返回 -1 而不是 2。</li>
+    <li>
+<strong>顺手加了反向边当无向图</strong>：对 <code class="language-plaintext highlighter-rouge">times = [[1,2,1],[2,3,7],[1,3,4],[2,1,2]]</code>、<code class="language-plaintext highlighter-rouge">k = 1</code>，无向化后 <code class="language-plaintext highlighter-rouge">dist[3]</code> 会被算成 4 以下的某个更小值，掩盖掉真实的有向传播代价。</li>
+    <li>
+<strong>数组开成 <code class="language-plaintext highlighter-rouge">new int[n]</code></strong>：编号 <code class="language-plaintext highlighter-rouge">n</code> 的节点访问 <code class="language-plaintext highlighter-rouge">dist[n]</code> 直接抛 <code class="language-plaintext highlighter-rouge">ArrayIndexOutOfBoundsException</code>；<code class="language-plaintext highlighter-rouge">n = 1</code>、<code class="language-plaintext highlighter-rouge">k = 1</code> 时会在 <code class="language-plaintext highlighter-rouge">dist[k] = 0</code> 这一行就崩。</li>
+    <li>
+<strong>收尾时忘了 <code class="language-plaintext highlighter-rouge">dist</code> 里还有无穷大</strong>：直接 <code class="language-plaintext highlighter-rouge">max</code> 全部值，对 <code class="language-plaintext highlighter-rouge">times = [[1,2,1]]</code>、<code class="language-plaintext highlighter-rouge">n = 3</code>、<code class="language-plaintext highlighter-rouge">k = 1</code> 会返回 <code class="language-plaintext highlighter-rouge">Integer.MAX_VALUE</code> 而不是 -1。</li>
+    <li>
+<strong>收尾只扫 <code class="language-plaintext highlighter-rouge">dist[1..n-1]</code> 或从 0 开始扫</strong>：从 0 扫会把永远为无穷大的哨兵位 <code class="language-plaintext highlighter-rouge">dist[0]</code> 算进去，任何输入都返回 -1。</li>
+    <li>
+<strong>松弛后入堆的仍是旧距离</strong>：写成 <code class="language-plaintext highlighter-rouge">pq.offer(new int[]{d, next})</code> 而不是 <code class="language-plaintext highlighter-rouge">{dist[next], next}</code>，堆的排序键与真实距离脱节，弹出顺序失序，<code class="language-plaintext highlighter-rouge">times = [[1,2,10],[1,3,1],[3,2,1]]</code>、<code class="language-plaintext highlighter-rouge">k = 1</code> 这类「绕路更短」的图会得到 10 而非 2。</li>
+    <li>
+<strong>无条件把邻居入堆而不判断是否真的缩短</strong>：去掉 <code class="language-plaintext highlighter-rouge">if (dist[node] + w &lt; dist[next])</code> 的判断，堆规模会随环的存在无限膨胀，稠密图上直接超时或内存溢出。</li>
+    <li>
+<strong>用 <code class="language-plaintext highlighter-rouge">visited</code> 布尔数组代替过期判断且在入堆时打标记</strong>：节点在首次入堆（而非首次出堆）时就被标记为已访问，后续更短的路径无法再更新它，<code class="language-plaintext highlighter-rouge">times = [[1,2,10],[1,3,1],[3,2,1]]</code>、<code class="language-plaintext highlighter-rouge">k = 1</code> 会返回 10 而不是 2。标记必须在出堆定稿时打。</li>
+    <li>
+<strong>比较器写成 <code class="language-plaintext highlighter-rouge">(a, b) -&gt; a[1] - b[1]</code></strong>：按节点编号而非距离排序，堆退化成任意顺序的容器，贪心前提被破坏，结果随输入而错。</li>
+    <li>
+<strong>Go 里 <code class="language-plaintext highlighter-rouge">dist</code> 初值用 <code class="language-plaintext highlighter-rouge">math.MaxInt64</code></strong>：松弛时算 <code class="language-plaintext highlighter-rouge">cur.dist + e.cost</code> 会整数溢出成负数，反而「优于」任何真实距离，导致不可达节点被误判成可达；应当像代码里那样取 <code class="language-plaintext highlighter-rouge">1 &lt;&lt; 60</code> 这类留足余量的哨兵。</li>
+    <li>
+<strong>忘记把起点自身计入答案</strong>：只在被松弛过的节点里取最大值，<code class="language-plaintext highlighter-rouge">n = 1</code>、<code class="language-plaintext highlighter-rouge">k = 1</code>、<code class="language-plaintext highlighter-rouge">times = []</code> 会因为没有任何松弛而返回初始值以外的东西；正确答案是 0。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/cheapest-flights-within-k-stops/">787. K 站中转内最便宜的航班</a></td>
+      <td>中等</td>
+      <td>多出「中转次数上限」这一维状态，贪心前提失效，需按轮次松弛的 Bellman-Ford</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/path-with-minimum-effort/">1631. 最小体力消耗路径</a></td>
+      <td>中等</td>
+      <td>路径代价从「边权累加」换成「边权取最大」，松弛式改为取 max，也可改用二分加连通判定</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/swim-in-rising-water/">778. 水位上升的泳池中游泳</a></td>
+      <td>困难</td>
+      <td>同为瓶颈路径，但代价定义在格点权值上，堆里存的是当前路径的最高水位</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/the-maze-ii/">505. 迷宫 II</a></td>
+      <td>中等</td>
+      <td>边不是显式给出的，球一路滚到墙才算一条边，需要先把滚动过程折算成权重</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/the-maze-iii/">499. 迷宫 III</a></td>
+      <td>困难</td>
+      <td>在 505 之上追加字典序最小的路径要求，堆的比较器要变成「距离优先、路径串次之」</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/">1334. 阈值距离内邻居最少的城市</a></td>
+      <td>中等</td>
+      <td>需要全源最短路而非单源，节点数小，直接三重循环的 Floyd 比跑 $n$ 次本题解法更简洁</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-path-in-binary-matrix/">1091. 二进制矩阵中的最短路径</a></td>
+      <td>中等</td>
+      <td>边权全为 1，此时堆是多余的，普通队列 BFS 就能保证首次到达即最短</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/bus-routes/">815. 公交路线</a></td>
+      <td>困难</td>
+      <td>建图对象要从站点换成路线，抽象出正确的节点定义比跑最短路本身更难</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2021/87881998" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 930. 和相同的二元子数组</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/74903862" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1363. 形成三的最大倍数</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/24042204">https://hgnulb.github.io/blog/2021/24042204</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

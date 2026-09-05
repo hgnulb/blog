@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode LCR 060. 前 K 个高频元素 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,LCR,分治,哈希表,堆（优先队列）,快速选择,排序,数组,桶排序,计数" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode LCR 060. 前 K 个高频元素" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/71560461" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/71560461" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-29T01:59:06+08:00" />
+<meta property="article:modified_time" content="2026-03-29T01:59:06+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode LCR 060. 前 K 个高频元素" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-03-29T01:59:06+08:00","datePublished":"2026-03-29T01:59:06+08:00","description":"题目描述","headline":"LeetCode LCR 060. 前 K 个高频元素","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/71560461"},"url":"https://hgnulb.github.io/blog/2026/71560461"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希计数--频率桶">解法：哈希计数 + 频率桶</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode LCR 060. 前 K 个高频元素">LeetCode LCR 060. 前 K 个高频元素</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-03-29 01:59:06"
+                    datetime="2026-03-29T01:59:06+08:00"
+            >
+                2026-03-29
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2715 字 · 英文 188 词 · 代码 52 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2715 字 · 英文 188 词 · 代码 52 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    9 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3007053882/" title="119 经典题变种挑战">
+        119 经典题变种挑战
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3355311990/" title="剑指 Offer">
+        剑指 Offer
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7450658006/" title="剑指 Offer（专项突击版）">
+        剑指 Offer（专项突击版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3320177889/" title="排序">
+        排序
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6142931175/" title="LCR">
+        LCR
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7037379732/" title="堆（优先队列）">
+        堆（优先队列）
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5147323714/" title="分治">
+        分治
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6351116753/" title="计数">
+        计数
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3098871430/" title="快速选择">
+        快速选择
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0691290655/" title="桶排序">
+        桶排序
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希计数--频率桶">解法：哈希计数 + 频率桶</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/g5c51o/">LCR 060. 前 K 个高频元素</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>输入一个整数数组 <code class="language-plaintext highlighter-rouge">nums</code> 和一个整数 k，要求返回其中出现次数最多的 k 个元素，返回的顺序不作要求。</p>
+
+  <p>题目明确保证「答案唯一」，也就是不存在第 k 名与第 k+1 名出现次数相同的歧义情形，因此不需要额外设计打破平局的规则；同时 k 的取值保证合法，一定落在 1 到数组中不同元素个数之间，不必防御 k 越界或结果凑不满的情况。</p>
+
+  <p>有两个约束信号值得留意。其一，数组长度可以达到 $10^5$ 量级，而题目在进阶要求里直接写明「时间复杂度必须优于 $O(n \log n)$」，等于提前否决了「统计完再整体定序」这条路。其二，任何一个元素的出现次数最少是 1 次、最多是 n 次，这个统计量被牢牢卡在一段很窄的整数区间里，是个很强的暗示。</p>
+
+  <p>边界方面：数组只有一个元素时 k 只能是 1，直接返回该元素；所有元素互不相同时每个次数都是 1，此时任取 k 个都是合法答案；元素允许为负数，所以不能拿数值本身去当数组下标。</p>
+</blockquote>
+
+<h2 id="解法哈希计数--频率桶">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%93%88%E5%B8%8C%E8%AE%A1%E6%95%B0--%E9%A2%91%E7%8E%87%E6%A1%B6" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：哈希计数 + 频率桶</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最直接的做法是先用哈希表数出每个数字的出现次数，得到 m 个不同元素，再把它们按次数从大到小整体排序，取前 k 个。结果一定正确，但排序为全部 m 个元素确定了完整的先后次序，代价是 $O(m \log m)$。而题目只关心「谁进了前 k 名」，第 k+1 名之后彼此谁高谁低完全没人过问，这些多做的定序工作就是瓶颈所在，也正是进阶要求要砍掉的部分。</p>
+
+  <p>第一层观察是：既然只要前 k 名，就没必要把 m 个候选全留在手上，随时只保留「当前最强的 k 个」即可。承载这个想法的结构是一个大小恒为 k 的<strong>最小堆</strong>，堆内按出现次数比较。这里的对应关系最容易记反，务必咬死一句话：<strong>求前 k 大要用最小堆</strong>。因为最小堆的堆顶是候选集中次数最小的那个，也就是「下一个该被淘汰的人」，把淘汰对象放在 $O(1)$ 就能看到的位置，才是这个结构的价值。于是每处理一个新元素：堆没满就直接压入；堆已满时拿它的次数和堆顶比，大于堆顶就弹掉堆顶再压入，否则说明它连当前最弱的候选都比不过，直接丢弃。整个过程维持的不变量是：<strong>处理完前 i 个不同元素后，堆中恰好装着这 i 个元素里次数最大的 $\min(i, k)$ 个</strong>。堆的规模始终不超过 k，单次调整只要 $O(\log k)$，总代价 $O(m \log k)$，已经优于 $O(n \log n)$。</p>
+
+  <p>第二层观察进一步利用题意分析里那个「次数被卡在 1 到 n 之间」的信号：既然次数本身就是一个不大的正整数，它就可以直接充当数组下标，那么连比较和堆调整都可以省掉。开一个长度为 <code class="language-plaintext highlighter-rouge">n + 1</code> 的桶数组 <code class="language-plaintext highlighter-rouge">buckets</code>，把出现次数为 <code class="language-plaintext highlighter-rouge">c</code> 的所有数字挂进 <code class="language-plaintext highlighter-rouge">buckets[c]</code>，一次线性扫描就完成了「按次数分组」。此时维持的不变量是：<strong><code class="language-plaintext highlighter-rouge">buckets[c]</code> 里的每个数字出现次数都恰好等于 c，且下标越大代表次数越高</strong>。于是从最大下标向下遍历，先被遇到的元素次数必然不低于后被遇到的，凑满 k 个立刻收工，整体降到 $O(n)$。桶的思想本质上是用「值域有限」换掉了「比较排序」，这也是本题最终解法采用的写法。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>遍历数组，用哈希表 <code class="language-plaintext highlighter-rouge">freq</code> 把每个数字的出现次数累加出来。为什么先做这一步：题目问的是「次数」而不是「数值」，必须先把原始数组压缩成「数字 → 次数」的映射，后面所有比较才有依据。</li>
+    <li>开一个长度为 <code class="language-plaintext highlighter-rouge">nums.length + 1</code> 的桶数组 <code class="language-plaintext highlighter-rouge">buckets</code>，下标表示出现次数。为什么长度是 <code class="language-plaintext highlighter-rouge">n + 1</code>：出现次数最大就是 n（整个数组都是同一个数字），下标要能取到 n，所以数组长度得是 <code class="language-plaintext highlighter-rouge">n + 1</code>，下标 0 空着不用。</li>
+    <li>遍历 <code class="language-plaintext highlighter-rouge">freq</code> 的每个键值对，把数字挂到 <code class="language-plaintext highlighter-rouge">buckets[count]</code> 这一格里。为什么用「挂链」而不是直接赋值：不同数字完全可能次数相同（如都出现 2 次），一格里必须能装下多个数字，所以每格是一个列表。</li>
+    <li>从最大下标向下遍历桶，遇到空桶直接跳过。为什么从大到小：这正是「下标越大次数越高」这条不变量的兑现方式，倒着走就等价于按次数降序访问，而这个降序是分组时白送的，不花任何比较代价。</li>
+    <li>把桶内的数字依次写进结果数组，一旦写满 k 个就立即停止外层与内层循环。为什么可以立刻停：此时已收集的 k 个元素次数都不低于尚未访问的任何桶，加上题目保证答案唯一，它们就是标准答案，继续扫描纯属浪费。</li>
+    <li>
+<strong>以 <code class="language-plaintext highlighter-rouge">[1,1,1,2,2,3], k = 2</code> 走一遍</strong>：先统计得到计数表「1 → 3 次，2 → 2 次，3 → 1 次」。若按最小堆的思路推演：压入 (数字 1, 次数 3)，堆为 <code class="language-plaintext highlighter-rouge">[(1,3)]</code>；压入 (数字 2, 次数 2)，堆为 <code class="language-plaintext highlighter-rouge">[(2,2), (1,3)]</code>，堆顶是次数最小的 <code class="language-plaintext highlighter-rouge">(2,2)</code>；再来 (数字 3, 次数 1)，堆已满且 1 小于堆顶的 2，直接丢弃，堆保持 <code class="language-plaintext highlighter-rouge">{1, 2}</code>。若按本文的桶做法：<code class="language-plaintext highlighter-rouge">n = 6</code>，<code class="language-plaintext highlighter-rouge">buckets[3] = [1]</code>，<code class="language-plaintext highlighter-rouge">buckets[2] = [2]</code>，<code class="language-plaintext highlighter-rouge">buckets[1] = [3]</code>，其余为空；从下标 6 往下扫，6、5、4 全空跳过，下标 3 取出数字 1（已收 1 个），下标 2 取出数字 2（已收 2 个，等于 k）立即返回。两条路线的答案一致，结果为 <code class="language-plaintext highlighter-rouge">[1, 2]</code>。</li>
+  </ul>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">topKFrequent</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">freq</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">freq</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">num</span><span class="o">,</span> <span class="n">freq</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">num</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;[]</span> <span class="n">buckets</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">[</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">freq</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">buckets</span><span class="o">[</span><span class="n">count</span><span class="o">]</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">buckets</span><span class="o">[</span><span class="n">count</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+            <span class="o">}</span>
+            <span class="n">buckets</span><span class="o">[</span><span class="n">count</span><span class="o">].</span><span class="na">add</span><span class="o">(</span><span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">());</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">k</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">buckets</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">count</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">k</span><span class="o">;</span> <span class="n">count</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">buckets</span><span class="o">[</span><span class="n">count</span><span class="o">]</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="c1">// 从高频桶向低频桶收集，先拿到的就是高频元素。</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">buckets</span><span class="o">[</span><span class="n">count</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">res</span><span class="o">[</span><span class="n">idx</span><span class="o">++]</span> <span class="o">=</span> <span class="n">num</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">idx</span> <span class="o">==</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">topKFrequent</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="n">freq</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">num</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+        <span class="n">freq</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">++</span>
+    <span class="p">}</span>
+
+    <span class="n">buckets</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">count</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">freq</span> <span class="p">{</span>
+        <span class="n">buckets</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">buckets</span><span class="p">[</span><span class="n">count</span><span class="p">],</span> <span class="n">num</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">res</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">count</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buckets</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">count</span> <span class="o">&gt;=</span> <span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="n">count</span><span class="o">--</span> <span class="p">{</span>
+        <span class="c">// 高频桶优先输出，桶内顺序不影响题意。</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">num</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">buckets</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">==</span> <span class="n">k</span> <span class="p">{</span>
+                <span class="k">break</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。凭什么是线性：统计次数扫描数组一次是 $O(n)$；遍历哈希表入桶，不同元素个数 m 不超过 n，是 $O(m)$；倒序扫描桶时，桶数组共 <code class="language-plaintext highlighter-rouge">n + 1</code> 格、所有桶内元素总数也是 m，因此扫描代价被 $O(n + m)$ 卡住。全程没有任何一次元素间的比较排序，所以不会退化出 $\log$ 因子。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。凭什么：哈希表最多存 m 个键值对，桶数组固定 <code class="language-plaintext highlighter-rouge">n + 1</code> 格且所有桶内元素合计 m 个，两者都被 $O(n)$ 覆盖；输出数组占 $O(k)$，而 $k \le m \le n$。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>只要「前 k 名」而不要全序，就不该做全排序。整体排序是在为不关心的名次买单，凡是题面出现「前 k 个」「第 k 大」，第一反应就该是能否只维护 k 个候选。</li>
+    <li>
+<strong>求前 k 大用最小堆，求前 k 小用最大堆</strong>，方向是反的。判断依据不是「要什么」，而是「堆顶要放谁」，堆顶必须是最容易被淘汰的那个，这样一次比较就能决定新元素的去留。</li>
+    <li>面试视角：本题写完 $O(n \log k)$ 的堆解法后，面试官几乎必然追问「能否做到 $O(n)$」。答案就是桶排序或计数排序思路，突破口在于「出现次数是 1 到 n 的整数」这个有限值域，把比较换成下标寻址。能主动说出这一层，才算真正答完 347。</li>
+    <li>值域有限是可以直接用下标索引取代比较的强信号。同类可迁移场景包括年龄、分数、字符集大小固定的字符计数等，这也是计数排序、基数排序共享的底层观察。</li>
+    <li>「答案唯一」这类保证要读出来并用上，它免除了平局裁决逻辑；一旦题目改成允许并列（例如 692 题要求次数相同时按字典序），桶内顺序就不再随意，解法必须相应加码。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：把全部不同元素塞进一个大小为 m 的<strong>最大堆</strong>，再连弹 k 次取答案。用例 <code class="language-plaintext highlighter-rouge">[1,1,1,2,2,3], k = 2</code> → 结果虽然对，但建堆是 $O(m)$、每次弹出 $O(\log m)$，当 k 接近 m 时退化成 $O(m \log m)$，与进阶要求背道而驰；更糟的变体是「用最大堆但只留 k 个元素」，为了淘汰最小者不得不每轮把堆顶的最大值取走再放回，相当于要弹 n-k 次才能定位到该淘汰的人，纯属把最小堆的活硬塞给最大堆。正解是大小为 k 的最小堆，堆顶天然就是淘汰对象。</li>
+    <li>
+<strong>错误写法</strong>：桶数组开成 <code class="language-plaintext highlighter-rouge">new ArrayList[nums.length]</code>。用例 <code class="language-plaintext highlighter-rouge">[7,7,7], k = 1</code> → 唯一元素出现 3 次，而 <code class="language-plaintext highlighter-rouge">n = 3</code> 时最大合法下标只有 2，写 <code class="language-plaintext highlighter-rouge">buckets[3]</code> 直接抛出下标越界，桶长度必须是 <code class="language-plaintext highlighter-rouge">n + 1</code>。</li>
+    <li>
+<strong>错误写法</strong>：忘记桶数组里存在大量空格子，直接 <code class="language-plaintext highlighter-rouge">for (int num : buckets[count])</code> 遍历。用例 <code class="language-plaintext highlighter-rouge">[1,1,1,2,2,3], k = 2</code> → 下标 6、5、4 对应的桶从未初始化，Java 里是 <code class="language-plaintext highlighter-rouge">null</code>，遍历时抛空指针，必须先判空跳过（Go 中空切片可安全遍历，但空判同样让意图更清晰）。</li>
+    <li>
+<strong>错误写法</strong>：内层循环写满 k 个后只 <code class="language-plaintext highlighter-rouge">break</code> 内层，外层继续往下扫。用例 <code class="language-plaintext highlighter-rouge">[1,1,2,2,3,3], k = 2</code> → 结果数组下标继续自增，<code class="language-plaintext highlighter-rouge">res[idx++]</code> 越界；即便用列表接收也会多收元素返回错误长度。外层循环条件必须同时带上 <code class="language-plaintext highlighter-rouge">idx &lt; k</code>。</li>
+    <li>
+<strong>错误写法</strong>：拿数字本身当桶下标，以为「值域也不大」。用例 <code class="language-plaintext highlighter-rouge">[-1,-1,3]</code> → 负数下标直接越界。桶的下标必须是出现次数，而不是元素值，这两者在本题里是完全不同的量。</li>
+    <li>
+<strong>错误写法</strong>：担心返回顺序不对而额外把结果排序。用例 <code class="language-plaintext highlighter-rouge">[1,1,1,2,2,3], k = 2</code> → 返回 <code class="language-plaintext highlighter-rouge">[2,1]</code> 和 <code class="language-plaintext highlighter-rouge">[1,2]</code> 都判对，题目明确「按任意顺序返回」，多加一次排序既无必要又重新引入了 $\log$ 因子。</li>
+    <li>
+<strong>错误写法</strong>：在只出现一次的元素上做特判提前返回。用例 <code class="language-plaintext highlighter-rouge">[1,2,3,4], k = 3</code> → 所有元素次数都是 1，全部堆在 <code class="language-plaintext highlighter-rouge">buckets[1]</code> 里，此时仍需正常从该桶取 3 个；误以为「没有高频元素就无解」会直接返回空数组。</li>
+    <li>
+<strong>错误写法</strong>：用 <code class="language-plaintext highlighter-rouge">freq.get(num) + 1</code> 累加计数。用例 <code class="language-plaintext highlighter-rouge">[5]</code> → 首次遇到 5 时哈希表中无此键，<code class="language-plaintext highlighter-rouge">get</code> 返回 <code class="language-plaintext highlighter-rouge">null</code>，自动拆箱触发空指针，应使用 <code class="language-plaintext highlighter-rouge">getOrDefault(num, 0) + 1</code>（Go 的 map 零值为 0，可直接 <code class="language-plaintext highlighter-rouge">freq[num]++</code>）。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/kth-largest-element-in-an-array/">215. 数组中的第K个最大元素</a></td>
+      <td>中等</td>
+      <td>只定位第 k 名这一个位置，比的是数值本身，可用快速选择</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/top-k-frequent-words/">692. 前K个高频单词</a></td>
+      <td>中等</td>
+      <td>同样按次数取前 k，但答案不唯一，并列时须按字典序裁决</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/k-closest-points-to-origin/">973. 最接近原点的 K 个点</a></td>
+      <td>中等</td>
+      <td>排序键换成到原点距离，值域连续因而无法用桶，只能靠堆</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/xx4gT2/">LCR 076. 数组中的第 K 个最大元素</a></td>
+      <td>中等</td>
+      <td>215 的同题，练原地划分与递归只走一侧的剪枝</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/zui-xiao-de-kge-shu-lcof/">剑指 Offer 40. 最小的k个数</a></td>
+      <td>简单</td>
+      <td>方向相反，求最小 k 个要改用大小为 k 的最大堆</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/smallest-k-lcci/">面试题 17.14. 最小K个数</a></td>
+      <td>中等</td>
+      <td>同为求最小 k 个且顺序不限，可对比堆与快速选择的常数差异</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/46051006" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode LCR 059. 数据流中的第 K 大元素</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/44061981" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode LCR 061. 查找和最小的 K 对数字</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/71560461">https://hgnulb.github.io/blog/2026/71560461</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 930. 和相同的二元子数组 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,前缀和,哈希表,字节跳动,数组,滑动窗口" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 930. 和相同的二元子数组" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/87881998" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/87881998" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-12-07T15:51:01+08:00" />
+<meta property="article:modified_time" content="2021-12-07T15:51:01+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 930. 和相同的二元子数组" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-12-07T15:51:01+08:00","datePublished":"2021-12-07T15:51:01+08:00","description":"题目描述","headline":"LeetCode 930. 和相同的二元子数组","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/87881998"},"url":"https://hgnulb.github.io/blog/2021/87881998"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法前缀和--哈希计数">解法：前缀和 + 哈希计数</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 930. 和相同的二元子数组">LeetCode 930. 和相同的二元子数组</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-12-07 15:51:01"
+                    datetime="2021-12-07T15:51:01+08:00"
+            >
+                2021-12-07
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2357 字 · 英文 179 词 · 代码 25 行"
+            aria-label="预计阅读时间约 7 分钟，正文 2357 字 · 英文 179 词 · 代码 25 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 7 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5692196181/" title="滑动窗口">
+        滑动窗口
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7488286296/" title="前缀和">
+        前缀和
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法前缀和--哈希计数">解法：前缀和 + 哈希计数</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/binary-subarrays-with-sum/">930. 和相同的二元子数组</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个只含 0 和 1 的数组 <code class="language-plaintext highlighter-rouge">nums</code> 和一个非负整数 <code class="language-plaintext highlighter-rouge">goal</code>，统计有多少个<strong>非空连续子数组</strong>的元素和恰好等于 <code class="language-plaintext highlighter-rouge">goal</code>。</p>
+
+  <p>「连续子数组」是关键词——不是子序列，所以每个候选都由一对下标 <code class="language-plaintext highlighter-rouge">(左端, 右端)</code> 唯一确定，共 $O(n^2)$ 个候选。题目要的是<strong>个数</strong>而不是具体位置，这意味着不需要枚举出每一个，只要能数对就行。</p>
+
+  <p>数组只含 0 和 1 这一点，让前缀和具有单调不减的性质，从而衍生出滑动窗口做法；但它并不是必需条件——本题的主流解法对任意非负数组都成立。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">goal</code> 可以为 0，这是最容易被忽略的边界：此时要统计的是「全是 0 的连续段」的子数组个数，一段长度为 <code class="language-plaintext highlighter-rouge">m</code> 的连续 0 会贡献 $\frac{m(m+1)}{2}$ 个。任何依赖「窗口内至少有一个 1」的实现都会在这里翻车。</p>
+
+  <p>约束里 $n$ 最大 3 万，$O(n^2)$ 的暴力枚举是 9 亿次，超时；需要 $O(n)$ 或 $O(n \log n)$。</p>
+
+  <p>边界：<code class="language-plaintext highlighter-rouge">goal</code> 大于数组中 1 的总数时答案是 0；数组全是 1、<code class="language-plaintext highlighter-rouge">goal = 0</code> 时答案也是 0；单元素数组时直接判断该元素是否等于 <code class="language-plaintext highlighter-rouge">goal</code>。</p>
+</blockquote>
+
+<h2 id="解法前缀和--哈希计数">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%89%8D%E7%BC%80%E5%92%8C--%E5%93%88%E5%B8%8C%E8%AE%A1%E6%95%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：前缀和 + 哈希计数</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是枚举左右端点、累加区间和，$O(n^2)$（配合前缀和数组）或 $O(n^3)$（每次重新求和）。$n = 3$ 万时都不可接受。</p>
+
+  <p>瓶颈在于我们对每个右端点，都要把所有左端点重新试一遍。但换个写法就能看出浪费在哪：记 $P_i$ 为前 <code class="language-plaintext highlighter-rouge">i</code> 个元素的和（$P_0 = 0$），则子数组 <code class="language-plaintext highlighter-rouge">nums[l..r]</code> 的和等于 $P_{r+1} - P_l$。要求这个差等于 <code class="language-plaintext highlighter-rouge">goal</code>，即</p>
+
+\[P_l = P_{r+1} - goal\]
+
+  <p>也就是说，<strong>固定右端点后，合法左端点的个数 = 在它之前出现过多少个值为 $P_{r+1} - goal$ 的前缀和</strong>。这不再需要枚举，只需要「查一个数出现过几次」——哈希表的本职工作。</p>
+
+  <p>于是算法变成一趟扫描：维护当前前缀和 <code class="language-plaintext highlighter-rouge">sum</code> 和一张「前缀和值 → 出现次数」的哈希表 <code class="language-plaintext highlighter-rouge">count</code>。每读入一个元素就更新 <code class="language-plaintext highlighter-rouge">sum</code>，先累加 <code class="language-plaintext highlighter-rouge">count[sum - goal]</code> 到答案，再把当前的 <code class="language-plaintext highlighter-rouge">sum</code> 记进表里。</p>
+
+  <p><strong>不变量</strong>：处理完第 <code class="language-plaintext highlighter-rouge">i</code> 个元素后，<code class="language-plaintext highlighter-rouge">count</code> 中记录的恰好是 $P_0, P_1, \dots, P_i$ 这 <code class="language-plaintext highlighter-rouge">i+1</code> 个前缀和各自的出现次数，而 <code class="language-plaintext highlighter-rouge">answer</code> 恰好等于「右端点落在前 <code class="language-plaintext highlighter-rouge">i</code> 个元素之内的、和为 <code class="language-plaintext highlighter-rouge">goal</code> 的子数组总数」。</p>
+
+  <p>两个顺序细节决定成败。</p>
+
+  <p>第一，<code class="language-plaintext highlighter-rouge">count[0] = 1</code> 必须<strong>预先</strong>放入。它代表空前缀 $P_0 = 0$，对应「子数组从下标 0 开始」的情形。没有它，<code class="language-plaintext highlighter-rouge">nums = [1]</code>、<code class="language-plaintext highlighter-rouge">goal = 1</code> 会算出 0 而不是 1。</p>
+
+  <p>第二，<strong>先查询再写入</strong>。若先把当前 <code class="language-plaintext highlighter-rouge">sum</code> 计数再去查 <code class="language-plaintext highlighter-rouge">count[sum - goal]</code>，当 <code class="language-plaintext highlighter-rouge">goal = 0</code> 时 <code class="language-plaintext highlighter-rouge">sum - goal == sum</code>，刚写进去的自己会被查到，等于把长度为 0 的空子数组算进答案，每个位置都多算一次。查询在前，天然保证配对的左端点严格在当前位置之前。</p>
+
+  <p>顺带说明为什么不必特意为 <code class="language-plaintext highlighter-rouge">goal = 0</code> 写分支：此时查询的是 <code class="language-plaintext highlighter-rouge">count[sum]</code>，也就是「之前有多少个前缀和与当前相同」，而两个相同的前缀和之间夹的正是一段和为 0 的区间——公式自动覆盖了「连续 0 段」的组合计数，不需要额外的 $\frac{m(m+1)}{2}$ 公式。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>初始化 <code class="language-plaintext highlighter-rouge">count = {0: 1}</code>、<code class="language-plaintext highlighter-rouge">sum = 0</code>、<code class="language-plaintext highlighter-rouge">answer = 0</code></strong>：那个 <code class="language-plaintext highlighter-rouge">{0: 1}</code> 是空前缀的席位，它让「从下标 0 开始的子数组」也能被正常配对。漏掉它会让所有以数组开头为左端点的答案全部丢失。</li>
+    <li>
+<strong>遍历数组，先更新 <code class="language-plaintext highlighter-rouge">sum += x</code></strong>：<code class="language-plaintext highlighter-rouge">sum</code> 始终表示「包含当前元素在内」的前缀和，也就是 $P_{r+1}$。</li>
+    <li>
+<strong>再累加 <code class="language-plaintext highlighter-rouge">answer += count.getOrDefault(sum - goal, 0)</code></strong>：这一行回答的是「有多少个更早的前缀和等于 <code class="language-plaintext highlighter-rouge">sum - goal</code>」，每一个都对应一个以当前位置结尾的合法子数组。查不到时按 0 计，不能抛异常也不能跳过。</li>
+    <li>
+<strong>最后 <code class="language-plaintext highlighter-rouge">count[sum]++</code></strong>：把当前前缀和登记进表，供后续位置查询。这三步的顺序（更新和 → 查询 → 登记）不能调换，尤其登记必须排在查询之后。</li>
+    <li>
+<strong>返回 <code class="language-plaintext highlighter-rouge">answer</code></strong>：不需要任何后处理，也不需要减去空子数组——先查后写已经排除了它。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">nums = [1,0,1,0,1]</code>、<code class="language-plaintext highlighter-rouge">goal = 2</code> 走一遍，正确答案是 4。</p>
+
+  <p>初始：<code class="language-plaintext highlighter-rouge">count = {0:1}</code>，<code class="language-plaintext highlighter-rouge">sum = 0</code>，<code class="language-plaintext highlighter-rouge">answer = 0</code>。</p>
+
+  <p><strong>读入 <code class="language-plaintext highlighter-rouge">nums[0] = 1</code></strong>：<code class="language-plaintext highlighter-rouge">sum = 1</code>。查 <code class="language-plaintext highlighter-rouge">count[1 - 2] = count[-1]</code>，不存在，加 0，<code class="language-plaintext highlighter-rouge">answer = 0</code>。登记 <code class="language-plaintext highlighter-rouge">count[1] = 1</code>。表：<code class="language-plaintext highlighter-rouge">{0:1, 1:1}</code>。</p>
+
+  <p><strong>读入 <code class="language-plaintext highlighter-rouge">nums[1] = 0</code></strong>：<code class="language-plaintext highlighter-rouge">sum = 1</code>。查 <code class="language-plaintext highlighter-rouge">count[-1]</code>，仍不存在，<code class="language-plaintext highlighter-rouge">answer = 0</code>。登记后 <code class="language-plaintext highlighter-rouge">count[1] = 2</code>。表：<code class="language-plaintext highlighter-rouge">{0:1, 1:2}</code>。这里 <code class="language-plaintext highlighter-rouge">count[1]</code> 变成 2，记录的是「前缀和为 1」出现过两次（前 1 个元素、前 2 个元素），后面会派上用场。</p>
+
+  <p><strong>读入 <code class="language-plaintext highlighter-rouge">nums[2] = 1</code></strong>：<code class="language-plaintext highlighter-rouge">sum = 2</code>。查 <code class="language-plaintext highlighter-rouge">count[2 - 2] = count[0] = 1</code>，<code class="language-plaintext highlighter-rouge">answer = 1</code>。这一个对应子数组 <code class="language-plaintext highlighter-rouge">nums[0..2] = [1,0,1]</code>，和为 2。登记 <code class="language-plaintext highlighter-rouge">count[2] = 1</code>。表：<code class="language-plaintext highlighter-rouge">{0:1, 1:2, 2:1}</code>。</p>
+
+  <p><strong>读入 <code class="language-plaintext highlighter-rouge">nums[3] = 0</code></strong>：<code class="language-plaintext highlighter-rouge">sum = 2</code>。查 <code class="language-plaintext highlighter-rouge">count[0] = 1</code>，<code class="language-plaintext highlighter-rouge">answer = 2</code>。新增的是 <code class="language-plaintext highlighter-rouge">nums[0..3] = [1,0,1,0]</code>，和仍为 2。登记后 <code class="language-plaintext highlighter-rouge">count[2] = 2</code>。</p>
+
+  <p><strong>读入 <code class="language-plaintext highlighter-rouge">nums[4] = 1</code></strong>：<code class="language-plaintext highlighter-rouge">sum = 3</code>。查 <code class="language-plaintext highlighter-rouge">count[3 - 2] = count[1] = 2</code>，<code class="language-plaintext highlighter-rouge">answer = 4</code>。一次加了 2，对应两个子数组：<code class="language-plaintext highlighter-rouge">nums[1..4] = [0,1,0,1]</code> 和 <code class="language-plaintext highlighter-rouge">nums[2..4] = [1,0,1]</code>——它们的左端点分别是「前缀和为 1」的两个位置。登记 <code class="language-plaintext highlighter-rouge">count[3] = 1</code>。</p>
+
+  <p>返回 4。手工核对：和为 2 的子数组是 <code class="language-plaintext highlighter-rouge">[1,0,1]</code>（下标 0-2）、<code class="language-plaintext highlighter-rouge">[1,0,1,0]</code>（0-3）、<code class="language-plaintext highlighter-rouge">[0,1,0,1]</code>（1-4）、<code class="language-plaintext highlighter-rouge">[1,0,1]</code>（2-4），恰好 4 个，一致。</p>
+
+  <p>再验证一下 <code class="language-plaintext highlighter-rouge">count[0] = 1</code> 的必要性：如果初始表为空，第三步查 <code class="language-plaintext highlighter-rouge">count[0]</code> 会得到 0，<code class="language-plaintext highlighter-rouge">nums[0..2]</code> 这个答案就漏了，最终返回 2 而不是 4。</p>
+
+  <p>以及「先查后写」的必要性：把 <code class="language-plaintext highlighter-rouge">nums = [0,0]</code>、<code class="language-plaintext highlighter-rouge">goal = 0</code> 代进去，正确答案是 3（<code class="language-plaintext highlighter-rouge">[0]</code>、<code class="language-plaintext highlighter-rouge">[0]</code>、<code class="language-plaintext highlighter-rouge">[0,0]</code>）。按正确顺序：第一步 <code class="language-plaintext highlighter-rouge">sum = 0</code>，查 <code class="language-plaintext highlighter-rouge">count[0] = 1</code>，<code class="language-plaintext highlighter-rouge">answer = 1</code>，登记后 <code class="language-plaintext highlighter-rouge">count[0] = 2</code>；第二步 <code class="language-plaintext highlighter-rouge">sum = 0</code>，查 <code class="language-plaintext highlighter-rouge">count[0] = 2</code>，<code class="language-plaintext highlighter-rouge">answer = 3</code>，正确。若先登记再查询，第一步会查到刚写入的自己，<code class="language-plaintext highlighter-rouge">answer</code> 变成 2，第二步再多算一次变成 5，凭空多出两个长度为 0 的「空子数组」。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">numSubarraysWithSum</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">goal</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">count</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">count</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">answer</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">x</span><span class="o">;</span>
+            <span class="n">answer</span> <span class="o">+=</span> <span class="n">count</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">sum</span> <span class="o">-</span> <span class="n">goal</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+            <span class="n">count</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">sum</span><span class="o">,</span> <span class="n">count</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">sum</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">numSubarraysWithSum</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">goal</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">count</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="m">0</span><span class="o">:</span> <span class="m">1</span><span class="p">}</span>
+    <span class="n">sum</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="n">answer</span> <span class="o">:=</span> <span class="m">0</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">x</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">x</span>
+        <span class="n">answer</span> <span class="o">+=</span> <span class="n">count</span><span class="p">[</span><span class="n">sum</span><span class="o">-</span><span class="n">goal</span><span class="p">]</span>
+        <span class="n">count</span><span class="p">[</span><span class="n">sum</span><span class="p">]</span><span class="o">++</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">answer</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。数组只扫一遍，每个位置做常数次哈希查询与写入（均摊 $O(1)$），没有任何回退或嵌套。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。哈希表最多存下 $n + 1$ 个不同的前缀和值。由于本题元素非负、前缀和取值范围是 $0$ 到 $n$，也可以把哈希表换成长度 $n+1$ 的数组，常数更小但阶数不变。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「连续子数组的和等于定值」的标准范式就是前缀和加哈希：把区间和条件 $P_r - P_l = goal$ 改写成 $P_l = P_r - goal$，于是「枚举左端点」变成「查一个数出现过几次」。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">count[0] = 1</code> 是空前缀的席位，它让「从下标 0 开始」的子数组能被正常配对。这个初始化不是可选的细节，而是整套推导的一部分。</li>
+    <li>「先查询后登记」保证了配对的左端点严格早于当前位置，同时自动排除空子数组。<code class="language-plaintext highlighter-rouge">goal = 0</code> 就是检验这个顺序的试金石。</li>
+    <li>求的是<strong>个数</strong>而非某个具体子数组，所以哈希表存的是「出现次数」而不是「下标」；存下标只能回答存在性或最值类问题。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">goal = 0</code> 不需要单独分支：相同前缀和之间夹的正是和为 0 的区间，组合计数被公式自然覆盖。</li>
+    <li>面试视角：先说暴力 $O(n^2)$，再点出「固定右端点后左端点的条件是一个等式」，最后落到哈希计数——这条推导链适用于 560、974、1248 一整类题，讲清楚一次就能复用。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>漏掉 <code class="language-plaintext highlighter-rouge">count[0] = 1</code></strong>：<code class="language-plaintext highlighter-rouge">nums = [1]</code>、<code class="language-plaintext highlighter-rouge">goal = 1</code> 会返回 0，正确答案是 1；所有以数组开头为左端点的子数组全部丢失。</li>
+    <li>
+<strong>先登记 <code class="language-plaintext highlighter-rouge">count[sum]++</code> 再查询</strong>：<code class="language-plaintext highlighter-rouge">nums = [0,0]</code>、<code class="language-plaintext highlighter-rouge">goal = 0</code> 会返回 5，正确答案是 3——空子数组被重复计入。</li>
+    <li>
+<strong>查询写成 <code class="language-plaintext highlighter-rouge">count[goal - sum]</code></strong>：把等式方向搞反，<code class="language-plaintext highlighter-rouge">nums = [1,0,1]</code>、<code class="language-plaintext highlighter-rouge">goal = 2</code> 会返回 0 而不是 1。正确的是 <code class="language-plaintext highlighter-rouge">count[sum - goal]</code>。</li>
+    <li>
+<strong>查不到时不按 0 处理</strong>：Java 里直接 <code class="language-plaintext highlighter-rouge">count.get(sum - goal)</code> 会返回 <code class="language-plaintext highlighter-rouge">null</code> 并在自动拆箱时空指针；必须用 <code class="language-plaintext highlighter-rouge">getOrDefault</code>。</li>
+    <li>
+<strong>用数组代替哈希表却不做负下标保护</strong>：<code class="language-plaintext highlighter-rouge">sum - goal</code> 在 <code class="language-plaintext highlighter-rouge">goal</code> 较大时为负，<code class="language-plaintext highlighter-rouge">arr[-1]</code> 直接越界；换数组实现时必须显式判 <code class="language-plaintext highlighter-rouge">sum &gt;= goal</code>。</li>
+    <li>
+<strong>误以为可以用「和不超过 goal 的窗口数」直接相减而漏掉边界</strong>：<code class="language-plaintext highlighter-rouge">atMost(goal) - atMost(goal - 1)</code> 的写法在 <code class="language-plaintext highlighter-rouge">goal = 0</code> 时会调用 <code class="language-plaintext highlighter-rouge">atMost(-1)</code>，若该函数不返回 0 就会算出负数。</li>
+    <li>
+<strong>用滑动窗口但收缩条件写成 <code class="language-plaintext highlighter-rouge">sum &gt; goal</code></strong>：<code class="language-plaintext highlighter-rouge">goal = 0</code>、<code class="language-plaintext highlighter-rouge">nums = [0,0,0]</code> 时窗口永远不收缩，且「恰好等于」需要同时统计左边界的多种取法，单纯的双指针会漏算重复 0 的组合。</li>
+    <li>
+<strong>把子数组当成子序列</strong>：<code class="language-plaintext highlighter-rouge">nums = [1,0,1]</code>、<code class="language-plaintext highlighter-rouge">goal = 2</code> 若允许不连续会数出更多方案，正确答案只统计连续区间。</li>
+    <li>
+<strong>答案变量用 <code class="language-plaintext highlighter-rouge">int</code> 却担心溢出而改成取模</strong>：$n = 3$ 万时最坏答案约 $4.5 \times 10^8$，仍在 <code class="language-plaintext highlighter-rouge">int</code> 范围内，题目也未要求取模，擅自取模会答错。</li>
+    <li>
+<strong>在循环外统一登记所有前缀和再统计</strong>：这样每个右端点会把它之后的前缀和也算进来，<code class="language-plaintext highlighter-rouge">nums = [1,1]</code>、<code class="language-plaintext highlighter-rouge">goal = 1</code> 会返回 4 而不是 2。</li>
+    <li>
+<strong>返回子数组列表而不是数量</strong>：题目问的是个数，构造出所有子数组既没必要也会退化到 $O(n^2)$。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/subarray-sum-equals-k/">560. 和为 K 的子数组</a></td>
+      <td>中等</td>
+      <td>与本题同一套模板，但元素可为负，因此滑动窗口不成立，只能用哈希计数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/subarray-sums-divisible-by-k/">974. 和可被 K 整除的子数组</a></td>
+      <td>中等</td>
+      <td>哈希键换成前缀和的模，负数取模要先加 K 再取模</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/count-number-of-nice-subarrays/">1248. 统计「优美子数组」</a></td>
+      <td>中等</td>
+      <td>把奇数记为 1、偶数记为 0，就完全退化成本题</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/continuous-subarray-sum/">523. 连续的子数组和</a></td>
+      <td>中等</td>
+      <td>存的是模值的<strong>最早下标</strong>而非次数，因为要判长度至少为 2 的存在性</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/contiguous-array/">525. 连续数组</a></td>
+      <td>中等</td>
+      <td>把 0 记为 -1 后求「和为 0 的最长子数组」，哈希存最早下标以求最长</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/subarrays-with-k-different-integers/">992. K 个不同整数的子数组</a></td>
+      <td>困难</td>
+      <td>用「恰好 K = 至多 K − 至多 K−1」的差分技巧，是本题的滑窗解法的推广</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/subarray-product-less-than-k/">713. 乘积小于 K 的子数组</a></td>
+      <td>中等</td>
+      <td>条件是「小于」而非「等于」，元素全为正时可直接滑动窗口累加窗口长度</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-size-subarray-sum/">209. 长度最小的子数组</a></td>
+      <td>中等</td>
+      <td>求最短长度而非个数，正数前提下用双指针单调收缩即可</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/QTMn0o/">LCR 010. 和为 K 的子数组</a></td>
+      <td>中等</td>
+      <td>与 560 同题</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2021/58180207" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1081. 不同字符的最小子序列</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/24042204" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 743. 网络延迟时间</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/87881998">https://hgnulb.github.io/blog/2021/87881998</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

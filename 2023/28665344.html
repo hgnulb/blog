@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 430. 扁平化多级双向链表 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,双向链表,字节跳动,快手,深度优先搜索,链表" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 430. 扁平化多级双向链表" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2023/28665344" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2023/28665344" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-08-29T00:00:00+08:00" />
+<meta property="article:modified_time" content="2023-08-29T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 430. 扁平化多级双向链表" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2023-08-29T00:00:00+08:00","datePublished":"2023-08-29T00:00:00+08:00","description":"题目描述","headline":"LeetCode 430. 扁平化多级双向链表","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2023/28665344"},"url":"https://hgnulb.github.io/blog/2023/28665344"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法栈模拟-dfs">解法：栈模拟 DFS</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 430. 扁平化多级双向链表">LeetCode 430. 扁平化多级双向链表</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2023-08-29 00:00:00"
+                    datetime="2023-08-29T00:00:00+08:00"
+            >
+                2023-08-29
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2314 字 · 英文 127 词 · 代码 53 行"
+            aria-label="预计阅读时间约 8 分钟，正文 2314 字 · 英文 127 词 · 代码 53 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 8 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1259449732/" title="快手">
+        快手
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6005735281/" title="链表">
+        链表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0407173734/" title="双向链表">
+        双向链表
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法栈模拟-dfs">解法：栈模拟 DFS</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/flatten-a-multilevel-doubly-linked-list/">430. 扁平化多级双向链表</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给的链表每个节点除了 <code class="language-plaintext highlighter-rouge">prev</code> 和 <code class="language-plaintext highlighter-rouge">next</code>，还多一个 <code class="language-plaintext highlighter-rouge">child</code> 指针，指向另一条结构完全相同的双向链表。要求把这棵「链表构成的树」压成一条单层双向链表。</p>
+
+  <p>顺序规则藏在题目给的样例里：走到一个带 <code class="language-plaintext highlighter-rouge">child</code> 的节点时，要先把它的子链整条走完（子链里若还有 <code class="language-plaintext highlighter-rouge">child</code>，同样先展开），走完再回来接它原本的 <code class="language-plaintext highlighter-rouge">next</code>。这就是一次深度优先遍历，而且是先序的。</p>
+
+  <p>除了顺序，还有两条容易被忽略的硬性要求。其一，展平后所有节点的 <code class="language-plaintext highlighter-rouge">child</code> 必须置为 <code class="language-plaintext highlighter-rouge">null</code>，否则返回的仍是多级结构。其二，结果必须是合法的双向链表，也就是每一处 <code class="language-plaintext highlighter-rouge">prev</code> 都要和 <code class="language-plaintext highlighter-rouge">next</code> 对上，只改 <code class="language-plaintext highlighter-rouge">next</code> 不改 <code class="language-plaintext highlighter-rouge">prev</code> 会被判错。</p>
+
+  <p>边界情况包括：<code class="language-plaintext highlighter-rouge">head</code> 为空；带 <code class="language-plaintext highlighter-rouge">child</code> 的节点恰好是本层最后一个节点，此时没有需要保存的后继；嵌套层数可以很深；子链自身长度可以为 $1$。</p>
+</blockquote>
+
+<h2 id="解法栈模拟-dfs">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%A0%88%E6%A8%A1%E6%8B%9F-dfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：栈模拟 DFS</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最自然的想法是递归：遇到 <code class="language-plaintext highlighter-rouge">child</code> 就递归展平子链，然后把子链接在当前节点之后。麻烦在于接回——递归展平完子链后，还得知道子链的尾节点是谁，才能把原来的 <code class="language-plaintext highlighter-rouge">next</code> 续上。这意味着递归函数要额外返回尾指针，或者返回后再走一遍子链找尾，前者写法啰嗦，后者会让复杂度退化。</p>
+
+  <p>换个角度看这件事：真正需要「记住」的信息只有一条，就是那些被暂时搁置、等会儿要接回来的 <code class="language-plaintext highlighter-rouge">next</code> 节点。而它们的恢复顺序恰好是「后搁置的先恢复」——越深层的分支越先走完，也越先需要接回。这正是栈的语义，于是可以把递归的调用栈显式化，整个遍历压平成一重循环。</p>
+
+  <p>循环维持的不变量是：<code class="language-plaintext highlighter-rouge">cur</code> 及其之前的所有节点已经排成最终答案的前缀，它们的 <code class="language-plaintext highlighter-rouge">prev</code> / <code class="language-plaintext highlighter-rouge">next</code> 都已正确对接，且 <code class="language-plaintext highlighter-rouge">child</code> 全部为 <code class="language-plaintext highlighter-rouge">null</code>；栈中从栈顶到栈底，依次是等待接回的分支后继，栈顶对应最内层、最先该被恢复的那一个。每一步只需看 <code class="language-plaintext highlighter-rouge">cur</code> 的局部形态就能决定动作：有 <code class="language-plaintext highlighter-rouge">child</code> 就下沉，无 <code class="language-plaintext highlighter-rouge">child</code> 且走到本段尽头就弹栈上浮，否则平移。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>先处理 <code class="language-plaintext highlighter-rouge">head</code> 为空的情况直接返回，避免后续解引用空指针。随后用 <code class="language-plaintext highlighter-rouge">cur</code> 从 <code class="language-plaintext highlighter-rouge">head</code> 出发，配一个空栈。</li>
+    <li>当 <code class="language-plaintext highlighter-rouge">cur.child</code> 非空时，说明要下沉。若 <code class="language-plaintext highlighter-rouge">cur.next</code> 也非空，先把它压栈——这是唯一会在下沉后丢失的信息，不存下来就再也找不回来了；若 <code class="language-plaintext highlighter-rouge">cur.next</code> 为空则无需压栈，少压一个空值能让后面的弹栈条件更干净。</li>
+    <li>接着把子链头接到 <code class="language-plaintext highlighter-rouge">cur</code> 之后：<code class="language-plaintext highlighter-rouge">cur.next = child</code> 与 <code class="language-plaintext highlighter-rouge">child.prev = cur</code> 必须成对写，只写一半就破坏了双向性。然后立刻把 <code class="language-plaintext highlighter-rouge">cur.child</code> 置空，因为这条边已经被「消费」成了 <code class="language-plaintext highlighter-rouge">next</code> 边，留着就会让结果仍是多级结构。</li>
+    <li>当 <code class="language-plaintext highlighter-rouge">cur.child</code> 为空且 <code class="language-plaintext highlighter-rouge">cur.next</code> 也为空时，说明当前这一段走到了尽头。此时若栈非空，弹出栈顶节点接到 <code class="language-plaintext highlighter-rouge">cur</code> 后面，同样成对更新 <code class="language-plaintext highlighter-rouge">next</code> 与 <code class="language-plaintext highlighter-rouge">prev</code>。若栈为空则说明整条链已经走完，<code class="language-plaintext highlighter-rouge">cur = cur.next</code> 自然得到 <code class="language-plaintext highlighter-rouge">null</code>，循环结束。</li>
+    <li>上述三种情况处理完统一执行 <code class="language-plaintext highlighter-rouge">cur = cur.next</code> 前进一格。注意「下沉」这一支执行完后 <code class="language-plaintext highlighter-rouge">cur.next</code> 已经是子链头，所以这一句同时承担了下沉、上浮和平移三种移动，不需要分别写。</li>
+    <li>循环结束后返回 <code class="language-plaintext highlighter-rouge">head</code>。头节点自始至终没被换过，因为展平只会在它后面追加内容。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">[1,2,3,4,5,6,null,null,null,7,8,9,10,null,null,11,12]</code> 走一遍</strong>：这条数据描述的结构是主链 $1 \leftrightarrow 2 \leftrightarrow 3 \leftrightarrow 4 \leftrightarrow 5 \leftrightarrow 6$，节点 $3$ 的 <code class="language-plaintext highlighter-rouge">child</code> 指向 $7 \leftrightarrow 8 \leftrightarrow 9 \leftrightarrow 10$，节点 $8$ 的 <code class="language-plaintext highlighter-rouge">child</code> 指向 $11 \leftrightarrow 12$。<code class="language-plaintext highlighter-rouge">cur = 1</code>，无 <code class="language-plaintext highlighter-rouge">child</code>，<code class="language-plaintext highlighter-rouge">next</code> 非空，平移到 $2$；$2$ 同理平移到 $3$。<code class="language-plaintext highlighter-rouge">cur = 3</code> 时 <code class="language-plaintext highlighter-rouge">child</code> 为 $7$，<code class="language-plaintext highlighter-rouge">next</code> 为 $4$ 非空，把 $4$ 压栈得到栈 <code class="language-plaintext highlighter-rouge">[4]</code>，然后接 $3 \to 7$、$7.prev = 3$、$3.child = null$，<code class="language-plaintext highlighter-rouge">cur</code> 前进到 $7$。$7$ 无 <code class="language-plaintext highlighter-rouge">child</code> 且 <code class="language-plaintext highlighter-rouge">next</code> 为 $8$，平移到 $8$。<code class="language-plaintext highlighter-rouge">cur = 8</code> 时 <code class="language-plaintext highlighter-rouge">child</code> 为 $11$，<code class="language-plaintext highlighter-rouge">next</code> 为 $9$ 非空，压栈得到 <code class="language-plaintext highlighter-rouge">[4, 9]</code>（栈顶是 $9$），接 $8 \to 11$、$11.prev = 8$、<code class="language-plaintext highlighter-rouge">8.child = null</code>，前进到 $11$。$11$ 平移到 $12$。<code class="language-plaintext highlighter-rouge">cur = 12</code> 时无 <code class="language-plaintext highlighter-rouge">child</code> 且 <code class="language-plaintext highlighter-rouge">next</code> 为空，栈非空，弹出栈顶 $9$，接 $12 \to 9$、$9.prev = 12$，栈剩 <code class="language-plaintext highlighter-rouge">[4]</code>，前进到 $9$。$9$ 平移到 $10$。<code class="language-plaintext highlighter-rouge">cur = 10</code> 时无 <code class="language-plaintext highlighter-rouge">child</code> 且 <code class="language-plaintext highlighter-rouge">next</code> 为空，弹出 $4$，接 $10 \to 4$、$4.prev = 10$，栈空，前进到 $4$。$4$ 平移到 $5$，$5$ 平移到 $6$。<code class="language-plaintext highlighter-rouge">cur = 6</code> 时无 <code class="language-plaintext highlighter-rouge">child</code>、<code class="language-plaintext highlighter-rouge">next</code> 为空且栈为空，<code class="language-plaintext highlighter-rouge">cur</code> 变为 <code class="language-plaintext highlighter-rouge">null</code>，循环结束。最终链为 $1 \leftrightarrow 2 \leftrightarrow 3 \leftrightarrow 7 \leftrightarrow 8 \leftrightarrow 11 \leftrightarrow 12 \leftrightarrow 9 \leftrightarrow 10 \leftrightarrow 4 \leftrightarrow 5 \leftrightarrow 6$，与期望输出一致。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 继续向前走，若链表走到尽头，则从栈中弹出之前保存的 next 接回。</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">Node</span> <span class="nf">flatten</span><span class="o">(</span><span class="nc">Node</span> <span class="n">head</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">head</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Node</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">Node</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+
+        <span class="k">while</span> <span class="o">(</span><span class="n">cur</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cur</span><span class="o">.</span><span class="na">child</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">cur</span><span class="o">.</span><span class="na">next</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">cur</span><span class="o">.</span><span class="na">next</span><span class="o">);</span>
+                <span class="o">}</span>
+
+                <span class="nc">Node</span> <span class="n">child</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">child</span><span class="o">;</span>
+                <span class="n">cur</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">child</span><span class="o">;</span>
+                <span class="n">child</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">cur</span><span class="o">;</span>
+                <span class="n">cur</span><span class="o">.</span><span class="na">child</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">cur</span><span class="o">.</span><span class="na">next</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+                <span class="nc">Node</span> <span class="n">next</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+                <span class="n">cur</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">next</span><span class="o">;</span>
+                <span class="n">next</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">cur</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">head</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 继续向前走，若链表走到尽头，则从栈中弹出之前保存的 next 接回。</span>
+<span class="k">func</span> <span class="n">flatten</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">Node</span><span class="p">)</span> <span class="o">*</span><span class="n">Node</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">root</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="no">nil</span>
+    <span class="p">}</span>
+
+    <span class="n">stack</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="n">Node</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="n">cur</span> <span class="o">:=</span> <span class="n">root</span>
+
+    <span class="k">for</span> <span class="n">cur</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">cur</span><span class="o">.</span><span class="n">Child</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">cur</span><span class="o">.</span><span class="n">Next</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+                <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">cur</span><span class="o">.</span><span class="n">Next</span><span class="p">)</span>
+            <span class="p">}</span>
+
+            <span class="n">child</span> <span class="o">:=</span> <span class="n">cur</span><span class="o">.</span><span class="n">Child</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">Next</span> <span class="o">=</span> <span class="n">child</span>
+            <span class="n">child</span><span class="o">.</span><span class="n">Prev</span> <span class="o">=</span> <span class="n">cur</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">Child</span> <span class="o">=</span> <span class="no">nil</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">cur</span><span class="o">.</span><span class="n">Next</span> <span class="o">==</span> <span class="no">nil</span> <span class="o">&amp;&amp;</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="n">next</span> <span class="o">:=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">Next</span> <span class="o">=</span> <span class="n">next</span>
+            <span class="n">next</span><span class="o">.</span><span class="n">Prev</span> <span class="o">=</span> <span class="n">cur</span>
+        <span class="p">}</span>
+
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">Next</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">root</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$，$n$ 为节点总数。<code class="language-plaintext highlighter-rouge">cur</code> 沿着最终链条单向前进，每个节点恰好被 <code class="language-plaintext highlighter-rouge">cur</code> 访问一次；每次访问内部只有常数次指针赋值和至多一次入栈或出栈，而每个节点至多入栈一次、出栈一次。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(d)$，$d$ 为链表的最大嵌套深度，最坏情况下每个节点都带 <code class="language-plaintext highlighter-rouge">child</code> 从而 $d = O(n)$。栈中保存的是尚未接回的分支后继，同一时刻栈内元素个数等于当前所处的嵌套层数。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>递归转迭代的关键判断是「递归返回后还需要什么」。这里返回后只需要一个被搁置的 <code class="language-plaintext highlighter-rouge">next</code> 节点，信息量极小，所以显式栈只存节点即可，不必模拟完整的调用帧。</li>
+    <li>处理双向链表时把 <code class="language-plaintext highlighter-rouge">next</code> 与 <code class="language-plaintext highlighter-rouge">prev</code> 的更新写成紧挨着的一对，是最省心的自律。分开写、或者只在最后统一补 <code class="language-plaintext highlighter-rouge">prev</code>，是这类题最高发的错误来源。</li>
+    <li>消费掉的结构信息要立刻清理。<code class="language-plaintext highlighter-rouge">cur.child = null</code> 不是收尾工作，而是循环不变量的一部分——不清就没法用「<code class="language-plaintext highlighter-rouge">child</code> 是否为空」来驱动状态判断。</li>
+    <li>让一句 <code class="language-plaintext highlighter-rouge">cur = cur.next</code> 同时承担下沉、平移、上浮三种语义，靠的是每个分支都提前把 <code class="language-plaintext highlighter-rouge">cur.next</code> 修成了正确的后继。这种「先修好指针再统一前进」的写法能显著压缩分支数量。</li>
+    <li>面试视角：面试官通常会追问「递归怎么写」以及「递归为什么不如迭代顺手」。答出「递归需要额外返回子链尾指针」这一点，比单纯背下迭代模板更能证明理解。</li>
+    <li>面试视角：写完主动用一个三层嵌套的小样例口述验证，重点展示栈的深度变化，能一次性打消面试官对上浮顺序是否正确的疑虑。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：接子链时只写 <code class="language-plaintext highlighter-rouge">cur.next = child</code> 而漏掉 <code class="language-plaintext highlighter-rouge">child.prev = cur</code> → 对 <code class="language-plaintext highlighter-rouge">[1,2,null,3]</code> 这类数据（节点 $2$ 的 <code class="language-plaintext highlighter-rouge">child</code> 为 $3$），从头正向遍历看起来完全正确，但反向沿 <code class="language-plaintext highlighter-rouge">prev</code> 走时 $3$ 的前驱仍是 <code class="language-plaintext highlighter-rouge">null</code>，判题按双向链表校验会失败。</li>
+    <li>
+<strong>错误写法</strong>：忘记 <code class="language-plaintext highlighter-rouge">cur.child = null</code> → 结构顺序对了，但返回的链表里节点 $3$ 仍挂着 <code class="language-plaintext highlighter-rouge">child</code>，不满足「单层链表」的要求，直接判错。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">cur.child</code> 非空时无条件把 <code class="language-plaintext highlighter-rouge">cur.next</code> 压栈 → 当带 <code class="language-plaintext highlighter-rouge">child</code> 的节点是本层最后一个（<code class="language-plaintext highlighter-rouge">next</code> 为 <code class="language-plaintext highlighter-rouge">null</code>）时，栈里混入一个空值，后续弹栈会把 <code class="language-plaintext highlighter-rouge">null</code> 当成节点解引用赋 <code class="language-plaintext highlighter-rouge">prev</code>，抛空指针异常。</li>
+    <li>
+<strong>错误写法</strong>：用队列代替栈 → 对节点 $3$ 有 <code class="language-plaintext highlighter-rouge">child</code>、节点 $8$ 也有 <code class="language-plaintext highlighter-rouge">child</code> 的嵌套结构，先搁置的外层 <code class="language-plaintext highlighter-rouge">next</code> 会被先恢复，导致内层子链没走完就跳回外层，输出顺序完全错乱。</li>
+    <li>
+<strong>错误写法</strong>：先接子链再压 <code class="language-plaintext highlighter-rouge">next</code> → 此时 <code class="language-plaintext highlighter-rouge">cur.next</code> 已经被改成了子链头，压进栈的是子链头而不是原后继，原本的后半段链条彻底丢失。</li>
+    <li>
+<strong>错误写法</strong>：弹栈条件写成「栈非空」而不带 <code class="language-plaintext highlighter-rouge">cur.next == null</code> → 走到 $3$ 的子链中间时就把外层的 $4$ 接了上去，把还没走完的子链后半段截断。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">head</code> 为空时不特判就进入循环并最后 <code class="language-plaintext highlighter-rouge">return head</code> → Java 侧其实能侥幸通过（循环体不执行），但若实现中先访问了 <code class="language-plaintext highlighter-rouge">head.child</code> 做预处理则直接崩溃，稳妥做法是开头就返回。</li>
+    <li>
+<strong>错误写法</strong>：递归版本里展平子链后直接用「子链头的原始尾节点」接回 <code class="language-plaintext highlighter-rouge">next</code> → 若子链内部还有更深的 <code class="language-plaintext highlighter-rouge">child</code>，展平后真正的尾节点已经变了，接回位置会落在链条中间，后半段丢失。</li>
+    <li>
+<strong>错误写法</strong>：为了「一次遍历」而在下沉时不移动 <code class="language-plaintext highlighter-rouge">cur</code>，指望下一轮循环重新判断 → 由于 <code class="language-plaintext highlighter-rouge">cur.child</code> 已被置空，下一轮会走到「无 <code class="language-plaintext highlighter-rouge">child</code>」分支并平移，虽然结果碰巧正确，但多绕一轮且逻辑难以自证，不如直接前进清晰。</li>
+    <li>
+<strong>错误写法</strong>：返回子链头或返回 <code class="language-plaintext highlighter-rouge">cur</code> 而非原 <code class="language-plaintext highlighter-rouge">head</code> → 展平过程从不改变头节点，返回别的节点会丢掉整个前缀。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/Qv1Da2/">LCR 028. 扁平化多级双向链表</a></td>
+      <td>中等</td>
+      <td>同一题的另一入口，可用来对拍递归写法与迭代写法的输出</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/">114. 二叉树展开为链表</a></td>
+      <td>中等</td>
+      <td>展平对象是二叉树，可用 Morris 思路把右子树挂到左子树最右端</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/flatten-nested-list-iterator/">341. 扁平化嵌套列表迭代器</a></td>
+      <td>中等</td>
+      <td>展平结果按需惰性产出，栈里存的是迭代器而非待接回的节点</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/convert-binary-search-tree-to-sorted-doubly-linked-list/">426. 将二叉搜索树转化为排序的双向链表</a></td>
+      <td>中等</td>
+      <td>中序遍历中原地改指针，需要额外维护前驱节点并最终首尾成环</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/copy-list-with-random-pointer/">138. 随机链表的复制</a></td>
+      <td>中等</td>
+      <td>同样是额外指针的链表，但难点在深拷贝时的旧节点到新节点映射</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2023/58293090" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1267. 统计参与通信的服务器</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2023/99048587" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 554. 砖墙</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2023/28665344">https://hgnulb.github.io/blog/2023/28665344</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

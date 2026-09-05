@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 590. N 叉树的后序遍历 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,拼多多,栈,树,深度优先搜索" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 590. N 叉树的后序遍历" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/61739036" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/61739036" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-10-09T20:43:25+08:00" />
+<meta property="article:modified_time" content="2022-10-09T20:43:25+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 590. N 叉树的后序遍历" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-10-09T20:43:25+08:00","datePublished":"2022-10-09T20:43:25+08:00","description":"题目描述","headline":"LeetCode 590. N 叉树的后序遍历","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/61739036"},"url":"https://hgnulb.github.io/blog/2022/61739036"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法递归-dfs">解法：递归 DFS</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 590. N 叉树的后序遍历">LeetCode 590. N 叉树的后序遍历</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-10-09 20:43:25"
+                    datetime="2022-10-09T20:43:25+08:00"
+            >
+                2022-10-09
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3285 字 · 英文 69 词 · 代码 37 行"
+            aria-label="预计阅读时间约 9 分钟，正文 3285 字 · 英文 69 词 · 代码 37 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4923693516/" title="简单">
+        简单
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7041841112/" title="拼多多">
+        拼多多
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2805463697/" title="树">
+        树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法递归-dfs">解法：递归 DFS</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/n-ary-tree-postorder-traversal/">590. N 叉树的后序遍历</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一棵 N 叉树的根节点，按<strong>后序遍历</strong>的顺序返回所有节点值组成的列表。N 叉树的节点结构是 <code class="language-plaintext highlighter-rouge">val</code> 加一个 <code class="language-plaintext highlighter-rouge">children</code> 列表，孩子的个数不固定。</p>
+
+  <p>后序遍历的定义只有一句话：<strong>先按顺序遍历完全部子树，最后访问自己</strong>。对二叉树来说是「左 → 右 → 根」，推广到 N 叉树就是「孩子 1 → 孩子 2 → … → 孩子 k → 根」。孩子之间必须严格按 <code class="language-plaintext highlighter-rouge">children</code> 列表给出的顺序，不能重排。</p>
+
+  <p>从这个定义能直接读出两个性质。第一，<strong>根节点必然是输出序列的最后一个元素</strong>——因为它要等所有子树都处理完才轮到自己。第二，<strong>每棵子树的输出是结果序列中一段连续的区间</strong>，并且这些区间按孩子顺序依次排列。这两点是检查实现是否正确的最快判据。</p>
+
+  <p>题目本身没有任何优化空间：每个节点必须访问且只需访问一次，答案长度就是节点数，所以 $O(n)$ 时间是下界也是上界。真正需要拿捏的是<strong>访问时机</strong>——「什么时候把 <code class="language-plaintext highlighter-rouge">val</code> 写进结果」这一个动作放在循环之前还是之后，决定了前序还是后序，没有第三种可能。这也是这类题在面试中的全部考点：能不能把遍历的结构和访问时机分离着讲清楚。</p>
+
+  <p>约束里节点总数是线性规模，但<strong>树的高度可能退化成链</strong>（每个节点只有一个孩子），递归深度随之达到节点数量级，这一点在讨论空间复杂度时必须提到。</p>
+
+  <p>边界：根为空时返回空列表而不是报错；某个节点的 <code class="language-plaintext highlighter-rouge">children</code> 为空列表（叶子）时循环一次都不进，直接输出自己；<code class="language-plaintext highlighter-rouge">children</code> 里理论上不该有空指针，但递归入口保留空判可以让代码对不规范输入也安全。</p>
+</blockquote>
+
+<h2 id="解法递归-dfs">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E9%80%92%E5%BD%92-dfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：递归 DFS</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>后序遍历的定义本身就是递归的：<strong>一棵树的后序序列 = 各棵子树的后序序列按顺序拼接 + 根节点值</strong>。既然定义是递归的，直接照着定义写递归就是最短路径，不需要任何转化。</p>
+
+  <p>于是递归函数的契约定成：<strong><code class="language-plaintext highlighter-rouge">dfs(node)</code> 的职责是「把以 <code class="language-plaintext highlighter-rouge">node</code> 为根的整棵子树的后序序列，按顺序追加到结果列表末尾」</strong>。这个契约有两个要点。其一，它是「追加」而不是「返回」——用一个在所有递归层之间共享的结果列表，让每层直接往末尾写，避免了每层构造并合并子列表带来的 $O(n^2)$ 拷贝。其二，它承诺<strong>只追加、不修改已有内容</strong>，所以各层写入的区间天然不会互相干扰，拼接顺序完全由调用顺序决定。</p>
+
+  <p>有了这个契约，函数体就只剩三行：空节点直接返回（空子树的后序序列是空的，什么都不用追加）；依次对每个孩子递归（按 <code class="language-plaintext highlighter-rouge">children</code> 的顺序调用，于是各子树的区间按孩子顺序排好）；最后追加自己的 <code class="language-plaintext highlighter-rouge">val</code>。</p>
+
+  <p><strong>最后那一行的位置就是全部的算法内容</strong>。放在循环之后是后序，放在循环之前就变成了前序（589 题），中间没有任何别的差别。理解「遍历的骨架相同，只有访问时机不同」这一点，前序、后序两道题就合并成了一道。至于中序，在 N 叉树上没有定义——因为孩子多于两个时，「中间」的位置不唯一。</p>
+
+  <p>不变量：<strong>每次 <code class="language-plaintext highlighter-rouge">dfs(node)</code> 返回时，结果列表相比调用前恰好多了一段内容，它正是以 <code class="language-plaintext highlighter-rouge">node</code> 为根的子树的完整后序序列</strong>。用归纳法看：叶子节点显然成立（只追加自己）；对内部节点，若所有孩子都满足这个不变量，则循环结束时列表末尾依次是各子树的后序序列，再追加根值，正好构成本子树的后序序列。</p>
+
+  <p>递归没有重复子问题、也没有可剪枝的分支，每个节点恰好被调用一次，所以复杂度就是 $O(n)$，无法再优化。唯一的代价是调用栈，深度等于树高。</p>
+
+  <p>值得一提的是迭代写法的思路（面试常见追问）：用栈做前序遍历，但<strong>孩子按逆序入栈</strong>得到「根 → 孩子 k → … → 孩子 1」的序列，再把整个结果反转，就得到后序。它避免了栈深度限制，但可读性不如递归，通常作为补充方案给出。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>在入口创建结果列表，调用递归函数，最后返回该列表</strong>。<strong>为什么</strong>：把「准备容器」和「填充容器」分成两层，递归函数就可以保持无返回值的纯追加语义；结果列表由所有递归层共享，避免每层构造子列表再合并——那样每个节点会被复制 $O(h)$ 次，总代价退化到 $O(nh)$。</li>
+    <li>
+<strong>递归函数第一行判 <code class="language-plaintext highlighter-rouge">node == null</code> 直接返回</strong>。<strong>为什么</strong>：空子树的后序序列是空的，按契约什么都不该追加，直接返回正好；这一行同时兜住了「根为空」这个入口边界和「<code class="language-plaintext highlighter-rouge">children</code> 里意外含空指针」这种不规范输入，一处判断覆盖两种场景。</li>
+    <li>
+<strong>按 <code class="language-plaintext highlighter-rouge">children</code> 列表的原始顺序，依次对每个孩子递归调用</strong>。<strong>为什么</strong>：后序要求子树之间保持给定顺序，而每次递归调用都会在结果末尾追加一段连续区间，所以调用顺序直接决定了区间顺序——顺序遍历 <code class="language-plaintext highlighter-rouge">children</code> 就等于让区间按孩子顺序排列。这里不需要判断孩子个数，<code class="language-plaintext highlighter-rouge">children</code> 为空时循环一次都不进，叶子节点自然落入主逻辑。</li>
+    <li>
+<strong>循环结束之后，才把 <code class="language-plaintext highlighter-rouge">node.val</code> 追加到结果末尾</strong>。<strong>为什么</strong>：这一行的位置就是「后序」的全部含义——必须等所有子树的区间都写完，根节点才排在它们之后。把它移到循环之前，输出立刻变成前序；这是本题唯一需要精确控制的地方。</li>
+    <li>
+<strong>返回结果列表</strong>。</li>
+  </ul>
+
+  <p><strong>以一棵具体的树走一遍</strong>。设根为 <code class="language-plaintext highlighter-rouge">1</code>，它有三个孩子依次是 <code class="language-plaintext highlighter-rouge">3</code>、<code class="language-plaintext highlighter-rouge">2</code>、<code class="language-plaintext highlighter-rouge">4</code>；其中 <code class="language-plaintext highlighter-rouge">3</code> 又有两个孩子 <code class="language-plaintext highlighter-rouge">5</code>、<code class="language-plaintext highlighter-rouge">6</code>；其余节点都是叶子。（这正是 LeetCode 该题的示例，期望输出 <code class="language-plaintext highlighter-rouge">[5, 6, 3, 2, 4, 1]</code>。）</p>
+
+  <p><code class="language-plaintext highlighter-rouge">dfs(1)</code>：非空，进入循环。</p>
+
+  <p>先处理第一个孩子 <code class="language-plaintext highlighter-rouge">dfs(3)</code>：非空，进入它自己的循环。先 <code class="language-plaintext highlighter-rouge">dfs(5)</code>——<code class="language-plaintext highlighter-rouge">5</code> 是叶子，<code class="language-plaintext highlighter-rouge">children</code> 为空、循环不进，直接追加 <code class="language-plaintext highlighter-rouge">5</code>，结果变成 <code class="language-plaintext highlighter-rouge">[5]</code>，返回。再 <code class="language-plaintext highlighter-rouge">dfs(6)</code>——同理追加 <code class="language-plaintext highlighter-rouge">6</code>，结果变成 <code class="language-plaintext highlighter-rouge">[5, 6]</code>，返回。<code class="language-plaintext highlighter-rouge">3</code> 的循环结束，现在才追加 <code class="language-plaintext highlighter-rouge">3</code>，结果变成 <code class="language-plaintext highlighter-rouge">[5, 6, 3]</code>，返回。注意此刻结果末尾的这三个元素 <code class="language-plaintext highlighter-rouge">[5, 6, 3]</code> 恰好是以 <code class="language-plaintext highlighter-rouge">3</code> 为根的子树的完整后序序列，且 <code class="language-plaintext highlighter-rouge">3</code> 排在它两个孩子之后——不变量成立。</p>
+
+  <p>回到 <code class="language-plaintext highlighter-rouge">dfs(1)</code> 的循环，处理第二个孩子 <code class="language-plaintext highlighter-rouge">dfs(2)</code>：叶子，追加 <code class="language-plaintext highlighter-rouge">2</code>，结果 <code class="language-plaintext highlighter-rouge">[5, 6, 3, 2]</code>。</p>
+
+  <p>处理第三个孩子 <code class="language-plaintext highlighter-rouge">dfs(4)</code>：叶子，追加 <code class="language-plaintext highlighter-rouge">4</code>，结果 <code class="language-plaintext highlighter-rouge">[5, 6, 3, 2, 4]</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">1</code> 的循环结束，最后追加根值 <code class="language-plaintext highlighter-rouge">1</code>，结果 <code class="language-plaintext highlighter-rouge">[5, 6, 3, 2, 4, 1]</code>，与期望一致。</p>
+
+  <p>从这条轨迹能看出两处校验点：根节点 <code class="language-plaintext highlighter-rouge">1</code> 确实落在最末尾；三棵子树分别占据 <code class="language-plaintext highlighter-rouge">[5, 6, 3]</code>、<code class="language-plaintext highlighter-rouge">[2]</code>、<code class="language-plaintext highlighter-rouge">[4]</code> 三段连续区间，且按 <code class="language-plaintext highlighter-rouge">children</code> 顺序排列。如果把追加根值那一行挪到循环之前，同一棵树会输出 <code class="language-plaintext highlighter-rouge">[1, 3, 5, 6, 2, 4]</code>——那是前序，根跑到了最前面，每棵子树的区间虽然仍然连续，但根节点插在了自己的子树之前。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="nf">postorder</span><span class="o">(</span><span class="nc">Node</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">dfs590</span><span class="o">(</span><span class="n">root</span><span class="o">,</span> <span class="n">res</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// 契约：把以 node 为根的整棵子树的后序序列追加到 res 末尾。</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">dfs590</span><span class="o">(</span><span class="nc">Node</span> <span class="n">node</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">res</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">// 按 children 的原始顺序递归，各子树的区间随之按序排列。</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Node</span> <span class="n">child</span> <span class="o">:</span> <span class="n">node</span><span class="o">.</span><span class="na">children</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">dfs590</span><span class="o">(</span><span class="n">child</span><span class="o">,</span> <span class="n">res</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="c1">// 这一行放在循环之后即后序；挪到循环之前就变成前序。</span>
+        <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">postorder</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">Node</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="n">res</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="c">// 契约：把以 node 为根的整棵子树的后序序列追加到 res 末尾。</span>
+    <span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">Node</span><span class="p">)</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">Node</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="c">// 按 Children 的原始顺序递归，各子树的区间随之按序排列。</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">child</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">node</span><span class="o">.</span><span class="n">Children</span> <span class="p">{</span>
+            <span class="n">dfs</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="c">// 这一行放在循环之后即后序；挪到循环之前就变成前序。</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Val</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$，<code class="language-plaintext highlighter-rouge">n</code> 为节点总数。凭什么：每个节点恰好被 <code class="language-plaintext highlighter-rouge">dfs</code> 调用一次，函数体内除了遍历自己的 <code class="language-plaintext highlighter-rouge">children</code> 之外只有一次列表追加；而所有节点的孩子数之和等于边数 <code class="language-plaintext highlighter-rouge">n - 1</code>，因此循环的总执行次数是线性的。列表追加是均摊 $O(1)$，不影响总量。这也是理论下界——输出本身就有 <code class="language-plaintext highlighter-rouge">n</code> 个元素。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(h)$ 辅助空间，<code class="language-plaintext highlighter-rouge">h</code> 为树高，最坏 $O(n)$。凭什么：唯一的额外开销是递归调用栈，深度等于当前路径长度即树高；每层栈帧只存节点指针和循环变量，是常数。树退化成一条链（每个节点只有一个孩子）时 <code class="language-plaintext highlighter-rouge">h = n</code>，这也是递归写法在极深树上有栈溢出风险的原因。结果列表占 $O(n)$，但那是必须的输出，通常不计入辅助空间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>树的三种深度优先遍历共用同一套骨架，<strong>唯一的差别是「访问当前节点」这一行放在哪里</strong>：放在递归子树之前是前序，放在之后是后序。把这句话记牢，589 与 590 就是同一道题。</li>
+    <li>N 叉树没有中序遍历。孩子超过两个时「中间」的位置不唯一，这是 N 叉树相比二叉树少一种遍历方式的根本原因，面试中被追问时能一句话答出来是个小加分。</li>
+    <li>递归函数要么「返回子结果由上层合并」，要么「共享一个容器直接追加」。后者省掉了每层的列表构造与拷贝，把 $O(nh)$ 降到 $O(n)$——凡是收集型的递归都应优先用共享容器。</li>
+    <li>写递归前先把契约说清楚：「调用这个函数会对结果产生什么效果」。本题的契约是「把本子树的后序序列追加到末尾」，有了它，正确性可以直接用归纳法一句话说完。</li>
+    <li>空间复杂度要说成 $O(h)$ 而不是笼统的 $O(n)$，并主动指出「链状树时 <code class="language-plaintext highlighter-rouge">h = n</code>」。能区分「典型情况」与「最坏情况」是评价复杂度分析是否到位的常见标准。</li>
+    <li>面试延伸：被问「不用递归怎么写」时，标准答案是<strong>用栈做「根 → 孩子逆序」的前序遍历，最后把结果整体反转</strong>。理由是后序序列的逆序恰好是「根 → 最后一个孩子 → … → 第一个孩子」这种变形前序，而前序用栈很容易写。若被要求「不许反转」，则需要在栈里额外记录每个节点已处理到第几个孩子，模拟真正的后序回溯。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>把 <code class="language-plaintext highlighter-rouge">res.add(node.val)</code> 写在孩子循环之前</strong>：示例树 <code class="language-plaintext highlighter-rouge">1 → [3 → [5, 6], 2, 4]</code> → 输出 <code class="language-plaintext highlighter-rouge">[1, 3, 5, 6, 2, 4]</code>，这是前序结果，而正确答案是 <code class="language-plaintext highlighter-rouge">[5, 6, 3, 2, 4, 1]</code>。</li>
+    <li>
+<strong>逆序遍历 <code class="language-plaintext highlighter-rouge">children</code></strong>：同一棵树 → 输出 <code class="language-plaintext highlighter-rouge">[4, 2, 6, 5, 3, 1]</code>，子树之间的顺序被翻转；后序只要求「根在最后」，孩子之间必须保持原顺序。</li>
+    <li>
+<strong>每层递归都新建列表再合并返回</strong>：一条长度为 <code class="language-plaintext highlighter-rouge">n</code> 的链状树 → 每个节点的结果被向上复制 $O(n)$ 次，总代价 $O(n^2)$，节点数上万时超时。</li>
+    <li>
+<strong>忘记 <code class="language-plaintext highlighter-rouge">node == null</code> 判断</strong>：<code class="language-plaintext highlighter-rouge">root</code> 为空 → 直接访问 <code class="language-plaintext highlighter-rouge">node.children</code> 抛空指针异常，而正确行为是返回空列表。</li>
+    <li>
+<strong>在循环里判断 <code class="language-plaintext highlighter-rouge">child != null</code> 却漏了入口判空</strong>：<code class="language-plaintext highlighter-rouge">postorder(null)</code> → 仍然在第一行就崩溃；判空应放在递归入口，一处覆盖所有情形。</li>
+    <li>
+<strong>把 <code class="language-plaintext highlighter-rouge">children</code> 当成二叉树的 <code class="language-plaintext highlighter-rouge">left</code> / <code class="language-plaintext highlighter-rouge">right</code> 只处理前两个孩子</strong>：示例树的根有三个孩子 → 第三个孩子 <code class="language-plaintext highlighter-rouge">4</code> 被完全忽略，输出缺项。</li>
+    <li>
+<strong>递归时传错节点（如仍传 <code class="language-plaintext highlighter-rouge">node</code> 而不是 <code class="language-plaintext highlighter-rouge">child</code>）</strong>：任意有孩子的树 → 无限递归，栈溢出。</li>
+    <li>
+<strong>用一个成员变量存结果却不在入口重置</strong>：判题连续调用两次 <code class="language-plaintext highlighter-rouge">postorder</code> → 第二次的结果拼在第一次后面，长度翻倍。</li>
+    <li>
+<strong>用「前序 + 反转」的迭代思路时，孩子按正序入栈</strong>：栈的后进先出会让最后一个孩子先出栈，得到的是「根 → 孩子 1 → … → 孩子 k」，反转后孩子顺序整体颠倒；必须<strong>逆序入栈</strong>才对。</li>
+    <li>
+<strong>迭代写法忘记最后反转结果</strong>：得到的是「根 → 孩子 k → … → 孩子 1」这种变形前序 → 示例树输出 <code class="language-plaintext highlighter-rouge">[1, 4, 2, 3, 6, 5]</code>，恰好是正确答案的逆序。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/n-ary-tree-preorder-traversal/">589. N 叉树的前序遍历</a></td>
+      <td>简单</td>
+      <td>与本题骨架完全相同，只把访问根的那一行移到孩子循环之前</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/binary-tree-postorder-traversal/">145. 二叉树的后序遍历</a></td>
+      <td>简单</td>
+      <td>孩子退化成固定的左右两个，迭代写法可用「上一个访问节点」判断是否回溯</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/binary-tree-preorder-traversal/">144. 二叉树的前序遍历</a></td>
+      <td>简单</td>
+      <td>二叉树版前序，迭代实现最简单，只需右孩子先入栈</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/binary-tree-inorder-traversal/">94. 二叉树的中序遍历</a></td>
+      <td>简单</td>
+      <td>只有二叉树才有中序，迭代要「一路向左压栈再出栈转右」，与本题结构不同</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/n-ary-tree-level-order-traversal/">429. N 叉树的层序遍历</a></td>
+      <td>中等</td>
+      <td>改为广度优先，用队列按层展开并记录每层大小，输出的是二维列表</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-depth-of-n-ary-tree/">559. N 叉树的最大深度</a></td>
+      <td>简单</td>
+      <td>同为后序框架，但每层向上返回的是子树深度的最大值而非追加序列</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/serialize-and-deserialize-n-ary-tree/">428. 序列化和反序列化 N 叉树</a></td>
+      <td>困难</td>
+      <td>遍历时还要写出孩子个数或分隔符，才能让序列反过来唯一确定树结构</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/binary-tree-level-order-traversal/">102. 二叉树的层序遍历</a></td>
+      <td>中等</td>
+      <td>429 的二叉树版本，可用来对照「孩子数固定」与「孩子数不定」的写法差异</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/56387538" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 839. 相似字符串组</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/35832532" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1642. 可以到达的最远建筑</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/61739036">https://hgnulb.github.io/blog/2022/61739036</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

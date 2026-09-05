@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 面试题 04.06. 后继者 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,二叉搜索树,二叉树,树,深度优先搜索,百度" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 面试题 04.06. 后继者" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/72481693" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/72481693" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-08-13T18:42:02+08:00" />
+<meta property="article:modified_time" content="2021-08-13T18:42:02+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 面试题 04.06. 后继者" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-08-13T18:42:02+08:00","datePublished":"2021-08-13T18:42:02+08:00","description":"题目描述","headline":"LeetCode 面试题 04.06. 后继者","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/72481693"},"url":"https://hgnulb.github.io/blog/2021/72481693"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法利用-bst-性质定位后继">解法：利用 BST 性质定位后继</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 面试题 04.06. 后继者">LeetCode 面试题 04.06. 后继者</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-08-13 18:42:02"
+                    datetime="2021-08-13T18:42:02+08:00"
+            >
+                2021-08-13
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2979 字 · 英文 51 词 · 代码 46 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2979 字 · 英文 51 词 · 代码 46 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    6 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7723837750/" title="程序员面试金典（第 6 版）">
+        程序员面试金典（第 6 版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9879723011/" title="百度">
+        百度
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2805463697/" title="树">
+        树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3241866243/" title="二叉树">
+        二叉树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2728179459/" title="二叉搜索树">
+        二叉搜索树
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法利用-bst-性质定位后继">解法：利用 BST 性质定位后继</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/successor-lcci/">面试题 04.06. 后继者</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给定一棵二叉搜索树的根节点 <code class="language-plaintext highlighter-rouge">root</code> 和树中的某个节点 <code class="language-plaintext highlighter-rouge">p</code>，返回 <code class="language-plaintext highlighter-rouge">p</code> 在<strong>中序遍历</strong>下的下一个节点。如果 <code class="language-plaintext highlighter-rouge">p</code> 是中序遍历的最后一个节点（也就是整棵树里最大的），返回空。</p>
+</blockquote>
+
+<blockquote>
+  <p>约束里有三个必须读出来的信号。第一，这是<strong>二叉搜索树</strong>而不是普通二叉树——意味着可以靠值的大小关系直接决定往左还是往右走，不必遍历整棵树。第二，<strong>节点没有父指针</strong>，所以无法从 <code class="language-plaintext highlighter-rouge">p</code> 向上回溯，必须从根重新往下找。第三，题目保证 <code class="language-plaintext highlighter-rouge">p</code> 确实在树中，且 BST 里节点值互不相同，所以"中序后继"等价于"所有大于 <code class="language-plaintext highlighter-rouge">p.val</code> 的节点里值最小的那个"，这个等价转换是整题的钥匙。</p>
+</blockquote>
+
+<blockquote>
+  <p>边界上要覆盖：<code class="language-plaintext highlighter-rouge">p</code> 是最大节点（无后继，返回空）；<code class="language-plaintext highlighter-rouge">p</code> 有右子树（后继在子树内部，与祖先无关）；<code class="language-plaintext highlighter-rouge">p</code> 是某个祖先的左子树里的最右节点（后继就是那个祖先）；以及 <code class="language-plaintext highlighter-rouge">p</code> 就是根节点的两种情形（有无右子树）。</p>
+</blockquote>
+
+<h2 id="解法利用-bst-性质定位后继">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%88%A9%E7%94%A8-bst-%E6%80%A7%E8%B4%A8%E5%AE%9A%E4%BD%8D%E5%90%8E%E7%BB%A7" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：利用 BST 性质定位后继</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是完整跑一遍中序遍历，把节点按序存进列表，再找到 <code class="language-plaintext highlighter-rouge">p</code> 的位置返回下一个。它一定正确，但瓶颈明显：时间和空间都是 $O(n)$，完全没有用到 BST 的有序性——同样的代码放在普通二叉树上也能跑，说明它没抓住这题的考点。</p>
+</blockquote>
+
+<blockquote>
+  <p>关键观察是把"中序后继"翻译成值域上的语言：<strong>中序遍历 BST 得到的是升序序列，所以 <code class="language-plaintext highlighter-rouge">p</code> 的后继就是"值大于 <code class="language-plaintext highlighter-rouge">p.val</code> 的所有节点中，值最小的那个"</strong>。一旦转成这个描述，问题就从"遍历"变成了"查找"，可以像二分一样沿着一条根到叶的路径下行。</p>
+</blockquote>
+
+<blockquote>
+  <p>具体分两种情况，分别对应两个不同的不变量。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>情况一：<code class="language-plaintext highlighter-rouge">p</code> 有右子树。</strong> 中序遍历访问完 <code class="language-plaintext highlighter-rouge">p</code> 之后，紧接着就要进入 <code class="language-plaintext highlighter-rouge">p</code> 的右子树，并且在右子树内部又是"先一路向左走到底"。所以后继就是<strong>右子树的最左节点</strong>。这个答案完全落在 <code class="language-plaintext highlighter-rouge">p</code> 的子树内部，与任何祖先无关——因为右子树里所有值都大于 <code class="language-plaintext highlighter-rouge">p.val</code>，而它们中最小的那个必然比任何祖先都更"紧贴"<code class="language-plaintext highlighter-rouge">p</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>情况二：<code class="language-plaintext highlighter-rouge">p</code> 没有右子树。</strong> 此时后继必然是 <code class="language-plaintext highlighter-rouge">p</code> 的某个祖先——具体说，是"最近的、把 <code class="language-plaintext highlighter-rouge">p</code> 放在自己左子树里的那个祖先"。因为把 <code class="language-plaintext highlighter-rouge">p</code> 放在左子树意味着该祖先的值大于 <code class="language-plaintext highlighter-rouge">p.val</code>，而 <code class="language-plaintext highlighter-rouge">p</code> 到根路径上所有"把 <code class="language-plaintext highlighter-rouge">p</code> 放在右子树里"的祖先值都小于 <code class="language-plaintext highlighter-rouge">p.val</code>，不可能是后继。</p>
+</blockquote>
+
+<blockquote>
+  <p>代码把这两种情况用一次自根向下的行走统一处理。维护变量 <code class="language-plaintext highlighter-rouge">succ</code> 表示"到目前为止见过的、大于 <code class="language-plaintext highlighter-rouge">p.val</code> 的最小值节点"，<strong>不变量</strong>是：每次循环结束时，<code class="language-plaintext highlighter-rouge">succ</code> 恰好是"已访问过的节点中，值大于 <code class="language-plaintext highlighter-rouge">p.val</code> 的最小者"，而尚未访问的部分全都落在 <code class="language-plaintext highlighter-rouge">cur</code> 所在的子树里。行走规则是：若 <code class="language-plaintext highlighter-rouge">p.val &lt; cur.val</code>，说明 <code class="language-plaintext highlighter-rouge">cur</code> 是一个候选后继（它大于 <code class="language-plaintext highlighter-rouge">p.val</code>），先记下 <code class="language-plaintext highlighter-rouge">succ = cur</code>，然后往左找有没有更小的候选；否则 <code class="language-plaintext highlighter-rouge">cur.val &lt;= p.val</code>，<code class="language-plaintext highlighter-rouge">cur</code> 及其左子树都不可能是后继，直接往右。走到空节点时，路径上所有可能的候选都已被考察，<code class="language-plaintext highlighter-rouge">succ</code> 就是答案（可能为空，表示 <code class="language-plaintext highlighter-rouge">p</code> 是最大节点）。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>先处理"<code class="language-plaintext highlighter-rouge">p</code> 有右子树"这一情况，直接返回右子树的最左节点</strong>。之所以单独拎出来，是因为它有一条极短的确定路径，代码意图更清晰，也便于在面试里分情况讲解；顺带一提，即使去掉这个分支、只用后面的自根行走，答案同样正确——行走会自然地下降到右子树并在其中一路向左，但那样就把两种截然不同的情形糅在一起，讲解和验证都更费劲。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">leftMost(node)</code>：沿 <code class="language-plaintext highlighter-rouge">left</code> 一直走到底</strong>。循环条件写成 <code class="language-plaintext highlighter-rouge">node.left != null</code> 而不是 <code class="language-plaintext highlighter-rouge">node != null</code>，是为了返回最后一个非空节点而不是空指针。这个函数返回的正是"以 <code class="language-plaintext highlighter-rouge">node</code> 为根的子树中的最小值节点"。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>否则从 <code class="language-plaintext highlighter-rouge">root</code> 出发，用 <code class="language-plaintext highlighter-rouge">succ = null</code>、<code class="language-plaintext highlighter-rouge">cur = root</code> 开始自顶向下行走</strong>。<code class="language-plaintext highlighter-rouge">succ</code> 初始化为空，这一步就已经把"<code class="language-plaintext highlighter-rouge">p</code> 是最大节点"的边界处理掉了：如果整条路径上从未出现过大于 <code class="language-plaintext highlighter-rouge">p.val</code> 的节点，<code class="language-plaintext highlighter-rouge">succ</code> 保持为空，直接作为答案返回。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">p.val &lt; cur.val</code> 时记录 <code class="language-plaintext highlighter-rouge">succ = cur</code> 并转向左子树</strong>。记录是因为 <code class="language-plaintext highlighter-rouge">cur</code> 满足"大于 <code class="language-plaintext highlighter-rouge">p.val</code>"这个必要条件，是一个合法候选；转向左是为了寻找更小的候选——左子树里的值都比 <code class="language-plaintext highlighter-rouge">cur</code> 小，若其中还有大于 <code class="language-plaintext highlighter-rouge">p.val</code> 的，它会更接近 <code class="language-plaintext highlighter-rouge">p</code>，从而覆盖掉当前的 <code class="language-plaintext highlighter-rouge">succ</code>。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>否则（<code class="language-plaintext highlighter-rouge">cur.val &lt;= p.val</code>）转向右子树，且不更新 <code class="language-plaintext highlighter-rouge">succ</code></strong>。<code class="language-plaintext highlighter-rouge">cur</code> 本身不大于 <code class="language-plaintext highlighter-rouge">p.val</code>，不是候选；它的整棵左子树的值更小，也全部出局。只有右子树里还可能藏着答案。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>循环结束返回 <code class="language-plaintext highlighter-rouge">succ</code></strong>。此时不变量保证 <code class="language-plaintext highlighter-rouge">succ</code> 已经是全树中大于 <code class="language-plaintext highlighter-rouge">p.val</code> 的最小节点，或者为空。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><strong>以下面这棵 BST 走一遍</strong>：根 <code class="language-plaintext highlighter-rouge">5</code>，左孩子 <code class="language-plaintext highlighter-rouge">3</code>（其左孩子 <code class="language-plaintext highlighter-rouge">2</code>、右孩子 <code class="language-plaintext highlighter-rouge">4</code>），右孩子 <code class="language-plaintext highlighter-rouge">6</code>。中序序列是 <code class="language-plaintext highlighter-rouge">2, 3, 4, 5, 6</code>。</p>
+
+  <p><strong>查 <code class="language-plaintext highlighter-rouge">p = 3</code>（有右子树）</strong>：走情况一，<code class="language-plaintext highlighter-rouge">leftMost(p.right)</code> 从节点 <code class="language-plaintext highlighter-rouge">4</code> 出发，<code class="language-plaintext highlighter-rouge">4.left</code> 为空，直接返回 <code class="language-plaintext highlighter-rouge">4</code>。中序序列里 <code class="language-plaintext highlighter-rouge">3</code> 的下一个确实是 <code class="language-plaintext highlighter-rouge">4</code>，正确。</p>
+
+  <p><strong>查 <code class="language-plaintext highlighter-rouge">p = 4</code>（无右子树）</strong>：进入自根行走。<code class="language-plaintext highlighter-rouge">cur = 5</code>：<code class="language-plaintext highlighter-rouge">4 &lt; 5</code> 成立，<code class="language-plaintext highlighter-rouge">succ = 5</code>，转向左子树 <code class="language-plaintext highlighter-rouge">cur = 3</code>。<code class="language-plaintext highlighter-rouge">cur = 3</code>：<code class="language-plaintext highlighter-rouge">4 &lt; 3</code> 不成立，转向右子树 <code class="language-plaintext highlighter-rouge">cur = 4</code>。<code class="language-plaintext highlighter-rouge">cur = 4</code>：<code class="language-plaintext highlighter-rouge">4 &lt; 4</code> 不成立，转向右子树 <code class="language-plaintext highlighter-rouge">cur = null</code>。循环结束，返回 <code class="language-plaintext highlighter-rouge">succ = 5</code>。中序序列里 <code class="language-plaintext highlighter-rouge">4</code> 的下一个正是 <code class="language-plaintext highlighter-rouge">5</code>，正确。注意这里 <code class="language-plaintext highlighter-rouge">succ</code> 在第一步就被记下，之后再没有更优的候选出现——<code class="language-plaintext highlighter-rouge">3</code> 和 <code class="language-plaintext highlighter-rouge">4</code> 都不大于 <code class="language-plaintext highlighter-rouge">4</code>，被正确跳过。</p>
+
+  <p><strong>查 <code class="language-plaintext highlighter-rouge">p = 6</code>（最大节点，无右子树）</strong>：<code class="language-plaintext highlighter-rouge">cur = 5</code>：<code class="language-plaintext highlighter-rouge">6 &lt; 5</code> 不成立，转向右 <code class="language-plaintext highlighter-rouge">cur = 6</code>。<code class="language-plaintext highlighter-rouge">cur = 6</code>：<code class="language-plaintext highlighter-rouge">6 &lt; 6</code> 不成立，转向右 <code class="language-plaintext highlighter-rouge">cur = null</code>。循环结束，<code class="language-plaintext highlighter-rouge">succ</code> 从未被赋值，返回空。正确——<code class="language-plaintext highlighter-rouge">6</code> 是中序最后一个节点。</p>
+
+  <p><strong>查 <code class="language-plaintext highlighter-rouge">p = 2</code>（无右子树，后继是父节点）</strong>：<code class="language-plaintext highlighter-rouge">cur = 5</code>：<code class="language-plaintext highlighter-rouge">2 &lt; 5</code>，<code class="language-plaintext highlighter-rouge">succ = 5</code>，转左 <code class="language-plaintext highlighter-rouge">cur = 3</code>。<code class="language-plaintext highlighter-rouge">cur = 3</code>：<code class="language-plaintext highlighter-rouge">2 &lt; 3</code>，<code class="language-plaintext highlighter-rouge">succ = 3</code>（覆盖掉更远的 <code class="language-plaintext highlighter-rouge">5</code>），转左 <code class="language-plaintext highlighter-rouge">cur = 2</code>。<code class="language-plaintext highlighter-rouge">cur = 2</code>：<code class="language-plaintext highlighter-rouge">2 &lt; 2</code> 不成立，转右 <code class="language-plaintext highlighter-rouge">cur = null</code>。返回 <code class="language-plaintext highlighter-rouge">3</code>，正确。这一步清楚展示了"往左走去找更紧的候选"的作用：若停在 <code class="language-plaintext highlighter-rouge">5</code> 不再深入，答案就会偏大。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">TreeNode</span> <span class="nf">inorderSuccessor</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">p</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">right</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nf">leftMost</span><span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nc">TreeNode</span> <span class="n">succ</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="nc">TreeNode</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">cur</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">cur</span><span class="o">.</span><span class="na">val</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">succ</span> <span class="o">=</span> <span class="n">cur</span><span class="o">;</span>
+                <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">left</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">right</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">succ</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">TreeNode</span> <span class="nf">leftMost</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">inorderSuccessor</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">,</span> <span class="n">p</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="n">TreeNode</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">Right</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">leftMost</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">Right</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">var</span> <span class="n">succ</span> <span class="o">*</span><span class="n">TreeNode</span>
+    <span class="n">cur</span> <span class="o">:=</span> <span class="n">root</span>
+    <span class="k">for</span> <span class="n">cur</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">Val</span> <span class="o">&lt;</span> <span class="n">cur</span><span class="o">.</span><span class="n">Val</span> <span class="p">{</span>
+            <span class="n">succ</span> <span class="o">=</span> <span class="n">cur</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">Left</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">Right</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">succ</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">leftMost</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="n">TreeNode</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">node</span><span class="o">.</span><span class="n">Left</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Left</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">node</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(h)$，<code class="language-plaintext highlighter-rouge">h</code> 为树高。两条路径都是自上而下单向行走，每步下降一层且绝不回头：情况一沿右子树的最左链下降，情况二从根沿一条路径下降到空。平衡树是 $O(\log n)$，退化成链时是 $O(n)$。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(1)$。全程只用了 <code class="language-plaintext highlighter-rouge">succ</code>、<code class="language-plaintext highlighter-rouge">cur</code> 两个指针，没有递归、没有栈、没有存中序序列——这正是它优于"跑完整中序遍历"做法的地方。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>把"中序后继"翻译成"大于目标值的最小节点"，是解锁 BST 的通用动作</strong>。一旦换成值域语言，遍历问题就变成查找问题，复杂度从 $O(n)$ 掉到 $O(h)$。中序前驱同理，翻译成"小于目标值的最大节点"，把代码里的比较方向和左右分支整体镜像即可。</li>
+    <li>
+<strong>"沿路径记录候选、边走边覆盖"是有序结构上找边界的标准模板</strong>。这和数组二分找"第一个大于 target 的位置"是同一个骨架：满足条件时记下答案并继续向更优的一侧收缩，不满足时直接排除半边。</li>
+    <li>
+<strong>没有父指针就必须从根重新下行</strong>。判断能否向上回溯，是树题选择解法的第一个岔路口：有父指针（如 <code class="language-plaintext highlighter-rouge">510</code> 题）可以直接沿父链向上找"第一个把当前节点放在左子树里的祖先"，$O(h)$ 但常数更小；没有就只能自根走一遍。</li>
+    <li>
+<strong>把 <code class="language-plaintext highlighter-rouge">succ</code> 初始化为空，就把"无后继"这个边界一并处理了</strong>。用哨兵值或额外标志位都不如"空即答案"来得干净——这是一类可迁移的写法：让默认值直接等于边界情形的正确答案，省掉一次特判。</li>
+    <li>
+<strong>面试视角：先分两种情况讲清中序后继的结构，再谈实现</strong>。面试官考这题看的就是你是否理解"有右子树看子树、无右子树看祖先"这个结构性结论。开口先说这两句，再说"因为没有父指针，第二种情况我改成从根出发边走边记候选"，思路链条完整；若被追问"能否用 $O(1)$ 空间且不分情况"，就答"可以，只保留自根行走那一段，它对两种情况都成立"。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">if (p.val &lt;= cur.val) { succ = cur; cur = cur.left; }</code>（用了 <code class="language-plaintext highlighter-rouge">&lt;=</code>）</strong> → 用例：树 <code class="language-plaintext highlighter-rouge">[5, 3, 6, 2, 4]</code>，查 <code class="language-plaintext highlighter-rouge">p = 4</code>：走到 <code class="language-plaintext highlighter-rouge">cur = 4</code> 时 <code class="language-plaintext highlighter-rouge">4 &lt;= 4</code> 成立，<code class="language-plaintext highlighter-rouge">succ</code> 被错误地更新成 <code class="language-plaintext highlighter-rouge">4</code> 自己并转向左子树，最终返回 <code class="language-plaintext highlighter-rouge">4</code>，正确答案是 <code class="language-plaintext highlighter-rouge">5</code>。后继必须<strong>严格大于</strong> <code class="language-plaintext highlighter-rouge">p.val</code>，等号会把 <code class="language-plaintext highlighter-rouge">p</code> 自己当成答案。</li>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">p.val &lt; cur.val</code> 时转向右子树（左右写反）</strong> → 用例：树 <code class="language-plaintext highlighter-rouge">[5, 3, 6, 2, 4]</code>，查 <code class="language-plaintext highlighter-rouge">p = 2</code>：<code class="language-plaintext highlighter-rouge">2 &lt; 5</code> 记下 <code class="language-plaintext highlighter-rouge">succ = 5</code> 后转向右子树 <code class="language-plaintext highlighter-rouge">6</code>，<code class="language-plaintext highlighter-rouge">2 &lt; 6</code> 又把 <code class="language-plaintext highlighter-rouge">succ</code> 更新成 <code class="language-plaintext highlighter-rouge">6</code>，最终返回 <code class="language-plaintext highlighter-rouge">6</code>，正确答案是 <code class="language-plaintext highlighter-rouge">3</code>。往左才能找到更紧的候选。</li>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">succ</code> 初始化为 <code class="language-plaintext highlighter-rouge">root</code></strong> → 用例：树只有一个节点 <code class="language-plaintext highlighter-rouge">[1]</code>，查 <code class="language-plaintext highlighter-rouge">p = 1</code>：循环里 <code class="language-plaintext highlighter-rouge">1 &lt; 1</code> 不成立直接转右走到空，返回 <code class="language-plaintext highlighter-rouge">root</code> 即节点 <code class="language-plaintext highlighter-rouge">1</code> 自己，正确答案是空。</li>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">leftMost</code> 的循环条件写成 <code class="language-plaintext highlighter-rouge">while (node != null) node = node.left;</code></strong> → 用例：树 <code class="language-plaintext highlighter-rouge">[5, 3, 6, 2, 4]</code>，查 <code class="language-plaintext highlighter-rouge">p = 3</code>：一直走到空指针后返回 <code class="language-plaintext highlighter-rouge">null</code>，正确答案是节点 <code class="language-plaintext highlighter-rouge">4</code>。要返回最后一个非空节点，条件必须是 <code class="language-plaintext highlighter-rouge">node.left != null</code>。</li>
+    <li>
+<strong>错误写法：情况一写成 <code class="language-plaintext highlighter-rouge">return p.right;</code>（直接返回右孩子）</strong> → 用例：树中 <code class="language-plaintext highlighter-rouge">p = 1</code>，<code class="language-plaintext highlighter-rouge">p.right</code> 是 <code class="language-plaintext highlighter-rouge">5</code> 且 <code class="language-plaintext highlighter-rouge">5</code> 有左孩子 <code class="language-plaintext highlighter-rouge">3</code>：返回 <code class="language-plaintext highlighter-rouge">5</code>，正确答案是 <code class="language-plaintext highlighter-rouge">3</code>。右子树里最小的才是后继，必须再一路向左。</li>
+    <li>
+<strong>错误写法：情况一写成 <code class="language-plaintext highlighter-rouge">rightMost(p.right)</code>（走到最右）</strong> → 用例：<code class="language-plaintext highlighter-rouge">p.right</code> 是 <code class="language-plaintext highlighter-rouge">5</code>，其右孩子是 <code class="language-plaintext highlighter-rouge">7</code>：返回 <code class="language-plaintext highlighter-rouge">7</code>，正确答案是右子树的最小值。方向反了。</li>
+    <li>
+<strong>错误写法：不判 <code class="language-plaintext highlighter-rouge">p.right != null</code> 就调 <code class="language-plaintext highlighter-rouge">leftMost(p.right)</code></strong> → 用例：查最大节点 <code class="language-plaintext highlighter-rouge">p = 6</code>：传入空指针后 <code class="language-plaintext highlighter-rouge">node.left</code> 抛 NPE（Go 里是 nil 指针解引用 panic）。</li>
+    <li>
+<strong>错误写法：把比较改成按引用判断 <code class="language-plaintext highlighter-rouge">if (cur == p) ...</code> 来定位 <code class="language-plaintext highlighter-rouge">p</code> 再取后继</strong> → 用例：任意有右子树的 <code class="language-plaintext highlighter-rouge">p</code>：找到 <code class="language-plaintext highlighter-rouge">p</code> 之后仍然无法向上回溯（没有父指针），只能得到右子树内的答案，无右子树时直接返回空。引用定位丢掉了 BST 的有序性，等于自废武功。</li>
+    <li>
+<strong>错误写法：改用完整中序遍历存进 <code class="language-plaintext highlighter-rouge">List</code> 再线性查找</strong> → 用例：<code class="language-plaintext highlighter-rouge">n = 10^5</code> 的链状树：时间和空间都是 $O(n)$，虽然能过但完全没用上 BST 性质；面试里会被要求重写成 $O(h)$ / $O(1)$ 的版本。</li>
+    <li>
+<strong>错误写法：Go 里写 <code class="language-plaintext highlighter-rouge">succ := &amp;TreeNode{}</code> 而不是 <code class="language-plaintext highlighter-rouge">var succ *TreeNode</code></strong> → 用例：查最大节点：返回的是一个值为 0 的假节点而不是 <code class="language-plaintext highlighter-rouge">nil</code>，判题会认为你返回了一个不存在的节点。表示"没有答案"必须用真正的空指针。</li>
+    <li>
+<strong>错误写法：把行走循环写成递归但忘了把 <code class="language-plaintext highlighter-rouge">succ</code> 沿调用链传下去/传回来</strong> → 用例：树 <code class="language-plaintext highlighter-rouge">[5, 3, 6, 2, 4]</code>，查 <code class="language-plaintext highlighter-rouge">p = 2</code>：如果 <code class="language-plaintext highlighter-rouge">succ</code> 是局部变量，深层递归记录的候选无法带回上层，返回空。改递归时必须把 <code class="language-plaintext highlighter-rouge">succ</code> 作为参数下传或作为返回值上传。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/inorder-successor-in-bst/">285. 二叉搜索树中的中序后继</a></td>
+      <td>中等</td>
+      <td>完全同题的主站版本，可对照"分两种情况"与"纯自根行走"两种写法</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/inorder-successor-in-bst-ii/">510. 二叉搜索树中的中序后继 II</a></td>
+      <td>中等</td>
+      <td>给了父指针但不给根，改成沿父链向上找第一个"左拐"的祖先</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/binary-search-tree-iterator/">173. 二叉搜索树迭代器</a></td>
+      <td>中等</td>
+      <td>要连续输出后继，用显式栈缓存左链把均摊代价降到 $O(1)$</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/search-in-a-binary-search-tree/">700. 二叉搜索树中的搜索</a></td>
+      <td>简单</td>
+      <td>同样自根下行，但目标是精确命中而非维护"最紧候选"</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/">235. 二叉搜索树的最近公共祖先</a></td>
+      <td>中等</td>
+      <td>靠两个值与当前节点的相对位置决定走向，在"分叉点"停下</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/delete-node-in-a-bst/">450. 删除二叉搜索树中的节点</a></td>
+      <td>中等</td>
+      <td>删除双子节点时正是用右子树最左节点（后继）来顶替</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2021/71512261" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 990. 等式方程的可满足性</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/16588586" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 补充题 18. 反转双向链表</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/72481693">https://hgnulb.github.io/blog/2021/72481693</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

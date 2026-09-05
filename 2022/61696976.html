@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1681. 最小不兼容性 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,位掩码,位运算,动态规划,哈希表,哔哩哔哩,数组" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1681. 最小不兼容性" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/61696976" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/61696976" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-01T22:52:47+08:00" />
+<meta property="article:modified_time" content="2022-09-01T22:52:47+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1681. 最小不兼容性" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-09-01T22:52:47+08:00","datePublished":"2022-09-01T22:52:47+08:00","description":"题目描述","headline":"LeetCode 1681. 最小不兼容性","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/61696976"},"url":"https://hgnulb.github.io/blog/2022/61696976"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法状态压缩-dp">解法：状态压缩 DP</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1681. 最小不兼容性">LeetCode 1681. 最小不兼容性</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-09-01 22:52:47"
+                    datetime="2022-09-01T22:52:47+08:00"
+            >
+                2022-09-01
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3091 字 · 英文 155 词 · 代码 162 行"
+            aria-label="预计阅读时间约 13 分钟，正文 3091 字 · 英文 155 词 · 代码 162 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 13 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2834367601/" title="哔哩哔哩">
+        哔哩哔哩
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2535886171/" title="位运算">
+        位运算
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4822032622/" title="位掩码">
+        位掩码
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法状态压缩-dp">解法：状态压缩 DP</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/minimum-incompatibility/">1681. 最小不兼容性</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>把 <code class="language-plaintext highlighter-rouge">nums</code> 分成 <code class="language-plaintext highlighter-rouge">k</code> 个<strong>大小完全相同</strong>的子集，每个子集的不兼容性定义为它的最大值减最小值，要求所有子集不兼容性之和最小；分不出来就返回 -1。</p>
+
+  <p>「大小完全相同」这条约束把每组的容量钉死为 $m = n / k$，<code class="language-plaintext highlighter-rouge">n</code> 能被 <code class="language-plaintext highlighter-rouge">k</code> 整除是题目保证的。这意味着分组不是自由切割，而是把 <code class="language-plaintext highlighter-rouge">n</code> 个元素恰好摊进 <code class="language-plaintext highlighter-rouge">k</code> 个 <code class="language-plaintext highlighter-rouge">m</code> 元格子。</p>
+
+  <p>无解只有一个来源：<strong>同一个子集里不能出现重复元素</strong>（否则最大最小之差的定义仍然成立，但题目明确要求子集内元素互不相同）。所以若某个数值出现的次数超过 <code class="language-plaintext highlighter-rouge">k</code>，它无论怎么分都会有两个落进同一组，直接无解。</p>
+
+  <p>决定做法的是数据规模：<code class="language-plaintext highlighter-rouge">n</code> 最多 16，元素值也不超过 <code class="language-plaintext highlighter-rouge">n</code>。16 这个数字几乎是「状态压缩」的代名词——$2^{16} = 65536$ 个子集状态完全可以枚举，而 $16!$ 的排列数则不可接受。元素值上界很小这一点，则让「子集内是否有重复」可以用一个小数组直接判定。</p>
+
+  <p>还要注意的是<strong>分组之间没有顺序</strong>：把元素分成 ${A, B}$ 和分成 ${B, A}$ 是同一种方案。如果不消除这种对称性，搜索空间会被放大 $k!$ 倍。</p>
+
+  <p>边界包括：<code class="language-plaintext highlighter-rouge">k == 1</code>（整个数组是一组，答案是全局极差，但若有重复元素则无解）；<code class="language-plaintext highlighter-rouge">k == n</code>（每组一个元素，不兼容性全为 0）；以及某个值出现次数超过 <code class="language-plaintext highlighter-rouge">k</code> 的无解情形。</p>
+</blockquote>
+
+<h2 id="解法状态压缩-dp">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E7%8A%B6%E6%80%81%E5%8E%8B%E7%BC%A9-dp" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：状态压缩 DP</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是枚举所有分组方案：把 <code class="language-plaintext highlighter-rouge">n</code> 个元素划分成 <code class="language-plaintext highlighter-rouge">k</code> 个大小为 <code class="language-plaintext highlighter-rouge">m</code> 的无序组，方案数是 $\dfrac{n!}{(m!)^k \cdot k!}$，<code class="language-plaintext highlighter-rouge">n = 16</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> 时约 6435，看着不大；但 <code class="language-plaintext highlighter-rouge">k = 4</code>、<code class="language-plaintext highlighter-rouge">m = 4</code> 时已经是 262 万，<code class="language-plaintext highlighter-rouge">k = 8</code> 时更糟，而且每个方案还要计算代价。真正的问题是这种枚举没有复用性——不同方案之间共享的前缀被反复重算。</p>
+
+  <p>观察点在于：<strong>当我们已经组好了若干完整的组，接下来怎么组，只取决于「还剩哪些元素没用」，与已用元素被怎样分组无关</strong>。这就是无后效性，也是把指数枚举换成 DP 的依据。而「还剩哪些元素」在 <code class="language-plaintext highlighter-rouge">n ≤ 16</code> 时正好可以用一个 16 位整数表示。</p>
+
+  <p>于是定义状态：<code class="language-plaintext highlighter-rouge">dp[mask]</code> 表示<strong>已经选取 <code class="language-plaintext highlighter-rouge">mask</code> 中标记的这些元素、并把它们恰好分成若干个满员小组时，这些小组的不兼容性之和的最小值</strong>。<code class="language-plaintext highlighter-rouge">mask</code> 中 1 的个数必然是 <code class="language-plaintext highlighter-rouge">m</code> 的倍数，其他 <code class="language-plaintext highlighter-rouge">mask</code> 不可达。初始状态 <code class="language-plaintext highlighter-rouge">dp[0] = 0</code>（还没组任何小组，代价为 0），答案是 <code class="language-plaintext highlighter-rouge">dp[all]</code>，<code class="language-plaintext highlighter-rouge">all</code> 是全 1 掩码；若它仍是无穷大，说明无解。</p>
+
+  <p>转移是「一次补齐一个完整小组」：从 <code class="language-plaintext highlighter-rouge">dp[mask]</code> 出发，在剩余元素 <code class="language-plaintext highlighter-rouge">remain = all ^ mask</code> 中挑一个大小为 <code class="language-plaintext highlighter-rouge">m</code> 的子集 <code class="language-plaintext highlighter-rouge">sub</code> 作为新的一组，转移到 <code class="language-plaintext highlighter-rouge">dp[mask | sub]</code>，代价加上 <code class="language-plaintext highlighter-rouge">cost[sub]</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">cost[sub]</code> 是预处理量，含义是「把 <code class="language-plaintext highlighter-rouge">sub</code> 中的元素放在同一组时的不兼容性」。只有当 <code class="language-plaintext highlighter-rouge">sub</code> 恰好有 <code class="language-plaintext highlighter-rouge">m</code> 个元素且其中的数值互不相同时它才有定义，否则标记为非法。把它预处理出来，是因为同一个 <code class="language-plaintext highlighter-rouge">sub</code> 会在无数条转移路径上被用到，重复计算是纯浪费。</p>
+
+  <p>消除组间顺序的对称性靠一个小技巧：<strong>强制新的一组必须包含 <code class="language-plaintext highlighter-rouge">remain</code> 中最低位的那个元素</strong>。任何一种分组方案里，含有「当前剩余的最小下标元素」的那一组是唯一的，把它钉死为「下一个要组的组」，就让每种方案在 DP 中只被计数一次。这一步既是正确性无关的优化，也把枚举量从 $3^n$ 砍掉一半以上。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>先统计数值频次</strong>。若任一数值出现超过 <code class="language-plaintext highlighter-rouge">k</code> 次，<code class="language-plaintext highlighter-rouge">k</code> 个组无法各自最多放一个，直接返回 -1。</li>
+    <li>
+<strong>算出每组容量 <code class="language-plaintext highlighter-rouge">m = n / k</code> 与全集掩码 <code class="language-plaintext highlighter-rouge">all = (1 &lt;&lt; n) - 1</code></strong>。后续所有判断都围绕这两个量展开。</li>
+    <li>
+<strong>预处理 <code class="language-plaintext highlighter-rouge">cost</code> 数组，长度 $2^n$，初值全置 -1 表示非法</strong>。遍历每个 <code class="language-plaintext highlighter-rouge">mask</code>，先用位计数过滤掉大小不等于 <code class="language-plaintext highlighter-rouge">m</code> 的；再遍历其中的每一位，用一个按数值索引的布尔数组检测重复，一旦发现重复立即标记非法并跳出；同时统计最大值与最小值。合法则写入 <code class="language-plaintext highlighter-rouge">max - min</code>。数值上界不超过 <code class="language-plaintext highlighter-rouge">n ≤ 16</code>，所以布尔数组开到 21 已经绰绰有余。</li>
+    <li>
+<strong>初始化 <code class="language-plaintext highlighter-rouge">dp</code> 数组，长度 $2^n$，全部置为一个足够大的哨兵值，<code class="language-plaintext highlighter-rouge">dp[0] = 0</code></strong>。哨兵取 <code class="language-plaintext highlighter-rouge">Integer.MAX_VALUE / 4</code> 而不是 <code class="language-plaintext highlighter-rouge">MAX_VALUE</code>，是为了给后续的 <code class="language-plaintext highlighter-rouge">dp[mask] + cost[sub]</code> 留出加法空间，避免溢出成负数后被误当作更优解。</li>
+    <li>
+<strong>正序遍历所有 <code class="language-plaintext highlighter-rouge">mask</code> 做转移</strong>。正序保证在处理 <code class="language-plaintext highlighter-rouge">mask</code> 时，所有能到达它的更小状态都已经算完——因为 <code class="language-plaintext highlighter-rouge">mask | sub</code> 严格大于 <code class="language-plaintext highlighter-rouge">mask</code>（<code class="language-plaintext highlighter-rouge">sub</code> 与 <code class="language-plaintext highlighter-rouge">mask</code> 无交集且非空）。遇到 <code class="language-plaintext highlighter-rouge">dp[mask]</code> 仍是哨兵值就跳过，不可达状态不能继续扩展，否则会把哨兵值当成真实代价传播出去。</li>
+    <li>
+<strong>找出 <code class="language-plaintext highlighter-rouge">remain</code> 的最低位 <code class="language-plaintext highlighter-rouge">must</code></strong>。这是对称性消除的落点：接下来枚举的子集必须包含它。</li>
+    <li>
+<strong>用 <code class="language-plaintext highlighter-rouge">sub = remain; sub &gt; 0; sub = (sub - 1) &amp; remain</code> 枚举 <code class="language-plaintext highlighter-rouge">remain</code> 的所有非空子集</strong>。这是子集枚举的标准写法，<code class="language-plaintext highlighter-rouge">(sub - 1) &amp; remain</code> 能不重不漏地给出下一个子集。枚举体内先跳过不含 <code class="language-plaintext highlighter-rouge">must</code> 的、再跳过 <code class="language-plaintext highlighter-rouge">cost</code> 为 -1 的（既排除了大小不对，也排除了含重复值的），然后用 <code class="language-plaintext highlighter-rouge">dp[mask] + cost[sub]</code> 更新 <code class="language-plaintext highlighter-rouge">dp[mask | sub]</code>。</li>
+    <li>
+<strong>最后检查 <code class="language-plaintext highlighter-rouge">dp[all]</code></strong>：等于哨兵值说明全集不可达，返回 -1；否则返回它。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">nums = [1, 2, 1, 4]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> 走一遍，预期答案 4。<code class="language-plaintext highlighter-rouge">n = 4</code>，<code class="language-plaintext highlighter-rouge">m = 2</code>，<code class="language-plaintext highlighter-rouge">all = 0b1111</code>。</p>
+
+  <p>预处理阶段，只有大小为 2 的掩码有资格。下标 0、2 上的值都是 1，所以掩码 <code class="language-plaintext highlighter-rouge">0b0101</code> 含重复，非法。其余大小为 2 的掩码：<code class="language-plaintext highlighter-rouge">0b0011</code>（值 1、2）代价 1；<code class="language-plaintext highlighter-rouge">0b1001</code>（值 1、4）代价 3；<code class="language-plaintext highlighter-rouge">0b0110</code>（值 2、1）代价 1；<code class="language-plaintext highlighter-rouge">0b1010</code>（值 2、4）代价 2；<code class="language-plaintext highlighter-rouge">0b1100</code>（值 1、4）代价 3。</p>
+
+  <p>DP 从 <code class="language-plaintext highlighter-rouge">dp[0] = 0</code> 开始。<code class="language-plaintext highlighter-rouge">remain = 0b1111</code>，最低位是第 0 位，<code class="language-plaintext highlighter-rouge">must = 0b0001</code>。含 <code class="language-plaintext highlighter-rouge">must</code> 且大小为 2 的合法子集有 <code class="language-plaintext highlighter-rouge">0b0011</code>（代价 1）、<code class="language-plaintext highlighter-rouge">0b1001</code>（代价 3）；<code class="language-plaintext highlighter-rouge">0b0101</code> 因含重复被跳过。于是 <code class="language-plaintext highlighter-rouge">dp[0b0011] = 1</code>、<code class="language-plaintext highlighter-rouge">dp[0b1001] = 3</code>。</p>
+
+  <p>处理 <code class="language-plaintext highlighter-rouge">mask = 0b0011</code> 时 <code class="language-plaintext highlighter-rouge">remain = 0b1100</code>，最低位是第 2 位，<code class="language-plaintext highlighter-rouge">must = 0b0100</code>。含它的合法二元子集只有 <code class="language-plaintext highlighter-rouge">0b1100</code>，代价 3，于是 <code class="language-plaintext highlighter-rouge">dp[0b1111] = 1 + 3 = 4</code>。处理 <code class="language-plaintext highlighter-rouge">mask = 0b1001</code> 时 <code class="language-plaintext highlighter-rouge">remain = 0b0110</code>，<code class="language-plaintext highlighter-rouge">must = 0b0010</code>，合法子集是 <code class="language-plaintext highlighter-rouge">0b0110</code>，代价 1，于是 <code class="language-plaintext highlighter-rouge">dp[0b1111]</code> 尝试更新为 $3 + 1 = 4$，与已有值相同不变。</p>
+
+  <p>最终 <code class="language-plaintext highlighter-rouge">dp[0b1111] = 4</code>，对应分组 <code class="language-plaintext highlighter-rouge">{1, 2}</code> 与 <code class="language-plaintext highlighter-rouge">{1, 4}</code>，不兼容性 $1 + 3 = 4$。</p>
+
+  <p>再看无解用例 <code class="language-plaintext highlighter-rouge">nums = [1, 1, 1, 1]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code>。所有大小为 2 的掩码都含两个 1，<code class="language-plaintext highlighter-rouge">cost</code> 全为 -1，从 <code class="language-plaintext highlighter-rouge">dp[0]</code> 出发一个转移都做不出来，<code class="language-plaintext highlighter-rouge">dp[all]</code> 保持哨兵值，返回 -1。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">minimumIncompatibility</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">n</span> <span class="o">/</span> <span class="n">k</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">all</span> <span class="o">=</span> <span class="o">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="o">)</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">frequency</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">value</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(++</span><span class="n">frequency</span><span class="o">[</span><span class="n">value</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 预处理每个候选小组的代价，-1 表示大小不符或组内有重复值。</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">cost</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">cost</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">mask</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">mask</span> <span class="o">&lt;=</span> <span class="n">all</span><span class="o">;</span> <span class="n">mask</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">bitCount</span><span class="o">(</span><span class="n">mask</span><span class="o">)</span> <span class="o">!=</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="kt">int</span> <span class="n">min</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">max</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MIN_VALUE</span><span class="o">;</span>
+            <span class="kt">boolean</span> <span class="n">ok</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="kt">boolean</span><span class="o">[]</span> <span class="n">seen</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(((</span><span class="n">mask</span> <span class="o">&gt;&gt;</span> <span class="n">i</span><span class="o">)</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">seen</span><span class="o">[</span><span class="n">v</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">ok</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">seen</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="n">min</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">min</span><span class="o">,</span> <span class="n">v</span><span class="o">);</span>
+                <span class="n">max</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">max</span><span class="o">,</span> <span class="n">v</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">ok</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">cost</span><span class="o">[</span><span class="n">mask</span><span class="o">]</span> <span class="o">=</span> <span class="n">max</span> <span class="o">-</span> <span class="n">min</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 哨兵留出加法余量，避免相加后溢出成负数。</span>
+        <span class="kt">int</span> <span class="n">inf</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span> <span class="o">/</span> <span class="mi">4</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">dp</span><span class="o">,</span> <span class="n">inf</span><span class="o">);</span>
+        <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">mask</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">mask</span> <span class="o">&lt;=</span> <span class="n">all</span><span class="o">;</span> <span class="n">mask</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">mask</span><span class="o">]</span> <span class="o">==</span> <span class="n">inf</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mask</span> <span class="o">==</span> <span class="n">all</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="kt">int</span> <span class="n">remain</span> <span class="o">=</span> <span class="n">all</span> <span class="o">^</span> <span class="n">mask</span><span class="o">;</span>
+            <span class="c1">// 强制新组包含剩余元素中的最低位，消除组间顺序的重复计数。</span>
+            <span class="kt">int</span> <span class="n">first</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">while</span> <span class="o">(((</span><span class="n">remain</span> <span class="o">&gt;&gt;</span> <span class="n">first</span><span class="o">)</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">first</span><span class="o">++;</span>
+            <span class="o">}</span>
+            <span class="kt">int</span> <span class="n">must</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">first</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">sub</span> <span class="o">=</span> <span class="n">remain</span><span class="o">;</span> <span class="n">sub</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span> <span class="n">sub</span> <span class="o">=</span> <span class="o">(</span><span class="n">sub</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">remain</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">((</span><span class="n">sub</span> <span class="o">&amp;</span> <span class="n">must</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">cost</span><span class="o">[</span><span class="n">sub</span><span class="o">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="kt">int</span> <span class="n">nxt</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">|</span> <span class="n">sub</span><span class="o">;</span>
+                <span class="kt">int</span> <span class="n">cand</span> <span class="o">=</span> <span class="n">dp</span><span class="o">[</span><span class="n">mask</span><span class="o">]</span> <span class="o">+</span> <span class="n">cost</span><span class="o">[</span><span class="n">sub</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">cand</span> <span class="o">&lt;</span> <span class="n">dp</span><span class="o">[</span><span class="n">nxt</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">dp</span><span class="o">[</span><span class="n">nxt</span><span class="o">]</span> <span class="o">=</span> <span class="n">cand</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">all</span><span class="o">]</span> <span class="o">==</span> <span class="n">inf</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="n">all</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="s">"math/bits"</span>
+
+<span class="k">func</span> <span class="n">minimumIncompatibility</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+	<span class="n">m</span> <span class="o">:=</span> <span class="n">n</span> <span class="o">/</span> <span class="n">k</span>
+	<span class="n">all</span> <span class="o">:=</span> <span class="p">(</span><span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span>
+
+	<span class="n">frequency</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+		<span class="n">frequency</span><span class="p">[</span><span class="n">value</span><span class="p">]</span><span class="o">++</span>
+		<span class="k">if</span> <span class="n">frequency</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">k</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="c">// 预处理每个候选小组的代价，-1 表示大小不符或组内有重复值。</span>
+	<span class="n">cost</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">1</span><span class="o">&lt;&lt;</span><span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">cost</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">mask</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">mask</span> <span class="o">&lt;=</span> <span class="n">all</span><span class="p">;</span> <span class="n">mask</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">bits</span><span class="o">.</span><span class="n">OnesCount</span><span class="p">(</span><span class="kt">uint</span><span class="p">(</span><span class="n">mask</span><span class="p">))</span> <span class="o">!=</span> <span class="n">m</span> <span class="p">{</span>
+			<span class="k">continue</span>
+		<span class="p">}</span>
+		<span class="n">minVal</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="o">^</span><span class="kt">uint</span><span class="p">(</span><span class="m">0</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="m">1</span><span class="p">)</span>
+		<span class="n">maxVal</span> <span class="o">:=</span> <span class="o">-</span><span class="n">minVal</span>
+		<span class="n">seen</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+		<span class="n">ok</span> <span class="o">:=</span> <span class="no">true</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">mask</span><span class="o">&gt;&gt;</span><span class="n">i</span><span class="p">)</span><span class="o">&amp;</span><span class="m">1</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="k">continue</span>
+			<span class="p">}</span>
+			<span class="n">v</span> <span class="o">:=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">seen</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="p">{</span>
+				<span class="n">ok</span> <span class="o">=</span> <span class="no">false</span>
+				<span class="k">break</span>
+			<span class="p">}</span>
+			<span class="n">seen</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+			<span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="n">minVal</span> <span class="p">{</span>
+				<span class="n">minVal</span> <span class="o">=</span> <span class="n">v</span>
+			<span class="p">}</span>
+			<span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="n">maxVal</span> <span class="p">{</span>
+				<span class="n">maxVal</span> <span class="o">=</span> <span class="n">v</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">ok</span> <span class="p">{</span>
+			<span class="n">cost</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">maxVal</span> <span class="o">-</span> <span class="n">minVal</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="c">// 哨兵留出加法余量，避免相加后溢出。</span>
+	<span class="n">inf</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="o">^</span><span class="kt">uint</span><span class="p">(</span><span class="m">0</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="m">1</span><span class="p">)</span> <span class="o">/</span> <span class="m">4</span>
+	<span class="n">dp</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">1</span><span class="o">&lt;&lt;</span><span class="n">n</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">dp</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">inf</span>
+	<span class="p">}</span>
+	<span class="n">dp</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">=</span> <span class="m">0</span>
+
+	<span class="k">for</span> <span class="n">mask</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">mask</span> <span class="o">&lt;=</span> <span class="n">all</span><span class="p">;</span> <span class="n">mask</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">dp</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">==</span> <span class="n">inf</span> <span class="o">||</span> <span class="n">mask</span> <span class="o">==</span> <span class="n">all</span> <span class="p">{</span>
+			<span class="k">continue</span>
+		<span class="p">}</span>
+		<span class="n">remain</span> <span class="o">:=</span> <span class="n">all</span> <span class="o">^</span> <span class="n">mask</span>
+		<span class="c">// 强制新组包含剩余元素中的最低位，消除组间顺序的重复计数。</span>
+		<span class="n">first</span> <span class="o">:=</span> <span class="m">0</span>
+		<span class="k">for</span> <span class="p">((</span><span class="n">remain</span> <span class="o">&gt;&gt;</span> <span class="n">first</span><span class="p">)</span> <span class="o">&amp;</span> <span class="m">1</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+			<span class="n">first</span><span class="o">++</span>
+		<span class="p">}</span>
+		<span class="n">must</span> <span class="o">:=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="n">first</span>
+		<span class="k">for</span> <span class="n">sub</span> <span class="o">:=</span> <span class="n">remain</span><span class="p">;</span> <span class="n">sub</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">;</span> <span class="n">sub</span> <span class="o">=</span> <span class="p">(</span><span class="n">sub</span> <span class="o">-</span> <span class="m">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">remain</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">sub</span> <span class="o">&amp;</span> <span class="n">must</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+				<span class="k">continue</span>
+			<span class="p">}</span>
+			<span class="k">if</span> <span class="n">cost</span><span class="p">[</span><span class="n">sub</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+				<span class="k">continue</span>
+			<span class="p">}</span>
+			<span class="n">nxt</span> <span class="o">:=</span> <span class="n">mask</span> <span class="o">|</span> <span class="n">sub</span>
+			<span class="n">cand</span> <span class="o">:=</span> <span class="n">dp</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">+</span> <span class="n">cost</span><span class="p">[</span><span class="n">sub</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">cand</span> <span class="o">&lt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">nxt</span><span class="p">]</span> <span class="p">{</span>
+				<span class="n">dp</span><span class="p">[</span><span class="n">nxt</span><span class="p">]</span> <span class="o">=</span> <span class="n">cand</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="n">dp</span><span class="p">[</span><span class="n">all</span><span class="p">]</span> <span class="o">==</span> <span class="n">inf</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">all</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+<strong>时间复杂度</strong>：$O(n \cdot 2^n + 3^n)$。预处理部分对每个掩码扫一遍所有位，是 $O(n \cdot 2^n)$；DP 部分对每个 <code class="language-plaintext highlighter-rouge">mask</code> 枚举 <code class="language-plaintext highlighter-rouge">remain</code> 的全部子集，所有 <code class="language-plaintext highlighter-rouge">(mask, sub)</code> 组合的总数是 $\sum_{mask} 2^{</td>
+            <td>remain</td>
+            <td>} = 3^n$，这是子集枚举的经典结论。<code class="language-plaintext highlighter-rouge">n = 16</code> 时 $3^{16} \approx 4.3 \times 10^7$，加上「必含最低位」的剪枝实际只有一半左右，可以通过。</td>
+          </tr>
+        </tbody>
+      </table>
+    </li>
+    <li>
+<strong>空间复杂度</strong>：$O(2^n)$，<code class="language-plaintext highlighter-rouge">cost</code> 与 <code class="language-plaintext highlighter-rouge">dp</code> 两个数组各占 $2^n$ 个整数，<code class="language-plaintext highlighter-rouge">n = 16</code> 时约 65536 项，内存压力很小。预处理中的 <code class="language-plaintext highlighter-rouge">seen</code> 数组是常数大小。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<code class="language-plaintext highlighter-rouge">n ≤ 16</code> 加「划分成若干组」几乎是状态压缩 DP 的固定搭配。看到这个规模就应该先想「用二进制表示已用元素集合」，而不是先想搜索或贪心。</li>
+    <li>同一数值出现超过 <code class="language-plaintext highlighter-rouge">k</code> 次时必然无解，因为 <code class="language-plaintext highlighter-rouge">k</code> 个组每组最多容纳一个；代码先做这个必要条件检查，合法子集预处理仍负责保证每个具体组内无重复。</li>
+    <li>状态定义的关键是找到<strong>无后效性的切口</strong>：本题的切口是「已用元素集合」，因为未来的选择只依赖剩下哪些元素，不依赖已用元素的分组方式。能说清这一点，状态就定对了一半。</li>
+    <li>把「一次转移补齐一整个组」而不是「一次转移放一个元素」，能让状态里不必额外记录「当前组已放几个」，维度更低。这是划分类状压题的通用取舍。</li>
+    <li>
+<strong>强制新组包含剩余最低位</strong>是消除组间顺序对称性的标准手法。它不改变最优值，却能把等价方案压成一条路径，既提速又避免重复统计。同类技巧在 698、473 里也反复出现。</li>
+    <li>预处理把「子集合法性 + 代价」一次算清，让 DP 主循环只剩查表和取最小值。哪些量该预处理，判断标准是「它是否会在多条转移路径上被重复计算」。</li>
+    <li>哨兵值要留出加法余量。用 <code class="language-plaintext highlighter-rouge">MAX_VALUE</code> 做无穷大时，<code class="language-plaintext highlighter-rouge">dp[mask] + cost[sub]</code> 会溢出成负数并被误判为更优，这是状压 DP 里最隐蔽的一类错误。</li>
+    <li>面试视角：先说清「暴力枚举划分方案的数量」，再指出无后效性并给出状态定义，然后讲转移和子集枚举写法，最后补上对称性消除与哨兵细节。面试官常追问「为什么复杂度是 $3^n$」，要能给出「每个元素在 <code class="language-plaintext highlighter-rouge">mask</code> 内、在 <code class="language-plaintext highlighter-rouge">sub</code> 内、都不在，共三种归属」的组合论证；再追问「能不能改成按元素逐个放」，答案是可以，但状态要加一维记录当前组已放个数，转移更琐碎。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：哨兵值取 <code class="language-plaintext highlighter-rouge">Integer.MAX_VALUE</code></strong>。用例 <code class="language-plaintext highlighter-rouge">nums = [1, 1, 1, 1]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → 虽然本例转移不会发生，但只要有任何一条从不可达状态出发的转移被执行，<code class="language-plaintext highlighter-rouge">MAX_VALUE + cost</code> 立刻溢出成负数并被当作最优解写入 <code class="language-plaintext highlighter-rouge">dp</code>，最终返回一个负的不兼容性。</li>
+    <li>
+<strong>错误写法：不跳过 <code class="language-plaintext highlighter-rouge">dp[mask] == inf</code> 的不可达状态</strong>。用例 <code class="language-plaintext highlighter-rouge">nums = [1, 2, 1, 4]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → 从 <code class="language-plaintext highlighter-rouge">dp[0b0101]</code>（含重复值、本不可达）继续扩展，哨兵值一路传播，配合前一条的溢出会直接给出错误答案。</li>
+    <li>
+<strong>错误写法：省略「新组必须包含 <code class="language-plaintext highlighter-rouge">remain</code> 最低位」的限制</strong>。用例 <code class="language-plaintext highlighter-rouge">nums = [1, 2, 1, 4]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → 结果仍然正确，但每种分组被按 <code class="language-plaintext highlighter-rouge">k!</code> 种顺序重复枚举，<code class="language-plaintext highlighter-rouge">n = 16</code>、<code class="language-plaintext highlighter-rouge">k = 8</code> 时运行时间成倍增长，大用例超时。</li>
+    <li>
+<strong>错误写法：子集枚举写成 <code class="language-plaintext highlighter-rouge">for (int sub = remain; sub &gt;= 0; sub = (sub - 1) &amp; remain)</code></strong>。用例：任意输入 → <code class="language-plaintext highlighter-rouge">sub</code> 减到 0 后 <code class="language-plaintext highlighter-rouge">(0 - 1) &amp; remain</code> 又回到 <code class="language-plaintext highlighter-rouge">remain</code>，条件 <code class="language-plaintext highlighter-rouge">sub &gt;= 0</code> 恒成立，程序陷入死循环。</li>
+    <li>
+<strong>错误写法：判重时用「下标是否重复」而不是「数值是否重复」</strong>。用例 <code class="language-plaintext highlighter-rouge">nums = [1, 1, 1, 1]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → 每个掩码里的下标天然互不相同，所有子集都被判为合法，返回 0，正确答案是 -1。</li>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">seen</code> 数组按元素值开成 <code class="language-plaintext highlighter-rouge">new boolean[n]</code></strong>。用例 <code class="language-plaintext highlighter-rouge">nums = [1, 2, 3, 4]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → 值 4 作为下标访问长度为 4 的数组，越界抛异常；数值上界是 <code class="language-plaintext highlighter-rouge">n</code>，数组长度至少要 <code class="language-plaintext highlighter-rouge">n + 1</code>。</li>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">cost</code> 数组初值设为 0 而不是 -1</strong>。用例 <code class="language-plaintext highlighter-rouge">nums = [1, 1, 1, 1]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → 含重复值的子集代价被当成 0，DP 顺利走到全集，返回 0，正确答案是 -1。</li>
+    <li>
+<strong>错误写法：转移时不校验 <code class="language-plaintext highlighter-rouge">sub</code> 的大小是否为 <code class="language-plaintext highlighter-rouge">m</code></strong>。用例 <code class="language-plaintext highlighter-rouge">nums = [1, 2, 1, 4]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → 若 <code class="language-plaintext highlighter-rouge">cost</code> 又恰好对非 <code class="language-plaintext highlighter-rouge">m</code> 大小的子集有值，会拼出大小不等的分组，答案偏小且不满足「每组大小相同」。</li>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">mask</code> 倒序遍历</strong>。用例 <code class="language-plaintext highlighter-rouge">nums = [1, 2, 1, 4]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → 处理 <code class="language-plaintext highlighter-rouge">0b1111</code> 时它的前驱 <code class="language-plaintext highlighter-rouge">0b0011</code> 还未被更新，<code class="language-plaintext highlighter-rouge">dp[all]</code> 拿不到任何有效转移，返回 -1，正确答案是 4。</li>
+    <li>
+<strong>错误写法：把答案写成 <code class="language-plaintext highlighter-rouge">dp[all]</code> 但忘记判断它是否仍是哨兵值</strong>。用例 <code class="language-plaintext highlighter-rouge">nums = [1, 1, 1, 1]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> → 返回一个巨大的哨兵数字而不是 -1。</li>
+    <li>
+<strong>错误写法：通过频次检查后直接返回 0</strong>。频次不超过 <code class="language-plaintext highlighter-rouge">k</code> 只说明可以避免组内重复，不能给出最小代价；<code class="language-plaintext highlighter-rouge">nums = [1,2,1,4]</code>、<code class="language-plaintext highlighter-rouge">k = 2</code> 通过检查，但最小不兼容性是 4 而不是 0。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/subsets/">78. 子集</a></td>
+      <td>中等</td>
+      <td>用二进制枚举子集的入门形态，只需构造不需优化，是本题预处理环节的基础</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/partition-equal-subset-sum/">416. 分割等和子集</a></td>
+      <td>中等</td>
+      <td>只分两组且只关心和，可用容量维度的 01 背包，无需压缩到集合状态</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/matchsticks-to-square/">473. 火柴拼正方形</a></td>
+      <td>中等</td>
+      <td>固定分四组且要求组内和相等，可用回溯加剪枝，也可用同样的状压 DP 骨架</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/partition-to-k-equal-sum-subsets/">698. 划分为k个相等的子集</a></td>
+      <td>中等</td>
+      <td>与本题结构最接近，只是评价标准从极差换成「和是否相等」，可用同一套掩码 DP</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/largest-divisible-subset/">368. 最大整除子集</a></td>
+      <td>中等</td>
+      <td>同样在子集上做最优化，但元素规模大，只能靠排序后的线性 DP 而非状态压缩</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-path-visiting-all-nodes/">847. 访问所有节点的最短路径</a></td>
+      <td>困难</td>
+      <td>状态是「已访问集合 + 当前位置」，展示状压如何与图上 BFS 结合</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/n-queens/">51. N 皇后</a></td>
+      <td>困难</td>
+      <td>用位运算维护列与两条对角线的占用，是位掩码用于剪枝而非用于 DP 状态</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/">1526. 形成目标数组的子数组最少增加次数</a></td>
+      <td>困难</td>
+      <td>同为「最小操作次数」但结构完全不同，靠差分与贪心一遍扫描解决</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/51516451" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 757. 设置交集大小至少为2</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/48719087" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1228. 等差数列中缺失的数字</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/61696976">https://hgnulb.github.io/blog/2022/61696976</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

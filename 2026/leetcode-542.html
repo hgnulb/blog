@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 542. 01 矩阵 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,BFS,动态规划,图,字节跳动,广度优先搜索,携程,数组,矩阵,队列" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 542. 01 矩阵" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/leetcode-542" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/leetcode-542" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-04-15T00:54:06+08:00" />
+<meta property="article:modified_time" content="2026-04-15T00:54:06+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 542. 01 矩阵" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-04-15T00:54:06+08:00","datePublished":"2026-04-15T00:54:06+08:00","description":"题目描述","headline":"LeetCode 542. 01 矩阵","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/leetcode-542"},"url":"https://hgnulb.github.io/blog/2026/leetcode-542"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法多源-bfs">解法：多源 BFS</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 542. 01 矩阵">LeetCode 542. 01 矩阵</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-04-15 00:54:06"
+                    datetime="2026-04-15T00:54:06+08:00"
+            >
+                2026-04-15
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2512 字 · 英文 197 词 · 代码 85 行"
+            aria-label="预计阅读时间约 10 分钟，正文 2512 字 · 英文 197 词 · 代码 85 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 10 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    9 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1110808550/" title="携程">
+        携程
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9242240291/" title="矩阵">
+        矩阵
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5789791753/" title="图">
+        图
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1903280772/" title="队列">
+        队列
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8043676264/" title="BFS">
+        BFS
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法多源-bfs">解法：多源 BFS</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/01-matrix/">542. 01 矩阵</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给定一个只含 0 和 1 的矩阵，要求为每个格子算出它到最近的 0 的距离，距离按上下左右四方向相邻计一步。输出是一个同样大小的矩阵。</p>
+
+  <p>值得注意的是「最近的 0」并不指定是哪一个 0，也就是说每个 1 的答案由离它最近的那个 0 决定，而不同的 1 可以对应不同的 0。这提示答案不是围绕单个源点展开的。</p>
+
+  <p>约束里保证矩阵中至少有一个 0，所以不存在无解格子，不需要处理无穷大的输出。矩阵规模可达一万行一万列量级、但总格数有限，说明允许的总代价大致是把每个格子处理常数次。</p>
+
+  <p>边界情况有两类：格子本身是 0 时答案为 0；整个矩阵全是 0 时输出与输入同形且全零。另外要留意 1 的数量可能远多于 0，也可能远少于 0，解法不该对这两种分布有偏好。</p>
+</blockquote>
+
+<h2 id="解法多源-bfs">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%A4%9A%E6%BA%90-bfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：多源 BFS</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>直觉解法是对每个值为 1 的格子单独做一次广度优先搜索，一路扩散直到碰到第一个 0。结果正确，但代价是「1 的个数」乘以「一次搜索的代价」，在几乎全是 1 的矩阵上会退化成格子数的平方级别。</p>
+
+  <p>瓶颈在于同一片区域被反复扫描：相邻的两个 1 走的扩散路径高度重合，却各算各的。反过来想，如果把搜索的方向倒过来——不是从 1 出发找 0，而是从所有 0 出发向外扩散——那么每个 0 的影响范围会自然拼接，整张图只需要扫一遍。</p>
+
+  <p>把所有 0 同时放进队列作为第 0 层，等价于在原图外面虚拟一个超级源点，它到每个 0 的边权为 0，再从这个超级源点做一次普通的广度优先搜索。由于每条边的权重都是 1，广度优先搜索按层扩散的性质保证了：<strong>一个格子第一次被弹出的时刻所记录的距离，就是它到最近 0 的最短距离，此后不会再被更短的路径改写</strong>。这就是本题的不变量。</p>
+
+  <p>具体到实现，用距离矩阵本身兼作访问标记：0 的位置初始化为 0，1 的位置初始化为 -1 表示未确定。这样就不需要额外的 visited 数组，判断「是否已定值」和「取距离」是同一次读取。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>扫一遍矩阵，把所有 0 的坐标入队并把距离置 0，把 1 的距离置 -1。之所以要一次性全部入队，是因为这些 0 共同构成搜索的第 0 层，只有同时出发才能保证扩散的波前是按真实距离推进的。</li>
+    <li>用两个整型数组加头尾下标模拟队列。总入队次数不会超过格子总数，所以定长数组足够，省掉了链式队列的分配开销。</li>
+    <li>循环从队头取出坐标，用方向数组 <code class="language-plaintext highlighter-rouge">{-1, 0, 1, 0, -1}</code> 的相邻两项组成四个方向的偏移。这种写法比写四个 if 更短，也不容易漏方向。</li>
+    <li>对每个邻居先做越界判断，再看它的距离是否仍是 -1。只有仍是 -1 才更新为当前距离加一并入队；已经有值说明它在更早或同一层就被确定过，那个值只会更小或相等。</li>
+    <li>关键在于「赋值即入队」：更新距离的同时立刻入队，等价于在入队时刻就完成了访问标记。若把标记推迟到出队，同一个格子会被多个邻居重复推进队列。</li>
+    <li>队列排空后距离矩阵即为答案，直接返回，不需要额外一轮转换。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">mat = [[0,0,0],[0,1,0],[1,1,1]]</code> 走一遍</strong>：初始化后 <code class="language-plaintext highlighter-rouge">dist</code> 为 <code class="language-plaintext highlighter-rouge">[[0,0,0],[0,-1,0],[-1,-1,-1]]</code>，队列依次装入 (0,0)、(0,1)、(0,2)、(1,0)、(1,2) 这五个 0。</p>
+
+  <p>弹出 (0,0)，四个邻居中 (1,0) 和 (0,1) 的距离都不是 -1，无事发生。弹出 (0,1)，下方 (1,1) 距离为 -1，置为 $0 + 1 = 1$ 并入队。弹出 (0,2)，下方 (1,2) 已是 0，跳过。弹出 (1,0)，下方 (2,0) 为 -1，置为 $0 + 1 = 1$ 并入队；右方 (1,1) 此刻已是 1，跳过。弹出 (1,2)，下方 (2,2) 为 -1，置为 1 并入队。</p>
+
+  <p>第一层处理完，队列里是 (1,1)、(2,0)、(2,2)，距离都是 1。弹出 (1,1)，下方 (2,1) 为 -1，置为 $1 + 1 = 2$ 并入队。弹出 (2,0)，右方 (2,1) 已是 2，跳过。弹出 (2,2)，左方 (2,1) 同样跳过。最后弹出 (2,1)，四周再无 -1。</p>
+
+  <p>队列排空，<code class="language-plaintext highlighter-rouge">dist</code> 为 <code class="language-plaintext highlighter-rouge">[[0,0,0],[0,1,0],[1,2,1]]</code>。注意 (2,1) 的答案 2 来自 (1,1) 这条路径，而 (2,0) 的答案 1 来自另一个 0，这正是多源扩散相对单源搜索的价值所在。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// 如果从每个 1 分别 BFS，复杂度会乘以 1 的数量，双重遍历很重。</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[][]</span> <span class="nf">updateMatrix</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">mat</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">mat</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">dist</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">m</span><span class="o">][</span><span class="n">n</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">qx</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">m</span> <span class="o">*</span> <span class="n">n</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">qy</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">m</span> <span class="o">*</span> <span class="n">n</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">head</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">tail</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">dirs</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">};</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">mat</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">qx</span><span class="o">[</span><span class="n">tail</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+                    <span class="n">qy</span><span class="o">[</span><span class="n">tail</span><span class="o">]</span> <span class="o">=</span> <span class="n">j</span><span class="o">;</span>
+                    <span class="n">tail</span><span class="o">++;</span>
+                    <span class="n">dist</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="n">dist</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">while</span> <span class="o">(</span><span class="n">head</span> <span class="o">&lt;</span> <span class="n">tail</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">qx</span><span class="o">[</span><span class="n">head</span><span class="o">];</span>
+            <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">qy</span><span class="o">[</span><span class="n">head</span><span class="o">];</span>
+            <span class="n">head</span><span class="o">++;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">;</span> <span class="n">d</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dirs</span><span class="o">[</span><span class="n">d</span><span class="o">];</span>
+                <span class="kt">int</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dirs</span><span class="o">[</span><span class="n">d</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">nx</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">ny</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">nx</span> <span class="o">&gt;=</span> <span class="n">m</span> <span class="o">||</span> <span class="n">ny</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="n">dist</span><span class="o">[</span><span class="n">nx</span><span class="o">][</span><span class="n">ny</span><span class="o">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">dist</span><span class="o">[</span><span class="n">nx</span><span class="o">][</span><span class="n">ny</span><span class="o">]</span> <span class="o">=</span> <span class="n">dist</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="n">qx</span><span class="o">[</span><span class="n">tail</span><span class="o">]</span> <span class="o">=</span> <span class="n">nx</span><span class="o">;</span>
+                <span class="n">qy</span><span class="o">[</span><span class="n">tail</span><span class="o">]</span> <span class="o">=</span> <span class="n">ny</span><span class="o">;</span>
+                <span class="n">tail</span><span class="o">++;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">dist</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">updateMatrix</span><span class="p">(</span><span class="n">mat</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[][]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="c">// 如果从每个 1 分别 BFS，复杂度会乘以 1 的数量，双重遍历很重。</span>
+    <span class="n">m</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+    <span class="n">dist</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="n">qx</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">m</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">qy</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">m</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">head</span><span class="p">,</span> <span class="n">tail</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span>
+    <span class="n">dirs</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+                <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="m">0</span>
+                <span class="n">qx</span><span class="p">[</span><span class="n">tail</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="n">qy</span><span class="p">[</span><span class="n">tail</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span>
+                <span class="n">tail</span><span class="o">++</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">head</span> <span class="o">&lt;</span> <span class="n">tail</span> <span class="p">{</span>
+        <span class="n">x</span> <span class="o">:=</span> <span class="n">qx</span><span class="p">[</span><span class="n">head</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">:=</span> <span class="n">qy</span><span class="p">[</span><span class="n">head</span><span class="p">]</span>
+        <span class="n">head</span><span class="o">++</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="m">4</span><span class="p">;</span> <span class="n">d</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">nx</span> <span class="o">:=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dirs</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+            <span class="n">ny</span> <span class="o">:=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dirs</span><span class="p">[</span><span class="n">d</span><span class="o">+</span><span class="m">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">nx</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="n">ny</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="n">nx</span> <span class="o">&gt;=</span> <span class="n">m</span> <span class="o">||</span> <span class="n">ny</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="p">{</span>
+                <span class="k">continue</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">dist</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+                <span class="k">continue</span>
+            <span class="p">}</span>
+            <span class="n">dist</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">+</span> <span class="m">1</span>
+            <span class="n">qx</span><span class="p">[</span><span class="n">tail</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx</span>
+            <span class="n">qy</span><span class="p">[</span><span class="n">tail</span><span class="p">]</span> <span class="o">=</span> <span class="n">ny</span>
+            <span class="n">tail</span><span class="o">++</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">dist</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(m \cdot n)$，每个格子只在距离从 -1 变为确定值的那一刻入队一次，出队后固定检查 4 个方向，所以总操作量是格子数的常数倍，与 0 和 1 的分布无关。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(m \cdot n)$，距离矩阵是必须的输出，队列在最坏情况（矩阵全为 0）下会同时容纳所有格子，两者都是格子数量级。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「每个点到最近的某类点的距离」是多源最短路的标准信号，方向应当反转：从所有目标点同时出发，而不是从每个查询点各走一次。</li>
+    <li>多源广度优先搜索等价于加一个到所有源点边权为 0 的超级源点，理解了这个等价关系，就不必怀疑同时入队是否会破坏层序性质。</li>
+    <li>边权全为 1 是广度优先搜索能给出最短路的前提。一旦边权不等，就必须换成优先队列，这条界限在面试里经常被追问。</li>
+    <li>用结果数组的哨兵值（这里是 -1）兼作访问标记，既省一个数组，也让「已确定」和「取值」合并为一次读取，减少状态不一致的可能。</li>
+    <li>标记时机必须是入队时而非出队时。这是广度优先搜索最常见的效率与正确性分水岭，写多源版本时尤其容易忽略。</li>
+    <li>面试视角：先说出朴素解法及其复杂度上界，再点明「反向扩散」的观察，最后才写代码。能主动补一句「若把 0 和 1 的角色对调，或者改成八连通，代码只需改初始化和方向数组」，会显著提升评价。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：对每个值为 1 的格子各做一次广度优先搜索。<code class="language-plaintext highlighter-rouge">mat</code> 为 200×200 且只有右下角一个 0 → 近四万个格子各自扩散一遍，总操作量达到十亿量级，直接超时。</li>
+    <li>
+<strong>错误写法</strong>：只把第一个遇到的 0 入队，然后再逐个补。<code class="language-plaintext highlighter-rouge">[[0,0,0],[0,1,0],[1,1,1]]</code> → 波前不再按真实距离推进，(2,0) 会先从远处的 0 拿到偏大的值并被锁定，输出 <code class="language-plaintext highlighter-rouge">[[0,0,0],[0,1,0],[2,2,1]]</code> 之类的错误结果。</li>
+    <li>
+<strong>错误写法</strong>：把访问标记放在出队时。全 0 矩阵 → 每个格子被四个邻居各推一次，队列长度膨胀到格子数的四倍，预分配的定长队列数组越界。</li>
+    <li>
+<strong>错误写法</strong>：把 1 的初始距离设成 0 而不是 -1。<code class="language-plaintext highlighter-rouge">[[0,1]]</code> → 判断「是否已确定」时把真正未访问的格子误当成已确定，(0,1) 永远不会被更新，输出 <code class="language-plaintext highlighter-rouge">[[0,0]]</code>。</li>
+    <li>
+<strong>错误写法</strong>：用一个足够大的正数（如 <code class="language-plaintext highlighter-rouge">Integer.MAX_VALUE</code>）作未访问标记，更新时写成 <code class="language-plaintext highlighter-rouge">dist[nx][ny] = dist[x][y] + 1</code> 却不判断是否已访问。任何含 1 的用例 → 已确定的格子被后来的更长路径覆盖，答案偏大。</li>
+    <li>
+<strong>错误写法</strong>：方向数组写成 <code class="language-plaintext highlighter-rouge">{-1, 0, 1, 0}</code> 并按 <code class="language-plaintext highlighter-rouge">dirs[d]</code> 与 <code class="language-plaintext highlighter-rouge">dirs[d + 1]</code> 取偏移。任意矩阵 → 第四个方向读到下标 4 越界，或用取模绕回后重复了第一个方向而漏掉左方，最左侧的 1 拿不到正确距离。</li>
+    <li>
+<strong>错误写法</strong>：越界判断写在读取 <code class="language-plaintext highlighter-rouge">dist[nx][ny]</code> 之后。第 0 行任意格子 → 先访问 <code class="language-plaintext highlighter-rouge">dist[-1][y]</code> 就已经抛出下标异常。</li>
+    <li>
+<strong>错误写法</strong>：假设矩阵是方阵，用同一个边长同时判断行和列。<code class="language-plaintext highlighter-rouge">[[0,0,0,0,1]]</code> 这类扁平矩阵 → 列方向的合法下标被误判为越界，右侧的 1 保持 -1 不变。</li>
+    <li>
+<strong>错误写法</strong>：入队后忘记推进队尾下标，或出队后忘记推进队头下标。任意含 1 的用例 → 前者让新格子被后续写入覆盖导致漏搜，后者让循环永远处理同一个坐标而死循环。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/rotting-oranges/">994. 腐烂的橘子</a></td>
+      <td>中等</td>
+      <td>同为多源扩散，但要的是总层数并判断是否有剩余</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/as-far-from-land-as-possible/">1162. 地图分析</a></td>
+      <td>中等</td>
+      <td>多源扩散后取所有距离的最大值</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-path-in-binary-matrix/">1091. 二进制矩阵中的最短路径</a></td>
+      <td>中等</td>
+      <td>单源八连通网格，答案是经过的格子数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-path-in-a-grid-with-obstacles-elimination/">1293. 网格中的最短路径</a></td>
+      <td>困难</td>
+      <td>状态要附加剩余消除次数，访问标记升到三维</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/snakes-and-ladders/">909. 蛇梯棋</a></td>
+      <td>中等</td>
+      <td>棋盘一维化并处理蛇与梯子造成的跳转边</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-path-with-alternating-colors/">1129. 颜色交替的最短路径</a></td>
+      <td>中等</td>
+      <td>状态要记住上一条边的颜色，同点两份距离</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/word-ladder/">127. 单词接龙</a></td>
+      <td>困难</td>
+      <td>隐式图，邻居靠逐位替换字符临时枚举</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-genetic-mutation/">433. 最小基因变化</a></td>
+      <td>中等</td>
+      <td>字符集只有四个，可直接暴力枚举全部邻居</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/open-the-lock/">752. 打开转盘锁</a></td>
+      <td>中等</td>
+      <td>带禁止状态的转盘图，适合双向搜索</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/sliding-puzzle/">773. 滑动谜题</a></td>
+      <td>困难</td>
+      <td>把棋盘序列化成字符串当作图节点</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/k-similar-strings/">854. 相似度为 K 的字符串</a></td>
+      <td>困难</td>
+      <td>邻居由交换生成，需剪掉无意义的交换</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/jump-game-iv/">1345. 跳跃游戏 IV</a></td>
+      <td>困难</td>
+      <td>等值下标之间的超级边用完必须清空</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-jumps-to-reach-home/">1654. 到家的最少跳跃次数</a></td>
+      <td>中等</td>
+      <td>一维无界坐标，需要先推导搜索范围上界</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/zui-xiao-tiao-yue-ci-shu/">LCP 09. 最小跳跃次数</a></td>
+      <td>困难</td>
+      <td>单向弹簧图，用已扩散前缀避免重复回退</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-candies-you-can-get-from-boxes/">1298. 你能从盒子里获得的最大糖果数</a></td>
+      <td>困难</td>
+      <td>队列驱动的可达性传播，钥匙与盒子互相解锁</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/om3reC/">LCR 108. 单词接龙</a></td>
+      <td>困难</td>
+      <td>127 的 LCR 编号，可用来复核模板熟练度</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/zlDJc7/">LCR 109. 打开转盘锁</a></td>
+      <td>中等</td>
+      <td>752 的 LCR 编号，注意起点即禁止态的边界</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/57538385" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 499. 迷宫 III</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/13215177" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 680. 验证回文串 II</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/leetcode-542">https://hgnulb.github.io/blog/2026/leetcode-542</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

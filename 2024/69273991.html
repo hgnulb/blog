@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 535. TinyURL 的加密与解密 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,京东,哈希函数,哈希表,字符串,设计" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 535. TinyURL 的加密与解密" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2024/69273991" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2024/69273991" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-07-27T10:00:02+08:00" />
+<meta property="article:modified_time" content="2024-07-27T10:00:02+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 535. TinyURL 的加密与解密" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2024-07-27T10:00:02+08:00","datePublished":"2024-07-27T10:00:02+08:00","description":"题目描述","headline":"LeetCode 535. TinyURL 的加密与解密","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2024/69273991"},"url":"https://hgnulb.github.io/blog/2024/69273991"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希映射短链接">解法：哈希映射短链接</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 535. TinyURL 的加密与解密">LeetCode 535. TinyURL 的加密与解密</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2024-07-27 10:00:02"
+                    datetime="2024-07-27T10:00:02+08:00"
+            >
+                2024-07-27
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2728 字 · 英文 70 词 · 代码 95 行"
+            aria-label="预计阅读时间约 10 分钟，正文 2728 字 · 英文 70 词 · 代码 95 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 10 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1492811566/" title="京东">
+        京东
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5321850966/" title="哈希函数">
+        哈希函数
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法哈希映射短链接">解法：哈希映射短链接</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/encode-and-decode-tinyurl/">535. TinyURL 的加密与解密</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>设计一个短链服务的两个接口：<code class="language-plaintext highlighter-rouge">encode(longUrl)</code> 把任意长网址变成一个形如 <code class="language-plaintext highlighter-rouge">http://tinyurl.com/xxxx</code> 的短网址，<code class="language-plaintext highlighter-rouge">decode(shortUrl)</code> 把短网址还原成原来的长网址。判题只要求 <code class="language-plaintext highlighter-rouge">decode(encode(url)) == url</code>，短码长什么样、有多长、是不是随机，完全由实现者决定。</p>
+
+  <p>这是一道<strong>设计题</strong>而不是算法题，所以要先看清它到底考什么。题目没有给出任何「短码必须能从长链接算出来」的要求，也没有限制内存——这等于明确允许<strong>把映射关系存下来</strong>。一旦允许存储，<code class="language-plaintext highlighter-rouge">decode</code> 就退化成一次查表，全部设计压力都落在 <code class="language-plaintext highlighter-rouge">encode</code> 如何生成短码上。</p>
+
+  <p>生成短码的核心约束只有一条：<strong>不同的长链接必须拿到不同的短码</strong>。一旦两个不同的长链接撞到同一个短码，后写入的会覆盖先写入的，<code class="language-plaintext highlighter-rouge">decode</code> 必然返回错误结果。这条约束把「用长链接的 hashCode 当短码」这类做法直接判死——哈希值有限而输入无限，冲突不可避免且无法察觉。</p>
+
+  <p>另一个隐含要求是<strong>同一个长链接反复 <code class="language-plaintext highlighter-rouge">encode</code> 应当返回同一个短码</strong>。判题不检查这一点，但真实短链服务必须如此，否则每次调用都白白消耗一个新短码。面试中主动做到这点是加分项，代价只是多维护一张反向表。</p>
+
+  <p>边界与实现取舍：<code class="language-plaintext highlighter-rouge">decode</code> 拿到的是完整短网址，必须先剥掉 <code class="language-plaintext highlighter-rouge">http://tinyurl.com/</code> 前缀才能查表，用「取最后一个 <code class="language-plaintext highlighter-rouge">/</code> 之后的部分」比硬编码前缀长度更稳；短码要尽量短，直接用十进制自增数字会很快变长，换成 62 进制能把长度压到十进制的约 $\log_{62}10 \approx 0.56$ 倍；计数器要考虑位宽，用 <code class="language-plaintext highlighter-rouge">long</code> 可以覆盖任何现实调用量。</p>
+</blockquote>
+
+<h2 id="解法哈希映射短链接">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%93%88%E5%B8%8C%E6%98%A0%E5%B0%84%E7%9F%AD%E9%93%BE%E6%8E%A5" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：哈希映射短链接</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先排除两类看似聪明的做法。其一是<strong>用长链接的哈希值当短码</strong>——<code class="language-plaintext highlighter-rouge">String.hashCode()</code> 只有 32 位，输入空间无限，必然存在两个不同网址哈希相同，而这种冲突静默发生、无法自检，是设计题里的硬伤。其二是<strong>随机生成短码</strong>——每次随机后要循环检测是否已被占用，占用率高时会反复重试，且需要一个高质量随机源，复杂度和确定性都不如自增。</p>
+
+  <p>正确的切入点是：<strong>短码不需要从长链接推导出来，它只是一个「第几个被登记的链接」的编号</strong>。既然如此，用一个单调自增的计数器就能保证「绝不重复」这个唯一硬约束——第 <code class="language-plaintext highlighter-rouge">k</code> 次登记拿到编号 <code class="language-plaintext highlighter-rouge">k</code>，不同的登记必然拿到不同编号，冲突从根上不存在。</p>
+
+  <p>编号直接当短码会太长（第一亿个链接的十进制表示有 9 位）。把它转成 62 进制（<code class="language-plaintext highlighter-rouge">0-9</code> + <code class="language-plaintext highlighter-rouge">a-z</code> + <code class="language-plaintext highlighter-rouge">A-Z</code>），同样是一亿只需要 5 位字符。62 进制转换本身就是反复除以 62 取余、把余数映射成字符，再把结果反转——因为除法先得到的是最低位。</p>
+
+  <p>于是维护两张哈希表和一个计数器：<code class="language-plaintext highlighter-rouge">code2url</code> 存「短码 → 长链接」，供 <code class="language-plaintext highlighter-rouge">decode</code> 查；<code class="language-plaintext highlighter-rouge">url2code</code> 存「长链接 → 短码」，供 <code class="language-plaintext highlighter-rouge">encode</code> 判重复用。两张表方向相反，各自服务一个接口的查询方向，这是空间换时间的标准做法。</p>
+
+  <p>不变量：<strong>任何时刻 <code class="language-plaintext highlighter-rouge">code2url</code> 与 <code class="language-plaintext highlighter-rouge">url2code</code> 互为逆映射，且两者的大小恒等于已分配的短码个数 <code class="language-plaintext highlighter-rouge">id</code></strong>。每次新登记同时往两张表各写一条，这个不变量就一直成立，<code class="language-plaintext highlighter-rouge">decode</code> 也就必然能查到 <code class="language-plaintext highlighter-rouge">encode</code> 曾返回过的任意短码。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">decode</code> 侧只剩一件事：从完整短网址里切出短码。取最后一个 <code class="language-plaintext highlighter-rouge">/</code> 之后的子串即可——这个写法不依赖域名前缀的具体长度，换个域名也不用改代码。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>在类里放一个 <code class="language-plaintext highlighter-rouge">long id = 0</code> 计数器、两张 <code class="language-plaintext highlighter-rouge">Map&lt;String, String&gt;</code>、一个 62 个字符的字符表常量</strong>。<strong>为什么</strong>：计数器保证短码唯一，两张表分别服务两个方向的查询，字符表用 <code class="language-plaintext highlighter-rouge">static final</code> 声明避免每次调用重新构造。字符表的字符顺序无关紧要，只要固定不变即可。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">encode</code> 第一步先查 <code class="language-plaintext highlighter-rouge">url2code</code>，命中就直接拼上前缀返回</strong>。<strong>为什么</strong>：同一个长链接不应该消耗第二个短码。这一步必须放在 <code class="language-plaintext highlighter-rouge">id++</code> 之前，否则计数器已经被推进，就算不用也浪费了一个编号。</li>
+    <li>
+<strong>未命中时先 <code class="language-plaintext highlighter-rouge">id++</code>，再用新的 <code class="language-plaintext highlighter-rouge">id</code> 生成短码</strong>。<strong>为什么</strong>：从 <code class="language-plaintext highlighter-rouge">1</code> 而不是 <code class="language-plaintext highlighter-rouge">0</code> 开始编号，可以避开 <code class="language-plaintext highlighter-rouge">toBase62(0)</code> 的特殊分支；先自增再取值保证每次调用拿到的编号都不同。</li>
+    <li>
+<strong>把 <code class="language-plaintext highlighter-rouge">(code, longUrl)</code> 写进 <code class="language-plaintext highlighter-rouge">code2url</code>，把 <code class="language-plaintext highlighter-rouge">(longUrl, code)</code> 写进 <code class="language-plaintext highlighter-rouge">url2code</code>，两条一起写</strong>。<strong>为什么</strong>：两张表必须同时更新才能维持互为逆映射的不变量；只写一张会导致要么 <code class="language-plaintext highlighter-rouge">decode</code> 查不到、要么重复 <code class="language-plaintext highlighter-rouge">encode</code> 判不出。</li>
+    <li>
+<strong>返回 <code class="language-plaintext highlighter-rouge">"http://tinyurl.com/" + code</code></strong>。<strong>为什么</strong>：题目要求返回的是完整短网址而不是裸短码。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">toBase62</code> 里循环执行「取 <code class="language-plaintext highlighter-rouge">v % 62</code> 映射成字符、<code class="language-plaintext highlighter-rouge">v /= 62</code>」直到 <code class="language-plaintext highlighter-rouge">v</code> 为 0，最后把结果反转</strong>。<strong>为什么</strong>：除法先得到的是最低位，所以拼出来的串是倒序的，必须反转才是正确的进制表示。单独处理 <code class="language-plaintext highlighter-rouge">x == 0</code> 是因为此时 <code class="language-plaintext highlighter-rouge">while</code> 一次都不进，会返回空串。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">decode</code> 先用 <code class="language-plaintext highlighter-rouge">lastIndexOf('/')</code> 定位分隔符，取其后的子串作为短码</strong>。<strong>为什么</strong>：取最后一个而不是第一个 <code class="language-plaintext highlighter-rouge">/</code>，才能跳过 <code class="language-plaintext highlighter-rouge">http://</code> 里的那两个；不硬编码前缀长度，域名改动时代码不用跟着改。</li>
+    <li>
+<strong>用短码查 <code class="language-plaintext highlighter-rouge">code2url</code> 并返回</strong>。<strong>为什么</strong>：<code class="language-plaintext highlighter-rouge">decode</code> 的全部工作就是一次哈希查找；查不到时返回空串而不是 <code class="language-plaintext highlighter-rouge">null</code>，避免调用方空指针。</li>
+  </ul>
+
+  <p><strong>走一遍完整的调用序列</strong>。初始 <code class="language-plaintext highlighter-rouge">id = 0</code>，两张表都空。</p>
+
+  <p>调用 <code class="language-plaintext highlighter-rouge">encode("https://leetcode.cn/problems/design-tinyurl")</code>：<code class="language-plaintext highlighter-rouge">url2code</code> 查不到，<code class="language-plaintext highlighter-rouge">id</code> 变成 <code class="language-plaintext highlighter-rouge">1</code>，<code class="language-plaintext highlighter-rouge">toBase62(1)</code> 里 <code class="language-plaintext highlighter-rouge">v = 1</code>，第一轮 <code class="language-plaintext highlighter-rouge">r = 1 % 62 = 1</code> 取字符 <code class="language-plaintext highlighter-rouge">'1'</code>、<code class="language-plaintext highlighter-rouge">v</code> 变 <code class="language-plaintext highlighter-rouge">0</code>，循环结束，反转后仍是 <code class="language-plaintext highlighter-rouge">"1"</code>。写入 <code class="language-plaintext highlighter-rouge">code2url["1"] = 长链接</code>、<code class="language-plaintext highlighter-rouge">url2code[长链接] = "1"</code>，返回 <code class="language-plaintext highlighter-rouge">"http://tinyurl.com/1"</code>。</p>
+
+  <p>再调用 <code class="language-plaintext highlighter-rouge">encode("https://example.com")</code>：查不到，<code class="language-plaintext highlighter-rouge">id</code> 变成 <code class="language-plaintext highlighter-rouge">2</code>，短码为 <code class="language-plaintext highlighter-rouge">"2"</code>，两张表各加一条，返回 <code class="language-plaintext highlighter-rouge">"http://tinyurl.com/2"</code>。</p>
+
+  <p>又调用一次 <code class="language-plaintext highlighter-rouge">encode("https://leetcode.cn/problems/design-tinyurl")</code>：这次 <code class="language-plaintext highlighter-rouge">url2code</code> 命中，直接返回 <code class="language-plaintext highlighter-rouge">"http://tinyurl.com/1"</code>，<code class="language-plaintext highlighter-rouge">id</code> 仍是 <code class="language-plaintext highlighter-rouge">2</code>，没有浪费编号。</p>
+
+  <p>调用 <code class="language-plaintext highlighter-rouge">decode("http://tinyurl.com/1")</code>：<code class="language-plaintext highlighter-rouge">lastIndexOf('/')</code> 找到下标 <code class="language-plaintext highlighter-rouge">18</code>（即 <code class="language-plaintext highlighter-rouge">tinyurl.com</code> 后面那个斜杠），截取得到 <code class="language-plaintext highlighter-rouge">"1"</code>，查 <code class="language-plaintext highlighter-rouge">code2url</code> 得到原始长链接，返回。</p>
+
+  <p>顺带看一个进制转换稍长的例子：当 <code class="language-plaintext highlighter-rouge">id</code> 涨到 <code class="language-plaintext highlighter-rouge">62</code> 时，第一轮 <code class="language-plaintext highlighter-rouge">62 % 62 = 0</code> 取 <code class="language-plaintext highlighter-rouge">'0'</code>、<code class="language-plaintext highlighter-rouge">v = 1</code>；第二轮 <code class="language-plaintext highlighter-rouge">1 % 62 = 1</code> 取 <code class="language-plaintext highlighter-rouge">'1'</code>、<code class="language-plaintext highlighter-rouge">v = 0</code>。拼出的串是 <code class="language-plaintext highlighter-rouge">"01"</code>，反转后得 <code class="language-plaintext highlighter-rouge">"10"</code>——这正是 62 在 62 进制下的表示。若漏掉反转就会返回 <code class="language-plaintext highlighter-rouge">"01"</code>，虽然仍然唯一、不影响判题，但已经不是正确的进制表示，一旦后续需要「从短码反解出编号」就会全盘错乱。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Codec</span> <span class="o">{</span>
+    <span class="c1">// 自增计数器保证短码绝不重复；用 long 覆盖任何现实调用量。</span>
+    <span class="kd">private</span> <span class="kt">long</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">code2url</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">url2code</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">BASE</span> <span class="o">=</span> <span class="s">"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">encode</span><span class="o">(</span><span class="nc">String</span> <span class="n">longUrl</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 同一个长链接复用旧短码，判重必须在 id++ 之前。</span>
+        <span class="nc">String</span> <span class="n">code</span> <span class="o">=</span> <span class="n">url2code</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">longUrl</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">code</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="s">"http://tinyurl.com/"</span> <span class="o">+</span> <span class="n">code</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">id</span><span class="o">++;</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">toBase62</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+        <span class="c1">// 两张表互为逆映射，必须同时写入。</span>
+        <span class="n">code2url</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">code</span><span class="o">,</span> <span class="n">longUrl</span><span class="o">);</span>
+        <span class="n">url2code</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">longUrl</span><span class="o">,</span> <span class="n">code</span><span class="o">);</span>
+        <span class="k">return</span> <span class="s">"http://tinyurl.com/"</span> <span class="o">+</span> <span class="n">code</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">decode</span><span class="o">(</span><span class="nc">String</span> <span class="n">shortUrl</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 取最后一个 '/' 之后的部分，不依赖前缀的具体长度。</span>
+        <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">shortUrl</span><span class="o">.</span><span class="na">lastIndexOf</span><span class="o">(</span><span class="sc">'/'</span><span class="o">);</span>
+        <span class="nc">String</span> <span class="n">code</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">?</span> <span class="n">shortUrl</span> <span class="o">:</span> <span class="n">shortUrl</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="nc">String</span> <span class="n">url</span> <span class="o">=</span> <span class="n">code2url</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">code</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">url</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="s">""</span> <span class="o">:</span> <span class="n">url</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="nf">toBase62</span><span class="o">(</span><span class="kt">long</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="s">"0"</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+        <span class="kt">long</span> <span class="n">v</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">v</span> <span class="o">%</span> <span class="mi">62</span><span class="o">);</span>
+            <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="no">BASE</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">r</span><span class="o">));</span>
+            <span class="n">v</span> <span class="o">/=</span> <span class="mi">62</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">// 除法先得到低位，拼出来是倒序的，必须反转。</span>
+        <span class="k">return</span> <span class="n">sb</span><span class="o">.</span><span class="na">reverse</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">Codec</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="c">// 自增计数器保证短码绝不重复；uint64 覆盖现实调用量。</span>
+	<span class="n">id</span>       <span class="kt">uint64</span>
+	<span class="n">code2url</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span>
+	<span class="n">url2code</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">Codec</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">Codec</span><span class="p">{</span><span class="n">code2url</span><span class="o">:</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">),</span> <span class="n">url2code</span><span class="o">:</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">)}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">Codec</span><span class="p">)</span> <span class="n">encode</span><span class="p">(</span><span class="n">longUrl</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="c">// 同一个长链接复用旧短码，判重必须在 id++ 之前。</span>
+	<span class="k">if</span> <span class="n">code</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">this</span><span class="o">.</span><span class="n">url2code</span><span class="p">[</span><span class="n">longUrl</span><span class="p">];</span> <span class="n">ok</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="s">"http://tinyurl.com/"</span> <span class="o">+</span> <span class="n">code</span>
+	<span class="p">}</span>
+	<span class="n">this</span><span class="o">.</span><span class="n">id</span><span class="o">++</span>
+	<span class="n">code</span> <span class="o">:=</span> <span class="n">toBase62</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+	<span class="c">// 两张表互为逆映射，必须同时写入。</span>
+	<span class="n">this</span><span class="o">.</span><span class="n">code2url</span><span class="p">[</span><span class="n">code</span><span class="p">]</span> <span class="o">=</span> <span class="n">longUrl</span>
+	<span class="n">this</span><span class="o">.</span><span class="n">url2code</span><span class="p">[</span><span class="n">longUrl</span><span class="p">]</span> <span class="o">=</span> <span class="n">code</span>
+	<span class="k">return</span> <span class="s">"http://tinyurl.com/"</span> <span class="o">+</span> <span class="n">code</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">Codec</span><span class="p">)</span> <span class="n">decode</span><span class="p">(</span><span class="n">shortUrl</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="c">// 取最后一个 '/' 之后的部分，不依赖前缀的具体长度。</span>
+	<span class="n">idx</span> <span class="o">:=</span> <span class="o">-</span><span class="m">1</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">shortUrl</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">shortUrl</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'/'</span> <span class="p">{</span>
+			<span class="n">idx</span> <span class="o">=</span> <span class="n">i</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">code</span> <span class="o">:=</span> <span class="n">shortUrl</span>
+	<span class="k">if</span> <span class="n">idx</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+		<span class="n">code</span> <span class="o">=</span> <span class="n">shortUrl</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="m">1</span><span class="o">:</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">code2url</span><span class="p">[</span><span class="n">code</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">toBase62</span><span class="p">(</span><span class="n">x</span> <span class="kt">uint64</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="n">base</span> <span class="o">:=</span> <span class="s">"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>
+	<span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="s">"0"</span>
+	<span class="p">}</span>
+	<span class="n">buf</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">buf</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">base</span><span class="p">[</span><span class="n">x</span><span class="o">%</span><span class="m">62</span><span class="p">])</span>
+		<span class="n">x</span> <span class="o">/=</span> <span class="m">62</span>
+	<span class="p">}</span>
+	<span class="c">// 除法先得到低位，拼出来是倒序的，必须反转。</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">;</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+		<span class="n">buf</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">buf</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">buf</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">buf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="kt">string</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：设长链接长度为 $L$、短码长度为 $K=O(\log_{62} id)$。<code class="language-plaintext highlighter-rouge">encode</code> 需要哈希长链接并生成短码，时间为 $O(L+K)$；重复编码时只需 $O(L)$。<code class="language-plaintext highlighter-rouge">decode</code> 扫描短网址并哈希短码，时间为 $O(K)$（固定域名前缀只贡献常数长度）。</li>
+    <li>
+<strong>空间复杂度</strong>：累计存储为 $O(S+n\log n)$，其中 $S$ 是所有不同长链接的总长度、$n$ 是其数量；两张映射各有 $n$ 个条目，短码总长度为 $O(n\log n)$。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>设计题先分清「哪些是题目硬约束、哪些是自己可以定的」。本题唯一的硬约束是短码不重复，认清这点后，自增计数器这个最简单的方案立刻浮出水面。</li>
+    <li>短码不必从长链接推导。凡是「只要求可还原、不要求可计算」的编码问题，都可以用「登记 + 查表」代替「计算」，从而彻底消灭冲突。</li>
+    <li>用哈希值当短码是这类题最典型的错误答案。面试时能主动说出「32 位哈希在无限输入空间上必然碰撞，而碰撞会静默产生错误」，比写对代码更能体现设计意识。</li>
+    <li>需要双向查询就维护双向表。<code class="language-plaintext highlighter-rouge">code2url</code> 服务 <code class="language-plaintext highlighter-rouge">decode</code>、<code class="language-plaintext highlighter-rouge">url2code</code> 服务幂等性，两者同时写入是保持逆映射不变量的关键。</li>
+    <li>解析短码时取最后一个分隔符，而不是硬编码前缀长度。这个习惯能让代码在域名或路径变化时不受影响。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>用 <code class="language-plaintext highlighter-rouge">longUrl.hashCode()</code> 当短码</strong>：两个不同网址哈希相同 → 后写入的覆盖先写入的，<code class="language-plaintext highlighter-rouge">decode</code> 静默返回另一个人的链接，是最严重的设计缺陷。</li>
+    <li>
+<strong>判重写在 <code class="language-plaintext highlighter-rouge">id++</code> 之后</strong>：连续两次 <code class="language-plaintext highlighter-rouge">encode</code> 同一个网址 → 第二次虽然返回旧短码，但计数器已白白前进，长期运行会浪费大量编号。</li>
+    <li>
+<strong>只维护 <code class="language-plaintext highlighter-rouge">code2url</code> 一张表</strong>：同一个长链接 <code class="language-plaintext highlighter-rouge">encode</code> 十次 → 分配十个不同短码、表里存十份重复的长链接，内存线性膨胀。</li>
+    <li>
+<strong>只维护 <code class="language-plaintext highlighter-rouge">url2code</code> 一张表</strong>：<code class="language-plaintext highlighter-rouge">decode</code> 无从下手 → 只能反向遍历整张表找短码，单次查询退化成 $O(n \cdot L)$。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">decode</code> 用 <code class="language-plaintext highlighter-rouge">indexOf('/')</code> 而不是 <code class="language-plaintext highlighter-rouge">lastIndexOf('/')</code></strong>：<code class="language-plaintext highlighter-rouge">"http://tinyurl.com/1"</code> → 截出的是 <code class="language-plaintext highlighter-rouge">"/tinyurl.com/1"</code>，查表必然落空，返回空串。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">decode</code> 用 <code class="language-plaintext highlighter-rouge">substring(19)</code> 硬编码前缀长度</strong>：一旦短网址前缀改成 <code class="language-plaintext highlighter-rouge">"https://tinyurl.com/"</code>（多一个字符）→ 截出的短码首字符被吃掉，全部还原失败。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">toBase62</code> 忘记反转</strong>：<code class="language-plaintext highlighter-rouge">id = 62</code> → 返回 <code class="language-plaintext highlighter-rouge">"01"</code> 而不是 <code class="language-plaintext highlighter-rouge">"10"</code>，虽不影响本题判题，但短码不再是合法的进制表示，任何「从短码反解编号」的扩展都会错。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">toBase62</code> 漏掉 <code class="language-plaintext highlighter-rouge">x == 0</code> 的分支</strong>：若计数器从 <code class="language-plaintext highlighter-rouge">0</code> 开始编号 → 第一次 <code class="language-plaintext highlighter-rouge">while</code> 一次都不进，返回空串，短网址变成 <code class="language-plaintext highlighter-rouge">"http://tinyurl.com/"</code>，<code class="language-plaintext highlighter-rouge">decode</code> 时截出空串。</li>
+    <li>
+<strong>62 进制字符表长度不等于 62</strong>：例如漏写一个字母只有 61 个字符 → <code class="language-plaintext highlighter-rouge">v % 62</code> 取到下标 61 时数组越界抛异常。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">decode</code> 查不到时直接返回 <code class="language-plaintext highlighter-rouge">code2url.get(code)</code></strong>：短码不存在 → Java 返回 <code class="language-plaintext highlighter-rouge">null</code>，调用方拼接或比较时空指针崩溃，应统一降级成空串。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/">297. 二叉树的序列化与反序列化</a></td>
+      <td>困难</td>
+      <td>同为编解码成对设计，但必须真正把结构写进字符串，不能靠查表作弊</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-hashmap/">706. 设计哈希映射</a></td>
+      <td>简单</td>
+      <td>要求手写本题直接使用的哈希表本身，考点是散列函数与冲突处理</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/insert-delete-getrandom-o1/">380. O(1) 时间插入、删除和获取随机元素</a></td>
+      <td>中等</td>
+      <td>同样用两个结构互补，但配的是「哈希表 + 动态数组」以支持随机取值</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lru-cache/">146. LRU 缓存</a></td>
+      <td>中等</td>
+      <td>在哈希表之外还要维护访问顺序，容量上限带来淘汰逻辑，本题则无需淘汰</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/implement-trie-prefix-tree/">208. 实现 Trie (前缀树)</a></td>
+      <td>中等</td>
+      <td>键之间存在前缀共享关系，用树而非平坦映射，换来前缀查询能力</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-twitter/">355. 设计推特</a></td>
+      <td>中等</td>
+      <td>多张表之间存在关联与时序，取数据时还要做多路归并，状态复杂度高一档</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/two-sum-iii-data-structure-design/">170. 两数之和 III - 数据结构设计</a></td>
+      <td>简单</td>
+      <td>同为「写入侧与查询侧的取舍」，考的是把开销放在 <code class="language-plaintext highlighter-rouge">add</code> 还是 <code class="language-plaintext highlighter-rouge">find</code>
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/all-oone-data-structure/">432. 全 O(1) 的数据结构</a></td>
+      <td>困难</td>
+      <td>哈希表需与双向链表联动才能让极值查询也保持常数，是双结构配合的进阶形态</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2024/95190141" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1553. 吃掉 N 个橘子的最少天数</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2024/23362247" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1233. 删除子文件夹</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2024/69273991">https://hgnulb.github.io/blog/2024/69273991</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

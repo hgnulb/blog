@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode LCR 106. 判断二分图 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,LCR,图,并查集,广度优先搜索,深度优先搜索" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode LCR 106. 判断二分图" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/64382604" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/64382604" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-29T01:59:06+08:00" />
+<meta property="article:modified_time" content="2026-03-29T01:59:06+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode LCR 106. 判断二分图" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-03-29T01:59:06+08:00","datePublished":"2026-03-29T01:59:06+08:00","description":"题目描述","headline":"LeetCode LCR 106. 判断二分图","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/64382604"},"url":"https://hgnulb.github.io/blog/2026/64382604"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法并查集维护连通性">解法：并查集维护连通性</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode LCR 106. 判断二分图">LeetCode LCR 106. 判断二分图</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-03-29 01:59:06"
+                    datetime="2026-03-29T01:59:06+08:00"
+            >
+                2026-03-29
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2608 字 · 英文 53 词 · 代码 53 行"
+            aria-label="预计阅读时间约 8 分钟，正文 2608 字 · 英文 53 词 · 代码 53 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 8 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3007053882/" title="119 经典题变种挑战">
+        119 经典题变种挑战
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3355311990/" title="剑指 Offer">
+        剑指 Offer
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7450658006/" title="剑指 Offer（专项突击版）">
+        剑指 Offer（专项突击版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6142931175/" title="LCR">
+        LCR
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5789791753/" title="图">
+        图
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5427091558/" title="并查集">
+        并查集
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法并查集维护连通性">解法：并查集维护连通性</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/vEAB3K/">LCR 106. 判断二分图</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一张用邻接表描述的<strong>无向图</strong>，<code class="language-plaintext highlighter-rouge">graph[u]</code> 列出所有与 <code class="language-plaintext highlighter-rouge">u</code> 相邻的点。问能否把全部节点分成两个集合，使得<strong>每一条边的两个端点分属不同集合</strong>。</p>
+
+  <p>把条件翻过来读更有用：题目其实是在问「有没有哪条边的两端被迫落在同一侧」。所以我们真正要维护的不是「谁在左边、谁在右边」这种绝对位置，而是<strong>节点之间的相对关系</strong>——<code class="language-plaintext highlighter-rouge">u</code> 与它的每个邻居必须异侧，而 <code class="language-plaintext highlighter-rouge">u</code> 的所有邻居彼此之间必须<strong>同侧</strong>（因为它们都在 <code class="language-plaintext highlighter-rouge">u</code> 的对面）。</p>
+
+  <p>「<code class="language-plaintext highlighter-rouge">u</code> 的所有邻居互相同侧」这句推论是整道题的题眼：它把「异侧」这种带方向的约束，转换成了「同侧」这种可以直接用集合合并来表达的无向约束。</p>
+
+  <p>约束里节点数 <code class="language-plaintext highlighter-rouge">n ≤ 100</code>，边数很小，说明任何 $O(n^2)$ 级别的做法都能过，重点不在效率而在建模是否正确。</p>
+
+  <p>图不保证连通，这一点必须留意：可能存在多个互相独立的分量，任何一个分量不满足条件整张图就不是二分图，所以必须遍历所有起点，不能只从 0 号点出发一次。</p>
+
+  <p>边界：没有边的图（所有 <code class="language-plaintext highlighter-rouge">graph[u]</code> 都是空）永远是二分图；自环会让一个点必须同时在两侧，直接判否（本题保证无自环）；一条边在邻接表里会出现两次（<code class="language-plaintext highlighter-rouge">u</code> 在 <code class="language-plaintext highlighter-rouge">v</code> 的列表里、<code class="language-plaintext highlighter-rouge">v</code> 也在 <code class="language-plaintext highlighter-rouge">u</code> 的列表里），重复处理同一条边不会影响结论。</p>
+</blockquote>
+
+<h2 id="解法并查集维护连通性">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%BB%B4%E6%8A%A4%E8%BF%9E%E9%80%9A%E6%80%A7" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：并查集维护连通性</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是枚举每个节点归左还是归右，共 $2^n$ 种分配，逐一检查每条边。$n = 100$ 时不可想象。</p>
+
+  <p>瓶颈在于<strong>枚举了绝对位置，而题目只约束相对关系</strong>。把整个方案左右互换，合法性完全不变，所以 $2^n$ 里有一半是重复的；更关键的是，一旦确定了某个点的归属，与它相连的那一整片区域的归属就被连锁确定了，根本不需要逐点枚举。</p>
+
+  <p>抓住「相对关系」这个词，就能把问题化成集合合并：<strong>把必须同侧的节点合并进同一个集合</strong>。哪些点必须同侧？由前面的推论，对任意节点 <code class="language-plaintext highlighter-rouge">u</code>，它的邻居列表 <code class="language-plaintext highlighter-rouge">graph[u]</code> 里的所有点两两同侧。于是逐个 <code class="language-plaintext highlighter-rouge">u</code> 处理，把 <code class="language-plaintext highlighter-rouge">graph[u]</code> 里的点全部并到一起即可。</p>
+
+  <p>那什么时候判否？如果在处理某条边 <code class="language-plaintext highlighter-rouge">(u, v)</code> 时发现 <code class="language-plaintext highlighter-rouge">u</code> 和 <code class="language-plaintext highlighter-rouge">v</code> <strong>已经处在同一个集合</strong>里，说明先前的约束已经逼着它们同侧，而这条边又要求它们异侧，矛盾出现，直接返回 <code class="language-plaintext highlighter-rouge">false</code>。</p>
+
+  <p>于是不变量可以写成：<strong>任何时刻，处于同一集合的节点在最终的划分中必须落在同一侧</strong>。算法从「每个点自成一集」开始（此时没有任何约束），每读一条边就往集合结构里追加一条「同侧」约束，同时检查这条边自身要求的「异侧」是否已被违反。</p>
+
+  <p>具体实现上有一个简洁的技巧：处理 <code class="language-plaintext highlighter-rouge">u</code> 的邻居列表时，不必两两配对合并，只要把每个邻居 <code class="language-plaintext highlighter-rouge">v</code> 都并到列表的第一个元素 <code class="language-plaintext highlighter-rouge">graph[u][0]</code> 上即可，同样能让整个列表归入一集，而且只需一次线性扫描。</p>
+
+  <p>全部边处理完仍未发现矛盾，说明这套「同侧」约束是自洽的，按集合染色即可得到合法的二分方案，返回 <code class="language-plaintext highlighter-rouge">true</code>。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>初始化父数组 <code class="language-plaintext highlighter-rouge">p</code>，令 <code class="language-plaintext highlighter-rouge">p[i] = i</code></strong>。为什么：起点是「没有任何约束」，每个节点单独成集；漏掉这一步会让所有点的父指针指向 0，等价于凭空断言全图同侧，任何有边的图都会被判否。</li>
+    <li>
+<strong>写带路径压缩的 <code class="language-plaintext highlighter-rouge">find</code></strong>：<code class="language-plaintext highlighter-rouge">if (p[x] != x) p[x] = find(p[x]); return p[x];</code>。为什么要压缩：本题会对同一批节点反复查询代表元，压缩后树高几乎为 1，均摊近似 $O(1)$；即使不压缩本题也能过，但这是并查集的标准装备，白板上写它不会比不写长几个字符。</li>
+    <li>
+<strong>外层遍历每个节点 <code class="language-plaintext highlighter-rouge">u</code>，取出它的邻居列表 <code class="language-plaintext highlighter-rouge">g = graph[u]</code></strong>。为什么要遍历所有 <code class="language-plaintext highlighter-rouge">u</code> 而不是只从 0 出发：图可能不连通，只搜一个分量会漏掉其余分量里的矛盾。</li>
+    <li>
+<strong>对列表中的每个 <code class="language-plaintext highlighter-rouge">v</code>，先判 <code class="language-plaintext highlighter-rouge">find(u) == find(v)</code>，成立则立刻返回 <code class="language-plaintext highlighter-rouge">false</code></strong>。为什么必须先判后合：这条边要求 <code class="language-plaintext highlighter-rouge">u</code> 与 <code class="language-plaintext highlighter-rouge">v</code> 异侧，若二者已被判定同侧就是硬矛盾。顺序反了的话，下一步的合并会把它们真的并到一起，矛盾被自己抹平，永远检测不出来。</li>
+    <li>
+<strong>再执行 <code class="language-plaintext highlighter-rouge">p[find(v)] = find(g[0])</code>，把 <code class="language-plaintext highlighter-rouge">v</code> 并到列表首元素所在的集合</strong>。为什么并到 <code class="language-plaintext highlighter-rouge">g[0]</code>：<code class="language-plaintext highlighter-rouge">g</code> 里所有点都是 <code class="language-plaintext highlighter-rouge">u</code> 的邻居，彼此必须同侧，选任意一个当锚点都行，取首元素最省事；这样一趟扫描就完成了整个列表的合并。</li>
+    <li>
+<strong>所有节点处理完仍未返回 <code class="language-plaintext highlighter-rouge">false</code>，则返回 <code class="language-plaintext highlighter-rouge">true</code></strong>。为什么可以直接下结论：此时全部「同侧」约束互相自洽，且没有任何一条边的两端落在同一集合，按集合任意二染色即为一组合法划分。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">graph = [[1,3],[0,2],[1,3],[0,2]]</code>（一个四元环 <code class="language-plaintext highlighter-rouge">0-1-2-3-0</code>）走一遍。初始 <code class="language-plaintext highlighter-rouge">p = [0,1,2,3]</code>，每点自成一集。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">u = 0</code>，<code class="language-plaintext highlighter-rouge">g = [1,3]</code>。处理 <code class="language-plaintext highlighter-rouge">v = 1</code>：<code class="language-plaintext highlighter-rouge">find(0)=0</code>、<code class="language-plaintext highlighter-rouge">find(1)=1</code> 不同，没有矛盾；合并 <code class="language-plaintext highlighter-rouge">p[find(1)] = find(g[0]=1)</code>，即 <code class="language-plaintext highlighter-rouge">p[1] = 1</code>，是一次空操作。处理 <code class="language-plaintext highlighter-rouge">v = 3</code>：<code class="language-plaintext highlighter-rouge">find(0)=0</code>、<code class="language-plaintext highlighter-rouge">find(3)=3</code> 不同；合并 <code class="language-plaintext highlighter-rouge">p[find(3)] = find(1) = 1</code>，于是 <code class="language-plaintext highlighter-rouge">{1,3}</code> 归为一集——这正体现了「0 的两个邻居必须同侧」。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">u = 1</code>，<code class="language-plaintext highlighter-rouge">g = [0,2]</code>。处理 <code class="language-plaintext highlighter-rouge">v = 0</code>：<code class="language-plaintext highlighter-rouge">find(1)=1</code>、<code class="language-plaintext highlighter-rouge">find(0)=0</code> 不同，合法；合并 <code class="language-plaintext highlighter-rouge">p[find(0)] = find(g[0]=0) = 0</code>，空操作。处理 <code class="language-plaintext highlighter-rouge">v = 2</code>：<code class="language-plaintext highlighter-rouge">find(1)=1</code>、<code class="language-plaintext highlighter-rouge">find(2)=2</code> 不同，合法；合并 <code class="language-plaintext highlighter-rouge">p[find(2)] = find(0) = 0</code>，于是 <code class="language-plaintext highlighter-rouge">{0,2}</code> 归为一集。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">u = 2</code>，<code class="language-plaintext highlighter-rouge">g = [1,3]</code>。<code class="language-plaintext highlighter-rouge">find(2)</code> 现在是 0，<code class="language-plaintext highlighter-rouge">find(1)=1</code>、<code class="language-plaintext highlighter-rouge">find(3)=1</code>，都与 0 不同，两条边都合法，合并操作全是空操作。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">u = 3</code>，<code class="language-plaintext highlighter-rouge">g = [0,2]</code>。<code class="language-plaintext highlighter-rouge">find(3)=1</code>，<code class="language-plaintext highlighter-rouge">find(0)=0</code>、<code class="language-plaintext highlighter-rouge">find(2)=0</code>，均不同，合法。</p>
+
+  <p>全部走完返回 <code class="language-plaintext highlighter-rouge">true</code>，对应的划分是 <code class="language-plaintext highlighter-rouge">{0,2}</code> 与 <code class="language-plaintext highlighter-rouge">{1,3}</code>，正是偶环的标准二分。</p>
+
+  <p>再看奇环 <code class="language-plaintext highlighter-rouge">graph = [[1,2],[0,2],[0,1]]</code>（三角形）。<code class="language-plaintext highlighter-rouge">u = 0</code>，<code class="language-plaintext highlighter-rouge">g = [1,2]</code>：处理 <code class="language-plaintext highlighter-rouge">v = 1</code> 合法，<code class="language-plaintext highlighter-rouge">p[1] = find(1) = 1</code>；处理 <code class="language-plaintext highlighter-rouge">v = 2</code> 合法，<code class="language-plaintext highlighter-rouge">p[find(2)] = find(1) = 1</code>，于是 <code class="language-plaintext highlighter-rouge">{1,2}</code> 同集。<code class="language-plaintext highlighter-rouge">u = 1</code>，<code class="language-plaintext highlighter-rouge">g = [0,2]</code>：处理 <code class="language-plaintext highlighter-rouge">v = 0</code> 合法；处理 <code class="language-plaintext highlighter-rouge">v = 2</code> 时 <code class="language-plaintext highlighter-rouge">find(1) = 1</code>、<code class="language-plaintext highlighter-rouge">find(2) = 1</code> <strong>相等</strong>，矛盾出现，返回 <code class="language-plaintext highlighter-rouge">false</code>。三角形确实不是二分图，检测正好落在闭合那条边上。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">p</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isBipartite</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">graph</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">p</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">u</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">u</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">u</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">g</span> <span class="o">=</span> <span class="n">graph</span><span class="o">[</span><span class="n">u</span><span class="o">];</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">g</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// 这条边要求 u、v 异侧，若二者已被判定同侧则矛盾。</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">find</span><span class="o">(</span><span class="n">u</span><span class="o">)</span> <span class="o">==</span> <span class="n">find</span><span class="o">(</span><span class="n">v</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="c1">// u 的所有邻居必须彼此同侧，统一并到列表首元素上。</span>
+                <span class="n">p</span><span class="o">[</span><span class="n">find</span><span class="o">(</span><span class="n">v</span><span class="o">)]</span> <span class="o">=</span> <span class="n">find</span><span class="o">(</span><span class="n">g</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">find</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">p</span><span class="o">[</span><span class="n">x</span><span class="o">]</span> <span class="o">!=</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">p</span><span class="o">[</span><span class="n">x</span><span class="o">]</span> <span class="o">=</span> <span class="n">find</span><span class="o">(</span><span class="n">p</span><span class="o">[</span><span class="n">x</span><span class="o">]);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">p</span><span class="o">[</span><span class="n">x</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">isBipartite</span><span class="p">(</span><span class="n">graph</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">p</span> <span class="p">{</span>
+        <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="p">}</span>
+    <span class="k">var</span> <span class="n">find</span> <span class="k">func</span><span class="p">(</span><span class="n">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span>
+    <span class="n">find</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span> <span class="p">{</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">g</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">graph</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">g</span> <span class="p">{</span>
+            <span class="c">// 这条边要求 u、v 异侧，若二者已被判定同侧则矛盾。</span>
+            <span class="k">if</span> <span class="n">find</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">==</span> <span class="n">find</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="no">false</span>
+            <span class="p">}</span>
+            <span class="c">// u 的所有邻居必须彼此同侧，统一并到列表首元素上。</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">find</span><span class="p">(</span><span class="n">v</span><span class="p">)]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O((n + m) \cdot \alpha(n))$，其中 $n$ 是节点数、$m$ 是边数（邻接表中每条边出现两次），$\alpha$ 是反阿克曼函数。凭什么：初始化扫一遍所有节点，主循环恰好把邻接表里的每一项处理一次，每一项做常数次 <code class="language-plaintext highlighter-rouge">find</code>，路径压缩后单次 <code class="language-plaintext highlighter-rouge">find</code> 的均摊代价接近常数。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。凭什么：只额外维护长度为 $n$ 的父数组；<code class="language-plaintext highlighter-rouge">find</code> 的递归深度在路径压缩后趋于常数，最坏情况下也不超过 $n$。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>判二分图的本质是「约束一致性」：边给出「异侧」约束，而「同一个点的所有邻居互相同侧」把它转成了可合并的「同侧」约束——这一步转换是并查集解法能成立的全部理由。</li>
+    <li>并查集只能表达「同类」，表达「异类」要靠两种手段：本题这种「把共同邻居并起来」，或者开二倍空间的「扩展域并查集」（<code class="language-plaintext highlighter-rouge">i</code> 与 <code class="language-plaintext highlighter-rouge">i + n</code> 分别代表两侧）。面试中能说出这两条路径，说明对并查集的适用边界有认识。</li>
+    <li>「先检查后合并」的顺序不可颠倒，这是所有用并查集做冲突检测的题目的通用铁律（684 冗余连接、990 等式方程同理）。</li>
+    <li>图不保证连通时必须对每个节点起跳，只跑一个分量是这类题的高频漏解点。</li>
+    <li>面试视角：更主流的答案其实是 BFS/DFS 二染色——给起点染 0，邻居染 1，遇到同色邻居即判否，时间同为线性且更直观。被问到时应当两种都能说，并指出染色法能顺带输出具体划分，而并查集只能回答可行性。</li>
+    <li>判否的时机就是「奇环闭合」的时刻，能把「不是二分图 ⟺ 存在奇环」这个等价命题说出来，是这道题最值钱的一句话。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>忘记初始化 <code class="language-plaintext highlighter-rouge">p[i] = i</code></strong>：<code class="language-plaintext highlighter-rouge">graph = [[1],[0]]</code> 时所有父指针默认是 0，<code class="language-plaintext highlighter-rouge">find(0)</code> 与 <code class="language-plaintext highlighter-rouge">find(1)</code> 都得 0，第一条边就被误判成矛盾，返回 <code class="language-plaintext highlighter-rouge">false</code> 而正确答案是 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+    <li>
+<strong>先合并后检查</strong>：<code class="language-plaintext highlighter-rouge">graph = [[1,2],[0,2],[0,1]]</code>（三角形）中，若把 <code class="language-plaintext highlighter-rouge">p[find(v)] = find(g[0])</code> 写在 <code class="language-plaintext highlighter-rouge">if</code> 之前，矛盾会被自己的合并抹平，返回 <code class="language-plaintext highlighter-rouge">true</code> 而正确答案是 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>
+<strong>只从 0 号节点做一次遍历</strong>：<code class="language-plaintext highlighter-rouge">graph = [[1],[0],[3,4],[2,4],[2,3]]</code> 的第二个分量是三角形，只搜 0 所在分量会漏掉它，返回 <code class="language-plaintext highlighter-rouge">true</code> 而正确答案是 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>
+<strong>合并时写成 <code class="language-plaintext highlighter-rouge">p[v] = find(g[0])</code> 而不是 <code class="language-plaintext highlighter-rouge">p[find(v)] = find(g[0])</code></strong>：直接改叶子的父指针会把 <code class="language-plaintext highlighter-rouge">v</code> 原先所在集合的其余成员甩掉，<code class="language-plaintext highlighter-rouge">graph = [[1,2,3],[0],[0],[0]]</code> 中 <code class="language-plaintext highlighter-rouge">{1,2,3}</code> 无法真正合成一集，后续矛盾检测失效。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">find</code> 里写成 <code class="language-plaintext highlighter-rouge">return find(p[x])</code> 却不回写 <code class="language-plaintext highlighter-rouge">p[x]</code></strong>：功能上仍正确但退化成无压缩版本，<code class="language-plaintext highlighter-rouge">graph</code> 退化成长链时递归层数逼近 $n$，链式数据下有栈溢出风险。</li>
+    <li>
+<strong>误以为邻接表里每条边只出现一次而跳过反向边</strong>：<code class="language-plaintext highlighter-rouge">graph = [[1],[0]]</code> 中若只处理 <code class="language-plaintext highlighter-rouge">u &lt; v</code> 的方向，本题恰好仍能过，但同样的写法在需要统计度数或边数的题里会直接少一半。</li>
+    <li>
+<strong>把「同侧」和「异侧」的语义写反，即把 <code class="language-plaintext highlighter-rouge">u</code> 与 <code class="language-plaintext highlighter-rouge">v</code> 合并</strong>：<code class="language-plaintext highlighter-rouge">graph = [[1],[0]]</code> 会先合并 0 和 1，再遇到反向边 <code class="language-plaintext highlighter-rouge">(1,0)</code> 时检测出「矛盾」，返回 <code class="language-plaintext highlighter-rouge">false</code> 而正确答案是 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+    <li>
+<strong>空邻居列表时访问 <code class="language-plaintext highlighter-rouge">g[0]</code></strong>：本题的 <code class="language-plaintext highlighter-rouge">g[0]</code> 只在循环体内被访问，<code class="language-plaintext highlighter-rouge">g</code> 为空时循环不进入，天然安全；若把 <code class="language-plaintext highlighter-rouge">find(g[0])</code> 提到循环外预先计算，<code class="language-plaintext highlighter-rouge">graph = [[],[]]</code> 会立刻越界。</li>
+    <li>
+<strong>认为「无环图一定是二分图，有环就不是」</strong>：<code class="language-plaintext highlighter-rouge">graph = [[1,3],[0,2],[1,3],[0,2]]</code> 是四元环却是二分图，只有<strong>奇环</strong>才会破坏二分性。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/is-graph-bipartite/">785. 判断二分图</a></td>
+      <td>中等</td>
+      <td>与本题同题，可直接套用同一份代码</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/possible-bipartition/">886. 可能的二分法</a></td>
+      <td>中等</td>
+      <td>给的是边列表而非邻接表，需要自己建图，且节点编号从 1 开始</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/satisfiability-of-equality-equations/">990. 等式方程的可满足性</a></td>
+      <td>中等</td>
+      <td>同样是「同类合并 + 异类检测」，但必须先处理完所有等式再验不等式</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/redundant-connection/">684. 冗余连接</a></td>
+      <td>中等</td>
+      <td>用并查集检测环，返回造成环的那条边，是「先查后合」的另一个典型</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-provinces/">547. 省份数量</a></td>
+      <td>中等</td>
+      <td>只统计连通分量个数，不涉及冲突检测，是并查集最基础的形态</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/couples-holding-hands/">765. 情侣牵手</a></td>
+      <td>困难</td>
+      <td>把情侣对当节点建图，答案是「节点数减连通分量数」，需要额外的贪心论证</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/36146417" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode LCR 105. 岛屿的最大面积</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/44768078" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode LCR 107. 01 矩阵</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/64382604">https://hgnulb.github.io/blog/2026/64382604</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

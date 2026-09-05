@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 面试题 02.06. 回文链表 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,双指针,栈,递归,链表" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 面试题 02.06. 回文链表" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2023/61216279" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2023/61216279" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-10-17T23:51:22+08:00" />
+<meta property="article:modified_time" content="2023-10-17T23:51:22+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 面试题 02.06. 回文链表" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2023-10-17T23:51:22+08:00","datePublished":"2023-10-17T23:51:22+08:00","description":"题目描述","headline":"LeetCode 面试题 02.06. 回文链表","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2023/61216279"},"url":"https://hgnulb.github.io/blog/2023/61216279"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法双指针收缩边界">解法：双指针收缩边界</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 面试题 02.06. 回文链表">LeetCode 面试题 02.06. 回文链表</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2023-10-17 23:51:22"
+                    datetime="2023-10-17T23:51:22+08:00"
+            >
+                2023-10-17
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2809 字 · 英文 95 词 · 代码 58 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2809 字 · 英文 95 词 · 代码 58 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    4 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4923693516/" title="简单">
+        简单
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5489305789/" title="已掌握">
+        已掌握
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7723837750/" title="程序员面试金典（第 6 版）">
+        程序员面试金典（第 6 版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8294756076/" title="双指针">
+        双指针
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6005735281/" title="链表">
+        链表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2907113006/" title="递归">
+        递归
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法双指针收缩边界">解法：双指针收缩边界</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/palindrome-linked-list-lcci/">面试题 02.06. 回文链表</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p><strong>题目目标</strong>：判断一个单向链表的值序列是否构成回文，是返回 <code class="language-plaintext highlighter-rouge">true</code>，否返回 <code class="language-plaintext highlighter-rouge">false</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>核心约束</strong>：链表是<strong>单向</strong>的，只能从头往后走，没法像数组那样两端往中间夹——这是全题的难点来源。同时面试里这题几乎必定跟一句「能不能 $O(1)$ 空间」，所以「先倒进数组再双指针」虽然正确，却只是热身答案。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>边界处理</strong>：空链表和单节点链表都算回文；节点数为偶数时两半等长，为奇数时中间那个节点不参与比较；数值可能为负也可能重复，比较必须逐个进行而不能靠求和、异或之类的哈希手段。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>实现取舍</strong>：三条路——倒进数组双指针（$O(n)$ 空间）、用栈存前半段（$O(n/2)$ 空间）、找中点后反转后半段再逐一比对（$O(1)$ 空间）。最后一种是面试官想看的，它把「回文判断」拆成了三个独立的链表基本功：快慢指针找中点、原地反转、双链表并行比较。</p>
+</blockquote>
+
+<h2 id="解法双指针收缩边界">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%8F%8C%E6%8C%87%E9%92%88%E6%94%B6%E7%BC%A9%E8%BE%B9%E7%95%8C" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：双指针收缩边界</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最直白的做法是遍历一遍把值倒进 <code class="language-plaintext highlighter-rouge">ArrayList</code>，然后左右指针向中间夹。这在数组上是标准答案，但在链表题里它绕开了考点——面试官想看的是你能不能只用指针操作解决问题，而不是把链表退化成数组。</p>
+</blockquote>
+
+<blockquote>
+  <p>瓶颈是什么？回文判断本质上需要「第 $i$ 个」和「倒数第 $i$ 个」同时可访问，而单链表只能正向走。数组解法用额外空间买到了随机访问，栈解法用额外空间买到了逆序访问。</p>
+</blockquote>
+
+<blockquote>
+  <p>关键观察：既然逆序访问是刚需，那就<strong>把后半段链表原地反转</strong>，让它变得可以从尾部往中间正向走。反转之后，前半段从头走、反转后的后半段也从头走，两条链并行推进，逐个比较即可。整个过程只动指针不建结构，空间降到 $O(1)$。</p>
+</blockquote>
+
+<blockquote>
+  <p>于是有三段清晰的不变量。第一段（找中点）：快指针每步走 2、慢指针每步走 1，且快指针初始就领先一格（<code class="language-plaintext highlighter-rouge">fast = head.next</code>），循环结束时 <strong><code class="language-plaintext highlighter-rouge">slow</code> 恰好停在前半段的最后一个节点上</strong>——偶数长度时 <code class="language-plaintext highlighter-rouge">slow</code> 是第 $n/2$ 个节点，奇数长度时 <code class="language-plaintext highlighter-rouge">slow</code> 是第 $(n+1)/2$ 个节点，也就是正中间那个。第二段（反转）：把 <code class="language-plaintext highlighter-rouge">slow.next</code> 开始的后半段头插到哑结点上，得到一条逆序链，同时 <code class="language-plaintext highlighter-rouge">slow.next = null</code> 把前半段截断，两条链彻底独立。第三段（比较）：以<strong>反转后的链</strong>为循环控制条件，因为它的长度总是不超过前半段——奇数长度时前半段比它多一个（正中间那个节点），这个节点在回文判断中本就该被跳过，用短链控制循环正好自动跳过它。</p>
+</blockquote>
+
+<blockquote>
+  <p>特别说明为什么 <code class="language-plaintext highlighter-rouge">fast</code> 要从 <code class="language-plaintext highlighter-rouge">head.next</code> 起步而不是 <code class="language-plaintext highlighter-rouge">head</code>。若从 <code class="language-plaintext highlighter-rouge">head</code> 起步，偶数长度时 <code class="language-plaintext highlighter-rouge">slow</code> 会停在后半段的第一个节点上，切割位置就偏了一格。让 <code class="language-plaintext highlighter-rouge">fast</code> 先领先一格，等价于把「向上取整」改成「向下取整」，正好把切点落在前半段末尾。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <p><strong>第一步：<code class="language-plaintext highlighter-rouge">head == null</code> 直接返回 <code class="language-plaintext highlighter-rouge">true</code>。</strong> 为什么必须先判：后面要访问 <code class="language-plaintext highlighter-rouge">head.next</code>，空链表会直接空指针；语义上空链表也确实是回文。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第二步：<code class="language-plaintext highlighter-rouge">slow = head</code>、<code class="language-plaintext highlighter-rouge">fast = head.next</code>，当 <code class="language-plaintext highlighter-rouge">fast != null &amp;&amp; fast.next != null</code> 时 <code class="language-plaintext highlighter-rouge">slow</code> 走一步、<code class="language-plaintext highlighter-rouge">fast</code> 走两步。</strong> 为什么循环条件要同时判两个：<code class="language-plaintext highlighter-rouge">fast</code> 每轮要走两步，只判 <code class="language-plaintext highlighter-rouge">fast != null</code> 的话 <code class="language-plaintext highlighter-rouge">fast.next.next</code> 会在最后一轮爆掉。为什么这样能停在前半段末尾：<code class="language-plaintext highlighter-rouge">fast</code> 领先一格且速度是两倍，<code class="language-plaintext highlighter-rouge">fast</code> 走到尽头时 <code class="language-plaintext highlighter-rouge">slow</code> 恰好走了一半路程。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第三步：<code class="language-plaintext highlighter-rouge">p = slow.next</code>，然后 <code class="language-plaintext highlighter-rouge">slow.next = null</code>。</strong> 为什么先取后断：断链之后就再也拿不到后半段的头了，顺序反了会丢失整条后半段。为什么要断：不断的话前半段的遍历会一路走进已经被反转的后半段，形成环或越界。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第四步：用哑结点做头插法反转 <code class="language-plaintext highlighter-rouge">p</code> 这条链。</strong> 循环体里先 <code class="language-plaintext highlighter-rouge">next = p.next</code> 保存后继，再 <code class="language-plaintext highlighter-rouge">p.next = dummy.next</code> 把当前节点挂到已反转部分的前面，接着 <code class="language-plaintext highlighter-rouge">dummy.next = p</code> 更新头，最后 <code class="language-plaintext highlighter-rouge">p = next</code> 前进。为什么必须先保存 <code class="language-plaintext highlighter-rouge">next</code>：<code class="language-plaintext highlighter-rouge">p.next</code> 马上要被覆盖，不先存下来就断了通往剩余节点的唯一通路。为什么用哑结点：省掉「第一个节点的 <code class="language-plaintext highlighter-rouge">next</code> 要置空」这个特判，<code class="language-plaintext highlighter-rouge">dummy.next</code> 初始为 <code class="language-plaintext highlighter-rouge">null</code> 天然充当了新链的尾。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第五步：<code class="language-plaintext highlighter-rouge">p = dummy.next</code>，与 <code class="language-plaintext highlighter-rouge">head</code> 并行推进，逐个比较 <code class="language-plaintext highlighter-rouge">val</code>，不等立即返回 <code class="language-plaintext highlighter-rouge">false</code>。</strong> 为什么循环条件挂在 <code class="language-plaintext highlighter-rouge">p</code> 上而不是 <code class="language-plaintext highlighter-rouge">head</code> 上：奇数长度时前半段多出中间那个节点，挂在 <code class="language-plaintext highlighter-rouge">p</code> 上会在比完所有该比的节点后自然退出；挂在 <code class="language-plaintext highlighter-rouge">head</code> 上则会多走一轮并访问到 <code class="language-plaintext highlighter-rouge">null.val</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第六步：循环走完说明每一对都相等，返回 <code class="language-plaintext highlighter-rouge">true</code>。</strong></p>
+</blockquote>
+
+<blockquote>
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">head = [1, 2, 3, 2, 1]</code>（奇数长度）走一遍</strong>：初始 <code class="language-plaintext highlighter-rouge">slow</code> 指向 1（下标 0），<code class="language-plaintext highlighter-rouge">fast</code> 指向 2（下标 1）。</p>
+</blockquote>
+
+<blockquote>
+  <p>第 1 轮：<code class="language-plaintext highlighter-rouge">fast</code>（下标 1）非空且 <code class="language-plaintext highlighter-rouge">fast.next</code>（下标 2）非空，<code class="language-plaintext highlighter-rouge">slow</code> 前进到下标 1（值 2），<code class="language-plaintext highlighter-rouge">fast</code> 前进两步到下标 3（值 2）。第 2 轮：<code class="language-plaintext highlighter-rouge">fast</code>（下标 3）非空且 <code class="language-plaintext highlighter-rouge">fast.next</code>（下标 4）非空，<code class="language-plaintext highlighter-rouge">slow</code> 前进到下标 2（值 3），<code class="language-plaintext highlighter-rouge">fast</code> 前进两步到下标 5，即 <code class="language-plaintext highlighter-rouge">null</code>。此时循环条件 <code class="language-plaintext highlighter-rouge">fast != null</code> 不成立，退出。<code class="language-plaintext highlighter-rouge">slow</code> 停在下标 2，也就是正中间那个 3——符合不变量。</p>
+</blockquote>
+
+<blockquote>
+  <p>切割：<code class="language-plaintext highlighter-rouge">p = slow.next</code> 指向下标 3（值 2），<code class="language-plaintext highlighter-rouge">slow.next = null</code>，前半段变成 <code class="language-plaintext highlighter-rouge">1 → 2 → 3</code>，后半段是 <code class="language-plaintext highlighter-rouge">2 → 1</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p>反转后半段：<code class="language-plaintext highlighter-rouge">p</code> 指向值 2 的节点，<code class="language-plaintext highlighter-rouge">next</code> 存下值 1 的节点，<code class="language-plaintext highlighter-rouge">p.next = dummy.next = null</code>，<code class="language-plaintext highlighter-rouge">dummy.next = p</code>，此时新链是 <code class="language-plaintext highlighter-rouge">2</code>；<code class="language-plaintext highlighter-rouge">p</code> 移到值 1 的节点，<code class="language-plaintext highlighter-rouge">next</code> 存 <code class="language-plaintext highlighter-rouge">null</code>，<code class="language-plaintext highlighter-rouge">p.next = dummy.next</code>（值 2 的节点），<code class="language-plaintext highlighter-rouge">dummy.next = p</code>，新链变成 <code class="language-plaintext highlighter-rouge">1 → 2</code>；<code class="language-plaintext highlighter-rouge">p = null</code> 退出。</p>
+</blockquote>
+
+<blockquote>
+  <p>比较：<code class="language-plaintext highlighter-rouge">p = 1 → 2</code>，<code class="language-plaintext highlighter-rouge">head = 1 → 2 → 3</code>。第一轮 <code class="language-plaintext highlighter-rouge">head.val = 1</code>、<code class="language-plaintext highlighter-rouge">p.val = 1</code>，相等，双双前进；第二轮 <code class="language-plaintext highlighter-rouge">head.val = 2</code>、<code class="language-plaintext highlighter-rouge">p.val = 2</code>，相等，前进后 <code class="language-plaintext highlighter-rouge">p</code> 变成 <code class="language-plaintext highlighter-rouge">null</code>。循环退出，返回 <code class="language-plaintext highlighter-rouge">true</code>。注意前半段那个值为 3 的中间节点从头到尾没参与比较，正是奇数长度下期望的行为。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>再以 <code class="language-plaintext highlighter-rouge">head = [1, 2]</code> 走一遍偶数的最小情形</strong>：<code class="language-plaintext highlighter-rouge">slow</code> 指向 1，<code class="language-plaintext highlighter-rouge">fast</code> 指向 2，<code class="language-plaintext highlighter-rouge">fast.next == null</code> 立刻退出循环，<code class="language-plaintext highlighter-rouge">slow</code> 停在下标 0，确实是前半段（只有一个节点）的末尾。切割后前半段是 <code class="language-plaintext highlighter-rouge">1</code>、后半段是 <code class="language-plaintext highlighter-rouge">2</code>，反转后仍是 <code class="language-plaintext highlighter-rouge">2</code>。比较 <code class="language-plaintext highlighter-rouge">1</code> 与 <code class="language-plaintext highlighter-rouge">2</code> 不等，返回 <code class="language-plaintext highlighter-rouge">false</code>，正确。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isPalindrome</span><span class="o">(</span><span class="nc">ListNode</span> <span class="n">head</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">head</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">ListNode</span> <span class="n">slow</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="nc">ListNode</span> <span class="n">fast</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">fast</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">fast</span><span class="o">.</span><span class="na">next</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">slow</span> <span class="o">=</span> <span class="n">slow</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">fast</span> <span class="o">=</span> <span class="n">fast</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">ListNode</span> <span class="n">p</span> <span class="o">=</span> <span class="n">slow</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="n">slow</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="nc">ListNode</span> <span class="n">dummy</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">p</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">ListNode</span> <span class="n">next</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">p</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">dummy</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">dummy</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">p</span><span class="o">;</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">dummy</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">p</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">head</span><span class="o">.</span><span class="na">val</span> <span class="o">!=</span> <span class="n">p</span><span class="o">.</span><span class="na">val</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">isPalindrome</span><span class="p">(</span><span class="n">head</span> <span class="o">*</span><span class="n">ListNode</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">head</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="no">true</span>
+    <span class="p">}</span>
+    <span class="n">slow</span><span class="p">,</span> <span class="n">fast</span> <span class="o">:=</span> <span class="n">head</span><span class="p">,</span> <span class="n">head</span><span class="o">.</span><span class="n">Next</span>
+    <span class="k">for</span> <span class="n">fast</span> <span class="o">!=</span> <span class="no">nil</span> <span class="o">&amp;&amp;</span> <span class="n">fast</span><span class="o">.</span><span class="n">Next</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">slow</span><span class="p">,</span> <span class="n">fast</span> <span class="o">=</span> <span class="n">slow</span><span class="o">.</span><span class="n">Next</span><span class="p">,</span> <span class="n">fast</span><span class="o">.</span><span class="n">Next</span><span class="o">.</span><span class="n">Next</span>
+    <span class="p">}</span>
+    <span class="n">p</span> <span class="o">:=</span> <span class="n">slow</span><span class="o">.</span><span class="n">Next</span>
+    <span class="n">slow</span><span class="o">.</span><span class="n">Next</span> <span class="o">=</span> <span class="no">nil</span>
+    <span class="n">dummy</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">ListNode</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">next</span> <span class="o">:=</span> <span class="n">p</span><span class="o">.</span><span class="n">Next</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">Next</span> <span class="o">=</span> <span class="n">dummy</span><span class="o">.</span><span class="n">Next</span>
+        <span class="n">dummy</span><span class="o">.</span><span class="n">Next</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">next</span>
+    <span class="p">}</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">dummy</span><span class="o">.</span><span class="n">Next</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">head</span><span class="o">.</span><span class="n">Val</span> <span class="o">!=</span> <span class="n">p</span><span class="o">.</span><span class="n">Val</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="no">false</span>
+        <span class="p">}</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="n">Next</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">Next</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。凭什么：三个阶段各扫一遍——找中点时快指针走了 $n/2$ 轮、反转后半段走 $n/2$ 个节点、比较最多走 $n/2$ 对，合计是 $n$ 的常数倍，没有任何嵌套循环。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(1)$。凭什么：全程只有 <code class="language-plaintext highlighter-rouge">slow</code>、<code class="language-plaintext highlighter-rouge">fast</code>、<code class="language-plaintext highlighter-rouge">p</code>、<code class="language-plaintext highlighter-rouge">next</code>、<code class="language-plaintext highlighter-rouge">dummy</code> 五个指针变量，反转是原地改 <code class="language-plaintext highlighter-rouge">next</code> 指向而非新建节点，也没有递归栈。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>单链表缺少逆序访问能力时，「原地反转一半」是把它补上的标准手段。</strong> 这比借助数组或栈更能体现链表基本功，也是本题被反复考的原因。</li>
+    <li>
+<strong>快慢指针的起点决定了中点的取整方向。</strong> <code class="language-plaintext highlighter-rouge">fast = head.next</code> 落在前半段末尾，<code class="language-plaintext highlighter-rouge">fast = head</code> 落在后半段开头，两者都对，但必须和后续的切割逻辑配套，不能混着记。</li>
+    <li>
+<strong>修改 <code class="language-plaintext highlighter-rouge">next</code> 之前一定先保存后继。</strong> 反转链表的所有变体（92、25、143）都栽在这一步上，形成「存 → 改 → 移」的固定节奏。</li>
+    <li>
+<strong>哑结点用来消灭「第一个节点」的特判。</strong> 凡是要往链头插入的场景，先建 <code class="language-plaintext highlighter-rouge">dummy</code> 几乎总能少写一个分支。</li>
+    <li>
+<strong>比较阶段用短链控制循环，可以自动跳过奇数长度的中间节点。</strong> 这类「让循环条件替你处理边界」的技巧比多写一个 <code class="language-plaintext highlighter-rouge">if</code> 更不容易错。</li>
+    <li>
+<strong>面试视角</strong>：标准应答节奏是「先说数组解法证明自己会做 → 主动问是否要求 $O(1)$ 空间 → 给出找中点 + 反转 + 比较三段式」。写完之后主动补一句「如果这是线上服务的共享数据结构，破坏性反转是不可接受的，比较完应该再反转回去还原链表」，这句几乎是本题的隐藏加分项。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>错误写法：<code class="language-plaintext highlighter-rouge">while (fast != null)</code> 少判 <code class="language-plaintext highlighter-rouge">fast.next</code> → 用例 <code class="language-plaintext highlighter-rouge">[1,2,3]</code>，第二轮 <code class="language-plaintext highlighter-rouge">fast</code> 指向下标 2，<code class="language-plaintext highlighter-rouge">fast.next</code> 为 <code class="language-plaintext highlighter-rouge">null</code>，执行 <code class="language-plaintext highlighter-rouge">fast.next.next</code> 抛出空指针异常。</li>
+    <li>错误写法：<code class="language-plaintext highlighter-rouge">fast = head</code> 而不是 <code class="language-plaintext highlighter-rouge">head.next</code>，其余不变 → 用例 <code class="language-plaintext highlighter-rouge">[1,2]</code>，循环条件 <code class="language-plaintext highlighter-rouge">fast != null &amp;&amp; fast.next != null</code> 成立一轮，<code class="language-plaintext highlighter-rouge">slow</code> 走到下标 1，切割后前半段是 <code class="language-plaintext highlighter-rouge">1 → 2</code>、后半段为空，反转结果为空链，比较循环一次都不执行直接返回 <code class="language-plaintext highlighter-rouge">true</code>，而正确答案是 <code class="language-plaintext highlighter-rouge">false</code>。</li>
+    <li>错误写法：先 <code class="language-plaintext highlighter-rouge">slow.next = null</code> 再 <code class="language-plaintext highlighter-rouge">p = slow.next</code> → 用例 <code class="language-plaintext highlighter-rouge">[1,2,2,1]</code>，<code class="language-plaintext highlighter-rouge">p</code> 拿到的是 <code class="language-plaintext highlighter-rouge">null</code>，后半段整个丢失，比较循环空转，任何输入都返回 <code class="language-plaintext highlighter-rouge">true</code>。</li>
+    <li>错误写法：忘记 <code class="language-plaintext highlighter-rouge">slow.next = null</code> 不切断前半段 → 用例 <code class="language-plaintext highlighter-rouge">[1,2,2,1]</code>，反转后半段后前半段的尾节点仍指向原来的第 3 个节点，而该节点的 <code class="language-plaintext highlighter-rouge">next</code> 已被改指，比较时 <code class="language-plaintext highlighter-rouge">head</code> 会走进反转后的链里，<code class="language-plaintext highlighter-rouge">p</code> 先走完退出循环返回 <code class="language-plaintext highlighter-rouge">true</code>，看似正确；换成 <code class="language-plaintext highlighter-rouge">[1,2,3,4]</code> 时前半段变成 <code class="language-plaintext highlighter-rouge">1 → 2 → 3</code>（3 是反转链的尾），比较 <code class="language-plaintext highlighter-rouge">1</code> 与 <code class="language-plaintext highlighter-rouge">4</code> 不等返回 <code class="language-plaintext highlighter-rouge">false</code> 也碰巧对，但链表结构已被破坏成不可预期的形状，后续任何复用都会出问题。</li>
+    <li>错误写法：反转循环里漏掉 <code class="language-plaintext highlighter-rouge">ListNode next = p.next</code> 直接写 <code class="language-plaintext highlighter-rouge">p.next = dummy.next; dummy.next = p; p = p.next;</code> → 用例 <code class="language-plaintext highlighter-rouge">[1,2,2,1]</code> 的后半段 <code class="language-plaintext highlighter-rouge">2 → 1</code>，第一轮把 <code class="language-plaintext highlighter-rouge">p.next</code> 改成 <code class="language-plaintext highlighter-rouge">null</code> 后 <code class="language-plaintext highlighter-rouge">p = p.next</code> 得到 <code class="language-plaintext highlighter-rouge">null</code>，循环立刻结束，反转链只有一个节点，比较时 <code class="language-plaintext highlighter-rouge">p</code> 一轮就走完返回 <code class="language-plaintext highlighter-rouge">true</code>，<code class="language-plaintext highlighter-rouge">[1,2,3,4]</code> 这类非回文也会被判成回文。</li>
+    <li>错误写法：比较循环写成 <code class="language-plaintext highlighter-rouge">while (head != null)</code> → 用例 <code class="language-plaintext highlighter-rouge">[1,2,3,2,1]</code>，前半段有 3 个节点而反转链只有 2 个，第三轮访问 <code class="language-plaintext highlighter-rouge">p.val</code> 时 <code class="language-plaintext highlighter-rouge">p</code> 已是 <code class="language-plaintext highlighter-rouge">null</code>，抛出空指针异常。</li>
+    <li>错误写法：比较时用 <code class="language-plaintext highlighter-rouge">head != p</code> 或 <code class="language-plaintext highlighter-rouge">head.equals(p)</code> 判断 → 用例 <code class="language-plaintext highlighter-rouge">[1,2,2,1]</code>，两条链的节点对象本就不同，恒不相等，直接返回 <code class="language-plaintext highlighter-rouge">false</code>；必须比较 <code class="language-plaintext highlighter-rouge">val</code> 字段。</li>
+    <li>错误写法：为省事把 <code class="language-plaintext highlighter-rouge">dummy</code> 去掉，写成 <code class="language-plaintext highlighter-rouge">ListNode pre = null;</code> 但循环体仍写 <code class="language-plaintext highlighter-rouge">p.next = dummy.next</code> 的等价物时忘了同步更新 <code class="language-plaintext highlighter-rouge">pre</code> → 用例任意长度大于 2 的链表，反转结果只保留最后一个节点，比较提前结束。</li>
+    <li>错误写法：用求和或异或代替逐个比较（如判断前后半段和相等） → 用例 <code class="language-plaintext highlighter-rouge">[1,2,3,0]</code>，前半段和 3、后半段和 3 相等被判为回文，实际不是。</li>
+    <li>错误写法：认为空链表应返回 <code class="language-plaintext highlighter-rouge">false</code> → 用例 <code class="language-plaintext highlighter-rouge">[]</code>，期望 <code class="language-plaintext highlighter-rouge">true</code>，返回 <code class="language-plaintext highlighter-rouge">false</code> 判错。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/swap-nodes-in-pairs/">24. 两两交换链表中的节点</a></td>
+      <td>中等</td>
+      <td>反转的粒度固定为 2 个节点，重点是每对交换后与前驱重新接线</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/reverse-nodes-in-k-group/">25. K 个一组翻转链表</a></td>
+      <td>困难</td>
+      <td>需要先探测够不够 k 个再决定是否反转，且不足 k 个要保持原序</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/reverse-linked-list-ii/">92. 反转链表 II</a></td>
+      <td>中等</td>
+      <td>只反转指定区间，难点在于记录区间前驱并把三段重新拼接</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/reorder-list/">143. 重排链表</a></td>
+      <td>中等</td>
+      <td>同样是「找中点 + 反转后半段」，但最后一步是交叉合并而非逐个比较</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/reverse-linked-list/">206. 反转链表</a></td>
+      <td>简单</td>
+      <td>纯反转本身，是本题第四步的独立练习</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/palindrome-linked-list/">234. 回文链表</a></td>
+      <td>简单</td>
+      <td>主站同题，可用来对照递归写法（用函数调用栈实现逆序访问）的空间代价</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/UHnkqh/">LCR 024. 反转链表</a></td>
+      <td>简单</td>
+      <td>反转的迭代与递归两种写法的对比练习</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/LGjMqU/">LCR 026. 重排链表</a></td>
+      <td>中等</td>
+      <td>在重排基础上要求还原后链表仍然可遍历，对断链顺序更敏感</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/aMhZSa/">LCR 027. 回文链表</a></td>
+      <td>简单</td>
+      <td>同题的专题版，适合用来练「比较完再反转回去」的无损实现</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/fan-zhuan-lian-biao-lcof/">剑指 Offer 24. 反转链表</a></td>
+      <td>简单</td>
+      <td>反转的经典出处，面试常要求当场同时写出迭代与递归两版</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2023/17889675" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1640. 能否连接形成数组</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2023/82761185" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 290. 单词规律</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2023/61216279">https://hgnulb.github.io/blog/2023/61216279</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

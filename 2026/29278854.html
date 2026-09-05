@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1206. 设计跳表 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,字节跳动,微软,滴滴,美团,腾讯,虾皮,设计,链表,阿里巴巴" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1206. 设计跳表" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/29278854" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/29278854" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-08-25T00:00:00+08:00" />
+<meta property="article:modified_time" content="2026-08-25T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1206. 设计跳表" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-08-25T00:00:00+08:00","datePublished":"2026-08-25T00:00:00+08:00","description":"题目描述","headline":"LeetCode 1206. 设计跳表","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/29278854"},"url":"https://hgnulb.github.io/blog/2026/29278854"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法多层有序链表--前驱数组">解法：多层有序链表 + 前驱数组</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1206. 设计跳表">LeetCode 1206. 设计跳表</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-08-25 00:00:00"
+                    datetime="2026-08-25T00:00:00+08:00"
+            >
+                2026-08-25
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1676 字 · 英文 51 词 · 代码 132 行"
+            aria-label="预计阅读时间约 9 分钟，正文 1676 字 · 英文 51 词 · 代码 132 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    9 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/9362659490/" title="10-20">
+        10-20
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2381712535/" title="腾讯">
+        腾讯
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8699249851/" title="阿里巴巴">
+        阿里巴巴
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0416977247/" title="美团">
+        美团
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4945439869/" title="滴滴">
+        滴滴
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6901340989/" title="虾皮">
+        虾皮
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6005735281/" title="链表">
+        链表
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法多层有序链表--前驱数组">解法：多层有序链表 + 前驱数组</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/design-skiplist/">1206. 设计跳表</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>要交付的是一个有序多重集合，对外只暴露三个动作：<code class="language-plaintext highlighter-rouge">search(target)</code> 回答某个值在不在，<code class="language-plaintext highlighter-rouge">add(num)</code> 放进一个值，<code class="language-plaintext highlighter-rouge">erase(num)</code> 拿走一个值并回答有没有拿到。注意是「多重」集合，同一个值可以被 <code class="language-plaintext highlighter-rouge">add</code> 多次，<code class="language-plaintext highlighter-rouge">erase</code> 一次只需要拿走其中一个，剩下的副本必须还在。</p>
+
+  <p>约束里有三个信号。第一个是题面明写的「不使用任何库函数」，这直接封死了 <code class="language-plaintext highlighter-rouge">TreeSet</code>、<code class="language-plaintext highlighter-rouge">TreeMap</code> 这类现成有序容器，意思是要求手写数据结构本身。第二个是值域 <code class="language-plaintext highlighter-rouge">0 &lt;= num, target &lt;= 2 * 10^4</code> 很窄，窄到可以开一个长度 20001 的计数桶把三个操作都做成 $O(1)$——但那是钻值域的空子，一旦面试官把值域换成 <code class="language-plaintext highlighter-rouge">int</code> 全域就整个失效，所以它是个诱饵而不是答案。第三个是操作总次数上限 $5 \times 10^4$，这个量级配合「有序容器」的要求，指向的是单次操作 $O(\log n)$ 的结构，同时也框定了结构最多需要多少层索引。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">erase</code> 要返回布尔值这一点也值得单独拎出来：它意味着删除必须「先确认存在再动手」，不能盲改指针，因此删除天然要复用一次完整的查找。</p>
+
+  <p>边界情形：容器为空时 <code class="language-plaintext highlighter-rouge">search</code> 与 <code class="language-plaintext highlighter-rouge">erase</code> 都要安全地返回 <code class="language-plaintext highlighter-rouge">false</code> 而不是空指针；删一个从来没插入过的值返回 <code class="language-plaintext highlighter-rouge">false</code>；插入的值可能小于当前所有元素或大于当前所有元素，接在最前和接在最后都要成立；同一个值插入多次后连续删除多次，每次都应该成功，直到副本用完才返回 <code class="language-plaintext highlighter-rouge">false</code>。</p>
+</blockquote>
+
+<h2 id="解法多层有序链表--前驱数组">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%A4%9A%E5%B1%82%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8--%E5%89%8D%E9%A9%B1%E6%95%B0%E7%BB%84" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：多层有序链表 + 前驱数组</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>有序链表插入、删除指针很便宜，但查找需要线性扫描。跳表在底层链表之上增加多级稀疏索引：查找从最高层开始，能向右就尽量向右，不能再走时下降一层，直到最底层。它相当于用链表模拟二分查找的“大步跳跃”。</p>
+
+  <p>高层节点通过随机层高产生。节点至少有 1 层；每次以二分之一概率再升一层，因此高一层的节点数期望减半，层数期望为 $O(\log n)$。随机化免去了平衡树的旋转或重平衡，但复杂度是期望保证，极端情况下仍可能退化为链表。</p>
+
+  <p>插入和删除的关键不是找到目标本身，而是找到目标在<strong>每一层的前驱</strong>。定义 <code class="language-plaintext highlighter-rouge">update[i]</code> 为第 <code class="language-plaintext highlighter-rouge">i</code> 层最后一个值严格小于 <code class="language-plaintext highlighter-rouge">target</code> 的节点。一次自顶向下查找即可填好整个 <code class="language-plaintext highlighter-rouge">update</code> 数组：</p>
+
+  <ul>
+    <li>
+<code class="language-plaintext highlighter-rouge">search</code> 检查 <code class="language-plaintext highlighter-rouge">update[0].next[0]</code> 是否等于目标；</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">add</code> 在新节点覆盖的每一层，把它插入 <code class="language-plaintext highlighter-rouge">update[i]</code> 后面；</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">erase</code> 找到最底层第一个目标节点，并从它实际出现的各层摘除。</li>
+  </ul>
+
+  <p>每层都保持有序，高层链表始终是低层链表的子序列。下降时无需回到头节点，正是因为当前节点也存在于下一层。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ol>
+    <li>创建覆盖 <code class="language-plaintext highlighter-rouge">MAX_LEVEL</code> 层的头哨兵，当前有效层数初始为 1。</li>
+    <li>查找前驱时，从当前最高层开始；右侧节点值小于目标就右移，否则记录当前节点并下降一层。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">search</code> 查看最底层前驱的后继是否等于目标。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">add</code> 随机生成节点层高；若超过当前层数，新层的前驱只能是头哨兵。随后逐层执行“新节点接旧后继、前驱接新节点”。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">erase</code> 先确认最底层目标存在，再从该节点拥有的各层断开它；最后收缩已经为空的最高层。</li>
+  </ol>
+
+  <p>重复值会被插在已有相同值之前。<code class="language-plaintext highlighter-rouge">erase</code> 每次只摘掉一个具体节点，因此重复插入两次后，必须连续删除两次才会彻底消失。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.concurrent.ThreadLocalRandom</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Skiplist</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">MAX_LEVEL</span> <span class="o">=</span> <span class="mi">32</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Node</span> <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(-</span><span class="mi">1</span><span class="o">,</span> <span class="no">MAX_LEVEL</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">level</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">search</span><span class="o">(</span><span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span> <span class="n">candidate</span> <span class="o">=</span> <span class="n">findPredecessors</span><span class="o">(</span><span class="n">target</span><span class="o">)[</span><span class="mi">0</span><span class="o">].</span><span class="na">next</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="k">return</span> <span class="n">candidate</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">candidate</span><span class="o">.</span><span class="na">value</span> <span class="o">==</span> <span class="n">target</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span><span class="o">[]</span> <span class="n">update</span> <span class="o">=</span> <span class="n">findPredecessors</span><span class="o">(</span><span class="n">num</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">nodeLevel</span> <span class="o">=</span> <span class="n">randomLevel</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">nodeLevel</span> <span class="o">&gt;</span> <span class="n">level</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">level</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nodeLevel</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">update</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="n">nodeLevel</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nc">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="n">num</span><span class="o">,</span> <span class="n">nodeLevel</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nodeLevel</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">update</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">next</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="n">update</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">next</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">erase</span><span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span><span class="o">[]</span> <span class="n">update</span> <span class="o">=</span> <span class="n">findPredecessors</span><span class="o">(</span><span class="n">num</span><span class="o">);</span>
+        <span class="nc">Node</span> <span class="n">target</span> <span class="o">=</span> <span class="n">update</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">next</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">target</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">target</span><span class="o">.</span><span class="na">value</span> <span class="o">!=</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">target</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">update</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">next</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="na">next</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">level</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">[</span><span class="n">level</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">level</span><span class="o">--;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">Node</span><span class="o">[]</span> <span class="nf">findPredecessors</span><span class="o">(</span><span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Node</span><span class="o">[]</span> <span class="n">update</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">[</span><span class="no">MAX_LEVEL</span><span class="o">];</span>
+        <span class="nc">Node</span> <span class="n">current</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">level</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">next</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">current</span><span class="o">.</span><span class="na">next</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">value</span> <span class="o">&lt;</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="na">next</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="o">}</span>
+            <span class="n">update</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">current</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">update</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">randomLevel</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">nodeLevel</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">nodeLevel</span> <span class="o">&lt;</span> <span class="no">MAX_LEVEL</span> <span class="o">&amp;&amp;</span> <span class="nc">ThreadLocalRandom</span><span class="o">.</span><span class="na">current</span><span class="o">().</span><span class="na">nextBoolean</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">nodeLevel</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">nodeLevel</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Node</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
+        <span class="kd">final</span> <span class="nc">Node</span><span class="o">[]</span> <span class="n">next</span><span class="o">;</span>
+
+        <span class="nc">Node</span><span class="o">(</span><span class="kt">int</span> <span class="n">value</span><span class="o">,</span> <span class="kt">int</span> <span class="n">level</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">[</span><span class="n">level</span><span class="o">];</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="s">"math/rand"</span>
+
+<span class="k">const</span> <span class="n">maxSkipLevel</span> <span class="o">=</span> <span class="m">32</span>
+
+<span class="k">type</span> <span class="n">skipNode</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">value</span> <span class="kt">int</span>
+	<span class="n">next</span>  <span class="p">[]</span><span class="o">*</span><span class="n">skipNode</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">Skiplist</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">head</span>  <span class="o">*</span><span class="n">skipNode</span>
+	<span class="n">level</span> <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">Skiplist</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">Skiplist</span><span class="p">{</span>
+		<span class="n">head</span><span class="o">:</span>  <span class="o">&amp;</span><span class="n">skipNode</span><span class="p">{</span><span class="n">value</span><span class="o">:</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="n">next</span><span class="o">:</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="n">skipNode</span><span class="p">,</span> <span class="n">maxSkipLevel</span><span class="p">)},</span>
+		<span class="n">level</span><span class="o">:</span> <span class="m">1</span><span class="p">,</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">s</span> <span class="o">*</span><span class="n">Skiplist</span><span class="p">)</span> <span class="n">Search</span><span class="p">(</span><span class="n">target</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">candidate</span> <span class="o">:=</span> <span class="n">s</span><span class="o">.</span><span class="n">findPredecessors</span><span class="p">(</span><span class="n">target</span><span class="p">)[</span><span class="m">0</span><span class="p">]</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+	<span class="k">return</span> <span class="n">candidate</span> <span class="o">!=</span> <span class="no">nil</span> <span class="o">&amp;&amp;</span> <span class="n">candidate</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">target</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">s</span> <span class="o">*</span><span class="n">Skiplist</span><span class="p">)</span> <span class="n">Add</span><span class="p">(</span><span class="n">num</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">update</span> <span class="o">:=</span> <span class="n">s</span><span class="o">.</span><span class="n">findPredecessors</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+	<span class="n">nodeLevel</span> <span class="o">:=</span> <span class="n">randomLevel</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">nodeLevel</span> <span class="o">&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">level</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">s</span><span class="o">.</span><span class="n">level</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nodeLevel</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="n">update</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">head</span>
+		<span class="p">}</span>
+		<span class="n">s</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">nodeLevel</span>
+	<span class="p">}</span>
+
+	<span class="n">node</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">skipNode</span><span class="p">{</span><span class="n">value</span><span class="o">:</span> <span class="n">num</span><span class="p">,</span> <span class="n">next</span><span class="o">:</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="n">skipNode</span><span class="p">,</span> <span class="n">nodeLevel</span><span class="p">)}</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nodeLevel</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">node</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">update</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="n">update</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">s</span> <span class="o">*</span><span class="n">Skiplist</span><span class="p">)</span> <span class="n">Erase</span><span class="p">(</span><span class="n">num</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">update</span> <span class="o">:=</span> <span class="n">s</span><span class="o">.</span><span class="n">findPredecessors</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+	<span class="n">target</span> <span class="o">:=</span> <span class="n">update</span><span class="p">[</span><span class="m">0</span><span class="p">]</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+	<span class="k">if</span> <span class="n">target</span> <span class="o">==</span> <span class="no">nil</span> <span class="o">||</span> <span class="n">target</span><span class="o">.</span><span class="n">value</span> <span class="o">!=</span> <span class="n">num</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">false</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">next</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">update</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">s</span><span class="o">.</span><span class="n">level</span> <span class="o">&gt;</span> <span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">level</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">s</span><span class="o">.</span><span class="n">level</span><span class="o">--</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">s</span> <span class="o">*</span><span class="n">Skiplist</span><span class="p">)</span> <span class="n">findPredecessors</span><span class="p">(</span><span class="n">target</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="o">*</span><span class="n">skipNode</span> <span class="p">{</span>
+	<span class="n">update</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="n">skipNode</span><span class="p">,</span> <span class="n">maxSkipLevel</span><span class="p">)</span>
+	<span class="n">current</span> <span class="o">:=</span> <span class="n">s</span><span class="o">.</span><span class="n">head</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">s</span><span class="o">.</span><span class="n">level</span> <span class="o">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="n">current</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="no">nil</span> <span class="o">&amp;&amp;</span> <span class="n">current</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">target</span> <span class="p">{</span>
+			<span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="p">}</span>
+		<span class="n">update</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">current</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">update</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">randomLevel</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">level</span> <span class="o">:=</span> <span class="m">1</span>
+	<span class="k">for</span> <span class="n">level</span> <span class="o">&lt;</span> <span class="n">maxSkipLevel</span> <span class="o">&amp;&amp;</span> <span class="n">rand</span><span class="o">.</span><span class="n">Intn</span><span class="p">(</span><span class="m">2</span><span class="p">)</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+		<span class="n">level</span><span class="o">++</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">level</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：<code class="language-plaintext highlighter-rouge">search</code>、<code class="language-plaintext highlighter-rouge">add</code>、<code class="language-plaintext highlighter-rouge">erase</code> 的期望时间均为 $O(\log n)$；随机层高极端失衡时最坏为 $O(n)$。</li>
+    <li>
+<strong>空间复杂度</strong>：期望 $O(n)$。各层节点数构成等比级数，平均每个节点只有常数条前进指针；一次操作的 <code class="language-plaintext highlighter-rouge">update</code> 固定最多 32 项。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>查找路径始终是“当前层尽量向右，不能走就下降”，且下降时不回头。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">update[i]</code> 保存每层前驱，让一次查找同时服务插入和删除。</li>
+    <li>前驱比较必须严格小于目标，才能让最底层后继停在第一个目标值上。</li>
+    <li>随机层高使高层节点数量按比例衰减，换来期望 $O(\log n)$，但没有最坏情况平衡保证。</li>
+    <li>节点可以重复；删除的是一个节点，不是删除所有相同值。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>前驱查找写成 <code class="language-plaintext highlighter-rouge">&lt;= target</code> 会越过所有目标节点，导致查询和删除失败。</li>
+    <li>插入时必须先让新节点指向旧后继，再让前驱指向新节点；顺序反了会形成自环。</li>
+    <li>新节点层高超过当前有效层数时，新增各层的前驱要补成头哨兵。</li>
+    <li>删除只能修改目标节点实际存在的层，否则会访问越界或误删其他链路。</li>
+    <li>删除最高层最后一个节点后要收缩 <code class="language-plaintext highlighter-rouge">level</code>，但至少保留第 0 层。</li>
+    <li>把复杂度说成严格 $O(\log n)$ 不准确；跳表依赖随机分布，只能给出期望保证。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-linked-list/">707. 设计链表</a></td>
+      <td>中等</td>
+      <td>跳表的单层退化版，只需按下标定位，是练习哑节点与指针改接的入门题</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lru-cache/">146. LRU 缓存</a></td>
+      <td>中等</td>
+      <td>同样是哈希表配链表，但维护的是访问时间顺序而非值序，靠双向链表 O(1) 摘节点</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lfu-cache/">460. LFU 缓存</a></td>
+      <td>困难</td>
+      <td>在 LRU 之上再按频次分桶，需要两层索引结构，是设计题里指针最密的一道</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/find-median-from-data-stream/">295. 数据流的中位数</a></td>
+      <td>困难</td>
+      <td>同样要动态维护有序性，但只关心中位，用对顶堆比完整有序结构更省</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/kth-largest-element-in-a-stream/">703. 数据流中的第 K 大元素</a></td>
+      <td>简单</td>
+      <td>动态插入加定序查询的最简形式，固定大小的小顶堆即可</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/implement-trie-prefix-tree/">208. 实现 Trie (前缀树)</a></td>
+      <td>中等</td>
+      <td>同为多层索引结构，但分叉依据是字符而非概率层高</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/insert-delete-getrandom-o1/">380. O(1) 时间插入、删除和获取随机元素</a></td>
+      <td>中等</td>
+      <td>放弃有序性换取 O(1)，用数组加哈希表的尾部交换删除法</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-circular-queue/">622. 设计循环队列</a></td>
+      <td>中等</td>
+      <td>定容结构设计，考点在头尾下标取模与空满判别</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-browser-history/">1472. 设计浏览器历史记录</a></td>
+      <td>中等</td>
+      <td>需要前后跳转的设计题，双栈或数组加下标都可，重点是边界裁剪</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/35203621" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 56. 合并区间</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/20444064" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 面试题 16.25. LRU 缓存</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/29278854">https://hgnulb.github.io/blog/2026/29278854</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

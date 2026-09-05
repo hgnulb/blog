@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 901. 股票价格跨度 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,单调栈,微软,数据流,栈,美团,设计" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 901. 股票价格跨度" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2024/99351946" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2024/99351946" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-04-11T00:00:00+08:00" />
+<meta property="article:modified_time" content="2024-04-11T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 901. 股票价格跨度" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2024-04-11T00:00:00+08:00","datePublished":"2024-04-11T00:00:00+08:00","description":"题目描述","headline":"LeetCode 901. 股票价格跨度","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2024/99351946"},"url":"https://hgnulb.github.io/blog/2024/99351946"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法单调栈维护候选">解法：单调栈维护候选</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 901. 股票价格跨度">LeetCode 901. 股票价格跨度</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2024-04-11 00:00:00"
+                    datetime="2024-04-11T00:00:00+08:00"
+            >
+                2024-04-11
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2600 字 · 英文 237 词 · 代码 28 行"
+            aria-label="预计阅读时间约 8 分钟，正文 2600 字 · 英文 237 词 · 代码 28 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 8 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    6 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/2986108175/" title="LeetCode 75">
+        LeetCode 75
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0416977247/" title="美团">
+        美团
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2085989135/" title="单调栈">
+        单调栈
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8438014738/" title="数据流">
+        数据流
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法单调栈维护候选">解法：单调栈维护候选</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/online-stock-span/">901. 股票价格跨度</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>这是一道<strong>数据流上的设计题</strong>：价格一天一天地喂进来，每次调用 <code class="language-plaintext highlighter-rouge">next(price)</code> 都要立刻返回「包括今天在内，往前连续有多少天的价格小于等于今天」。注意是「小于等于」，等于也算在跨度里，这个细节直接决定后面比较符是否带等号。</p>
+
+  <p>关键约束是<strong>在线</strong>：不能先把所有价格收集齐再统一处理，每次调用必须马上给出答案。这排除了任何需要看到未来数据的做法。</p>
+
+  <p>调用次数上限一万量级，看起来每次现场往回扫也能过，但这类题真正想考的是「均摊 $O(1)$」。约束里「价格范围有限、调用次数很多」的组合，加上答案本身是「向左延伸到第一个更大的价格为止」这种表述，提示应该在结构里保留一部分历史，让每个历史价格最多被处理常数次。</p>
+
+  <p>边界上要考虑：第一次调用没有历史，答案必然是 1；价格全程递减时每次答案都是 1；价格全程递增时第 k 次调用的答案是 k，此时结构会被清空到只剩一个元素。</p>
+</blockquote>
+
+<h2 id="解法单调栈维护候选">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%8D%95%E8%B0%83%E6%A0%88%E7%BB%B4%E6%8A%A4%E5%80%99%E9%80%89" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：单调栈维护候选</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是把所有历史价格存进一个数组，每次调用从当前位置往左逐个比较，直到遇到比今天大的价格就停。最坏情况（价格全程不增）每次都要扫到头，总代价 $O(n^2)$。</p>
+
+  <p>瓶颈在哪里？在于同一批历史价格被反复检查。假设昨天的价格是 80、今天是 100，那么昨天左边那些比 80 小的价格，今天必然也比 100 小——昨天已经确认过一次，今天又从头确认一遍，做的是完全重复的工作。</p>
+
+  <p>由此得到核心观察：<strong>一个价格一旦被某个更大（或相等）的后来者「吞掉」，它就永远不可能再成为任何未来查询的边界</strong>。因为未来的价格若能越过它，必然也能越过那个更大的后来者。所以它可以被彻底丢弃，但它贡献的天数不能丢，要合并进吞掉它的那个价格里。</p>
+
+  <p>于是维护这样一个不变量：结构中自底向上保存若干二元组 <code class="language-plaintext highlighter-rouge">(price, span)</code>，<strong>price 严格单调递减</strong>，且每个二元组的 span 表示「以该 price 为终点、向左延伸到上一个更大价格为止的天数」。这些 span 加起来恰好等于至今为止的总天数，不重不漏——这正是能直接累加求答案的原因。</p>
+
+  <p>处理新价格 cur 时：把栈顶所有 <code class="language-plaintext highlighter-rouge">price &lt;= cur</code> 的二元组弹出，它们代表的那些天全部落在 cur 的跨度范围内，把它们的 span 累加到 cur 的 span 上；弹不动时说明栈顶价格严格大于 cur，跨度到此为止。最后把 <code class="language-plaintext highlighter-rouge">(cur, span)</code> 压回去，单调递减的不变量继续成立。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>选择保存二元组而不是单个价格</strong>。这是本题与普通单调栈最大的区别：如果只存价格，弹出时只知道「弹掉了几个二元组」，而不知道它们各自代表多少天，答案会算少。存 span 相当于把被压缩掉的历史长度随身携带。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">span</code> 初始化为 1</strong>。今天自己必然算进跨度里，这一天不来自任何弹出操作，所以必须先记上。</li>
+    <li>
+<strong>循环条件用 <code class="language-plaintext highlighter-rouge">&lt;=</code> 而不是 <code class="language-plaintext highlighter-rouge">&lt;</code></strong>。题目说的是「小于或等于今天价格的连续天数」，价格相等的历史日也应该被计入，因此相等时同样要弹出合并。写成 <code class="language-plaintext highlighter-rouge">&lt;</code> 会让相等的那天留在栈里，成为假的边界。</li>
+    <li>
+<strong>每弹出一个就把它的 span 加到当前 span 上</strong>，而不是简单地 <code class="language-plaintext highlighter-rouge">span++</code>。被弹出的二元组可能已经压缩了很多天，只加 1 会严重少算。</li>
+    <li>
+<strong>循环结束后把 <code class="language-plaintext highlighter-rouge">(price, span)</code> 压入栈，并返回 span</strong>。压栈是为了让今天成为未来查询的候选；返回值就是刚累加完的 span，不需要再遍历栈求和。</li>
+  </ul>
+
+  <p>以调用序列 <code class="language-plaintext highlighter-rouge">next(100), next(80), next(60), next(70), next(60), next(75), next(85)</code> 走一遍。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">next(100)</code>：栈空，span = 1，压入 (100, 1)，返回 <strong>1</strong>。栈：[(100,1)]。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">next(80)</code>：栈顶 100 &gt; 80，不弹，span = 1，压入 (80, 1)，返回 <strong>1</strong>。栈：[(100,1), (80,1)]。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">next(60)</code>：栈顶 80 &gt; 60，不弹，span = 1，返回 <strong>1</strong>。栈：[(100,1), (80,1), (60,1)]。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">next(70)</code>：栈顶 (60,1) 满足 60 &lt;= 70，弹出，span = 1 + 1 = 2；新栈顶 80 &gt; 70，停止。压入 (70, 2)，返回 <strong>2</strong>。栈：[(100,1), (80,1), (70,2)]。注意 60 那一天已经被 70 吸收，以后再也不会单独出现。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">next(60)</code>：栈顶 70 &gt; 60，不弹，span = 1，返回 <strong>1</strong>。栈：[(100,1), (80,1), (70,2), (60,1)]。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">next(75)</code>：弹出 (60,1)，span = 2；再看栈顶 (70,2) 满足 70 &lt;= 75，弹出，span = 2 + 2 = 4；新栈顶 80 &gt; 75，停止。压入 (75, 4)，返回 <strong>4</strong>。栈：[(100,1), (80,1), (75,4)]。这个 4 覆盖的正是 60、70、60、75 这四天，验证了 span 的合并语义。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">next(85)</code>：弹出 (75,4)，span = 5；弹出 (80,1)，span = 6；栈顶 100 &gt; 85，停止。压入 (85, 6)，返回 <strong>6</strong>。栈：[(100,1), (85,6)]。手工核对：85 往左依次是 75、60、70、60、80，全部小于等于 85，加上自己共 6 天，再往左是 100 大于 85，正好截断。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 新价格到来时，弹出所有 price &lt;= current 的元素并累加跨度。</span>
+<span class="kd">class</span> <span class="nc">StockSpanner</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">next</span><span class="o">(</span><span class="kt">int</span> <span class="n">price</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">span</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">()[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">price</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">span</span> <span class="o">+=</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">()[</span><span class="mi">1</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="n">price</span><span class="o">,</span> <span class="n">span</span><span class="o">});</span>
+        <span class="k">return</span> <span class="n">span</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 新价格到来时，弹出所有 price &lt;= current 的元素并累加跨度。</span>
+<span class="k">type</span> <span class="n">StockSpanner</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">stack</span> <span class="p">[][</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">StockSpanner</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">StockSpanner</span><span class="p">{</span><span class="n">stack</span><span class="o">:</span> <span class="nb">make</span><span class="p">([][</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">)}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">s</span> <span class="o">*</span><span class="n">StockSpanner</span><span class="p">)</span> <span class="n">Next</span><span class="p">(</span><span class="n">price</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">span</span> <span class="o">:=</span> <span class="m">1</span>
+    <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="m">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">price</span> <span class="p">{</span>
+        <span class="n">span</span> <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="m">1</span><span class="p">]</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">,</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="n">price</span><span class="p">,</span> <span class="n">span</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">span</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：单次调用均摊 $O(1)$，n 次调用总计 $O(n)$。凭什么？每个价格一生只会入栈一次、出栈一次，出栈之后就被合并进别人的 span 里永不复现；虽然某一次调用可能连续弹出很多元素（如例中的 <code class="language-plaintext highlighter-rouge">next(85)</code>），但弹出的总次数被入栈总次数 n 严格限制住，摊到每次调用就是常数。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。凭什么？栈里保存的是当前仍可能成为未来边界的价格，最坏情况是价格严格递减（如 100、99、98……），此时没有任何元素被弹出，栈会一直增长到 n 个二元组。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>把「重复扫描的历史」压缩成一个带权候选</strong>：当一段历史对未来的影响可以用一个代表元加一个数量概括时，就该把它合并掉。这是单调结构从 $O(n^2)$ 降到均摊 $O(n)$ 的通用理由，不局限于本题。</li>
+    <li>
+<strong>存权重而非只存元素</strong>：普通「下一个更大元素」只需存下标，靠下标差算距离；本题是流式的、没有全局下标，所以改成随元素携带 span。遇到在线场景先问自己「我还能不能拿到下标」，答案是否定时就要把信息塞进栈元素里。</li>
+    <li>
+<strong>比较符的等号来自题面而非习惯</strong>：「小于或等于」对应弹栈条件 <code class="language-plaintext highlighter-rouge">&lt;=</code>，维持的是严格递减栈；如果题面写「严格小于」，就要改成 <code class="language-plaintext highlighter-rouge">&lt;</code> 并维持非严格递减栈。写代码前先把这句话对应清楚。</li>
+    <li>
+<strong>不变量要能一句话说清</strong>：「栈内价格自底向上严格递减，各 span 之和等于已处理天数」。面试时说出这句，等价于证明了算法正确性，比逐行讲代码有效得多。</li>
+    <li>
+<strong>均摊分析要主动讲</strong>：面试官问复杂度时，如果只答「$O(1)$」容易被追问「可是里面有 while 循环」。标准答法是「单次最坏 $O(n)$，但每个元素只进出栈各一次，所以均摊 $O(1)$」。</li>
+    <li>
+<strong>面试视角</strong>：这题常被用来检验候选人能否把离线的「下一个更大元素」迁移到在线场景。答完后可以主动补一句：若还要支持撤销最近一次调用，则需要额外记录每次弹出了哪些元素，栈就要换成可持久化结构。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：弹栈时写 <code class="language-plaintext highlighter-rouge">span++</code> 而不是 <code class="language-plaintext highlighter-rouge">span += 弹出的 span</code></strong>。用例 <code class="language-plaintext highlighter-rouge">100, 80, 60, 70, 75</code> → 在 <code class="language-plaintext highlighter-rouge">next(75)</code> 时应弹出 (60,1) 和 (70,2) 得到 4，写成 <code class="language-plaintext highlighter-rouge">span++</code> 只会得到 1 + 1 + 1 = 3，返回值少算了被 70 提前吸收的那一天。</li>
+    <li>
+<strong>错误写法：弹栈条件用 <code class="language-plaintext highlighter-rouge">&lt;</code> 而不是 <code class="language-plaintext highlighter-rouge">&lt;=</code></strong>。用例 <code class="language-plaintext highlighter-rouge">next(70), next(70)</code> → 第二次调用时栈顶价格 70 不满足 <code class="language-plaintext highlighter-rouge">70 &lt; 70</code>，不弹出，返回 1；正确答案是 2，因为等于今天价格的那天也计入跨度。</li>
+    <li>
+<strong>错误写法：把 <code class="language-plaintext highlighter-rouge">span = 1</code> 写在 while 循环之后或初始化为 0</strong>。用例 <code class="language-plaintext highlighter-rouge">next(100)</code> → 栈为空循环一次都不执行，span 保持 0，第一次调用就返回 0，而任何一天的跨度至少是 1（自己）。</li>
+    <li>
+<strong>错误写法：压栈时压入的是原始 span 1 而不是累加后的 span</strong>。用例 <code class="language-plaintext highlighter-rouge">100, 60, 70, 75</code> → <code class="language-plaintext highlighter-rouge">next(70)</code> 返回 2 但压入 (70,1)，随后 <code class="language-plaintext highlighter-rouge">next(75)</code> 弹出 (70,1) 与 (60,1) 得到 3，正确答案是 4；被吞掉的天数在栈里丢失，错误会一直向后传染。</li>
+    <li>
+<strong>错误写法：只在栈非空时才压栈，或者忘记压栈</strong>。用例连续调用 <code class="language-plaintext highlighter-rouge">next(50)</code> 三次 → 若第一次因为栈空而没压入，第二次仍看到空栈返回 1，第三次也返回 1，正确答案应是 1、2、3。每次调用都必须压栈，无一例外。</li>
+    <li>
+<strong>错误写法：Java 里用 <code class="language-plaintext highlighter-rouge">Stack</code> 并混用 <code class="language-plaintext highlighter-rouge">push</code> 与 <code class="language-plaintext highlighter-rouge">add</code></strong>。<code class="language-plaintext highlighter-rouge">Stack</code> 继承自 <code class="language-plaintext highlighter-rouge">Vector</code>，<code class="language-plaintext highlighter-rouge">add</code> 是尾部追加而 <code class="language-plaintext highlighter-rouge">push</code> 也是尾部，但 <code class="language-plaintext highlighter-rouge">Deque</code> 的 <code class="language-plaintext highlighter-rouge">push</code> 是头部插入、<code class="language-plaintext highlighter-rouge">add</code> 是尾部追加，两者语义相反。用例 <code class="language-plaintext highlighter-rouge">100, 80, 60</code> 下若在 <code class="language-plaintext highlighter-rouge">ArrayDeque</code> 上误用 <code class="language-plaintext highlighter-rouge">add</code> 压栈却用 <code class="language-plaintext highlighter-rouge">peek</code> 取栈顶，会取到最早的 100 而不是最新的 60，弹栈条件全盘失效。统一用 <code class="language-plaintext highlighter-rouge">push</code>/<code class="language-plaintext highlighter-rouge">pop</code>/<code class="language-plaintext highlighter-rouge">peek</code> 三件套。</li>
+    <li>
+<strong>错误写法：Go 里弹栈时先截断切片再读取被弹元素</strong>。写成 <code class="language-plaintext highlighter-rouge">s.stack = s.stack[:len(s.stack)-1]</code> 之后再访问 <code class="language-plaintext highlighter-rouge">s.stack[len(s.stack)-1][1]</code>，读到的是新栈顶而非刚弹出的元素，用例 <code class="language-plaintext highlighter-rouge">100, 60, 70</code> 下 <code class="language-plaintext highlighter-rouge">next(70)</code> 会把 100 的 span 累加进去，返回 2 但把 100 误当成已消费，后续所有答案偏移。必须先取值后截断。</li>
+    <li>
+<strong>错误写法：把栈声明为结构体值字段并在值接收者方法里修改</strong>。Go 中 <code class="language-plaintext highlighter-rouge">func (s StockSpanner) Next(...)</code> 对 <code class="language-plaintext highlighter-rouge">s.stack</code> 的 append 不会写回原对象，用例任意连续调用都会永远返回 1。必须用指针接收者 <code class="language-plaintext highlighter-rouge">func (s *StockSpanner) Next(...)</code>。</li>
+    <li>
+<strong>错误写法：每次调用都重新遍历整个栈求和来算答案</strong>。用例价格严格递减 10^4 次 → 栈长度线性增长，每次都全扫一遍变成 $O(n^2)$ 约五千万次操作，在数据流题的调用量下会超时；答案就是累加得到的 span 本身，不需要二次遍历。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/daily-temperatures/">739. 每日温度</a></td>
+      <td>中等</td>
+      <td>离线且要找右侧更大元素，栈里存下标靠差值算距离，无需携带权重</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/next-greater-element-i/">496. 下一个更大元素 I</a></td>
+      <td>简单</td>
+      <td>需要先对第二个数组预处理再用哈希映射回查询数组，多一层索引转换</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/next-greater-element-ii/">503. 下一个更大元素 II</a></td>
+      <td>中等</td>
+      <td>数组循环，靠遍历两遍取模模拟环形，考察边界的重复扫描处理</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/largest-rectangle-in-histogram/">84. 柱状图中最大的矩形</a></td>
+      <td>困难</td>
+      <td>弹栈时要同时确定左右两侧边界并结算面积，比单纯计数复杂一层</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/trapping-rain-water/">42. 接雨水</a></td>
+      <td>困难</td>
+      <td>弹栈结算的是凹槽体积，需要栈顶、次栈顶与当前元素三者共同参与计算</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2024/50140221" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 230. 二叉搜索树中第 K 小的元素</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2024/56393194" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 149. 直线上最多的点数</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2024/99351946">https://hgnulb.github.io/blog/2024/99351946</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

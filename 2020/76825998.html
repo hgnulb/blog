@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 307. 区域和检索 - 数组可修改 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,Sqrt Decomposition,分治,微软,数组,树状数组,线段树,设计" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 307. 区域和检索 - 数组可修改" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2020/76825998" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2020/76825998" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-24T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-10-24T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 307. 区域和检索 - 数组可修改" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2020-10-24T00:00:00+08:00","datePublished":"2020-10-24T00:00:00+08:00","description":"题目描述","headline":"LeetCode 307. 区域和检索 - 数组可修改","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2020/76825998"},"url":"https://hgnulb.github.io/blog/2020/76825998"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法树状数组fenwick">解法：树状数组（Fenwick）</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 307. 区域和检索 - 数组可修改">LeetCode 307. 区域和检索 - 数组可修改</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2020-10-24 00:00:00"
+                    datetime="2020-10-24T00:00:00+08:00"
+            >
+                2020-10-24
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3171 字 · 英文 271 词 · 代码 75 行"
+            aria-label="预计阅读时间约 11 分钟，正文 3171 字 · 英文 271 词 · 代码 75 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 11 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    7 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5147323714/" title="分治">
+        分治
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0190456276/" title="线段树">
+        线段树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2239716578/" title="树状数组">
+        树状数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8631483960/" title="Sqrt Decomposition">
+        Sqrt Decomposition
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法树状数组fenwick">解法：树状数组（Fenwick）</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/range-sum-query-mutable/">307. 区域和检索 - 数组可修改</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>设计一个类 <code class="language-plaintext highlighter-rouge">NumArray</code>，用一个整数数组初始化，之后要支持两种操作交替、任意次数地调用：<code class="language-plaintext highlighter-rouge">update(index, val)</code> 把某个位置的值<strong>改成</strong> <code class="language-plaintext highlighter-rouge">val</code>（注意是赋值不是增量），<code class="language-plaintext highlighter-rouge">sumRange(left, right)</code> 返回闭区间 <code class="language-plaintext highlighter-rouge">[left, right]</code> 的元素和。</p>
+
+  <p>这是一道设计题，考的不是算出某个答案，而是<strong>在两种操作之间做复杂度权衡</strong>。所以先把两种极端方案摆出来：直接存原数组，<code class="language-plaintext highlighter-rouge">update</code> 是 $O(1)$ 但 <code class="language-plaintext highlighter-rouge">sumRange</code> 要遍历区间，是 $O(n)$；预处理前缀和数组，<code class="language-plaintext highlighter-rouge">sumRange</code> 是 $O(1)$ 但 <code class="language-plaintext highlighter-rouge">update</code> 要重算后面所有前缀，是 $O(n)$。两种方案都有一侧是 $O(n)$。</p>
+
+  <p>数据规模是决定性信号：数组长度和调用次数都到 $3 \times 10^4$ 量级。若某一侧是 $O(n)$，最坏情况是 $3 \times 10^4 \times 3 \times 10^4 = 9 \times 10^8$ 次操作，超时。所以必须找一个<strong>两边都是 $O(\log n)$</strong> 的折中方案。</p>
+
+  <p>「单点修改 + 区间求和 + 两边都要 $\log$」这三条合起来，几乎是树状数组（Fenwick Tree）或线段树的定义式描述。两者都可以，树状数组代码短得多、常数更小，是本题的首选。</p>
+
+  <p>还有一个容易被忽略的细节：<code class="language-plaintext highlighter-rouge">update</code> 传入的是<strong>新值</strong>而不是增量。而树状数组的原生操作是「给某个位置加上一个增量」，所以必须自己维护一份原数组副本，用 <code class="language-plaintext highlighter-rouge">新值 - 旧值</code> 算出增量，再把增量喂给树状数组，同时更新副本。这份副本不是可有可无的辅助，而是接口语义决定的必需品。</p>
+
+  <p>边界：<code class="language-plaintext highlighter-rouge">sumRange(0, r)</code> 时需要 <code class="language-plaintext highlighter-rouge">prefix(-1)</code>，必须让它返回 0 而不是越界；<code class="language-plaintext highlighter-rouge">left == right</code> 时区间只有一个元素；<code class="language-plaintext highlighter-rouge">update</code> 成相同的值时增量为 0，应当能正确地什么都不改变；数组元素可以为负，所以不能假设前缀和单调。</p>
+</blockquote>
+
+<h2 id="解法树状数组fenwick">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84fenwick" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：树状数组（Fenwick）</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先看两个朴素方案为什么不够。存原数组时，<code class="language-plaintext highlighter-rouge">sumRange(0, n-1)</code> 要累加 $n$ 项；存前缀和时，<code class="language-plaintext highlighter-rouge">update(0, x)</code> 要修正 $n$ 个前缀。瓶颈的本质是：<strong>这两种存储都把「区间和」这件事表达得过于极端——要么完全不预聚合（查询慢），要么把每个前缀都完整预聚合（更新时牵一发动全身）</strong>。</p>
+
+  <p>关键观察是：区间和满足结合律，任何一段和都可以由若干<strong>不重叠的子段和</strong>拼出来。如果我们预先算好的不是「每个前缀」而是「一批精心挑选的子段」，让它们既能拼出任意前缀，又能保证单个元素只出现在少数几个子段里，那么查询和更新就能同时变快。</p>
+
+  <p>树状数组给出的就是这样一组子段。它把长度为 $n$ 的数组配上一个 1-based 的辅助数组 <code class="language-plaintext highlighter-rouge">bit</code>，规定 <strong><code class="language-plaintext highlighter-rouge">bit[i]</code> 保存的是原数组中区间 $(i - \mathrm{lowbit}(i),\ i]$ 的和</strong>，其中 $\mathrm{lowbit}(i) = i \&amp; (-i)$ 是 $i$ 的二进制最低位 1 所代表的值。举例：<code class="language-plaintext highlighter-rouge">bit[4]</code> 的 lowbit 是 4，管辖 $(0, 4]$ 即前 4 个元素；<code class="language-plaintext highlighter-rouge">bit[6]</code> 的 lowbit 是 2，管辖 $(4, 6]$ 即第 5、6 两个元素；<code class="language-plaintext highlighter-rouge">bit[7]</code> 的 lowbit 是 1，只管辖第 7 个元素。</p>
+
+  <p>这个定义就是树状数组的不变量，所有操作都围绕它维持。之所以选 lowbit 作为管辖长度，是因为它让两个方向的跳跃都恰好对应二进制位的增减：</p>
+
+  <p><strong>求前缀和</strong>：要算 $[1, i]$ 的和，先取 <code class="language-plaintext highlighter-rouge">bit[i]</code>（覆盖 $(i - \mathrm{lowbit}(i), i]$），剩下的部分是 $[1, i - \mathrm{lowbit}(i)]$，于是令 <code class="language-plaintext highlighter-rouge">i -= lowbit(i)</code> 继续累加。每次减掉最低位的 1，二进制中 1 的个数至少减少一个，所以最多循环 $O(\log n)$ 次。</p>
+
+  <p><strong>单点加增量</strong>：位置 $i$ 被哪些 <code class="language-plaintext highlighter-rouge">bit[j]</code> 管辖？答案是 <code class="language-plaintext highlighter-rouge">j = i</code>，然后 <code class="language-plaintext highlighter-rouge">j += lowbit(j)</code> 一路向上，直到超出数组范围。每次加最低位的 1 会让这一位进位，同样最多 $O(\log n)$ 步。这两个方向一个减 lowbit 一个加 lowbit，是树状数组最容易记混的地方，记法是「<strong>查询往回缩、更新往前推</strong>」。</p>
+
+  <p>有了 $O(\log n)$ 的前缀和，区间和就是两个前缀和之差：<code class="language-plaintext highlighter-rouge">sumRange(l, r) = prefix(r) - prefix(l-1)</code>。这里必须约定 <code class="language-plaintext highlighter-rouge">prefix(-1) = 0</code>，代表空前缀。</p>
+
+  <p>最后处理接口的语义差。<code class="language-plaintext highlighter-rouge">update</code> 给的是新值，树状数组只会加增量，所以类里额外维护一份 <code class="language-plaintext highlighter-rouge">nums</code> 副本：<code class="language-plaintext highlighter-rouge">delta = val - nums[index]</code>，先算增量，再更新副本，再把 <code class="language-plaintext highlighter-rouge">delta</code> 推进树状数组。构造函数则把副本初始化为全 0，然后对每个位置调用一次 <code class="language-plaintext highlighter-rouge">update(i, nums[i])</code>，让增量恰好等于原值，从而把整棵树建起来。</p>
+
+  <p>下标要小心：树状数组内部必须是 1-based（因为 $\mathrm{lowbit}(0) = 0$，从 0 出发会死循环），而题目接口是 0-based。所以 <code class="language-plaintext highlighter-rouge">bit</code> 数组开 <code class="language-plaintext highlighter-rouge">n + 1</code> 长度，所有进出都做 <code class="language-plaintext highlighter-rouge">+1</code> / <code class="language-plaintext highlighter-rouge">-1</code> 的转换，转换点集中在 <code class="language-plaintext highlighter-rouge">add</code> 和 <code class="language-plaintext highlighter-rouge">prefix</code> 两个私有方法里，外部接口保持 0-based 不变。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>成员变量设计</strong>：<code class="language-plaintext highlighter-rouge">nums</code> 保存当前值的副本、<code class="language-plaintext highlighter-rouge">bit</code> 保存树状数组，长度为 <code class="language-plaintext highlighter-rouge">n + 1</code>。为什么必须有 <code class="language-plaintext highlighter-rouge">nums</code> 副本——接口的 <code class="language-plaintext highlighter-rouge">update</code> 传新值而树状数组只接受增量，没有副本就算不出 <code class="language-plaintext highlighter-rouge">delta</code>；为什么 <code class="language-plaintext highlighter-rouge">bit</code> 要多开一位——树状数组是 1-based，下标 0 空置不用。</li>
+    <li>
+<strong>构造函数把 <code class="language-plaintext highlighter-rouge">nums</code> 初始化为全 0，再逐个调用 <code class="language-plaintext highlighter-rouge">update(i, nums[i])</code></strong>：为什么初值必须是 0——这样 <code class="language-plaintext highlighter-rouge">delta = nums[i] - 0 = nums[i]</code>，一次 <code class="language-plaintext highlighter-rouge">update</code> 就等价于「把第 <code class="language-plaintext highlighter-rouge">i</code> 个元素从无到有加进树里」；若直接把副本填成原值，<code class="language-plaintext highlighter-rouge">delta</code> 会算成 0，树状数组全是 0，所有查询返回 0。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">add(index, delta)</code>：令 <code class="language-plaintext highlighter-rouge">i = index + 1</code>，循环 <code class="language-plaintext highlighter-rouge">while (i &lt; bit.length)</code>，执行 <code class="language-plaintext highlighter-rouge">bit[i] += delta</code> 后 <code class="language-plaintext highlighter-rouge">i += i &amp; -i</code></strong>：为什么向上跳是加 lowbit——位置 <code class="language-plaintext highlighter-rouge">index</code> 被所有「管辖区间包含它」的节点覆盖，这些节点的下标恰好由不断加 lowbit 生成；为什么循环条件是 <code class="language-plaintext highlighter-rouge">i &lt; bit.length</code> 而不是 <code class="language-plaintext highlighter-rouge">i &lt;= n</code>——两者等价（<code class="language-plaintext highlighter-rouge">bit.length == n + 1</code>），写成前者更不易错。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">prefix(index)</code>：<code class="language-plaintext highlighter-rouge">index &lt; 0</code> 时返回 0；否则令 <code class="language-plaintext highlighter-rouge">i = index + 1</code>，循环 <code class="language-plaintext highlighter-rouge">while (i &gt; 0)</code>，累加 <code class="language-plaintext highlighter-rouge">bit[i]</code> 后 <code class="language-plaintext highlighter-rouge">i -= i &amp; -i</code></strong>：为什么向下跳是减 lowbit——<code class="language-plaintext highlighter-rouge">bit[i]</code> 覆盖了 $(i - \mathrm{lowbit}(i), i]$，剩余部分的右端点正是 <code class="language-plaintext highlighter-rouge">i - lowbit(i)</code>；为什么必须先判 <code class="language-plaintext highlighter-rouge">index &lt; 0</code>——<code class="language-plaintext highlighter-rouge">sumRange(0, r)</code> 会调用 <code class="language-plaintext highlighter-rouge">prefix(-1)</code>，此时 <code class="language-plaintext highlighter-rouge">i = 0</code>，若不提前返回，循环条件 <code class="language-plaintext highlighter-rouge">i &gt; 0</code> 恰好也不成立而返回 0，本例侥幸正确，但显式判断能让意图清晰，也能防住某些实现里 <code class="language-plaintext highlighter-rouge">i</code> 变成负数的情况。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">update(index, val)</code>：先算 <code class="language-plaintext highlighter-rouge">delta = val - nums[index]</code>，再写 <code class="language-plaintext highlighter-rouge">nums[index] = val</code>，最后 <code class="language-plaintext highlighter-rouge">add(index, delta)</code></strong>：为什么顺序不能变——<code class="language-plaintext highlighter-rouge">delta</code> 依赖旧值，先覆盖 <code class="language-plaintext highlighter-rouge">nums[index]</code> 会让 <code class="language-plaintext highlighter-rouge">delta</code> 恒为 0，树状数组永远不更新。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">sumRange(left, right)</code> 返回 <code class="language-plaintext highlighter-rouge">prefix(right) - prefix(left - 1)</code></strong>：为什么减的是 <code class="language-plaintext highlighter-rouge">left - 1</code> 而不是 <code class="language-plaintext highlighter-rouge">left</code>——前缀和是闭区间 $[0, i]$ 的和，要得到 $[left, right]$ 必须扣掉 $[0, left-1]$；减 <code class="language-plaintext highlighter-rouge">left</code> 会把 <code class="language-plaintext highlighter-rouge">nums[left]</code> 也扣掉。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">nums = [1, 3, 5]</code> 走一遍。<code class="language-plaintext highlighter-rouge">n = 3</code>，<code class="language-plaintext highlighter-rouge">bit</code> 长度为 4，初值 <code class="language-plaintext highlighter-rouge">bit = [0,0,0,0]</code>，副本 <code class="language-plaintext highlighter-rouge">nums = [0,0,0]</code>。</p>
+
+  <p><strong>构造阶段</strong>。<br>
+<code class="language-plaintext highlighter-rouge">update(0, 1)</code>：<code class="language-plaintext highlighter-rouge">delta = 1 - 0 = 1</code>，副本变成 <code class="language-plaintext highlighter-rouge">[1,0,0]</code>。<code class="language-plaintext highlighter-rouge">add(0, 1)</code>：<code class="language-plaintext highlighter-rouge">i = 1</code>，<code class="language-plaintext highlighter-rouge">bit[1] += 1</code> 得 1；<code class="language-plaintext highlighter-rouge">lowbit(1) = 1</code>，<code class="language-plaintext highlighter-rouge">i</code> 变成 2，<code class="language-plaintext highlighter-rouge">bit[2] += 1</code> 得 1；<code class="language-plaintext highlighter-rouge">lowbit(2) = 2</code>，<code class="language-plaintext highlighter-rouge">i</code> 变成 4，不小于 <code class="language-plaintext highlighter-rouge">bit.length = 4</code>，停止。此时 <code class="language-plaintext highlighter-rouge">bit = [0,1,1,0]</code>。<br>
+<code class="language-plaintext highlighter-rouge">update(1, 3)</code>：<code class="language-plaintext highlighter-rouge">delta = 3 - 0 = 3</code>，副本 <code class="language-plaintext highlighter-rouge">[1,3,0]</code>。<code class="language-plaintext highlighter-rouge">add(1, 3)</code>：<code class="language-plaintext highlighter-rouge">i = 2</code>，<code class="language-plaintext highlighter-rouge">bit[2] += 3</code> 得 4；<code class="language-plaintext highlighter-rouge">i</code> 变成 4，停止。<code class="language-plaintext highlighter-rouge">bit = [0,1,4,0]</code>。<br>
+<code class="language-plaintext highlighter-rouge">update(2, 5)</code>：<code class="language-plaintext highlighter-rouge">delta = 5</code>，副本 <code class="language-plaintext highlighter-rouge">[1,3,5]</code>。<code class="language-plaintext highlighter-rouge">add(2, 5)</code>：<code class="language-plaintext highlighter-rouge">i = 3</code>，<code class="language-plaintext highlighter-rouge">bit[3] += 5</code> 得 5；<code class="language-plaintext highlighter-rouge">lowbit(3) = 1</code>，<code class="language-plaintext highlighter-rouge">i</code> 变成 4，停止。<code class="language-plaintext highlighter-rouge">bit = [0,1,4,5]</code>。</p>
+
+  <p>核对不变量：<code class="language-plaintext highlighter-rouge">bit[1]</code> 管辖 $(0,1]$ 即 <code class="language-plaintext highlighter-rouge">nums[0] = 1</code>，值为 1，✓；<code class="language-plaintext highlighter-rouge">bit[2]</code> 管辖 $(0,2]$ 即 <code class="language-plaintext highlighter-rouge">nums[0]+nums[1] = 4</code>，值为 4，✓；<code class="language-plaintext highlighter-rouge">bit[3]</code> 管辖 $(2,3]$ 即 <code class="language-plaintext highlighter-rouge">nums[2] = 5</code>，值为 5，✓。</p>
+
+  <p><strong><code class="language-plaintext highlighter-rouge">sumRange(0, 2)</code></strong>：<code class="language-plaintext highlighter-rouge">prefix(2) - prefix(-1)</code>。<code class="language-plaintext highlighter-rouge">prefix(-1)</code> 因 <code class="language-plaintext highlighter-rouge">index &lt; 0</code> 返回 0。<code class="language-plaintext highlighter-rouge">prefix(2)</code>：<code class="language-plaintext highlighter-rouge">i = 3</code>，累加 <code class="language-plaintext highlighter-rouge">bit[3] = 5</code>，<code class="language-plaintext highlighter-rouge">res = 5</code>；<code class="language-plaintext highlighter-rouge">lowbit(3) = 1</code>，<code class="language-plaintext highlighter-rouge">i</code> 变成 2，累加 <code class="language-plaintext highlighter-rouge">bit[2] = 4</code>，<code class="language-plaintext highlighter-rouge">res = 9</code>；<code class="language-plaintext highlighter-rouge">lowbit(2) = 2</code>，<code class="language-plaintext highlighter-rouge">i</code> 变成 0，循环结束，返回 9。所以结果是 <code class="language-plaintext highlighter-rouge">9 - 0 = 9</code>，即 $1+3+5$，正确。注意这次查询只访问了两个节点而不是三个元素，跳跃路径 $3 \to 2 \to 0$ 正是不断减 lowbit 的结果。</p>
+
+  <p><strong><code class="language-plaintext highlighter-rouge">update(1, 2)</code></strong>：<code class="language-plaintext highlighter-rouge">delta = 2 - nums[1] = 2 - 3 = -1</code>，副本变成 <code class="language-plaintext highlighter-rouge">[1,2,5]</code>。<code class="language-plaintext highlighter-rouge">add(1, -1)</code>：<code class="language-plaintext highlighter-rouge">i = 2</code>，<code class="language-plaintext highlighter-rouge">bit[2] += -1</code> 得 3；<code class="language-plaintext highlighter-rouge">i</code> 变成 4，停止。<code class="language-plaintext highlighter-rouge">bit = [0,1,3,5]</code>。注意只改了一个节点——位置 1 只被 <code class="language-plaintext highlighter-rouge">bit[2]</code> 管辖，<code class="language-plaintext highlighter-rouge">bit[1]</code> 和 <code class="language-plaintext highlighter-rouge">bit[3]</code> 都不含它，所以不必改动。</p>
+
+  <p><strong>再次 <code class="language-plaintext highlighter-rouge">sumRange(0, 2)</code></strong>：<code class="language-plaintext highlighter-rouge">prefix(2)</code> 走 $3 \to 2$，累加 <code class="language-plaintext highlighter-rouge">5 + 3 = 8</code>，减去 0 得 8，即 $1+2+5$，正确。</p>
+
+  <p><strong><code class="language-plaintext highlighter-rouge">sumRange(1, 2)</code></strong>：<code class="language-plaintext highlighter-rouge">prefix(2) - prefix(0)</code>。<code class="language-plaintext highlighter-rouge">prefix(2) = 8</code>。<code class="language-plaintext highlighter-rouge">prefix(0)</code>：<code class="language-plaintext highlighter-rouge">i = 1</code>，累加 <code class="language-plaintext highlighter-rouge">bit[1] = 1</code>，<code class="language-plaintext highlighter-rouge">res = 1</code>；<code class="language-plaintext highlighter-rouge">lowbit(1) = 1</code>，<code class="language-plaintext highlighter-rouge">i</code> 变成 0，结束，返回 1。结果 <code class="language-plaintext highlighter-rouge">8 - 1 = 7</code>，即 $2 + 5$，正确。这里 <code class="language-plaintext highlighter-rouge">prefix(0)</code> 返回的是 <code class="language-plaintext highlighter-rouge">nums[0]</code> 而不是 0，正是 <code class="language-plaintext highlighter-rouge">left - 1</code> 这个减一存在的意义。</p>
+
+  <p>最后看一个容易出错的调用 <code class="language-plaintext highlighter-rouge">update(1, 2)</code> 再调用一次同样的 <code class="language-plaintext highlighter-rouge">update(1, 2)</code>：第二次 <code class="language-plaintext highlighter-rouge">delta = 2 - 2 = 0</code>，<code class="language-plaintext highlighter-rouge">add</code> 会把 0 加到路径上的节点，等于什么都没变，<code class="language-plaintext highlighter-rouge">bit</code> 保持 <code class="language-plaintext highlighter-rouge">[0,1,3,5]</code>，行为正确。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 维护 bit 存前缀增量，update 用差值更新。</span>
+<span class="kd">class</span> <span class="nc">NumArray</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">bit</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">NumArray</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">nums</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">bit</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">update</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">update</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="kt">int</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">delta</span> <span class="o">=</span> <span class="n">val</span> <span class="o">-</span> <span class="n">nums</span><span class="o">[</span><span class="n">index</span><span class="o">];</span>
+        <span class="n">nums</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">=</span> <span class="n">val</span><span class="o">;</span>
+        <span class="n">add</span><span class="o">(</span><span class="n">index</span><span class="o">,</span> <span class="n">delta</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">sumRange</span><span class="o">(</span><span class="kt">int</span> <span class="n">left</span><span class="o">,</span> <span class="kt">int</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">prefix</span><span class="o">(</span><span class="n">right</span><span class="o">)</span> <span class="o">-</span> <span class="n">prefix</span><span class="o">(</span><span class="n">left</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="kt">int</span> <span class="n">delta</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">bit</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">bit</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+=</span> <span class="n">delta</span><span class="o">;</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">prefix</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="n">bit</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="n">i</span> <span class="o">-=</span> <span class="n">i</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 维护 bit 存前缀增量，update 用差值更新。</span>
+<span class="k">type</span> <span class="n">NumArray</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span>
+	<span class="n">bit</span>  <span class="p">[]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="n">NumArray</span> <span class="p">{</span>
+	<span class="n">na</span> <span class="o">:=</span> <span class="n">NumArray</span><span class="p">{</span><span class="n">nums</span><span class="o">:</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)),</span> <span class="n">bit</span><span class="o">:</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">+</span><span class="m">1</span><span class="p">)}</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">na</span><span class="o">.</span><span class="n">Update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">na</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">NumArray</span><span class="p">)</span> <span class="n">Update</span><span class="p">(</span><span class="n">index</span> <span class="kt">int</span><span class="p">,</span> <span class="n">val</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">delta</span> <span class="o">:=</span> <span class="n">val</span> <span class="o">-</span> <span class="n">this</span><span class="o">.</span><span class="n">nums</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+	<span class="n">this</span><span class="o">.</span><span class="n">nums</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+	<span class="n">i</span> <span class="o">:=</span> <span class="n">index</span> <span class="o">+</span> <span class="m">1</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">bit</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">this</span><span class="o">.</span><span class="n">bit</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">delta</span>
+		<span class="n">i</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">i</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">NumArray</span><span class="p">)</span> <span class="n">SumRange</span><span class="p">(</span><span class="n">left</span> <span class="kt">int</span><span class="p">,</span> <span class="n">right</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">prefix</span><span class="p">(</span><span class="n">right</span><span class="p">)</span> <span class="o">-</span> <span class="n">this</span><span class="o">.</span><span class="n">prefix</span><span class="p">(</span><span class="n">left</span><span class="o">-</span><span class="m">1</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">NumArray</span><span class="p">)</span> <span class="n">prefix</span><span class="p">(</span><span class="n">index</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="m">0</span>
+	<span class="p">}</span>
+	<span class="n">res</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">i</span> <span class="o">:=</span> <span class="n">index</span> <span class="o">+</span> <span class="m">1</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">res</span> <span class="o">+=</span> <span class="n">this</span><span class="o">.</span><span class="n">bit</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="n">i</span> <span class="o">-=</span> <span class="n">i</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">i</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：构造 $O(n \log n)$，<code class="language-plaintext highlighter-rouge">update</code> 与 <code class="language-plaintext highlighter-rouge">sumRange</code> 均为 $O(\log n)$。<code class="language-plaintext highlighter-rouge">add</code> 每次执行 <code class="language-plaintext highlighter-rouge">i += lowbit(i)</code>，把当前位置的贡献传给下一个更大的管辖节点；一条祖先链长度不超过下标的二进制位数。<code class="language-plaintext highlighter-rouge">prefix</code> 每次执行 <code class="language-plaintext highlighter-rouge">i -= lowbit(i)</code>，消掉一个最低位 1，同样至多走 $O(\log n)$ 步。构造函数调用 $n$ 次 <code class="language-plaintext highlighter-rouge">update</code>；若需要，可用线性建树降为 $O(n)$，但不影响两种在线操作。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。凭什么：<code class="language-plaintext highlighter-rouge">bit</code> 数组长度是 $n + 1$，<code class="language-plaintext highlighter-rouge">nums</code> 副本长度是 $n$，两者都是线性的；所有操作都是迭代实现，没有递归栈。相比线段树的 $4n$ 数组，树状数组的常数明显更小，这也是本题选它的原因之一。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>设计题要先把<strong>极端方案的复杂度摆出来</strong>，说明为什么 $O(1)$ 查询配 $O(n)$ 更新和反过来都不可接受，再引出 $O(\log n)$ 的折中。直接甩出「用树状数组」而讲不清动机，是面试里最常见的减分点。</li>
+    <li>树状数组的全部内容就是一条不变量：<strong><code class="language-plaintext highlighter-rouge">bit[i]</code> 保存原数组 $(i - \mathrm{lowbit}(i),\ i]$ 的和</strong>。查询和更新的跳跃规则都是这条不变量的推论，记住它比背两个循环靠谱得多。</li>
+    <li>方向别记反：<strong>查询往回缩（<code class="language-plaintext highlighter-rouge">i -= lowbit(i)</code>），更新往前推（<code class="language-plaintext highlighter-rouge">i += lowbit(i)</code>）</strong>。可以用「查询是在拆分前缀、更新是在通知祖先」来理解。</li>
+    <li>树状数组必须 1-based，因为 $\mathrm{lowbit}(0) = 0$ 会让两个循环都卡死。把下标转换集中在 <code class="language-plaintext highlighter-rouge">add</code> / <code class="language-plaintext highlighter-rouge">prefix</code> 两个私有方法里，对外保持题目的 0-based 接口，是干净的分层写法。</li>
+    <li>当接口给的是「设为新值」而底层结构只支持「加增量」时，必须额外维护一份当前值副本来做差。这是适配器思维，在线段树、差分数组、并查集带权等场景里反复出现。</li>
+    <li>区间和拆成两个前缀和之差时，减的一定是 <code class="language-plaintext highlighter-rouge">left - 1</code> 而不是 <code class="language-plaintext highlighter-rouge">left</code>，并且要为 <code class="language-plaintext highlighter-rouge">left == 0</code> 约定 <code class="language-plaintext highlighter-rouge">prefix(-1) = 0</code>。这两处是前缀和类题目的固定检查点。</li>
+    <li>面试视角：这题的标准答法是先讲清权衡动机，再给出树状数组并解释 lowbit 的含义，最后主动分析两个循环各自为什么是 $O(\log n)$。被问「线段树呢」时要能说出：线段树更通用（支持区间修改、区间最值等非可减信息），但代码长、常数大；本题只需单点改和区间和，树状数组更合适。</li>
+    <li>面试视角：常见追问是「如果要支持区间修改、单点查询呢」。要能立刻答出把树状数组建在<strong>差分数组</strong>上——区间 $[l, r]$ 加 <code class="language-plaintext highlighter-rouge">v</code> 等价于差分数组上 <code class="language-plaintext highlighter-rouge">add(l, v)</code> 和 <code class="language-plaintext highlighter-rouge">add(r+1, -v)</code>，单点查询变成求差分的前缀和；再进一步「区间修改 + 区间查询」则需要维护两个树状数组。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">update</code> 里把 <code class="language-plaintext highlighter-rouge">val</code> 当增量直接 <code class="language-plaintext highlighter-rouge">add(index, val)</code></strong>：用例先 <code class="language-plaintext highlighter-rouge">update(1, 3)</code> 再 <code class="language-plaintext highlighter-rouge">update(1, 2)</code>，正确结果应是位置 1 变成 2，而这种写法会让它变成 $3 + 2 = 5$，<code class="language-plaintext highlighter-rouge">sumRange(1,1)</code> 返回 5 而不是 2。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">update</code> 里先写 <code class="language-plaintext highlighter-rouge">nums[index] = val</code> 再算 <code class="language-plaintext highlighter-rouge">delta</code></strong>：用例 <code class="language-plaintext highlighter-rouge">update(1, 2)</code> 当原值是 3 时，<code class="language-plaintext highlighter-rouge">delta</code> 变成 $2 - 2 = 0$，树状数组完全不更新，<code class="language-plaintext highlighter-rouge">sumRange(0,2)</code> 仍返回 9 而正确答案是 8。</li>
+    <li>
+<strong>构造函数把 <code class="language-plaintext highlighter-rouge">this.nums</code> 直接初始化成传入的数组再逐个 <code class="language-plaintext highlighter-rouge">update</code></strong>：用例 <code class="language-plaintext highlighter-rouge">nums = [1,3,5]</code>，每次 <code class="language-plaintext highlighter-rouge">delta = nums[i] - nums[i] = 0</code>，<code class="language-plaintext highlighter-rouge">bit</code> 全为 0，任何 <code class="language-plaintext highlighter-rouge">sumRange</code> 都返回 0。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">sumRange</code> 写成 <code class="language-plaintext highlighter-rouge">prefix(right) - prefix(left)</code></strong>：用例 <code class="language-plaintext highlighter-rouge">nums = [1,3,5]</code>、<code class="language-plaintext highlighter-rouge">sumRange(1,2)</code>，会算成 $9 - 4 = 5$，而正确答案是 $3+5=8$；<code class="language-plaintext highlighter-rouge">nums[left]</code> 被错误扣除。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">prefix</code> 没有处理 <code class="language-plaintext highlighter-rouge">index &lt; 0</code></strong>：用例 <code class="language-plaintext highlighter-rouge">sumRange(0, 2)</code>，<code class="language-plaintext highlighter-rouge">prefix(-1)</code> 时 <code class="language-plaintext highlighter-rouge">i = 0</code>，若循环条件写成 <code class="language-plaintext highlighter-rouge">i &gt;= 0</code> 则 <code class="language-plaintext highlighter-rouge">bit[0]</code> 会被累加且 <code class="language-plaintext highlighter-rouge">lowbit(0) = 0</code> 导致 <code class="language-plaintext highlighter-rouge">i</code> 永远不变，陷入死循环。</li>
+    <li>
+<strong>树状数组用 0-based（<code class="language-plaintext highlighter-rouge">bit</code> 长度取 <code class="language-plaintext highlighter-rouge">n</code>，<code class="language-plaintext highlighter-rouge">i = index</code>）</strong>：用例 <code class="language-plaintext highlighter-rouge">update(0, 5)</code>，<code class="language-plaintext highlighter-rouge">i = 0</code> 时 <code class="language-plaintext highlighter-rouge">lowbit(0) = 0</code>，<code class="language-plaintext highlighter-rouge">i += 0</code> 让循环永远停不下来，程序挂死。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">add</code> 的跳跃方向写成 <code class="language-plaintext highlighter-rouge">i -= i &amp; -i</code></strong>：用例 <code class="language-plaintext highlighter-rouge">nums = [1,3,5]</code>，构造时 <code class="language-plaintext highlighter-rouge">update(2,5)</code> 会从 <code class="language-plaintext highlighter-rouge">i=3</code> 跳到 <code class="language-plaintext highlighter-rouge">i=2</code> 再到 <code class="language-plaintext highlighter-rouge">i=0</code>，把 5 加到了 <code class="language-plaintext highlighter-rouge">bit[2]</code> 上，破坏不变量；随后 <code class="language-plaintext highlighter-rouge">sumRange(0,0)</code> 会返回错误的值。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">prefix</code> 的跳跃方向写成 <code class="language-plaintext highlighter-rouge">i += i &amp; -i</code></strong>：用例 <code class="language-plaintext highlighter-rouge">prefix(2)</code>，<code class="language-plaintext highlighter-rouge">i</code> 从 3 跳到 4、8、16…… 越界或死循环，取决于循环条件。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">add</code> 的循环条件写成 <code class="language-plaintext highlighter-rouge">i &lt;= n</code> 却把 <code class="language-plaintext highlighter-rouge">n</code> 取成了 <code class="language-plaintext highlighter-rouge">bit.length</code></strong>：用例 <code class="language-plaintext highlighter-rouge">nums = [1,3,5]</code>（<code class="language-plaintext highlighter-rouge">bit.length = 4</code>），<code class="language-plaintext highlighter-rouge">i = 4</code> 时会执行 <code class="language-plaintext highlighter-rouge">bit[4] += delta</code> 直接越界。</li>
+    <li>
+<strong>lowbit 写成 <code class="language-plaintext highlighter-rouge">i &amp; (i - 1)</code></strong>：用例 <code class="language-plaintext highlighter-rouge">i = 6</code>，<code class="language-plaintext highlighter-rouge">6 &amp; 5 = 4</code> 而正确的 <code class="language-plaintext highlighter-rouge">lowbit(6) = 6 &amp; -6 = 2</code>；<code class="language-plaintext highlighter-rouge">i &amp; (i-1)</code> 是「消掉最低位 1」而不是「取出最低位 1」，两者含义完全不同，会让跳跃路径全错。</li>
+    <li>
+<strong>不保存原值，误把 <code class="language-plaintext highlighter-rouge">bit[index+1]</code> 当成该位置当前值来算差量</strong>：<code class="language-plaintext highlighter-rouge">nums = [1,3]</code> 时 <code class="language-plaintext highlighter-rouge">bit[2]</code> 保存的是前两项之和 4，不是 <code class="language-plaintext highlighter-rouge">nums[1] = 3</code>；把下标 1 更新为 2 会算出错误差量 <code class="language-plaintext highlighter-rouge">2-4=-2</code>，区间和变成 2 而不是 3。</li>
+    <li>
+<strong>数组元素为负时假设前缀和单调而想用二分</strong>：用例 <code class="language-plaintext highlighter-rouge">nums = [5, -3, 5]</code>，<code class="language-plaintext highlighter-rouge">prefix</code> 序列是 <code class="language-plaintext highlighter-rouge">5, 2, 7</code> 非单调，任何依赖单调性的优化都会出错；树状数组本身不需要这个假设，但衍生用法（如求第 k 小）需要值域非负，要说清适用前提。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/range-sum-query-immutable/">303. 区域和检索 - 数组不可变</a></td>
+      <td>简单</td>
+      <td>没有修改操作，直接前缀和即可，用来对照理解修改需求如何逼出树状数组</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/range-sum-query-2d-mutable/">308. 二维区域和检索 - 矩阵可修改</a></td>
+      <td>中等</td>
+      <td>把树状数组升到二维，两个方向各跳一次 lowbit，区间和要用容斥拆成四个前缀</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/count-of-smaller-numbers-after-self/">315. 计算右侧小于当前元素的个数</a></td>
+      <td>困难</td>
+      <td>把树状数组建在<strong>值域</strong>上做计数而非求和，需要先离散化</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/count-of-range-sum/">327. 区间和的个数</a></td>
+      <td>困难</td>
+      <td>前缀和 + 树状数组统计落在区间内的历史前缀个数，考察问题到值域计数的转化</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/reverse-pairs/">493. 翻转对</a></td>
+      <td>困难</td>
+      <td>同为值域树状数组计数，但比较条件带系数，离散化时要把 $2 \times nums[i]$ 也放进值域</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/my-calendar-iii/">732. 我的日程安排表 III</a></td>
+      <td>困难</td>
+      <td>需要区间修改 + 全局最值，树状数组不再适用，必须换动态开点线段树</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/the-skyline-problem/">218. 天际线问题</a></td>
+      <td>困难</td>
+      <td>同属「动态维护聚合量」，但聚合的是最大值且要支持删除，指向多重集合或线段树</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2020/94980842" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">数据结构与算法-二分查找</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2020/98860960" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">Java 基础-this 关键字</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2020/76825998">https://hgnulb.github.io/blog/2020/76825998</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

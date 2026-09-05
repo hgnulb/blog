@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1188. 设计有限阻塞队列 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,商汤,多线程" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1188. 设计有限阻塞队列" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/11043513" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/11043513" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-05-08T22:25:18+08:00" />
+<meta property="article:modified_time" content="2022-05-08T22:25:18+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1188. 设计有限阻塞队列" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-05-08T22:25:18+08:00","datePublished":"2022-05-08T22:25:18+08:00","description":"题目描述","headline":"LeetCode 1188. 设计有限阻塞队列","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/11043513"},"url":"https://hgnulb.github.io/blog/2022/11043513"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法锁--条件变量--环形数组">解法：锁 + 条件变量 + 环形数组</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1188. 设计有限阻塞队列">LeetCode 1188. 设计有限阻塞队列</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-05-08 22:25:18"
+                    datetime="2022-05-08T22:25:18+08:00"
+            >
+                2022-05-08
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3137 字 · 英文 82 词 · 代码 108 行"
+            aria-label="预计阅读时间约 11 分钟，正文 3137 字 · 英文 82 词 · 代码 108 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 11 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    2 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9733506750/" title="商汤">
+        商汤
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4625220551/" title="多线程">
+        多线程
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法锁--条件变量--环形数组">解法：锁 + 条件变量 + 环形数组</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/design-bounded-blocking-queue/">1188. 设计有限阻塞队列</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>实现一个容量固定为 <code class="language-plaintext highlighter-rouge">capacity</code> 的线程安全队列，支持三个方法：<code class="language-plaintext highlighter-rouge">enqueue(x)</code> 把元素放到队尾——<strong>如果队列已满，调用线程必须阻塞等待</strong>，直到有空位；<code class="language-plaintext highlighter-rouge">dequeue()</code> 取出并返回队首元素——<strong>如果队列为空，调用线程必须阻塞等待</strong>，直到有元素；<code class="language-plaintext highlighter-rouge">size()</code> 返回当前元素个数。题目保证生产者线程只调 <code class="language-plaintext highlighter-rouge">enqueue</code>、消费者线程只调 <code class="language-plaintext highlighter-rouge">dequeue</code>，但两侧都可能有多个线程。</p>
+
+  <p>「阻塞」这个词是全题的核心，它排除了两类看似可行的写法。第一类是返回失败让调用方重试——题目要求的是等待而不是失败。第二类是忙等（<code class="language-plaintext highlighter-rouge">while (full) {}</code> 空转）——它虽然「能跑」，但会把 CPU 烧满，在面试里等同于错误答案。<strong>必须让线程真正挂起、并在条件满足时被唤醒</strong>。</p>
+
+  <p>其次要看清这是一个<strong>双向阻塞</strong>：满时挡住生产者、空时挡住消费者。两个方向的等待条件不同、唤醒时机也不同，这决定了用一把锁配<strong>两个</strong>条件变量而不是一个。</p>
+
+  <p>数据本身没有难度：先进先出、容量固定，用一个定长数组加两个下标环形使用即可，所有操作 $O(1)$。真正被考察的是并发原语的正确使用。</p>
+
+  <p>边界：<code class="language-plaintext highlighter-rouge">capacity</code> 至少为 1；队列可能长期处于满或空的极端状态，多个线程同时被阻塞；<code class="language-plaintext highlighter-rouge">size()</code> 也会被并发调用，同样需要同步保护。</p>
+</blockquote>
+
+<h2 id="解法锁--条件变量--环形数组">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E9%94%81--%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F--%E7%8E%AF%E5%BD%A2%E6%95%B0%E7%BB%84" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：锁 + 条件变量 + 环形数组</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先看最朴素的尝试：给三个方法都加 <code class="language-plaintext highlighter-rouge">synchronized</code>，满时写 <code class="language-plaintext highlighter-rouge">while (size == cap) { }</code> 自旋。自旋线程始终持有队列锁，消费者在任何 CPU 核上都无法进入临界区，队列永远腾不出空位；同时自旋还会持续占用 CPU。瓶颈很明确——<strong>等待期间必须同时释放锁和 CPU</strong>。</p>
+
+  <p>正确的原语是「锁 + 条件变量」。条件变量的 <code class="language-plaintext highlighter-rouge">await()</code> 做了三件不可分割的事：<strong>释放锁、挂起当前线程、被唤醒后重新抢锁</strong>。释放锁这一点是关键，它让别的线程有机会进来改变状态，从而使等待条件最终得以满足。</p>
+
+  <p>于是数据结构定为：一个定长数组 <code class="language-plaintext highlighter-rouge">data</code>，下标 <code class="language-plaintext highlighter-rouge">head</code> 指向队首元素、<code class="language-plaintext highlighter-rouge">tail</code> 指向下一个写入位置，计数 <code class="language-plaintext highlighter-rouge">size</code>；一把 <code class="language-plaintext highlighter-rouge">ReentrantLock</code>，以及从它派生的两个条件变量 <code class="language-plaintext highlighter-rouge">notFull</code>（生产者在此等待）与 <code class="language-plaintext highlighter-rouge">notEmpty</code>（消费者在此等待）。</p>
+
+  <p>不变量是：<strong>任何线程持锁期间观察到的 <code class="language-plaintext highlighter-rouge">size</code> 恒等于队列中的实际元素个数，且这 <code class="language-plaintext highlighter-rouge">size</code> 个元素依次位于 <code class="language-plaintext highlighter-rouge">data[head]</code>、<code class="language-plaintext highlighter-rouge">data[(head+1) % cap]</code>、……；<code class="language-plaintext highlighter-rouge">0 &lt;= size &lt;= cap</code>。</strong> 三个方法都必须在持锁状态下读写这套状态，退出前恢复不变量。</p>
+
+  <p>为什么要单独维护 <code class="language-plaintext highlighter-rouge">size</code> 而不用 <code class="language-plaintext highlighter-rouge">head</code> 与 <code class="language-plaintext highlighter-rouge">tail</code> 推算？因为环形数组里 <code class="language-plaintext highlighter-rouge">head == tail</code> 既可能表示空、也可能表示满，二者无法区分。常见的替代方案是「牺牲一个格子」，但那会让实际容量变成 <code class="language-plaintext highlighter-rouge">capacity - 1</code>，与题目要求不符。显式的 <code class="language-plaintext highlighter-rouge">size</code> 既解决歧义又让判断条件直白。</p>
+
+  <p>两个条件变量的分工要清楚：</p>
+
+  <ul>
+    <li>
+<code class="language-plaintext highlighter-rouge">enqueue</code> 在 <code class="language-plaintext highlighter-rouge">size == cap</code> 时 <code class="language-plaintext highlighter-rouge">notFull.await()</code>；成功入队后 <code class="language-plaintext highlighter-rouge">notEmpty.signal()</code> 唤醒一个可能在等的消费者。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">dequeue</code> 在 <code class="language-plaintext highlighter-rouge">size == 0</code> 时 <code class="language-plaintext highlighter-rouge">notEmpty.await()</code>；成功出队后 <code class="language-plaintext highlighter-rouge">notFull.signal()</code> 唤醒一个可能在等的生产者。</li>
+  </ul>
+
+  <p><strong>等待自己的条件、唤醒对方的条件</strong>——这是生产者消费者模型的标准配对。分开等待队列后，<code class="language-plaintext highlighter-rouge">notEmpty.signal()</code> 只会选择消费者，<code class="language-plaintext highlighter-rouge">notFull.signal()</code> 只会选择生产者。若所有线程共用一个条件变量，<code class="language-plaintext highlighter-rouge">signal()</code> 在等待者混合时可能选中条件仍不成立的一侧，真正能推进状态的线程继续沉睡；共用条件时必须改用 <code class="language-plaintext highlighter-rouge">signalAll()</code>，代价是惊群。两个条件变量让单次唤醒既正确又精确。</p>
+
+  <p>最后一个必须讲清的点：<strong>等待条件必须循环复检，不能只用 <code class="language-plaintext highlighter-rouge">if</code> 判断一次</strong>。Java 的 <code class="language-plaintext highlighter-rouge">Condition.await()</code> 允许虚假唤醒；更普遍的原因是，<code class="language-plaintext highlighter-rouge">signal</code> 只让等待者重新参与锁竞争，在它拿到锁之前，另一个同侧线程可能已经取走那个空位或元素。Go 的 <code class="language-plaintext highlighter-rouge">sync.Cond.Wait()</code> 不会无故返回，但同样存在后一种竞争。因此 Java 用 <code class="language-plaintext highlighter-rouge">while</code>、Go 用 <code class="language-plaintext highlighter-rouge">for</code>，醒来后都要重新检查谓词。</p>
+
+  <p><strong>正确性：</strong>同一把锁使每次入队、出队的状态变更不可交错；等待循环保证入队只在 <code class="language-plaintext highlighter-rouge">size &lt; cap</code> 时发生、出队只在 <code class="language-plaintext highlighter-rouge">size &gt; 0</code> 时发生，因此容量边界始终成立。入队只写 <code class="language-plaintext highlighter-rouge">tail</code> 并向后推进，出队只读 <code class="language-plaintext highlighter-rouge">head</code> 并向后推进，所以元素按进入顺序离开。每次改变“空/满”谓词后再唤醒对侧，使已满足条件的等待者有机会继续；所有方法退出时都恢复环形队列不变量。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>构造函数初始化状态</strong>：分配长度为 <code class="language-plaintext highlighter-rouge">capacity</code> 的数组，创建 <code class="language-plaintext highlighter-rouge">ReentrantLock</code>，并用 <code class="language-plaintext highlighter-rouge">lock.newCondition()</code> 派生两个条件变量。两个条件变量必须来自<strong>同一把锁</strong>——它们共享该锁的等待机制，跨锁使用会抛异常。<code class="language-plaintext highlighter-rouge">head</code>、<code class="language-plaintext highlighter-rouge">tail</code>、<code class="language-plaintext highlighter-rouge">size</code> 默认为 0 即为空队列。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">enqueue</code> 加锁</strong>：<code class="language-plaintext highlighter-rouge">lock.lock()</code> 之后立刻 <code class="language-plaintext highlighter-rouge">try</code>，<code class="language-plaintext highlighter-rouge">finally</code> 里 <code class="language-plaintext highlighter-rouge">unlock()</code>。把解锁放在 <code class="language-plaintext highlighter-rouge">finally</code> 是硬性要求——中间任何一步抛出异常（包括 <code class="language-plaintext highlighter-rouge">await</code> 抛 <code class="language-plaintext highlighter-rouge">InterruptedException</code>）都不能让锁泄漏，否则整个队列永久卡死。</li>
+    <li>
+<strong>循环等待非满</strong>：<code class="language-plaintext highlighter-rouge">while (size == data.length) notFull.await();</code>。用 <code class="language-plaintext highlighter-rouge">while</code> 应对虚假唤醒与「醒来后名额被抢」两种情况。</li>
+    <li>
+<strong>写入并推进</strong>：<code class="language-plaintext highlighter-rouge">data[tail] = element; tail = (tail + 1) % data.length; size++;</code>。取模实现环形复用，让数组尾部与头部首尾相接，避免搬移数据。三行必须在锁内一起完成，否则别的线程可能看到「写了数据但 <code class="language-plaintext highlighter-rouge">size</code> 还没加」的中间态。</li>
+    <li>
+<strong>唤醒对侧</strong>：状态更新完成后调用 <code class="language-plaintext highlighter-rouge">notEmpty.signal()</code>。被唤醒者仍要等当前线程释放锁后才能继续，因此同一临界区内先更新还是先通知不会暴露中间态；写成「改变谓词后通知」能让状态迁移与信号的因果关系最清楚。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">dequeue</code> 对称处理</strong>：循环等待 <code class="language-plaintext highlighter-rouge">size == 0</code>，取出 <code class="language-plaintext highlighter-rouge">data[head]</code>，<code class="language-plaintext highlighter-rouge">head</code> 前移取模，<code class="language-plaintext highlighter-rouge">size--</code>，然后 <code class="language-plaintext highlighter-rouge">notFull.signal()</code>，最后返回。注意 <code class="language-plaintext highlighter-rouge">return val</code> 写在 <code class="language-plaintext highlighter-rouge">try</code> 块内、<code class="language-plaintext highlighter-rouge">finally</code> 之前——Java 会保证 <code class="language-plaintext highlighter-rouge">finally</code> 中的 <code class="language-plaintext highlighter-rouge">unlock</code> 在返回前执行。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">size()</code> 也要加锁</strong>：读取 <code class="language-plaintext highlighter-rouge">size</code> 同样需要同步。不加锁读一个非 <code class="language-plaintext highlighter-rouge">volatile</code> 的 <code class="language-plaintext highlighter-rouge">int</code> 存在可见性问题（可能长期读到过期值），且与 <code class="language-plaintext highlighter-rouge">enqueue</code>/<code class="language-plaintext highlighter-rouge">dequeue</code> 的更新构成数据竞争。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">capacity = 2</code>、两个生产者线程 P1、P2 和一个消费者线程 C 走一遍：</p>
+
+  <p>初始 <code class="language-plaintext highlighter-rouge">head = tail = size = 0</code>，数组 <code class="language-plaintext highlighter-rouge">[_, _]</code>。</p>
+
+  <p>P1 调 <code class="language-plaintext highlighter-rouge">enqueue(1)</code>：拿到锁，<code class="language-plaintext highlighter-rouge">size = 0 != 2</code> 不等待，写 <code class="language-plaintext highlighter-rouge">data[0] = 1</code>，<code class="language-plaintext highlighter-rouge">tail = 1</code>，<code class="language-plaintext highlighter-rouge">size = 1</code>，<code class="language-plaintext highlighter-rouge">notEmpty.signal()</code>（此刻没人在等，信号被丢弃，这是允许的），释放锁。</p>
+
+  <p>P2 调 <code class="language-plaintext highlighter-rouge">enqueue(2)</code>：拿锁，<code class="language-plaintext highlighter-rouge">size = 1 != 2</code>，写 <code class="language-plaintext highlighter-rouge">data[1] = 2</code>，<code class="language-plaintext highlighter-rouge">tail = (1+1) % 2 = 0</code> <strong>绕回数组头部</strong>，<code class="language-plaintext highlighter-rouge">size = 2</code>，signal，释放锁。此时 <code class="language-plaintext highlighter-rouge">head = 0</code>、<code class="language-plaintext highlighter-rouge">tail = 0</code>、<code class="language-plaintext highlighter-rouge">size = 2</code>——<code class="language-plaintext highlighter-rouge">head == tail</code> 却是满的，这正是必须显式维护 <code class="language-plaintext highlighter-rouge">size</code> 的原因。</p>
+
+  <p>P1 再调 <code class="language-plaintext highlighter-rouge">enqueue(3)</code>：拿锁，<code class="language-plaintext highlighter-rouge">size == 2</code> 满足等待条件，进入 <code class="language-plaintext highlighter-rouge">notFull.await()</code>——<strong>锁被释放</strong>，P1 挂起。若这里用忙等，锁不会释放，下面的 C 永远进不来。</p>
+
+  <p>C 调 <code class="language-plaintext highlighter-rouge">dequeue()</code>：拿到（被 P1 释放的）锁，<code class="language-plaintext highlighter-rouge">size = 2 != 0</code>，取 <code class="language-plaintext highlighter-rouge">val = data[0] = 1</code>，<code class="language-plaintext highlighter-rouge">head = 1</code>，<code class="language-plaintext highlighter-rouge">size = 1</code>，<code class="language-plaintext highlighter-rouge">notFull.signal()</code> 唤醒 P1，释放锁并返回 1。</p>
+
+  <p>P1 被唤醒后重新抢锁，回到 <code class="language-plaintext highlighter-rouge">while</code> 顶部<strong>重新检查</strong> <code class="language-plaintext highlighter-rouge">size == 2</code>？现在 <code class="language-plaintext highlighter-rouge">size = 1</code>，条件不成立，退出循环，写 <code class="language-plaintext highlighter-rouge">data[0] = 3</code>（<code class="language-plaintext highlighter-rouge">tail = 0</code>），<code class="language-plaintext highlighter-rouge">tail = 1</code>，<code class="language-plaintext highlighter-rouge">size = 2</code>，释放锁。</p>
+
+  <p>假设此时还有 P3 也在 <code class="language-plaintext highlighter-rouge">notFull</code> 上等待，而 C 只出队了一次：<code class="language-plaintext highlighter-rouge">signal</code> 唤醒的可能是 P3 而不是 P1，P3 抢到锁后填满队列；P1 后来醒来发现 <code class="language-plaintext highlighter-rouge">size</code> 又变回 2，于是<strong>再次进入等待</strong>——这正是 <code class="language-plaintext highlighter-rouge">while</code> 而非 <code class="language-plaintext highlighter-rouge">if</code> 的价值所在。若写成 <code class="language-plaintext highlighter-rouge">if</code>，P1 会直接覆盖 <code class="language-plaintext highlighter-rouge">data[tail]</code>，把 P3 刚写入的元素冲掉，并让 <code class="language-plaintext highlighter-rouge">size</code> 变成 3 超过容量，不变量彻底崩坏。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.concurrent.locks.Condition</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.locks.ReentrantLock</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">BoundedBlockingQueue</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">data</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">head</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">tail</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">size</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">ReentrantLock</span> <span class="n">lock</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Condition</span> <span class="n">notFull</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Condition</span> <span class="n">notEmpty</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">BoundedBlockingQueue</span><span class="o">(</span><span class="kt">int</span> <span class="n">capacity</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">capacity</span><span class="o">];</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ReentrantLock</span><span class="o">();</span>
+        <span class="c1">// 两个条件变量必须派生自同一把锁。</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">notFull</span> <span class="o">=</span> <span class="n">lock</span><span class="o">.</span><span class="na">newCondition</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">notEmpty</span> <span class="o">=</span> <span class="n">lock</span><span class="o">.</span><span class="na">newCondition</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">enqueue</span><span class="o">(</span><span class="kt">int</span> <span class="n">element</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+        <span class="n">lock</span><span class="o">.</span><span class="na">lock</span><span class="o">();</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">// 必须用 while：应对虚假唤醒，以及醒来后空位被同侧线程抢走。</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">size</span> <span class="o">==</span> <span class="n">data</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">notFull</span><span class="o">.</span><span class="na">await</span><span class="o">();</span>
+            <span class="o">}</span>
+
+            <span class="n">data</span><span class="o">[</span><span class="n">tail</span><span class="o">]</span> <span class="o">=</span> <span class="n">element</span><span class="o">;</span>
+            <span class="n">tail</span> <span class="o">=</span> <span class="o">(</span><span class="n">tail</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">%</span> <span class="n">data</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+            <span class="n">size</span><span class="o">++;</span>
+
+            <span class="c1">// 状态更新完成后再唤醒对侧。</span>
+            <span class="n">notEmpty</span><span class="o">.</span><span class="na">signal</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">lock</span><span class="o">.</span><span class="na">unlock</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">dequeue</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+        <span class="n">lock</span><span class="o">.</span><span class="na">lock</span><span class="o">();</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">notEmpty</span><span class="o">.</span><span class="na">await</span><span class="o">();</span>
+            <span class="o">}</span>
+
+            <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">data</span><span class="o">[</span><span class="n">head</span><span class="o">];</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="o">(</span><span class="n">head</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">%</span> <span class="n">data</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+            <span class="n">size</span><span class="o">--;</span>
+
+            <span class="n">notFull</span><span class="o">.</span><span class="na">signal</span><span class="o">();</span>
+            <span class="k">return</span> <span class="n">val</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">lock</span><span class="o">.</span><span class="na">unlock</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">size</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">lock</span><span class="o">.</span><span class="na">lock</span><span class="o">();</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">size</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">lock</span><span class="o">.</span><span class="na">unlock</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="s">"sync"</span>
+
+<span class="k">type</span> <span class="n">BoundedBlockingQueue</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="nb">cap</span>      <span class="kt">int</span>
+	<span class="n">data</span>     <span class="p">[]</span><span class="kt">int</span>
+	<span class="n">head</span>     <span class="kt">int</span>
+	<span class="n">tail</span>     <span class="kt">int</span>
+	<span class="n">size</span>     <span class="kt">int</span>
+	<span class="n">mu</span>       <span class="n">sync</span><span class="o">.</span><span class="n">Mutex</span>
+	<span class="n">notFull</span>  <span class="o">*</span><span class="n">sync</span><span class="o">.</span><span class="n">Cond</span>
+	<span class="n">notEmpty</span> <span class="o">*</span><span class="n">sync</span><span class="o">.</span><span class="n">Cond</span>
+<span class="p">}</span>
+
+<span class="c">// 必须返回指针：Cond 持有 &amp;q.mu，返回值拷贝会让锁与条件变量指向不同的对象。</span>
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">(</span><span class="n">capacity</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">BoundedBlockingQueue</span> <span class="p">{</span>
+	<span class="n">q</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">BoundedBlockingQueue</span><span class="p">{</span>
+		<span class="nb">cap</span><span class="o">:</span>  <span class="n">capacity</span><span class="p">,</span>
+		<span class="n">data</span><span class="o">:</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">capacity</span><span class="p">),</span>
+	<span class="p">}</span>
+	<span class="n">q</span><span class="o">.</span><span class="n">notFull</span> <span class="o">=</span> <span class="n">sync</span><span class="o">.</span><span class="n">NewCond</span><span class="p">(</span><span class="o">&amp;</span><span class="n">q</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span>
+	<span class="n">q</span><span class="o">.</span><span class="n">notEmpty</span> <span class="o">=</span> <span class="n">sync</span><span class="o">.</span><span class="n">NewCond</span><span class="p">(</span><span class="o">&amp;</span><span class="n">q</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">q</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">q</span> <span class="o">*</span><span class="n">BoundedBlockingQueue</span><span class="p">)</span> <span class="n">Enqueue</span><span class="p">(</span><span class="n">element</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">q</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+	<span class="k">defer</span> <span class="n">q</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span>
+	<span class="c">// 必须用 for：醒来后重新抢锁时，空位可能已被同侧 goroutine 抢走。</span>
+	<span class="k">for</span> <span class="n">q</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">q</span><span class="o">.</span><span class="nb">cap</span> <span class="p">{</span>
+		<span class="n">q</span><span class="o">.</span><span class="n">notFull</span><span class="o">.</span><span class="n">Wait</span><span class="p">()</span>
+	<span class="p">}</span>
+
+	<span class="n">q</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="o">.</span><span class="n">tail</span><span class="p">]</span> <span class="o">=</span> <span class="n">element</span>
+	<span class="n">q</span><span class="o">.</span><span class="n">tail</span> <span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">tail</span> <span class="o">+</span> <span class="m">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">q</span><span class="o">.</span><span class="nb">cap</span>
+	<span class="n">q</span><span class="o">.</span><span class="n">size</span><span class="o">++</span>
+
+	<span class="c">// 状态更新完成后再唤醒对侧。</span>
+	<span class="n">q</span><span class="o">.</span><span class="n">notEmpty</span><span class="o">.</span><span class="n">Signal</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">q</span> <span class="o">*</span><span class="n">BoundedBlockingQueue</span><span class="p">)</span> <span class="n">Dequeue</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">q</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+	<span class="k">defer</span> <span class="n">q</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span>
+	<span class="k">for</span> <span class="n">q</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">q</span><span class="o">.</span><span class="n">notEmpty</span><span class="o">.</span><span class="n">Wait</span><span class="p">()</span>
+	<span class="p">}</span>
+
+	<span class="n">val</span> <span class="o">:=</span> <span class="n">q</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="o">.</span><span class="n">head</span><span class="p">]</span>
+	<span class="n">q</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">head</span> <span class="o">+</span> <span class="m">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">q</span><span class="o">.</span><span class="nb">cap</span>
+	<span class="n">q</span><span class="o">.</span><span class="n">size</span><span class="o">--</span>
+
+	<span class="n">q</span><span class="o">.</span><span class="n">notFull</span><span class="o">.</span><span class="n">Signal</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">val</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">q</span> <span class="o">*</span><span class="n">BoundedBlockingQueue</span><span class="p">)</span> <span class="n">Size</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">q</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+	<span class="k">defer</span> <span class="n">q</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">Unlock</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">q</span><span class="o">.</span><span class="n">size</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：三个方法在不阻塞时均为 $O(1)$——只做常数次下标运算与赋值，环形数组避免了任何搬移。阻塞时长取决于对侧线程的调度，不计入算法复杂度。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(capacity)$，定长数组一次性分配，不随入队出队增长；此外只有一把锁、两个条件变量和三个整型下标，都是常数开销。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>阻塞必须靠<strong>条件变量的 <code class="language-plaintext highlighter-rouge">await</code>/<code class="language-plaintext highlighter-rouge">wait</code></strong> 实现，它在挂起线程的同时释放锁；忙等既烧 CPU 又因不放锁而必然死锁，是这类题的第一条红线。</li>
+    <li>
+<strong>一把锁 + 两个条件变量</strong>：等待自己的条件、唤醒对方的条件。共用一个条件变量会因唤醒到同侧线程而丢失信号，除非退而使用 <code class="language-plaintext highlighter-rouge">signalAll</code> 承受无谓唤醒。</li>
+    <li>等待必须循环检查谓词：Java 用 <code class="language-plaintext highlighter-rouge">while (...) await()</code> 防虚假唤醒和状态竞争；Go 用 <code class="language-plaintext highlighter-rouge">for ... { Wait() }</code> 防重新抢锁前的状态竞争。一次 <code class="language-plaintext highlighter-rouge">if</code> 判断不足以保证醒来时条件仍成立。</li>
+    <li>环形数组中 <code class="language-plaintext highlighter-rouge">head == tail</code> 无法区分空与满，因此要么显式维护 <code class="language-plaintext highlighter-rouge">size</code>，要么牺牲一个格子；本题容量固定，显式 <code class="language-plaintext highlighter-rouge">size</code> 是更贴题的选择。</li>
+    <li>解锁必须放在 <code class="language-plaintext highlighter-rouge">finally</code>（Go 用 <code class="language-plaintext highlighter-rouge">defer</code>），保证任何异常路径都不会泄漏锁。</li>
+    <li>
+<strong>只读方法同样要加锁</strong>：<code class="language-plaintext highlighter-rouge">size()</code> 不加锁可能读到过期值，并与写操作构成数据竞争；原子地读到一个 <code class="language-plaintext highlighter-rouge">int</code> 不等于具备跨线程可见性。</li>
+    <li>Go 中 <code class="language-plaintext highlighter-rouge">sync.Cond</code> 保存的是 <code class="language-plaintext highlighter-rouge">Locker</code> 的指针，构造函数必须返回<strong>指针</strong>；返回结构体值会让拷贝出来的 <code class="language-plaintext highlighter-rouge">mu</code> 与 <code class="language-plaintext highlighter-rouge">Cond.L</code> 指向不同的互斥量，导致 <code class="language-plaintext highlighter-rouge">Wait</code> 解开的不是当前持有的那把锁。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：等待用 <code class="language-plaintext highlighter-rouge">if (size == cap) notFull.await();</code>。用例 容量 1 的满队列中 P1 等待，消费者出队并唤醒 P1；P1 重新拿锁前，新生产者 P2 抢先入队填满。P1 随后若不复检就继续写入，会让 <code class="language-plaintext highlighter-rouge">size</code> 变成 2 并覆盖未消费元素。</li>
+    <li>
+<strong>错误写法</strong>：只用一个条件变量并调用 <code class="language-plaintext highlighter-rouge">signal()</code>。可复现调度：容量 1 且队列已满，P1、P2 入队等待；C1 出队并唤醒 P1；P1 抢锁前 C2 发现队列为空并等待；随后 P1 入队，却错误唤醒 P2。P2 复检后继续等待，C2 也仍在睡，队列虽有元素却再无活动线程，形成死锁。</li>
+    <li>
+<strong>错误写法</strong>：忙等 <code class="language-plaintext highlighter-rouge">while (size == cap) { }</code> 不释放锁。用例 队列满时生产者调用 <code class="language-plaintext highlighter-rouge">enqueue</code>：锁被一直持有，消费者永远进不了 <code class="language-plaintext highlighter-rouge">dequeue</code>，队列永远不会腾出空位，死锁且 CPU 占满。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">unlock()</code> 写在 <code class="language-plaintext highlighter-rouge">try</code> 块末尾而非 <code class="language-plaintext highlighter-rouge">finally</code>。用例 <code class="language-plaintext highlighter-rouge">await()</code> 抛出 <code class="language-plaintext highlighter-rouge">InterruptedException</code>：解锁语句被跳过，锁永久泄漏，之后所有线程在 <code class="language-plaintext highlighter-rouge">lock()</code> 上无限阻塞。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">size()</code> 不加锁直接返回字段。用例 高并发下持续调用：可能长期读到缓存中的过期值，且与 <code class="language-plaintext highlighter-rouge">size++</code> 构成数据竞争，Go 的 <code class="language-plaintext highlighter-rouge">-race</code> 检测器会直接报错。</li>
+    <li>
+<strong>错误写法</strong>：用 <code class="language-plaintext highlighter-rouge">head == tail</code> 判空、<code class="language-plaintext highlighter-rouge">(tail + 1) % cap == head</code> 判满而不维护 <code class="language-plaintext highlighter-rouge">size</code>。用例 <code class="language-plaintext highlighter-rouge">capacity = 2</code> 连续入队两个元素：判满条件提前成立，实际只能存 1 个元素，容量比题目要求少 1。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">tail</code> 或 <code class="language-plaintext highlighter-rouge">head</code> 前移时忘记取模。用例 <code class="language-plaintext highlighter-rouge">capacity = 2</code> 入队三次（中间有出队）：<code class="language-plaintext highlighter-rouge">tail</code> 递增到 2 后数组下标越界抛异常。</li>
+    <li>
+<strong>错误写法</strong>：状态改变后忘记唤醒对侧。用例 容量 1 的空队列中消费者已在 <code class="language-plaintext highlighter-rouge">notEmpty</code> 等待，生产者入队后若漏掉 <code class="language-plaintext highlighter-rouge">notEmpty.signal()</code>，元素已经存在但消费者仍可能永久沉睡。</li>
+    <li>
+<strong>错误写法</strong>：两个条件变量分别用 <code class="language-plaintext highlighter-rouge">new ReentrantLock().newCondition()</code> 从不同的锁派生。用例 任意一次 <code class="language-plaintext highlighter-rouge">await</code>：会抛 <code class="language-plaintext highlighter-rouge">IllegalMonitorStateException</code>，因为当前线程并未持有该条件变量所属的锁。</li>
+    <li>
+<strong>错误写法</strong>：Go 中 <code class="language-plaintext highlighter-rouge">func Constructor(capacity int) BoundedBlockingQueue</code> 返回结构体值。用例 任意一次 <code class="language-plaintext highlighter-rouge">Wait</code>：<code class="language-plaintext highlighter-rouge">Cond.L</code> 指向构造函数内那个已被拷贝走的 <code class="language-plaintext highlighter-rouge">mu</code>，<code class="language-plaintext highlighter-rouge">Wait</code> 解开的锁与调用者持有的锁不是同一把，立刻产生数据竞争并可能永久阻塞。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">dequeue</code> 中先解锁再取值，例如把 <code class="language-plaintext highlighter-rouge">int val = data[head]</code> 挪到 <code class="language-plaintext highlighter-rouge">unlock()</code> 之后。用例 两个消费者并发出队：<code class="language-plaintext highlighter-rouge">head</code> 已被推进，两人可能读到同一个位置或读到已被覆盖的数据，返回值与实际出队的元素对不上。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/print-in-order/">1114. 按序打印</a></td>
+      <td>简单</td>
+      <td>多线程同步的入门题，只需一个计数状态与条件等待，没有容量限制</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/print-foobar-alternately/">1115. 交替打印 FooBar</a></td>
+      <td>中等</td>
+      <td>两线程严格交替，等待条件是「轮到我了」，可对照双条件变量的写法</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/print-zero-even-odd/">1116. 打印零与奇偶数</a></td>
+      <td>中等</td>
+      <td>三方轮转，条件变量数量与状态划分的设计更复杂</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/fizz-buzz-multithreaded/">1195. 多线程 Fizz Buzz</a></td>
+      <td>中等</td>
+      <td>四线程按数值特征分工，练习「唤醒谁」的判定逻辑</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/the-dining-philosophers/">1226. 哲学家进餐</a></td>
+      <td>中等</td>
+      <td>多把锁的获取顺序与死锁避免，是并发题里另一条主线</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-circular-queue/">622. 设计循环队列</a></td>
+      <td>中等</td>
+      <td>本题去掉并发后的单线程内核，专门练环形数组的空满判定</td>
+    </tr>
+    <tr>
+      <td><a href="https://hgnulb.github.io/blog/2025/25314462">美团面试题-Java 生产者消费者模式</a></td>
+      <td>中等</td>
+      <td>同一模型的工程视角，涵盖 <code class="language-plaintext highlighter-rouge">wait</code>/<code class="language-plaintext highlighter-rouge">notifyAll</code>、信号量与现成容器的选型</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/75775771" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 1031. 两个无重叠子数组的最大和</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/41764540" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1566. 重复至少 K 次且长度为 M 的模式</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/11043513">https://hgnulb.github.io/blog/2022/11043513</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

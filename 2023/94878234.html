@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 353. 贪吃蛇 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,哈希表,字节跳动,微软,数组,模拟,设计,队列" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 353. 贪吃蛇" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2023/94878234" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2023/94878234" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-02-22T17:28:02+08:00" />
+<meta property="article:modified_time" content="2023-02-22T17:28:02+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 353. 贪吃蛇" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2023-02-22T17:28:02+08:00","datePublished":"2023-02-22T17:28:02+08:00","description":"题目描述","headline":"LeetCode 353. 贪吃蛇","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2023/94878234"},"url":"https://hgnulb.github.io/blog/2023/94878234"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法队列--哈希集合模拟">解法：队列 + 哈希集合模拟</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 353. 贪吃蛇">LeetCode 353. 贪吃蛇</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2023-02-22 17:28:02"
+                    datetime="2023-02-22T17:28:02+08:00"
+            >
+                2023-02-22
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3018 字 · 英文 82 词 · 代码 117 行"
+            aria-label="预计阅读时间约 11 分钟，正文 3018 字 · 英文 82 词 · 代码 117 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 11 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    7 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1319407227/" title="模拟">
+        模拟
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1903280772/" title="队列">
+        队列
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法队列--哈希集合模拟">解法：队列 + 哈希集合模拟</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/design-snake-game/">353. 贪吃蛇</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>设计一个贪吃蛇游戏：蛇初始长度为 1，位于左上角 <code class="language-plaintext highlighter-rouge">(0, 0)</code>。每次调用 <code class="language-plaintext highlighter-rouge">move</code> 传入 <code class="language-plaintext highlighter-rouge">U</code>/<code class="language-plaintext highlighter-rouge">D</code>/<code class="language-plaintext highlighter-rouge">L</code>/<code class="language-plaintext highlighter-rouge">R</code> 之一，蛇头朝该方向走一格。若走到食物上，蛇长度加一、分数加一；否则蛇整体前移（头进尾出，长度不变）。撞墙或撞到自己的身体则返回 -1，否则返回当前分数。</p>
+
+  <p>食物按 <code class="language-plaintext highlighter-rouge">food</code> 数组给定的顺序<strong>依次</strong>出现，只有吃掉第 <code class="language-plaintext highlighter-rouge">k</code> 个才会出现第 <code class="language-plaintext highlighter-rouge">k+1</code> 个。这意味着任何时刻场上只有一个食物，位置就是 <code class="language-plaintext highlighter-rouge">food[foodIndex]</code>，判断「是否吃到」只需与这一项比较，不需要维护食物集合。</p>
+
+  <p>需要 $O(1)$ 判断的两件事是「新位置是否出界」和「新位置是否撞到自己」。前者用坐标范围判断即可，后者若遍历蛇身则是 $O(L)$，在调用次数多、蛇很长时会退化，所以要额外维护一个占用集合。</p>
+
+  <p>最微妙的规则是尾巴：当蛇没吃到食物时，尾巴那一格在这一步会腾出来，所以蛇头是<strong>可以</strong>移动到原尾巴位置的。这条规则决定了「移尾」和「判撞」这两个操作的先后顺序，是本题最主要的考点。</p>
+
+  <p>边界包括：网格只有一行或一列时，某些方向必然撞墙；蛇长度为 1 时头尾是同一格；食物恰好出现在蛇身上的情况题目已排除；以及食物全部吃完后 <code class="language-plaintext highlighter-rouge">foodIndex</code> 越界的保护。</p>
+</blockquote>
+
+<h2 id="解法队列--哈希集合模拟">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E9%98%9F%E5%88%97--%E5%93%88%E5%B8%8C%E9%9B%86%E5%90%88%E6%A8%A1%E6%8B%9F" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：队列 + 哈希集合模拟</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>朴素做法是用一个列表按顺序存蛇身格子，每次移动时在列表里线性查找新位置是否已被占用。逻辑对，但单次移动是 $O(L)$，蛇最长可达网格面积，调用次数又很多，整体退化成平方级。瓶颈在于「判断某格是否属于蛇身」这个查询被用线性扫描解决了。</p>
+
+  <p>观察点是：蛇身在结构上是一条<strong>先进先出</strong>的序列——新格子总是从头部加入，旧格子总是从尾部离开，这正是队列的语义；而「某格是否被占用」是一个纯粹的成员查询，正是哈希集合的语义。两者维护同一份内容、各自回答不同的问题，就能把每次移动压到常数时间。</p>
+
+  <p>于是数据结构定为一个双端队列 <code class="language-plaintext highlighter-rouge">body</code>（队首是尾巴、队尾是蛇头）加一个哈希集合 <code class="language-plaintext highlighter-rouge">occupied</code>。为了让格子能直接进集合，把二维坐标编码成一维整数 <code class="language-plaintext highlighter-rouge">r * width + c</code>，这是一一映射，解码用整除和取余即可。</p>
+
+  <p>不变量是：<strong>任意 <code class="language-plaintext highlighter-rouge">move</code> 调用返回后，<code class="language-plaintext highlighter-rouge">body</code> 中的元素从队首到队尾恰好是蛇从尾到头的每一节，且 <code class="language-plaintext highlighter-rouge">occupied</code> 的内容与 <code class="language-plaintext highlighter-rouge">body</code> 完全一致</strong>。两个结构必须在同一处代码里同增同减，任何一处只改其中之一都会让不变量破裂。</p>
+
+  <p>核心的顺序决策来自尾巴规则。设新位置为 <code class="language-plaintext highlighter-rouge">next</code>：如果这一步没吃到食物，尾巴会离开，此时它腾出的格子对 <code class="language-plaintext highlighter-rouge">next</code> 而言是可用的。所以正确的执行顺序是——<strong>先把尾巴从两个结构里移除，再检查 <code class="language-plaintext highlighter-rouge">next</code> 是否与剩余蛇身冲突</strong>。如果反过来先判撞，就会把「头移动到原尾巴位置」这种完全合法的操作误判成自撞，最典型的场景是蛇绕成一圈后头咬着自己尾巴走。</p>
+
+  <p>反之，如果这一步吃到了食物，尾巴不动、蛇变长，此时不能移除尾巴，判撞时也必须把尾巴算在内。</p>
+
+  <p>还有一个容易被忽略的顺序：越界检查要放在最前面，因为一旦越界就直接返回 -1，不应该对任何结构产生副作用。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>构造函数里初始化宽高、食物数组、食物下标、分数，并把编号 0（即左上角）同时放入 <code class="language-plaintext highlighter-rouge">body</code> 和 <code class="language-plaintext highlighter-rouge">occupied</code>。之所以两处都要放，是不变量的起点要求；只放一处会让第一步移动的判撞或移尾出错。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">move</code> 开头取队尾作为当前蛇头，并解码成行列 <code class="language-plaintext highlighter-rouge">r = head / width</code>、<code class="language-plaintext highlighter-rouge">c = head % width</code>。之所以能这样解码，是因为编码 <code class="language-plaintext highlighter-rouge">r * width + c</code> 中 <code class="language-plaintext highlighter-rouge">c</code> 严格小于 <code class="language-plaintext highlighter-rouge">width</code>，除法和取余是这个编码的精确逆运算。</li>
+    <li>按方向调整 <code class="language-plaintext highlighter-rouge">r</code> 或 <code class="language-plaintext highlighter-rouge">c</code>。之所以用 <code class="language-plaintext highlighter-rouge">switch</code> 而不是方向数组，是因为输入是字符串常量，直接分支比建映射表更直白；<code class="language-plaintext highlighter-rouge">default</code> 分支承担 <code class="language-plaintext highlighter-rouge">R</code>，因为四个方向已被穷尽。</li>
+    <li>立刻检查 <code class="language-plaintext highlighter-rouge">r</code>、<code class="language-plaintext highlighter-rouge">c</code> 是否越界，越界直接返回 -1。之所以必须最先检查，是因为越界坐标编码出的整数可能与某个合法格子的编号重合（例如 <code class="language-plaintext highlighter-rouge">c = -1</code> 时 <code class="language-plaintext highlighter-rouge">r * width - 1</code> 恰好是上一行的末尾），先编码再判断会得到错误结论；同时提前返回也保证了游戏结束时不留下半更新的状态。</li>
+    <li>计算 <code class="language-plaintext highlighter-rouge">next = r * width + c</code>，并判断是否吃到食物：要求 <code class="language-plaintext highlighter-rouge">foodIndex</code> 未越界且 <code class="language-plaintext highlighter-rouge">food[foodIndex]</code> 的行列与新位置相同。之所以要先判 <code class="language-plaintext highlighter-rouge">foodIndex &lt; food.length</code>，是因为食物吃完后数组已无更多项，不判会直接抛越界异常。</li>
+    <li>若没吃到食物，从 <code class="language-plaintext highlighter-rouge">body</code> 队首弹出尾巴，并从 <code class="language-plaintext highlighter-rouge">occupied</code> 中删除它。之所以放在判撞之前，是因为尾巴在这一步确实离开了它的格子，蛇头有权占据它。</li>
+    <li>检查 <code class="language-plaintext highlighter-rouge">occupied</code> 是否包含 <code class="language-plaintext highlighter-rouge">next</code>，包含则返回 -1。之所以此时的集合状态是准确的：没吃食物时尾巴已被移除，吃了食物时尾巴仍在，两种情形下集合都恰好等于「移动后蛇头之外的身体」。</li>
+    <li>把 <code class="language-plaintext highlighter-rouge">next</code> 加入 <code class="language-plaintext highlighter-rouge">body</code> 队尾和 <code class="language-plaintext highlighter-rouge">occupied</code>。之所以两处同时加，仍是维持不变量。</li>
+    <li>若吃到食物，分数加一、食物下标加一。之所以推进下标，是因为食物按序出现，下一个待吃的自然是后一项。</li>
+    <li>返回当前分数。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">width = 3, height = 2, food = [[1, 2], [0, 1]]</code> 走一遍，网格编号为第一行 0、1、2，第二行 3、4、5。</p>
+
+  <p>初始：<code class="language-plaintext highlighter-rouge">body = [0]</code>，<code class="language-plaintext highlighter-rouge">occupied = {0}</code>，<code class="language-plaintext highlighter-rouge">score = 0</code>，<code class="language-plaintext highlighter-rouge">foodIndex = 0</code>。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">move("R")</code>：头是 0，<code class="language-plaintext highlighter-rouge">r = 0</code>、<code class="language-plaintext highlighter-rouge">c = 0</code>，右移得 <code class="language-plaintext highlighter-rouge">c = 1</code>，不越界，<code class="language-plaintext highlighter-rouge">next = 1</code>。食物是 <code class="language-plaintext highlighter-rouge">(1, 2)</code>，与 <code class="language-plaintext highlighter-rouge">(0, 1)</code> 不符，未吃到。移尾：弹出 0，<code class="language-plaintext highlighter-rouge">occupied = {}</code>。判撞：<code class="language-plaintext highlighter-rouge">occupied</code> 不含 1，通过。加入：<code class="language-plaintext highlighter-rouge">body = [1]</code>，<code class="language-plaintext highlighter-rouge">occupied = {1}</code>。返回 0。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">move("D")</code>：头是 1，<code class="language-plaintext highlighter-rouge">r = 0</code>、<code class="language-plaintext highlighter-rouge">c = 1</code>，下移得 <code class="language-plaintext highlighter-rouge">r = 1</code>，不越界，<code class="language-plaintext highlighter-rouge">next = 1 * 3 + 1 = 4</code>。食物 <code class="language-plaintext highlighter-rouge">(1, 2)</code> 不符。移尾：弹出 1。判撞通过。<code class="language-plaintext highlighter-rouge">body = [4]</code>，<code class="language-plaintext highlighter-rouge">occupied = {4}</code>。返回 0。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">move("R")</code>：头是 4，<code class="language-plaintext highlighter-rouge">r = 1</code>、<code class="language-plaintext highlighter-rouge">c = 1</code>，右移得 <code class="language-plaintext highlighter-rouge">c = 2</code>，不越界，<code class="language-plaintext highlighter-rouge">next = 5</code>。食物 <code class="language-plaintext highlighter-rouge">(1, 2)</code> 与 <code class="language-plaintext highlighter-rouge">(1, 2)</code> 相符，吃到了。不移尾。判撞：<code class="language-plaintext highlighter-rouge">occupied = {4}</code> 不含 5，通过。加入：<code class="language-plaintext highlighter-rouge">body = [4, 5]</code>，<code class="language-plaintext highlighter-rouge">occupied = {4, 5}</code>，蛇长变成 2。分数加一得 1，<code class="language-plaintext highlighter-rouge">foodIndex</code> 变 1。返回 1。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">move("U")</code>：头是 5，<code class="language-plaintext highlighter-rouge">r = 1</code>、<code class="language-plaintext highlighter-rouge">c = 2</code>，上移得 <code class="language-plaintext highlighter-rouge">r = 0</code>，不越界，<code class="language-plaintext highlighter-rouge">next = 2</code>。新食物是 <code class="language-plaintext highlighter-rouge">(0, 1)</code>，与 <code class="language-plaintext highlighter-rouge">(0, 2)</code> 不符。移尾：弹出 4，<code class="language-plaintext highlighter-rouge">occupied = {5}</code>。判撞：不含 2，通过。<code class="language-plaintext highlighter-rouge">body = [5, 2]</code>，<code class="language-plaintext highlighter-rouge">occupied = {5, 2}</code>。返回 1。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">move("L")</code>：头是 2，左移得 <code class="language-plaintext highlighter-rouge">c = 1</code>，<code class="language-plaintext highlighter-rouge">next = 1</code>。食物 <code class="language-plaintext highlighter-rouge">(0, 1)</code> 相符，吃到。不移尾。判撞：<code class="language-plaintext highlighter-rouge">occupied = {5, 2}</code> 不含 1，通过。<code class="language-plaintext highlighter-rouge">body = [5, 2, 1]</code>，分数变 2，<code class="language-plaintext highlighter-rouge">foodIndex</code> 变 2。返回 2。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">move("U")</code>：头是 1，<code class="language-plaintext highlighter-rouge">r = 0</code>，上移得 <code class="language-plaintext highlighter-rouge">r = -1</code>，越界，返回 -1。游戏结束。</p>
+
+  <p>整个过程验证了「未吃食物时先移尾」的必要性：若在第四步先判撞再移尾，虽未出错，但只要构造一条首尾相接的路径（比如 2×2 网格中蛇长为 2 绕圈），先判撞就会把合法移动误判为死亡。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">SnakeGame</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">width</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">height</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">food</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">foodIndex</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">score</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">body</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">occupied</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">SnakeGame</span><span class="o">(</span><span class="kt">int</span> <span class="n">width</span><span class="o">,</span> <span class="kt">int</span> <span class="n">height</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">food</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">width</span> <span class="o">=</span> <span class="n">width</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">height</span> <span class="o">=</span> <span class="n">height</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">food</span> <span class="o">=</span> <span class="n">food</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">foodIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">score</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">body</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">occupied</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+
+        <span class="n">body</span><span class="o">.</span><span class="na">addLast</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="n">occupied</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">move</span><span class="o">(</span><span class="nc">String</span> <span class="n">direction</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">head</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="na">peekLast</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">head</span> <span class="o">/</span> <span class="n">width</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">head</span> <span class="o">%</span> <span class="n">width</span><span class="o">;</span>
+
+        <span class="k">switch</span> <span class="o">(</span><span class="n">direction</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">case</span> <span class="s">"U"</span><span class="o">:</span>
+                <span class="n">r</span><span class="o">--;</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="k">case</span> <span class="s">"D"</span><span class="o">:</span>
+                <span class="n">r</span><span class="o">++;</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="k">case</span> <span class="s">"L"</span><span class="o">:</span>
+                <span class="n">c</span><span class="o">--;</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="n">c</span><span class="o">++;</span>
+                <span class="k">break</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">r</span> <span class="o">&gt;=</span> <span class="n">height</span> <span class="o">||</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">c</span> <span class="o">&gt;=</span> <span class="n">width</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">next</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">width</span> <span class="o">+</span> <span class="n">c</span><span class="o">;</span>
+        <span class="kt">boolean</span> <span class="n">eating</span> <span class="o">=</span> <span class="n">foodIndex</span> <span class="o">&lt;</span> <span class="n">food</span><span class="o">.</span><span class="na">length</span>
+                <span class="o">&amp;&amp;</span> <span class="n">food</span><span class="o">[</span><span class="n">foodIndex</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">==</span> <span class="n">r</span>
+                <span class="o">&amp;&amp;</span> <span class="n">food</span><span class="o">[</span><span class="n">foodIndex</span><span class="o">][</span><span class="mi">1</span><span class="o">]</span> <span class="o">==</span> <span class="n">c</span><span class="o">;</span>
+
+        <span class="k">if</span> <span class="o">(!</span><span class="n">eating</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">tail</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="na">pollFirst</span><span class="o">();</span>
+            <span class="n">occupied</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">tail</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">occupied</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">next</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="n">body</span><span class="o">.</span><span class="na">addLast</span><span class="o">(</span><span class="n">next</span><span class="o">);</span>
+        <span class="n">occupied</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">next</span><span class="o">);</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">eating</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">score</span><span class="o">++;</span>
+            <span class="n">foodIndex</span><span class="o">++;</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">score</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">SnakeGame</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">width</span>     <span class="kt">int</span>
+    <span class="n">height</span>    <span class="kt">int</span>
+    <span class="n">food</span>      <span class="p">[][]</span><span class="kt">int</span>
+    <span class="n">foodIndex</span> <span class="kt">int</span>
+    <span class="n">score</span>     <span class="kt">int</span>
+    <span class="n">body</span>      <span class="o">*</span><span class="n">list</span><span class="o">.</span><span class="n">List</span>
+    <span class="n">occupied</span>  <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">bool</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">(</span><span class="n">width</span> <span class="kt">int</span><span class="p">,</span> <span class="n">height</span> <span class="kt">int</span><span class="p">,</span> <span class="n">food</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="n">SnakeGame</span> <span class="p">{</span>
+    <span class="n">body</span> <span class="o">:=</span> <span class="n">list</span><span class="o">.</span><span class="n">New</span><span class="p">()</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">PushBack</span><span class="p">(</span><span class="m">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">SnakeGame</span><span class="p">{</span>
+        <span class="n">width</span><span class="o">:</span>     <span class="n">width</span><span class="p">,</span>
+        <span class="n">height</span><span class="o">:</span>    <span class="n">height</span><span class="p">,</span>
+        <span class="n">food</span><span class="o">:</span>      <span class="n">food</span><span class="p">,</span>
+        <span class="n">foodIndex</span><span class="o">:</span> <span class="m">0</span><span class="p">,</span>
+        <span class="n">score</span><span class="o">:</span>     <span class="m">0</span><span class="p">,</span>
+        <span class="n">body</span><span class="o">:</span>      <span class="n">body</span><span class="p">,</span>
+        <span class="n">occupied</span><span class="o">:</span>  <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">bool</span><span class="p">{</span><span class="m">0</span><span class="o">:</span> <span class="no">true</span><span class="p">},</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">g</span> <span class="o">*</span><span class="n">SnakeGame</span><span class="p">)</span> <span class="n">Move</span><span class="p">(</span><span class="n">direction</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">head</span> <span class="o">:=</span> <span class="n">g</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">Back</span><span class="p">()</span><span class="o">.</span><span class="n">Value</span><span class="o">.</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">:=</span> <span class="n">head</span> <span class="o">/</span> <span class="n">g</span><span class="o">.</span><span class="n">width</span>
+    <span class="n">c</span> <span class="o">:=</span> <span class="n">head</span> <span class="o">%</span> <span class="n">g</span><span class="o">.</span><span class="n">width</span>
+
+    <span class="k">switch</span> <span class="n">direction</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="s">"U"</span><span class="o">:</span>
+        <span class="n">r</span><span class="o">--</span>
+    <span class="k">case</span> <span class="s">"D"</span><span class="o">:</span>
+        <span class="n">r</span><span class="o">++</span>
+    <span class="k">case</span> <span class="s">"L"</span><span class="o">:</span>
+        <span class="n">c</span><span class="o">--</span>
+    <span class="k">default</span><span class="o">:</span>
+        <span class="n">c</span><span class="o">++</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="n">r</span> <span class="o">&gt;=</span> <span class="n">g</span><span class="o">.</span><span class="n">height</span> <span class="o">||</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="n">c</span> <span class="o">&gt;=</span> <span class="n">g</span><span class="o">.</span><span class="n">width</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+    <span class="p">}</span>
+
+    <span class="n">next</span> <span class="o">:=</span> <span class="n">r</span><span class="o">*</span><span class="n">g</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">c</span>
+    <span class="n">eating</span> <span class="o">:=</span> <span class="n">g</span><span class="o">.</span><span class="n">foodIndex</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">food</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">g</span><span class="o">.</span><span class="n">food</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">foodIndex</span><span class="p">][</span><span class="m">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">r</span> <span class="o">&amp;&amp;</span> <span class="n">g</span><span class="o">.</span><span class="n">food</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">foodIndex</span><span class="p">][</span><span class="m">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span>
+
+    <span class="k">if</span> <span class="o">!</span><span class="n">eating</span> <span class="p">{</span>
+        <span class="n">tail</span> <span class="o">:=</span> <span class="n">g</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">Front</span><span class="p">()</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">Remove</span><span class="p">(</span><span class="n">tail</span><span class="p">)</span>
+        <span class="nb">delete</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">occupied</span><span class="p">,</span> <span class="n">tail</span><span class="o">.</span><span class="n">Value</span><span class="o">.</span><span class="p">(</span><span class="kt">int</span><span class="p">))</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">g</span><span class="o">.</span><span class="n">occupied</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+    <span class="p">}</span>
+
+    <span class="n">g</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">PushBack</span><span class="p">(</span><span class="n">next</span><span class="p">)</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">occupied</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+
+    <span class="k">if</span> <span class="n">eating</span> <span class="p">{</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">score</span><span class="o">++</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">foodIndex</span><span class="o">++</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">g</span><span class="o">.</span><span class="n">score</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：单次 <code class="language-plaintext highlighter-rouge">move</code> 为 $O(1)$，凭据是整个流程只有常数次算术、一次队首弹出、一次队尾插入、一次集合查询和至多两次集合增删，全部是常数或均摊常数操作，与蛇的长度无关。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(\min(width \times height, F))$，其中 $F$ 是食物总数，凭据是蛇身长度等于初始长度加已吃食物数、且不可能超过网格格子总数，<code class="language-plaintext highlighter-rouge">body</code> 与 <code class="language-plaintext highlighter-rouge">occupied</code> 保存的是同一批格子，食物数组本身由调用方持有不额外计入。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>一份数据要同时回答「顺序问题」和「成员问题」时，就用两个结构并行维护：队列负责先进先出的顺序语义，哈希集合负责 $O(1)$ 的存在性查询。代价是必须保证两者始终同增同减。</li>
+    <li>二维坐标编码成 <code class="language-plaintext highlighter-rouge">r * width + c</code> 是网格题的通用手法，它让格子可以直接作为哈希键或数组下标；使用时务必确认 <code class="language-plaintext highlighter-rouge">c</code> 严格小于 <code class="language-plaintext highlighter-rouge">width</code>，否则映射不再是单射。</li>
+    <li>越界检查要在编码之前完成。负的列坐标编码后可能与合法格子撞号，先编码再判断会得到看似合理却完全错误的结论。</li>
+    <li>「尾巴在本步腾出的格子对蛇头可用」这条规则决定了「先移尾、后判撞」的顺序，这是本题唯一真正的算法陷阱，也是面试官最常验证的点。</li>
+    <li>顺序出现的资源（本题的食物）只需一个下标指针，不需要集合或队列；判断命中时永远只和当前指针指向的那一项比较，并在推进前检查越界。</li>
+    <li>面试视角：面试官会先让你说清数据结构选型及理由，然后专门构造「蛇头追上自己尾巴」的用例来检验顺序问题。主动说出这个用例并解释为什么要先移尾，基本就拿到了这题的核心分。常见追问是「如果要支持撤销上一步移动怎么办」，答案是额外记录被弹出的尾巴值和当时的分数、食物下标，做一次逆操作。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>先判撞再移尾：用例 <code class="language-plaintext highlighter-rouge">width = 2, height = 2</code>，蛇长 2 时执行绕圈移动，蛇头走向原尾巴格会被误判为自撞返回 -1，而这是合法移动。</li>
+    <li>吃到食物时也移除尾巴：用例 <code class="language-plaintext highlighter-rouge">width = 3, height = 2, food = [[1, 2]]</code>，第三步吃到食物后蛇长应为 2，但尾巴被弹出导致长度仍为 1，后续所有自撞判断都偏松。</li>
+    <li>越界检查放在编码之后，用 <code class="language-plaintext highlighter-rouge">next &lt; 0 || next &gt;= width * height</code> 判断：用例 <code class="language-plaintext highlighter-rouge">width = 3, height = 2</code>，蛇头在 <code class="language-plaintext highlighter-rouge">(1, 0)</code> 即编号 3 时向左移动，<code class="language-plaintext highlighter-rouge">c = -1</code> 编码得 <code class="language-plaintext highlighter-rouge">1 * 3 - 1 = 2</code>，落在合法范围内，会被当成移动到 <code class="language-plaintext highlighter-rouge">(0, 2)</code>，蛇直接穿墙。</li>
+    <li>只维护队列不维护集合，判撞时遍历队列：用例网格 100×100、调用上万次且蛇很长，单次移动退化成 $O(L)$，总体超时。</li>
+    <li>只维护集合不维护队列：用例任意需要移尾的移动，集合无序，取不出「最早进入的那个格子」，尾巴无从删除。</li>
+    <li>移尾时只从队列弹出而忘记从集合删除：用例 <code class="language-plaintext highlighter-rouge">width = 3, height = 1</code>，蛇在一行内左右往返，集合里残留已离开的格子，第二次经过时被误判为自撞。</li>
+    <li>判断吃食物时不检查 <code class="language-plaintext highlighter-rouge">foodIndex &lt; food.length</code>：用例食物全部吃完后继续调用 <code class="language-plaintext highlighter-rouge">move</code>，<code class="language-plaintext highlighter-rouge">food[foodIndex]</code> 直接抛数组越界异常。</li>
+    <li>吃到食物后忘记推进 <code class="language-plaintext highlighter-rouge">foodIndex</code>：用例 <code class="language-plaintext highlighter-rouge">food = [[0, 1], [0, 2]]</code>，蛇会在同一格上反复得分，分数无限增长，且第二个食物永远不出现。</li>
+    <li>用 <code class="language-plaintext highlighter-rouge">body.peekFirst()</code> 取蛇头：用例任意长度大于 1 的蛇，取到的是尾巴，移动方向计算完全错位，第二步起就返回错误结果。</li>
+    <li>分数用 <code class="language-plaintext highlighter-rouge">body.size() - 1</code> 现算而不单独维护：用例吃到食物但随后撞墙返回 -1 的序列，本身尚可；但若在返回 -1 之前已经修改过 <code class="language-plaintext highlighter-rouge">body</code>，长度与真实分数脱节，需要额外回滚，单独维护 <code class="language-plaintext highlighter-rouge">score</code> 更稳。</li>
+    <li>Java 里 <code class="language-plaintext highlighter-rouge">occupied.remove(tail)</code> 中 <code class="language-plaintext highlighter-rouge">tail</code> 是 <code class="language-plaintext highlighter-rouge">int</code> 而集合是 <code class="language-plaintext highlighter-rouge">Set&lt;Integer&gt;</code>：装箱后调用的是按对象删除的重载，行为正确；但若集合误写成 <code class="language-plaintext highlighter-rouge">Set&lt;Object&gt;</code> 或 <code class="language-plaintext highlighter-rouge">List&lt;Integer&gt;</code>，<code class="language-plaintext highlighter-rouge">remove(int)</code> 会被解析成按下标删除，删掉错误的元素。</li>
+    <li>Go 里先 <code class="language-plaintext highlighter-rouge">g.body.Remove(tail)</code> 再读 <code class="language-plaintext highlighter-rouge">tail.Value</code> 时误以为值已被清空而改用其他变量缓存出错：正确做法是 <code class="language-plaintext highlighter-rouge">Remove</code> 后 <code class="language-plaintext highlighter-rouge">Value</code> 依然可读，或直接接收 <code class="language-plaintext highlighter-rouge">Remove</code> 的返回值。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/lru-cache/">146. LRU 缓存</a></td>
+      <td>中等</td>
+      <td>同样是哈希表配双向链表，但链表节点需支持任意位置摘除</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/insert-delete-getrandom-o1/">380. O(1) 时间插入、删除和获取随机元素</a></td>
+      <td>中等</td>
+      <td>哈希表配动态数组，删除时用尾元素填坑以保持 $O(1)$</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-circular-queue/">622. 设计循环队列</a></td>
+      <td>中等</td>
+      <td>用定长数组加双指针模拟队列，考察满与空的区分</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-recent-calls/">933. 最近的请求次数</a></td>
+      <td>简单</td>
+      <td>队列只做按时间过期的出队，不需要成员查询</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-hit-counter/">362. 敲击计数器</a></td>
+      <td>中等</td>
+      <td>同为时间窗口维护，可用队列也可用定长环形桶做常数空间优化</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2023/15281458" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 补充题 24. 双栈排序</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2023/60256979" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1438. 绝对差不超过限制的最长连续子数组</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2023/94878234">https://hgnulb.github.io/blog/2023/94878234</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 828. 统计子串中的唯一字符 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,动态规划,哈希表,字符串,阿里巴巴" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 828. 统计子串中的唯一字符" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2023/22994786" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2023/22994786" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-03-20T21:38:46+08:00" />
+<meta property="article:modified_time" content="2023-03-20T21:38:46+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 828. 统计子串中的唯一字符" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2023-03-20T21:38:46+08:00","datePublished":"2023-03-20T21:38:46+08:00","description":"题目描述","headline":"LeetCode 828. 统计子串中的唯一字符","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2023/22994786"},"url":"https://hgnulb.github.io/blog/2023/22994786"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法按字符贡献计数前后出现位置">解法：按字符贡献计数（前后出现位置）</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 828. 统计子串中的唯一字符">LeetCode 828. 统计子串中的唯一字符</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2023-03-20 21:38:46"
+                    datetime="2023-03-20T21:38:46+08:00"
+            >
+                2023-03-20
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3678 字 · 英文 630 词 · 代码 48 行"
+            aria-label="预计阅读时间约 13 分钟，正文 3678 字 · 英文 630 词 · 代码 48 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 13 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8699249851/" title="阿里巴巴">
+        阿里巴巴
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法按字符贡献计数前后出现位置">解法：按字符贡献计数（前后出现位置）</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/count-unique-characters-of-all-substrings-of-a-given-string/">828. 统计子串中的唯一字符</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>定义 $countUniqueChars(t)$ 为字符串 $t$ 中<strong>恰好只出现一次</strong>的字符的个数。给定字符串 <code class="language-plaintext highlighter-rouge">s</code>，求它所有子串（连续、非空，按位置区分而不去重）的 $countUniqueChars$ 之和。</p>
+
+  <p>「唯一」要读准：不是「不同字符的种类数」，而是<strong>出现次数恰好为 1</strong> 的字符个数。以 <code class="language-plaintext highlighter-rouge">ABA</code> 为例，它的不同字符有 2 种（A 和 B），但只出现一次的字符只有 B 一个，所以 $countUniqueChars(\texttt{ABA}) = 1$。这两个概念混淆是这道题最早的岔路口。</p>
+
+  <p>「子串按位置区分」也很关键：<code class="language-plaintext highlighter-rouge">ABA</code> 里两个 <code class="language-plaintext highlighter-rouge">A</code> 是两个不同的子串，各自贡献 1。所以不能对子串内容去重。</p>
+
+  <table>
+    <tbody>
+      <tr>
+        <td>约束是 $1 \le</td>
+        <td>s</td>
+        <td>\le 10^5$，全部为大写英文字母。子串数量是 $O(n^2) \approx 5 \times 10^9$，逐个枚举子串再统计<strong>必然超时</strong>，即便把统计优化成 $O(1)$ 也不行。这个规模直接排除了「枚举子串」这个维度，逼你换一个求和顺序。</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>字符集只有 26 个，这是一个很强的暗示：允许对每种字符单独开数组做记录，$26n$ 的辅助工作是免费的。</p>
+
+  <p>边界方面：单字符串的答案是 1；全部字符相同的串（如 <code class="language-plaintext highlighter-rouge">AAAA</code>）的答案等于 $n$（只有长度为 1 的子串里 A 是唯一的）；全部字符互不相同的串答案是所有子串的长度之和。这些都应由统一的公式得出。</p>
+</blockquote>
+
+<h2 id="解法按字符贡献计数前后出现位置">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%8C%89%E5%AD%97%E7%AC%A6%E8%B4%A1%E7%8C%AE%E8%AE%A1%E6%95%B0%E5%89%8D%E5%90%8E%E5%87%BA%E7%8E%B0%E4%BD%8D%E7%BD%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：按字符贡献计数（前后出现位置）</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力做法是枚举左右端点得到每个子串，再数一遍其中只出现一次的字符。这是 $O(n^3)$；用滑动的计数数组优化成边扩展边维护，也还是 $O(26 n^2)$。瓶颈很清楚：<strong>子串的数量本身就是 $O(n^2)$</strong>，只要还在按子串枚举，就没有出路。</p>
+
+  <p>突破口是<strong>交换求和顺序</strong>。原式是「对每个子串，数它里面有几个唯一字符」，把它翻转成「对每个字符的每次出现，数它在多少个子串里是唯一的」。两种数法数的是同一批「(子串, 唯一字符)」二元组，所以总和相等；但后者的枚举对象只有 $n$ 个（每个位置一次出现），一下就把规模从 $O(n^2)$ 压到了 $O(n)$。这个「按贡献计数」的视角转换，是本题的全部难度所在。</p>
+
+  <p>现在固定一个位置 $i$，设 $s[i]$ 这个字符上一次出现在 $prev$、下一次出现在 $next$（不存在时分别取 $-1$ 和 $n$）。问：有多少个子串 $[l, r]$ 使得 $s[i]$ 在其中<strong>恰好出现一次</strong>？条件是三条：$l \le i \le r$（包含位置 $i$）、$l &gt; prev$（不能把上一个同字符括进来）、$r &lt; next$（不能把下一个同字符括进来）。</p>
+
+  <p>于是 $l$ 的取值范围是 $(prev, i]$，共 $i - prev$ 种；$r$ 的取值范围是 $[i, next)$，共 $next - i$ 种。两者独立，所以位置 $i$ 的贡献是</p>
+
+  <p>$(i - prev) \times (next - i)$</p>
+
+  <p>把所有位置的贡献加起来就是答案。注意这里<strong>只需要看同一字符最近的前后各一次出现</strong>，更远的同字符会被这两个更近的挡住，完全不影响计数——这正是公式如此简洁的原因。</p>
+
+  <p>剩下的问题是如何拿到每个位置的 $prev$ 和 $next$。最直白的办法是预处理两个长度为 $n$ 的数组。但有一个更省的技巧：<strong>延迟结算</strong>。一边从左往右扫描，一边为每个字符维护它最近两次出现的位置——记为 $prev[c]$（最近一次）和 $prevPrev[c]$（次近一次）。当扫描到位置 $i$ 且 $s[i] = c$ 时，我们<strong>恰好知道了 $prev[c]$ 这次出现的 next 就是 $i$</strong>，于是立刻结算它的贡献：</p>
+
+  <p>$(prev[c] - prevPrev[c]) \times (i - prev[c])$</p>
+
+  <p>结算完再把两个变量向前滚动：$prevPrev[c] \leftarrow prev[c]$、$prev[c] \leftarrow i$。</p>
+
+  <p>这样每次出现的贡献都在「下一次同字符出现时」被结算。扫描结束后，每种字符<strong>最后一次出现</strong>还没被结算（它没有下一次），需要在收尾阶段用 $next = n$ 补上。这就是代码里那个额外的 26 次循环的用途。</p>
+
+  <p>维持的不变量是：<strong>扫描到位置 $i$ 之前，所有在 $i$ 之前出现过、且后面还有同字符出现的位置，其贡献都已计入答案；每种字符的 $prev$ 与 $prevPrev$ 分别是它在 $[0, i)$ 中最近与次近的出现位置（不足则为 $-1$）。</strong></p>
+
+  <p>用 $-1$ 作为「不存在」的哨兵，让公式无需特判：当 $prevPrev = -1$ 时，$prev - prevPrev = prev + 1$，正是左端点可以从 0 开始取到 $prev$ 的方案数，语义完全正确。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>第一步，为 26 个字符各准备 $prev$ 与 $prevPrev$ 两个位置变量，全部初始化为 $-1$。</strong> 为什么哨兵取 $-1$ 而不是 0：左端点的可选数量是 $i - prev$，当该字符此前从未出现时左端点可以取 $0$ 到 $i$ 共 $i+1$ 种，代入 $prev = -1$ 恰好得到 $i + 1$。取 0 会少算一种。</li>
+    <li><strong>第二步，从左往右扫描，取当前字符 $c$。</strong></li>
+    <li>
+<strong>第三步，若 $prev[c] \ne -1$，结算 $prev[c]$ 这次出现的贡献：$(prev[c] - prevPrev[c]) \times (i - prev[c])$。</strong> 为什么此刻才结算：贡献公式需要 $next$，而 $prev[c]$ 的 $next$ 直到当前位置 $i$ 出现同字符时才确定。这种「等到信息齐了再算」的延迟结算，省掉了预处理 $next$ 数组的那一遍扫描和 $O(n)$ 空间。为什么要判 $prev[c] \ne -1$：该字符还没出现过时无可结算。</li>
+    <li>
+<strong>第四步，滚动更新 $prevPrev[c] \leftarrow prev[c]$、$prev[c] \leftarrow i$。</strong> 为什么顺序不能反：先写 $prev[c] \leftarrow i$ 会让旧的 $prev$ 丢失，$prevPrev$ 拿到的是 $i$ 自己，之后所有公式全错。</li>
+    <li>
+<strong>第五步，扫描结束后遍历 26 个字符，对每个出现过的字符结算它最后一次出现的贡献，此时 $next = n$：$(prev[c] - prevPrev[c]) \times (n - prev[c])$。</strong> 为什么必须有这一步：每种字符的最后一次出现在主循环里永远等不到「下一次同字符」，不补算就会整体漏掉最多 26 项贡献。为什么 $next$ 取 $n$：右端点最大只能是 $n-1$，把虚拟的下一次出现放在 $n$ 处，方案数 $n - prev$ 恰好是 $prev$ 到 $n-1$ 的个数。</li>
+    <li>
+<strong>第六步，返回累加结果。</strong> 为什么用 64 位累加：单项贡献最大可达 $O(n^2)$ 量级（例如某字符只出现一次时是 $n \times 1$ 到 $\frac{n^2}{4}$），虽然本题最终答案在 32 位范围内，但中间累加用 64 位更稳妥。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">s = "ABA"</code> 走一遍（$n = 3$，期望答案 8）。字符 A 记作 0、B 记作 1。初始 $prev$ 与 $prevPrev$ 全为 $-1$。</p>
+
+  <p><strong>$i = 0$，字符 A</strong>：$prev[A] = -1$，没有可结算的前一次出现，跳过。滚动：$prevPrev[A] = -1$、$prev[A] = 0$。</p>
+
+  <p><strong>$i = 1$，字符 B</strong>：$prev[B] = -1$，跳过。滚动：$prevPrev[B] = -1$、$prev[B] = 1$。</p>
+
+  <p><strong>$i = 2$，字符 A</strong>：$prev[A] = 0 \ne -1$，结算位置 0 这次 A 的贡献。此刻我们知道位置 0 的 A 的下一次出现就是 $i = 2$，而它的上一次出现是 $prevPrev[A] = -1$。贡献 $= (0 - (-1)) \times (2 - 0) = 1 \times 2 = 2$。答案累计 2。含义是：包含位置 0 的 A 且不含位置 2 的 A 的子串有 $l \in {0}$、$r \in {0, 1}$ 共 2 个，即 <code class="language-plaintext highlighter-rouge">A</code> 和 <code class="language-plaintext highlighter-rouge">AB</code>，在这两个子串里位置 0 的 A 都是唯一的。滚动：$prevPrev[A] = 0$、$prev[A] = 2$。</p>
+
+  <p><strong>收尾循环</strong>：<br>
+字符 A：$prev[A] = 2$、$prevPrev[A] = 0$，$next$ 取 $n = 3$。贡献 $= (2 - 0) \times (3 - 2) = 2 \times 1 = 2$。答案累计 4。含义是：包含位置 2 的 A 且不含位置 0 的 A 的子串有 $l \in {1, 2}$、$r \in {2}$ 共 2 个，即 <code class="language-plaintext highlighter-rouge">BA</code> 和 <code class="language-plaintext highlighter-rouge">A</code>。<br>
+字符 B：$prev[B] = 1$、$prevPrev[B] = -1$，$next$ 取 3。贡献 $= (1 - (-1)) \times (3 - 1) = 2 \times 2 = 4$。答案累计 8。含义是：B 只出现一次，所有包含它的子串里它都是唯一的，$l \in {0, 1}$、$r \in {1, 2}$ 共 4 个，即 <code class="language-plaintext highlighter-rouge">AB</code>、<code class="language-plaintext highlighter-rouge">ABA</code>、<code class="language-plaintext highlighter-rouge">B</code>、<code class="language-plaintext highlighter-rouge">BA</code>。</p>
+
+  <p>返回 8。核对一下：<code class="language-plaintext highlighter-rouge">ABA</code> 的六个子串及其唯一字符数分别是 <code class="language-plaintext highlighter-rouge">A</code>(1)、<code class="language-plaintext highlighter-rouge">B</code>(1)、<code class="language-plaintext highlighter-rouge">A</code>(1)、<code class="language-plaintext highlighter-rouge">AB</code>(2)、<code class="language-plaintext highlighter-rouge">BA</code>(2)、<code class="language-plaintext highlighter-rouge">ABA</code>(1，只有 B 唯一)，合计 $1+1+1+2+2+1 = 8$，与按贡献求和的结果一致。</p>
+
+  <p>这个例子还顺带验证了两处哨兵的作用：位置 0 的 A 结算时用了 $prevPrev = -1$，字符 B 结算时同时用了 $prevPrev = -1$ 与 $next = n$，两处都不需要特判分支。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">uniqueLetterString</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">prevPrev</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">26</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">prev</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">26</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">prevPrev</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">prev</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+
+        <span class="kt">long</span> <span class="n">answer</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'A'</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">prev</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">answer</span> <span class="o">+=</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span> <span class="o">(</span><span class="n">prev</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">-</span> <span class="n">prevPrev</span><span class="o">[</span><span class="n">c</span><span class="o">])</span> <span class="o">*</span> <span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">prev</span><span class="o">[</span><span class="n">c</span><span class="o">]);</span>
+            <span class="o">}</span>
+            <span class="n">prevPrev</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">=</span> <span class="n">prev</span><span class="o">[</span><span class="n">c</span><span class="o">];</span>
+            <span class="n">prev</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="o">;</span> <span class="n">c</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">prev</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">answer</span> <span class="o">+=</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span> <span class="o">(</span><span class="n">prev</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">-</span> <span class="n">prevPrev</span><span class="o">[</span><span class="n">c</span><span class="o">])</span> <span class="o">*</span> <span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">prev</span><span class="o">[</span><span class="n">c</span><span class="o">]);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">uniqueLetterString</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">prevPrev</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">26</span><span class="p">)</span>
+    <span class="n">prev</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">26</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">26</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">prevPrev</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+        <span class="n">prev</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+    <span class="p">}</span>
+
+    <span class="k">var</span> <span class="n">answer</span> <span class="kt">int64</span> <span class="o">=</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">c</span> <span class="o">:=</span> <span class="kt">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'A'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prev</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+            <span class="n">answer</span> <span class="o">+=</span> <span class="kt">int64</span><span class="p">(</span><span class="n">prev</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">-</span><span class="n">prevPrev</span><span class="p">[</span><span class="n">c</span><span class="p">])</span> <span class="o">*</span> <span class="kt">int64</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">prev</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+        <span class="p">}</span>
+        <span class="n">prevPrev</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">prev</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+        <span class="n">prev</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">c</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="m">26</span><span class="p">;</span> <span class="n">c</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">prev</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+            <span class="n">answer</span> <span class="o">+=</span> <span class="kt">int64</span><span class="p">(</span><span class="n">prev</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">-</span><span class="n">prevPrev</span><span class="p">[</span><span class="n">c</span><span class="p">])</span> <span class="o">*</span> <span class="kt">int64</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="n">prev</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kt">int</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n + \Sigma)$，其中 $\Sigma = 26$ 是字符集大小。主循环扫描每个位置一次，每次只做一次减法、一次乘法和两次赋值；收尾循环固定 26 次。相比枚举子串的 $O(n^2)$（$n = 10^5$ 时约 $5 \times 10^9$），这里只有十万次操作。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(\Sigma)$，即两个长度为 26 的整型数组，与字符串长度无关。这比「预处理每个位置的前一次 / 后一次出现位置」的 $O(n)$ 空间写法更省——延迟结算把「需要 $next$」这个未来信息，转化成了「在下一次同字符出现时回头结算」的当下操作。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>枚举对象过多时，交换求和顺序</strong>。原问题按子串求和有 $O(n^2)$ 项，按「字符的每次出现」求和只有 $O(n)$ 项，而两者数的是同一批二元组。这个「贡献法」是组合计数题的核心武器，凡是看到「对所有子串 / 子数组求某个统计量之和」，第一反应就该是它。</li>
+    <li>
+<strong>贡献区间由「最近的同类元素」界定</strong>。位置 $i$ 作为唯一出现的合法子串，左端点被上一次同字符卡住、右端点被下一次同字符卡住，方案数是两段长度的乘积。这个「左右各找最近的边界，相乘得贡献」的模式，与单调栈求子数组最小值之和是同一套骨架，只是边界的定义换了。</li>
+    <li>
+<strong>哨兵值让公式免于特判</strong>。$prev = -1$ 和 $next = n$ 分别表示「左边没有同字符」和「右边没有同字符」，代入乘法公式后自动给出正确的方案数。选哨兵时的标准是：代入公式后语义是否天然正确，而不是随便取个不可能的值。</li>
+    <li>
+<strong>延迟结算可以把「需要未来信息」变成「当下可算」</strong>。不预处理 $next$ 数组，而是在下一次同字符出现时回头结算上一次，把空间从 $O(n)$ 压到 $O(26)$。判断能否这么做的标准是：所需的未来信息是否会在扫描过程中的某个确定时刻自然出现。</li>
+    <li>
+<strong>延迟结算必须配一个收尾补算</strong>。每种字符的最后一次出现永远等不到「下一次」，必须在扫描结束后统一用虚拟的 $next = n$ 补上。凡是用延迟结算的写法，都要专门检查「有没有一批对象永远等不到触发条件」。</li>
+    <li>
+<strong>面试视角</strong>：这题的分水岭是能否说出「换成按每个字符的每次出现计算贡献」。说出来之后，$(i - prev) \times (next - i)$ 的推导只需要解释左右端点的取值范围。常见追问有三个：一是「为什么只看最近的前后各一次」，答更远的同字符被更近的挡住，不影响可行区间；二是「$prev = -1$ 时为什么不用特判」，答哨兵代入公式后语义正确；三是「能不能只用 $O(1)$ 额外空间」，答已经是 $O(26)$ 即常数级，且不需要预处理数组。如果面试官把「唯一字符」改成「出现恰好 $k$ 次的字符」，要能答出：需要维护每个字符最近 $k+1$ 次出现的位置，贡献公式相应变成两段跨度的乘积。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：把 $countUniqueChars$ 理解成「不同字符的种类数」</strong>。以 <code class="language-plaintext highlighter-rouge">s = "ABA"</code> 为例，若按种类数计算，子串 <code class="language-plaintext highlighter-rouge">ABA</code> 会贡献 2 而不是 1，总和变成 9，而正确答案是 8。题目要的是「出现次数恰好为 1」的字符个数。</li>
+    <li>
+<strong>错误写法：滚动更新时先写 $prev[c] \leftarrow i$ 再写 $prevPrev[c] \leftarrow prev[c]$</strong>。以 <code class="language-plaintext highlighter-rouge">s = "ABA"</code> 为例，$i = 2$ 处理完后 $prevPrev[A]$ 会变成 2 而不是 0，收尾时贡献算成 $(2-2) \times (3-2) = 0$，总和变成 6，而正确答案是 8。两个变量的滚动必须自后向前赋值。</li>
+    <li>
+<strong>错误写法：漏掉收尾的 26 次补算循环</strong>。以 <code class="language-plaintext highlighter-rouge">s = "ABA"</code> 为例，主循环只结算了位置 0 的 A，贡献 2；位置 2 的 A 和位置 1 的 B 都没有「下一次出现」来触发结算，最终返回 2，而正确答案是 8。延迟结算必然要配收尾补算。</li>
+    <li>
+<strong>错误写法：哨兵取 0 而不是 $-1$</strong>。以 <code class="language-plaintext highlighter-rouge">s = "AB"</code> 为例，正确答案是 4（<code class="language-plaintext highlighter-rouge">A</code>、<code class="language-plaintext highlighter-rouge">B</code> 各 1，<code class="language-plaintext highlighter-rouge">AB</code> 贡献 2）。哨兵取 0 时，A 的收尾贡献算成 $(0 - 0) \times (2 - 0) = 0$、B 的算成 $(1 - 0) \times (2 - 1) = 1$，返回 1。正确的算法用 $prevPrev = -1$ 得到 $1 \times 2 = 2$ 与 $2 \times 1 = 2$，合计 4。哨兵必须让「左端点可取到 0」这一种方案被计入。</li>
+    <li>
+<strong>错误写法：收尾时 $next$ 取 $n - 1$</strong>。以 <code class="language-plaintext highlighter-rouge">s = "AB"</code> 为例，字符 B 的贡献算成 $(1 - (-1)) \times (1 - 1) = 0$，直接漏掉，返回值偏小。右端点的可选个数是 $[prev, n-1]$ 共 $n - prev$ 个，虚拟的下一次出现位置应取 $n$。</li>
+    <li>
+<strong>错误写法：结算的是当前位置 $i$ 而不是 $prev[c]$</strong>。以 <code class="language-plaintext highlighter-rouge">s = "ABA"</code> 为例，$i = 2$ 时若结算的是位置 2 的贡献，用的 $next$ 就是当前的 $i$ 本身，得到 $(2 - 0) \times (2 - 2) = 0$，逻辑完全错乱。延迟结算结算的永远是<strong>上一次</strong>出现，因为它的 $next$ 才刚刚确定。</li>
+    <li>
+<strong>错误写法：贡献公式写成 $(i - prev) + (next - i)$（加法而非乘法）</strong>。以 <code class="language-plaintext highlighter-rouge">s = "B"</code> 为例，正确贡献是 $(0 - (-1)) \times (1 - 0) = 1$，写成加法得 $1 + 1 = 2$，返回 2 而正确答案是 1。左右端点的选择相互独立，方案数是乘法关系。</li>
+    <li>
+<strong>错误写法：只维护 $prev$ 而不维护 $prevPrev$</strong>。以 <code class="language-plaintext highlighter-rouge">s = "ABA"</code> 为例，结算位置 0 的 A 时需要知道它前面还有没有 A（这里没有，取 $-1$）；只有 $prev$ 的话，在结算时它已经指向被结算的那个位置本身，左端点范围无从计算。必须同时保留最近两次出现。</li>
+    <li>
+<strong>错误写法：用哈希表存每个字符的所有出现位置，再对每个位置去查前后邻居</strong>。以 $n = 10^5$ 的输入为例，这么做正确但要多花 $O(n)$ 空间存位置列表；更常见的问题是查前后邻居时下标偏移写错，比如把列表里的第 $t$ 个位置的前驱写成第 $t$ 个而不是第 $t-1$ 个。两个滚动变量已经足够。</li>
+    <li>
+<strong>错误写法：字符下标用 <code class="language-plaintext highlighter-rouge">s.charAt(i) - 'a'</code></strong>。以 <code class="language-plaintext highlighter-rouge">s = "ABA"</code> 为例，大写 <code class="language-plaintext highlighter-rouge">A</code> 减去小写 <code class="language-plaintext highlighter-rouge">a</code> 得到 $-32$，数组下标为负，Java 抛越界异常，Go 直接 panic。题目明确是大写字母，必须减 <code class="language-plaintext highlighter-rouge">'A'</code>。</li>
+    <li>
+<strong>错误写法：用 32 位整型累加中间结果</strong>。以某字符只在字符串正中出现一次、$n = 10^5$ 的输入为例，单项贡献可达 $\frac{n}{2} \times \frac{n}{2} = 2.5 \times 10^9$，超出 32 位有符号整型上限而溢出成负数。累加要用 64 位，最后再转回。</li>
+    <li>
+<strong>错误写法：为每个子串维护滑动的字符计数数组，逐个统计</strong>。以 $n = 10^5$ 为例，子串数量是 $5 \times 10^9$，即便每个子串只花 $O(1)$ 也无法通过。必须换求和顺序，而不是优化子串内部的统计。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/sum-of-subarray-minimums/">907. 子数组的最小值之和</a></td>
+      <td>中等</td>
+      <td>同为贡献法，边界改由「左右两侧第一个更小元素」界定，需用单调栈求出</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-substring-without-repeating-characters/">3. 无重复字符的最长子串</a></td>
+      <td>中等</td>
+      <td>同样关注字符的上一次出现位置，但用滑动窗口求最长而非累加贡献</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/subarrays-with-k-different-integers/">992. K 个不同整数的子数组</a></td>
+      <td>困难</td>
+      <td>统计「恰好 K 种」的子数组个数，用「至多 K」减「至多 K-1」的差分技巧</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/count-number-of-nice-subarrays/">1248. 统计「优美子数组」</a></td>
+      <td>中等</td>
+      <td>统计恰含 k 个奇数的子数组数，可用前缀和计数或同样的左右可选区间相乘</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-substring-with-at-most-k-distinct-characters/">340. 至多包含 K 个不同字符的最长子串</a></td>
+      <td>中等</td>
+      <td>滑动窗口配合字符频次表，训练「字符出现次数」这一维状态的维护</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-substring-with-at-most-two-distinct-characters/">159. 至多包含两个不同字符的最长子串</a></td>
+      <td>中等</td>
+      <td>上一题 $k=2$ 的特例，可用两个位置变量代替哈希表，与本题的滚动变量思路相通</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/find-k-length-substrings-with-no-repeated-characters/">1100. 长度为 K 的无重复字符子串</a></td>
+      <td>中等</td>
+      <td>定长窗口内判无重复，重点是窗口移动时频次的增减对称</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2023/70476717" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 707. 设计链表</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2023/29648686" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 173. 二叉搜索树迭代器</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2023/22994786">https://hgnulb.github.io/blog/2023/22994786</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

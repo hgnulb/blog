@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 499. 迷宫 III | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,A* 搜索,Dijkstra 算法,Heuristic Search,图,堆（优先队列）,字符串,字节跳动,广度优先搜索,数组,最短路,深度优先搜索,矩阵" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 499. 迷宫 III" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/57538385" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/57538385" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-04-15T00:00:00+08:00" />
+<meta property="article:modified_time" content="2026-04-15T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 499. 迷宫 III" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-04-15T00:00:00+08:00","datePublished":"2026-04-15T00:00:00+08:00","description":"题目描述","headline":"LeetCode 499. 迷宫 III","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/57538385"},"url":"https://hgnulb.github.io/blog/2026/57538385"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dijkstra距离最短--路径字典序最小">解法：Dijkstra（距离最短 + 路径字典序最小）</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 499. 迷宫 III">LeetCode 499. 迷宫 III</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-04-15 00:00:00"
+                    datetime="2026-04-15T00:00:00+08:00"
+            >
+                2026-04-15
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2986 字 · 英文 101 词 · 代码 155 行"
+            aria-label="预计阅读时间约 13 分钟，正文 2986 字 · 英文 101 词 · 代码 155 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 13 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    12 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9242240291/" title="矩阵">
+        矩阵
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7037379732/" title="堆（优先队列）">
+        堆（优先队列）
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5789791753/" title="图">
+        图
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7618789166/" title="最短路">
+        最短路
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8629310514/" title="Dijkstra 算法">
+        Dijkstra 算法
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9340277132/" title="A* 搜索">
+        A* 搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9471640639/" title="Heuristic Search">
+        Heuristic Search
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dijkstra距离最短--路径字典序最小">解法：Dijkstra（距离最短 + 路径字典序最小）</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/the-maze-iii/">499. 迷宫 III</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p><strong>题目目标</strong>：小球放在 <code class="language-plaintext highlighter-rouge">ball</code> 位置，每次只能选一个方向让它滚，<strong>滚到撞墙或撞到边界才停</strong>，中途经过 <code class="language-plaintext highlighter-rouge">hole</code> 则掉进洞里立即停止。要求输出让球掉进洞的最短滚动距离对应的移动序列（<code class="language-plaintext highlighter-rouge">u</code>/<code class="language-plaintext highlighter-rouge">d</code>/<code class="language-plaintext highlighter-rouge">l</code>/<code class="language-plaintext highlighter-rouge">r</code>），距离相同时取字典序最小的序列；无法到达返回 <code class="language-plaintext highlighter-rouge">"impossible"</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>核心约束</strong>：两条约束决定了算法形态。第一，「一直滚到停」意味着相邻两个可停位置之间的距离不是 1 而是这一趟滚过的格数，边权非等值，普通 BFS 的层数不再等于距离。第二，除了距离还有第二关键字「路径字典序最小」，所以状态的比较必须是 <code class="language-plaintext highlighter-rouge">(距离, 路径)</code> 的二元组，而不是单看距离。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>边界处理</strong>：球滚到洞里就停，不会滚过去，因此洞可能出现在某一趟的中途；起点本身可能贴着墙，某些方向 <code class="language-plaintext highlighter-rouge">steps</code> 为 0，这种「原地不动」的转移必须丢弃，否则会陷入自环；洞可能不可达，返回值是字符串 <code class="language-plaintext highlighter-rouge">"impossible"</code> 而不是空串。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>实现取舍</strong>：距离和字典序两个关键字可以一起塞进优先队列的比较器，也可以先跑一遍纯距离最短路再回溯路径。前者代码短、一次成型，代价是队列元素带着字符串；后者省内存但要写两遍搜索。</p>
+</blockquote>
+
+<h2 id="解法dijkstra距离最短--路径字典序最小">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95dijkstra%E8%B7%9D%E7%A6%BB%E6%9C%80%E7%9F%AD--%E8%B7%AF%E5%BE%84%E5%AD%97%E5%85%B8%E5%BA%8F%E6%9C%80%E5%B0%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：Dijkstra（距离最短 + 路径字典序最小）</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先想暴力：从起点开始 DFS，枚举每一步选哪个方向，记录走过的路径和累计距离，到洞时更新答案。问题是同一个停点会被无数条前缀重复展开，状态空间指数级爆炸，必须剪枝。</p>
+</blockquote>
+
+<blockquote>
+  <p>自然的下一步是 BFS。但 BFS 只在<strong>边权全为 1</strong> 时才保证「先出队的层数更小」，而这里一次滚动的代价是 1 到 $\max(m,n)$ 不等。举个例子：从起点向右滚 1 格到达 A，向下滚 5 格到达 B，BFS 会认为 A、B 同层，可实际距离差了 4，后续从 B 出发得到的结果会被错误地当成同样优。所以边权非等值 → 用 Dijkstra。</p>
+</blockquote>
+
+<blockquote>
+  <p>再看第二关键字。字典序比较有个很好的性质：如果两条路径的距离相同，那么它们在洞处的字典序大小，完全由各自的字符串决定，而字符串是沿路径<strong>前缀单调拼接</strong>的——给两条路径同时追加同一个方向字符，它们的相对大小不变。这条单调性正是 Dijkstra 成立的前提（松弛不会让已确定的最优解变差），所以可以直接把 <code class="language-plaintext highlighter-rouge">(dist, path)</code> 当成一个复合权重，用字典序作为 tie-break。</p>
+</blockquote>
+
+<blockquote>
+  <p>于是状态定义写死为：<code class="language-plaintext highlighter-rouge">dist[x][y]</code> = 从起点滚到停点 <code class="language-plaintext highlighter-rouge">(x, y)</code> 的最短滚动格数；<code class="language-plaintext highlighter-rouge">bestPath[x][y]</code> = 在 <code class="language-plaintext highlighter-rouge">dist[x][y]</code> 达到最小的前提下，字典序最小的移动序列。优先队列按 <code class="language-plaintext highlighter-rouge">(dist, path)</code> 升序弹出，弹出的第一个 <code class="language-plaintext highlighter-rouge">(x, y)</code> 状态即为该点的最终答案。</p>
+</blockquote>
+
+<blockquote>
+  <p>还有一条不变量必须守住：<strong>队列里可能残留过期状态</strong>。当某个点先被写入 <code class="language-plaintext highlighter-rouge">("ul", 6)</code>、后又被更优的 <code class="language-plaintext highlighter-rouge">("lul", 6)</code> 覆盖时，堆里那份 <code class="language-plaintext highlighter-rouge">"ul"</code> 还在。弹出时用 <code class="language-plaintext highlighter-rouge">cur.dist == dist[x][y] &amp;&amp; cur.path == bestPath[x][y]</code> 双重校验，不匹配就丢弃——因为一个点的最优状态只有一份，用它继续扩展才不会污染后续。</p>
+</blockquote>
+
+<blockquote>
+  <p>最后是方向数组的写法：把四个方向按字符 <code class="language-plaintext highlighter-rouge">d &lt; l &lt; r &lt; u</code> 的字典序排列。这不是必需的（比较器已经保证正确性），但它让「同距离时先探到的就是更小的路径」成为常态，减少了无谓的松弛更新。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <p><strong>第一步：初始化 <code class="language-plaintext highlighter-rouge">dist</code> 全为 INF、<code class="language-plaintext highlighter-rouge">bestPath</code> 全为空串，起点 <code class="language-plaintext highlighter-rouge">dist = 0</code>、路径为空串。</strong> 为什么用空串而不是 <code class="language-plaintext highlighter-rouge">null</code>：后面判断「该点是否被访问过」时统一用 <code class="language-plaintext highlighter-rouge">isEmpty()</code>，避免在比较字符串时踩空指针。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第二步：建一个按 <code class="language-plaintext highlighter-rouge">(dist, path)</code> 升序的最小堆，压入起点状态。</strong> 为什么比较器要两级：只比 <code class="language-plaintext highlighter-rouge">dist</code> 的话，同距离的多条路径出队顺序随机，先出队的会被当作最优并锁死，得不到字典序最小的那条。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第三步：弹出堆顶，先做过期校验，<code class="language-plaintext highlighter-rouge">cur.dist != dist[x][y] || !cur.path.equals(bestPath[x][y])</code> 就 <code class="language-plaintext highlighter-rouge">continue</code>。</strong> 为什么：Dijkstra 的懒删除写法不从堆里移除旧状态，只能在出队时识别并跳过；不跳过就会用次优前缀去扩展，产生不满足不变量的结果。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第四步：对四个方向各模拟一次滚动。</strong> 内层 <code class="language-plaintext highlighter-rouge">while</code> 每次尝试走一格：越界或撞墙就停在上一格；否则前进并 <code class="language-plaintext highlighter-rouge">steps++</code>；<strong>前进之后立刻判断是否踩到洞，是则 break</strong>。为什么判洞要写在前进之后：球是滚到洞的格子上才掉下去的，先判后进会漏掉洞，先进后判才符合物理过程。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第五步：<code class="language-plaintext highlighter-rouge">steps == 0</code> 直接跳过该方向。</strong> 为什么：说明球紧贴着墙，这个方向根本推不动，落点还是自己。若不跳过，就会不断地把 <code class="language-plaintext highlighter-rouge">(x, y)</code> 以更长的路径重新入堆，形成死循环。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第六步：松弛。新距离 <code class="language-plaintext highlighter-rouge">ndist = cur.dist + steps</code>，新路径 <code class="language-plaintext highlighter-rouge">npath = cur.path + 方向字符</code>。当 <code class="language-plaintext highlighter-rouge">ndist &lt; dist[x][y]</code>，或者 <code class="language-plaintext highlighter-rouge">ndist == dist[x][y]</code> 且 <code class="language-plaintext highlighter-rouge">npath</code> 字典序更小时，更新两张表并入堆。</strong> 为什么同距离也要更新入堆：字典序更小的前缀会影响它后面所有的扩展结果，必须重新扩展一次。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>第七步：堆空后返回 <code class="language-plaintext highlighter-rouge">bestPath[hole]</code>；若仍是空串说明从未被松弛到，返回 <code class="language-plaintext highlighter-rouge">"impossible"</code>。</strong></p>
+</blockquote>
+
+<blockquote>
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">maze = [[0,0,0,0,0],[1,1,0,0,1],[0,0,0,0,0],[0,1,0,0,1],[0,1,0,0,0]]</code>、<code class="language-plaintext highlighter-rouge">ball = [4,3]</code>、<code class="language-plaintext highlighter-rouge">hole = [0,1]</code> 走一遍</strong>：方向按 <code class="language-plaintext highlighter-rouge">d, l, r, u</code> 顺序尝试。</p>
+</blockquote>
+
+<blockquote>
+  <p>起点 <code class="language-plaintext highlighter-rouge">(4,3)</code>，<code class="language-plaintext highlighter-rouge">dist = 0</code>，路径 <code class="language-plaintext highlighter-rouge">""</code>。向 <code class="language-plaintext highlighter-rouge">d</code> 走出界，<code class="language-plaintext highlighter-rouge">steps = 0</code> 跳过。向 <code class="language-plaintext highlighter-rouge">l</code>：<code class="language-plaintext highlighter-rouge">(4,2)</code> 是空地，再往左 <code class="language-plaintext highlighter-rouge">(4,1)</code> 是墙，停在 <code class="language-plaintext highlighter-rouge">(4,2)</code>，<code class="language-plaintext highlighter-rouge">steps = 1</code>，得到状态 <code class="language-plaintext highlighter-rouge">((4,2), 1, "l")</code>。向 <code class="language-plaintext highlighter-rouge">r</code>：<code class="language-plaintext highlighter-rouge">(4,4)</code> 后出界，停在 <code class="language-plaintext highlighter-rouge">(4,4)</code>，<code class="language-plaintext highlighter-rouge">steps = 1</code>，状态 <code class="language-plaintext highlighter-rouge">((4,4), 1, "r")</code>。向 <code class="language-plaintext highlighter-rouge">u</code>：一路 <code class="language-plaintext highlighter-rouge">(3,3) → (2,3) → (1,3) → (0,3)</code> 后出界，<code class="language-plaintext highlighter-rouge">steps = 4</code>，状态 <code class="language-plaintext highlighter-rouge">((0,3), 4, "u")</code>。堆内三个状态。</p>
+</blockquote>
+
+<blockquote>
+  <p>弹出 <code class="language-plaintext highlighter-rouge">((4,2), 1, "l")</code>（距离 1，<code class="language-plaintext highlighter-rouge">"l"</code> 比 <code class="language-plaintext highlighter-rouge">"r"</code> 小）。向 <code class="language-plaintext highlighter-rouge">l</code> 立刻撞墙 <code class="language-plaintext highlighter-rouge">steps = 0</code> 跳过；向 <code class="language-plaintext highlighter-rouge">r</code> 滚回 <code class="language-plaintext highlighter-rouge">(4,4)</code> 得 <code class="language-plaintext highlighter-rouge">dist = 3</code>，但 <code class="language-plaintext highlighter-rouge">dist[4][4]</code> 已是 1，不更新；向 <code class="language-plaintext highlighter-rouge">u</code> 一路滚到 <code class="language-plaintext highlighter-rouge">(0,2)</code>，<code class="language-plaintext highlighter-rouge">steps = 4</code>，<code class="language-plaintext highlighter-rouge">dist = 5</code>，路径 <code class="language-plaintext highlighter-rouge">"lu"</code>，写入。</p>
+</blockquote>
+
+<blockquote>
+  <p>弹出 <code class="language-plaintext highlighter-rouge">((4,4), 1, "r")</code>。向 <code class="language-plaintext highlighter-rouge">l</code> 滚回 <code class="language-plaintext highlighter-rouge">(4,2)</code> 得 <code class="language-plaintext highlighter-rouge">dist = 3</code> &gt; 1 不更新；向 <code class="language-plaintext highlighter-rouge">u</code> 被 <code class="language-plaintext highlighter-rouge">(3,4)</code> 的墙挡住 <code class="language-plaintext highlighter-rouge">steps = 0</code>；其余出界。这一支就此终结。</p>
+</blockquote>
+
+<blockquote>
+  <p>弹出 <code class="language-plaintext highlighter-rouge">((0,3), 4, "u")</code>。向 <code class="language-plaintext highlighter-rouge">l</code>：先到 <code class="language-plaintext highlighter-rouge">(0,2)</code>，再到 <code class="language-plaintext highlighter-rouge">(0,1)</code> —— <strong>正是洞</strong>，立刻 break，<code class="language-plaintext highlighter-rouge">steps = 2</code>，<code class="language-plaintext highlighter-rouge">ndist = 6</code>，路径 <code class="language-plaintext highlighter-rouge">"ul"</code>，写入 <code class="language-plaintext highlighter-rouge">dist[0][1] = 6</code>、<code class="language-plaintext highlighter-rouge">bestPath[0][1] = "ul"</code>。向 <code class="language-plaintext highlighter-rouge">r</code> 停在 <code class="language-plaintext highlighter-rouge">(0,4)</code>，<code class="language-plaintext highlighter-rouge">dist = 5</code>，写入。向 <code class="language-plaintext highlighter-rouge">d</code> 滚回起点，距离 8 &gt; 0 不更新。</p>
+</blockquote>
+
+<blockquote>
+  <p>弹出 <code class="language-plaintext highlighter-rouge">((0,2), 5, "lu")</code>。向 <code class="language-plaintext highlighter-rouge">l</code>：一步就踩到洞 <code class="language-plaintext highlighter-rouge">(0,1)</code>，<code class="language-plaintext highlighter-rouge">steps = 1</code>，<code class="language-plaintext highlighter-rouge">ndist = 6</code>。此时 <code class="language-plaintext highlighter-rouge">dist[0][1]</code> 也是 6，进入 tie-break：<code class="language-plaintext highlighter-rouge">"lul"</code> 与 <code class="language-plaintext highlighter-rouge">"ul"</code> 比较，首字符 <code class="language-plaintext highlighter-rouge">'l' &lt; 'u'</code>，所以 <code class="language-plaintext highlighter-rouge">"lul"</code> 更小，覆盖 <code class="language-plaintext highlighter-rouge">bestPath[0][1] = "lul"</code> 并重新入堆。这一步就是「同距离更新」不可省略的现场证据。</p>
+</blockquote>
+
+<blockquote>
+  <p>继续弹出 <code class="language-plaintext highlighter-rouge">((0,4), 5, "ur")</code>，它到洞需要 3 步共 <code class="language-plaintext highlighter-rouge">dist = 8</code> &gt; 6，不更新。随后弹出 <code class="language-plaintext highlighter-rouge">((0,1), 6, "lul")</code> 正常扩展（都不产生更优解），再弹出堆里残留的 <code class="language-plaintext highlighter-rouge">((0,1), 6, "ul")</code> 时，因为 <code class="language-plaintext highlighter-rouge">bestPath[0][1]</code> 已变成 <code class="language-plaintext highlighter-rouge">"lul"</code>，过期校验失败被跳过——这正是第三步存在的意义。堆空，返回 <code class="language-plaintext highlighter-rouge">"lul"</code>，与期望一致。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">INF</span> <span class="o">=</span> <span class="mi">1_000_000_000</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span><span class="o">[]</span> <span class="no">DX</span> <span class="o">=</span> <span class="o">{</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">};</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span><span class="o">[]</span> <span class="no">DY</span> <span class="o">=</span> <span class="o">{</span><span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">};</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span><span class="o">[]</span> <span class="no">DIR</span> <span class="o">=</span> <span class="o">{</span><span class="s">"d"</span><span class="o">,</span> <span class="s">"l"</span><span class="o">,</span> <span class="s">"r"</span><span class="o">,</span> <span class="s">"u"</span><span class="o">};</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">State</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">x</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">y</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">dist</span><span class="o">;</span>
+        <span class="nc">String</span> <span class="n">path</span><span class="o">;</span>
+
+        <span class="nc">State</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dist</span><span class="o">,</span> <span class="nc">String</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">dist</span> <span class="o">=</span> <span class="n">dist</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">findShortestWay</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">maze</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">ball</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">hole</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">maze</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">maze</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span><span class="o">;</span>
+
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">dist</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">m</span><span class="o">][</span><span class="n">n</span><span class="o">];</span>
+        <span class="nc">String</span><span class="o">[][]</span> <span class="n">bestPath</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">[</span><span class="n">m</span><span class="o">][</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">dist</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="no">INF</span><span class="o">);</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">bestPath</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="nc">PriorityQueue</span><span class="o">&lt;</span><span class="nc">State</span><span class="o">&gt;</span> <span class="n">pq</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;((</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">dist</span> <span class="o">!=</span> <span class="n">b</span><span class="o">.</span><span class="na">dist</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="na">dist</span> <span class="o">-</span> <span class="n">b</span><span class="o">.</span><span class="na">dist</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="na">path</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">b</span><span class="o">.</span><span class="na">path</span><span class="o">);</span>
+        <span class="o">});</span>
+
+        <span class="n">dist</span><span class="o">[</span><span class="n">ball</span><span class="o">[</span><span class="mi">0</span><span class="o">]][</span><span class="n">ball</span><span class="o">[</span><span class="mi">1</span><span class="o">]]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="n">pq</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="nc">State</span><span class="o">(</span><span class="n">ball</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">ball</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span> <span class="mi">0</span><span class="o">,</span> <span class="s">""</span><span class="o">));</span>
+
+        <span class="k">while</span> <span class="o">(!</span><span class="n">pq</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="nc">State</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cur</span><span class="o">.</span><span class="na">dist</span> <span class="o">!=</span> <span class="n">dist</span><span class="o">[</span><span class="n">cur</span><span class="o">.</span><span class="na">x</span><span class="o">][</span><span class="n">cur</span><span class="o">.</span><span class="na">y</span><span class="o">]</span> <span class="o">||</span> <span class="o">!</span><span class="n">cur</span><span class="o">.</span><span class="na">path</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">bestPath</span><span class="o">[</span><span class="n">cur</span><span class="o">.</span><span class="na">x</span><span class="o">][</span><span class="n">cur</span><span class="o">.</span><span class="na">y</span><span class="o">]))</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">;</span> <span class="n">d</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">x</span><span class="o">;</span>
+                <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">y</span><span class="o">;</span>
+                <span class="kt">int</span> <span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+                <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="no">DX</span><span class="o">[</span><span class="n">d</span><span class="o">];</span>
+                    <span class="kt">int</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="no">DY</span><span class="o">[</span><span class="n">d</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">nx</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">nx</span> <span class="o">&gt;=</span> <span class="n">m</span> <span class="o">||</span> <span class="n">ny</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">ny</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="n">maze</span><span class="o">[</span><span class="n">nx</span><span class="o">][</span><span class="n">ny</span><span class="o">]</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">nx</span><span class="o">;</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">ny</span><span class="o">;</span>
+                    <span class="n">steps</span><span class="o">++;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">hole</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">==</span> <span class="n">hole</span><span class="o">[</span><span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="n">steps</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="kt">int</span> <span class="n">ndist</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">dist</span> <span class="o">+</span> <span class="n">steps</span><span class="o">;</span>
+                <span class="nc">String</span> <span class="n">npath</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">path</span> <span class="o">+</span> <span class="no">DIR</span><span class="o">[</span><span class="n">d</span><span class="o">];</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="n">ndist</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">||</span> <span class="o">(</span><span class="n">ndist</span> <span class="o">==</span> <span class="n">dist</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="n">bestPath</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">].</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">||</span> <span class="n">npath</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">bestPath</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)))</span> <span class="o">{</span>
+                    <span class="n">dist</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">=</span> <span class="n">ndist</span><span class="o">;</span>
+                    <span class="n">bestPath</span><span class="o">[</span><span class="n">x</span><span class="o">][</span><span class="n">y</span><span class="o">]</span> <span class="o">=</span> <span class="n">npath</span><span class="o">;</span>
+                    <span class="n">pq</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="k">new</span> <span class="nc">State</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">,</span> <span class="n">ndist</span><span class="o">,</span> <span class="n">npath</span><span class="o">));</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="nc">String</span> <span class="n">answer</span> <span class="o">=</span> <span class="n">bestPath</span><span class="o">[</span><span class="n">hole</span><span class="o">[</span><span class="mi">0</span><span class="o">]][</span><span class="n">hole</span><span class="o">[</span><span class="mi">1</span><span class="o">]];</span>
+        <span class="k">return</span> <span class="n">answer</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">?</span> <span class="s">"impossible"</span> <span class="o">:</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">State</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">x</span>    <span class="kt">int</span>
+    <span class="n">y</span>    <span class="kt">int</span>
+    <span class="n">dist</span> <span class="kt">int</span>
+    <span class="n">path</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">MinHeap</span> <span class="p">[]</span><span class="n">State</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">MinHeap</span><span class="p">)</span> <span class="n">Len</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">MinHeap</span><span class="p">)</span> <span class="n">Less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dist</span> <span class="o">!=</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">dist</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dist</span> <span class="o">&lt;</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">dist</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">path</span> <span class="o">&lt;</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">path</span>
+<span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="n">MinHeap</span><span class="p">)</span> <span class="n">Swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="kt">int</span><span class="p">)</span>  <span class="p">{</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">MinHeap</span><span class="p">)</span> <span class="n">Push</span><span class="p">(</span><span class="n">x</span> <span class="n">any</span><span class="p">)</span>    <span class="p">{</span> <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="o">*</span><span class="n">h</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="p">(</span><span class="n">State</span><span class="p">))</span> <span class="p">}</span>
+<span class="k">func</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span><span class="n">MinHeap</span><span class="p">)</span> <span class="n">Pop</span><span class="p">()</span> <span class="n">any</span> <span class="p">{</span>
+    <span class="n">old</span> <span class="o">:=</span> <span class="o">*</span><span class="n">h</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">old</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">:=</span> <span class="n">old</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+    <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="n">old</span><span class="p">[</span><span class="o">:</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">x</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">findShortestWay</span><span class="p">(</span><span class="n">maze</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">ball</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">hole</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="n">m</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">maze</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">maze</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+
+    <span class="k">const</span> <span class="n">inf</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="m">1e9</span><span class="p">)</span>
+    <span class="n">dist</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="n">best</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">string</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="n">best</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">inf</span>
+            <span class="n">best</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="s">""</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">dx</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">}</span>
+    <span class="n">dy</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">0</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">}</span>
+    <span class="n">dir</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"d"</span><span class="p">,</span> <span class="s">"l"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">,</span> <span class="s">"u"</span><span class="p">}</span>
+
+    <span class="n">dist</span><span class="p">[</span><span class="n">ball</span><span class="p">[</span><span class="m">0</span><span class="p">]][</span><span class="n">ball</span><span class="p">[</span><span class="m">1</span><span class="p">]]</span> <span class="o">=</span> <span class="m">0</span>
+    <span class="n">best</span><span class="p">[</span><span class="n">ball</span><span class="p">[</span><span class="m">0</span><span class="p">]][</span><span class="n">ball</span><span class="p">[</span><span class="m">1</span><span class="p">]]</span> <span class="o">=</span> <span class="s">""</span>
+
+    <span class="n">h</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">MinHeap</span><span class="p">{}</span>
+    <span class="n">heap</span><span class="o">.</span><span class="n">Init</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+    <span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">State</span><span class="p">{</span><span class="n">x</span><span class="o">:</span> <span class="n">ball</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">y</span><span class="o">:</span> <span class="n">ball</span><span class="p">[</span><span class="m">1</span><span class="p">],</span> <span class="n">dist</span><span class="o">:</span> <span class="m">0</span><span class="p">,</span> <span class="n">path</span><span class="o">:</span> <span class="s">""</span><span class="p">})</span>
+
+    <span class="k">for</span> <span class="n">h</span><span class="o">.</span><span class="n">Len</span><span class="p">()</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="n">cur</span> <span class="o">:=</span> <span class="n">heap</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="n">State</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cur</span><span class="o">.</span><span class="n">dist</span> <span class="o">!=</span> <span class="n">dist</span><span class="p">[</span><span class="n">cur</span><span class="o">.</span><span class="n">x</span><span class="p">][</span><span class="n">cur</span><span class="o">.</span><span class="n">y</span><span class="p">]</span> <span class="o">||</span> <span class="n">cur</span><span class="o">.</span><span class="n">path</span> <span class="o">!=</span> <span class="n">best</span><span class="p">[</span><span class="n">cur</span><span class="o">.</span><span class="n">x</span><span class="p">][</span><span class="n">cur</span><span class="o">.</span><span class="n">y</span><span class="p">]</span> <span class="p">{</span>
+            <span class="k">continue</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">d</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="m">4</span><span class="p">;</span> <span class="n">d</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">:=</span> <span class="n">cur</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">cur</span><span class="o">.</span><span class="n">y</span>
+            <span class="n">steps</span> <span class="o">:=</span> <span class="m">0</span>
+            <span class="k">for</span> <span class="p">{</span>
+                <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">:=</span> <span class="n">x</span><span class="o">+</span><span class="n">dx</span><span class="p">[</span><span class="n">d</span><span class="p">],</span> <span class="n">y</span><span class="o">+</span><span class="n">dy</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">nx</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="n">nx</span> <span class="o">&gt;=</span> <span class="n">m</span> <span class="o">||</span> <span class="n">ny</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="n">ny</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="n">maze</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="o">==</span> <span class="m">1</span> <span class="p">{</span>
+                    <span class="k">break</span>
+                <span class="p">}</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span>
+                <span class="n">steps</span><span class="o">++</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">hole</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">==</span> <span class="n">hole</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+                    <span class="k">break</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">steps</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+                <span class="k">continue</span>
+            <span class="p">}</span>
+
+            <span class="n">ndist</span> <span class="o">:=</span> <span class="n">cur</span><span class="o">.</span><span class="n">dist</span> <span class="o">+</span> <span class="n">steps</span>
+            <span class="n">npath</span> <span class="o">:=</span> <span class="n">cur</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">dir</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">ndist</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">||</span> <span class="p">(</span><span class="n">ndist</span> <span class="o">==</span> <span class="n">dist</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">best</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="s">""</span> <span class="o">||</span> <span class="n">npath</span> <span class="o">&lt;</span> <span class="n">best</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]))</span> <span class="p">{</span>
+                <span class="n">dist</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndist</span>
+                <span class="n">best</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">npath</span>
+                <span class="n">heap</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">State</span><span class="p">{</span><span class="n">x</span><span class="o">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">:</span> <span class="n">y</span><span class="p">,</span> <span class="n">dist</span><span class="o">:</span> <span class="n">ndist</span><span class="p">,</span> <span class="n">path</span><span class="o">:</span> <span class="n">npath</span><span class="p">})</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">best</span><span class="p">[</span><span class="n">hole</span><span class="p">[</span><span class="m">0</span><span class="p">]][</span><span class="n">hole</span><span class="p">[</span><span class="m">1</span><span class="p">]]</span> <span class="o">==</span> <span class="s">""</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s">"impossible"</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">best</span><span class="p">[</span><span class="n">hole</span><span class="p">[</span><span class="m">0</span><span class="p">]][</span><span class="n">hole</span><span class="p">[</span><span class="m">1</span><span class="p">]]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(mn(m+n)\log(mn))$。凭什么：可停位置至多 $mn$ 个，每个位置最多被有效松弛常数次，每次弹出要向四个方向模拟滚动，单次滚动最长扫过一整行或一整列即 $O(m+n)$；堆操作 $O(\log(mn))$。若把路径字符串的比较也计入，还要再乘上路径长度这个因子。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(mn \cdot L)$，其中 $L$ 为最长路径的字符数。凭什么：<code class="language-plaintext highlighter-rouge">dist</code> 与 <code class="language-plaintext highlighter-rouge">bestPath</code> 各占 $mn$ 个格子，而 <code class="language-plaintext highlighter-rouge">bestPath</code> 的每个格子存的是一整条移动序列；优先队列中同时存在的状态数同样是 $O(mn)$ 量级，每个状态也携带一份字符串。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>边权是否等值决定 BFS 还是 Dijkstra。</strong> 「滚到停」把一次操作变成了不定长的位移，这是本题从迷宫 I 的 BFS 升级到迷宫 III 的 Dijkstra 的唯一原因，识别这一点比会写堆更重要。</li>
+    <li>
+<strong>多关键字最短路 = 把关键字打包进比较器 + 松弛条件同步扩展。</strong> 比较器写了两级，松弛条件也必须写两级（<code class="language-plaintext highlighter-rouge">&lt;</code> 或 <code class="language-plaintext highlighter-rouge">== 且更小</code>），只改一处必然出错。</li>
+    <li>
+<strong>字典序作为第二关键字之所以合法，是因为前缀单调。</strong> 追加相同字符不改变两串的相对顺序，这保证了「局部最优可以拼成全局最优」，换一个不满足单调性的第二关键字（比如「转弯次数尽量多」）这套写法就不成立了。</li>
+    <li>
+<strong>懒删除的 Dijkstra 必须在出队时校验状态是否过期。</strong> 校验条件要覆盖全部关键字，只比 <code class="language-plaintext highlighter-rouge">dist</code> 会放过被字典序覆盖掉的旧路径。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">steps == 0</code> 的自环剪枝是这类「滚动 / 传送」题的固定动作。</strong> 落点等于起点的转移既无意义又会破坏终止性。</li>
+    <li>
+<strong>面试视角</strong>：白板上先说清三件事——「相邻停点之间边权不为 1，所以是最短路不是 BFS」「第二关键字用字典序，靠前缀单调性保证正确」「洞在中途要立即停止」。写代码时把滚动模拟单独抽成一段，讲清楚为什么判洞在前进之后。如果面试官追问优化，可以提「路径字符串可以换成记录前驱指针，最后回溯，能把空间从 $O(mn \cdot L)$ 降到 $O(mn)$」。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>错误写法：用普通 BFS 按层数当距离 → 用例 <code class="language-plaintext highlighter-rouge">maze</code> 中从起点向 <code class="language-plaintext highlighter-rouge">l</code> 滚 1 格、向 <code class="language-plaintext highlighter-rouge">u</code> 滚 4 格，BFS 认为两者同层，会把 <code class="language-plaintext highlighter-rouge">dist = 4</code> 的 <code class="language-plaintext highlighter-rouge">(0,3)</code> 和 <code class="language-plaintext highlighter-rouge">dist = 1</code> 的 <code class="language-plaintext highlighter-rouge">(4,2)</code> 同等对待，最终可能输出 <code class="language-plaintext highlighter-rouge">"ul"</code> 而不是更优的 <code class="language-plaintext highlighter-rouge">"lul"</code>。</li>
+    <li>错误写法：比较器只写 <code class="language-plaintext highlighter-rouge">a.dist - b.dist</code>，不比路径 → 同为距离 6 的 <code class="language-plaintext highlighter-rouge">"ul"</code> 与 <code class="language-plaintext highlighter-rouge">"lul"</code> 出队顺序取决于堆的内部实现，先出的被锁定，答案退化成 <code class="language-plaintext highlighter-rouge">"ul"</code>。</li>
+    <li>错误写法：松弛条件只写 <code class="language-plaintext highlighter-rouge">ndist &lt; dist[x][y]</code> → <code class="language-plaintext highlighter-rouge">((0,2), 5, "lu")</code> 扩展出的 <code class="language-plaintext highlighter-rouge">("lul", 6)</code> 因为距离不小于已有的 6 而被丢弃，输出 <code class="language-plaintext highlighter-rouge">"ul"</code>，字典序不是最小。</li>
+    <li>错误写法：把踩洞判断写在前进之前 → 用例中 <code class="language-plaintext highlighter-rouge">(0,3)</code> 向 <code class="language-plaintext highlighter-rouge">l</code> 滚动时，第一次循环判断当前格 <code class="language-plaintext highlighter-rouge">(0,3)</code> 不是洞就继续，第二次到 <code class="language-plaintext highlighter-rouge">(0,2)</code> 仍不是洞，第三次到 <code class="language-plaintext highlighter-rouge">(0,1)</code> 是洞但已经先做了移动判断，逻辑一旦写成「先判当前格再走」，球会从洞上滚过去停到 <code class="language-plaintext highlighter-rouge">(0,0)</code>，<code class="language-plaintext highlighter-rouge">dist[0][1]</code> 永远是 INF，返回 <code class="language-plaintext highlighter-rouge">"impossible"</code>。</li>
+    <li>错误写法：忘记 <code class="language-plaintext highlighter-rouge">steps == 0</code> 就跳过 → 起点 <code class="language-plaintext highlighter-rouge">(4,3)</code> 向 <code class="language-plaintext highlighter-rouge">d</code> 出界、<code class="language-plaintext highlighter-rouge">(4,2)</code> 向 <code class="language-plaintext highlighter-rouge">l</code> 撞墙，都会把自己以更长路径重新压入堆，路径无限增长，程序超时或内存溢出。</li>
+    <li>错误写法：出队时不做过期校验 → 堆里残留的 <code class="language-plaintext highlighter-rouge">((0,1), 6, "ul")</code> 会被当作有效状态继续扩展，用一条已被淘汰的前缀去更新别的格子，可能把某个点的 <code class="language-plaintext highlighter-rouge">bestPath</code> 改成字典序更大的串。</li>
+    <li>错误写法：过期校验只写 <code class="language-plaintext highlighter-rouge">cur.dist != dist[cur.x][cur.y]</code> → 上一条中 <code class="language-plaintext highlighter-rouge">"ul"</code> 的 <code class="language-plaintext highlighter-rouge">dist</code> 恰好也是 6，校验通过，旧状态照样被展开，覆盖不掉的错误更隐蔽。</li>
+    <li>错误写法：方向数组按 <code class="language-plaintext highlighter-rouge">u, d, l, r</code> 排列并依赖遍历顺序来保证字典序 → 顺序本身不影响正确性（比较器兜底），但若同时又省掉了松弛里的字典序判断，<code class="language-plaintext highlighter-rouge">"u"</code> 开头的路径会先占坑，<code class="language-plaintext highlighter-rouge">"lul"</code> 再也写不进去。</li>
+    <li>错误写法：不可达时返回 <code class="language-plaintext highlighter-rouge">""</code> 或 <code class="language-plaintext highlighter-rouge">null</code> → 用例中若把 <code class="language-plaintext highlighter-rouge">hole</code> 换成被墙围死的位置，期望输出字符串 <code class="language-plaintext highlighter-rouge">"impossible"</code>，返回空串直接判错。</li>
+    <li>错误写法：<code class="language-plaintext highlighter-rouge">dist</code> 初始化为 <code class="language-plaintext highlighter-rouge">Integer.MAX_VALUE</code> 后又执行 <code class="language-plaintext highlighter-rouge">cur.dist + steps</code> → 只要有一处误用未初始化的 <code class="language-plaintext highlighter-rouge">dist</code> 参与加法就会整型溢出变成负数，负距离会被误判为「更优」，答案彻底错乱；用 <code class="language-plaintext highlighter-rouge">1e9</code> 这类留有余量的 INF 更安全。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/the-maze/">490. 迷宫</a></td>
+      <td>中等</td>
+      <td>只问可达性，不关心距离，普通 DFS/BFS 即可</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/the-maze-ii/">505. 迷宫 II</a></td>
+      <td>中等</td>
+      <td>要最短距离但不要路径，去掉字典序这一层即退化为单关键字 Dijkstra</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/network-delay-time/">743. 网络延迟时间</a></td>
+      <td>中等</td>
+      <td>显式给出带权边表，无需自己从网格推导边权</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/swim-in-rising-water/">778. 水位上升的泳池中游泳</a></td>
+      <td>困难</td>
+      <td>代价是路径上的最大值而非累加和，松弛式子从 <code class="language-plaintext highlighter-rouge">+</code> 换成 <code class="language-plaintext highlighter-rouge">max</code>
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/cheapest-flights-within-k-stops/">787. K 站中转内最便宜的航班</a></td>
+      <td>中等</td>
+      <td>多一维「已用中转次数」约束，Dijkstra 需扩维或改用 Bellman-Ford</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/">1334. 阈值距离内邻居最少的城市</a></td>
+      <td>中等</td>
+      <td>求全源最短路，点数小时 Floyd 比多次 Dijkstra 更好写</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/path-with-minimum-effort/">1631. 最小体力消耗路径</a></td>
+      <td>中等</td>
+      <td>网格上求「相邻高差最大值最小」，可用 Dijkstra 也可用二分 + 并查集</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/87495972" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 572. 另一棵树的子树</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/leetcode-542" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 542. 01 矩阵</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/57538385">https://hgnulb.github.io/blog/2026/57538385</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

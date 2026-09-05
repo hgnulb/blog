@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 730. 统计不同回文子序列 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,动态规划,字符串,美团" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 730. 统计不同回文子序列" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/93389645" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/93389645" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-04-06T16:30:37+08:00" />
+<meta property="article:modified_time" content="2022-04-06T16:30:37+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 730. 统计不同回文子序列" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-04-06T16:30:37+08:00","datePublished":"2022-04-06T16:30:37+08:00","description":"题目描述","headline":"LeetCode 730. 统计不同回文子序列","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/93389645"},"url":"https://hgnulb.github.io/blog/2022/93389645"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法区间-dp去重计数">解法：区间 DP（去重计数）</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 730. 统计不同回文子序列">LeetCode 730. 统计不同回文子序列</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-04-06 16:30:37"
+                    datetime="2022-04-06T16:30:37+08:00"
+            >
+                2022-04-06
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 4012 字 · 英文 658 词 · 代码 104 行"
+            aria-label="预计阅读时间约 16 分钟，正文 4012 字 · 英文 658 词 · 代码 104 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 16 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    3 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0416977247/" title="美团">
+        美团
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法区间-dp去重计数">解法：区间 DP（去重计数）</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/count-different-palindromic-subsequences/">730. 统计不同回文子序列</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给定一个字符串 <code class="language-plaintext highlighter-rouge">s</code>，统计它有多少个<strong>互不相同的非空回文子序列</strong>，结果对 $10^9+7$ 取模。子序列是删掉若干字符后剩下的序列，不要求连续；两个子序列只要字符内容相同就算同一个，无论它们在原串里由哪些下标构成。</p>
+
+  <p>「不同」这两个字是整道题的分水岭。如果只是统计回文子序列的<strong>出现次数</strong>，那就是一道模板题：按区间划分，两端相同时把内部答案乘二再加二即可。但一旦要求去重，同一个字符串通过不同下标组合被数了很多遍，朴素的区间转移会严重多算。以 <code class="language-plaintext highlighter-rouge">aaa</code> 为例，按下标算有 7 个回文子序列（三个单 <code class="language-plaintext highlighter-rouge">a</code>、三个 <code class="language-plaintext highlighter-rouge">aa</code>、一个 <code class="language-plaintext highlighter-rouge">aaa</code>），按内容去重后只有 3 个。所以本题的全部难度，都集中在「怎样在转移里精确地扣掉重复」。</p>
+
+  <table>
+    <tbody>
+      <tr>
+        <td>约束给了两个关键信号。第一，字符集只有 <code class="language-plaintext highlighter-rouge">a</code> <code class="language-plaintext highlighter-rouge">b</code> <code class="language-plaintext highlighter-rouge">c</code> <code class="language-plaintext highlighter-rouge">d</code> 四种，这个异常严格的限定几乎是在明说：你被允许对每种字符单独做预处理，$4n$ 的辅助表是免费的。第二，$1 \le</td>
+        <td>s</td>
+        <td>\le 1000$，$n^2$ 的状态数是 $10^6$，转移必须是 $O(1)$。这两条合起来把解法空间压得很窄——必须是区间型的二维状态，且每次转移只能查常数张预处理表。</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>还有一处约束容易被忽略：取模。中间转移里出现了减法（无论是容斥还是去重扣除），取模后的差值可能为负，必须显式修正回非负区间，否则最终结果会是一个负数或错误的余数。</p>
+
+  <p>边界方面：长度为 1 的区间答案恒为 1；空区间答案为 0，而这个 0 会被转移式频繁引用（比如两端相邻时的「内部」就是空区间），所以状态数组的默认零值恰好承担了这个语义，不需要额外初始化。</p>
+</blockquote>
+
+<h2 id="解法区间-dp去重计数">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%8C%BA%E9%97%B4-dp%E5%8E%BB%E9%87%8D%E8%AE%A1%E6%95%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：区间 DP（去重计数）</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先看暴力：枚举所有 $2^n$ 个子序列，逐个判回文并塞进哈希集合去重。$n$ 到 1000 时这条路彻底不可行，但它明确了目标——我们要的是一个<strong>集合的大小</strong>，而不是一个计数的累加。瓶颈由此暴露：任何按「选哪些下标」来计数的方法都天生带重复，必须换一种不会产生重复的组织方式。</p>
+
+  <p>换的方式是：<strong>按字符串内容本身来划分</strong>。设 $dp[i][j]$ 表示子串 <code class="language-plaintext highlighter-rouge">s[i..j]</code>（闭区间）中互不相同的非空回文子序列的个数。这个状态定义的关键在于它统计的是「不同的字符串」而非「不同的下标组合」，所以转移时必须保证不同来源产生的字符串集合要么不相交，要么被显式做了容斥。</p>
+
+  <p><strong>两端字符不同时</strong>（<code class="language-plaintext highlighter-rouge">s[i] != s[j]</code>）。<code class="language-plaintext highlighter-rouge">s[i..j]</code> 里的任何回文子序列，要么不用到下标 <code class="language-plaintext highlighter-rouge">i</code>，要么不用到下标 <code class="language-plaintext highlighter-rouge">j</code>——不可能同时用到，因为回文的首尾字符必须相等，而这两个位置的字符不同。于是集合 $P(i,j)$ 等于 $P(i+1,j) \cup P(i,j-1)$，两者的交集恰好是 $P(i+1,j-1)$。按容斥原理：</p>
+
+  <p>$dp[i][j] = dp[i+1][j] + dp[i][j-1] - dp[i+1][j-1]$</p>
+
+  <p><strong>两端字符相同时</strong>（<code class="language-plaintext highlighter-rouge">s[i] == s[j] == c</code>）。把 $P(i,j)$ 按「是否以 <code class="language-plaintext highlighter-rouge">c</code> 开头且以 <code class="language-plaintext highlighter-rouge">c</code> 结尾」切成两半。不以 <code class="language-plaintext highlighter-rouge">c</code> 为首尾的那些，一定完全落在 <code class="language-plaintext highlighter-rouge">s[i+1..j-1]</code> 内部，个数是 $dp[i+1][j-1]$ 减去内部那些以 <code class="language-plaintext highlighter-rouge">c</code> 为首尾的。以 <code class="language-plaintext highlighter-rouge">c</code> 为首尾的那些，可以写成 <code class="language-plaintext highlighter-rouge">c + X + c</code> 的形式（<code class="language-plaintext highlighter-rouge">X</code> 是 <code class="language-plaintext highlighter-rouge">s[i+1..j-1]</code> 中的任一回文子序列或空串），再加上单字符 <code class="language-plaintext highlighter-rouge">c</code> 本身，共 $dp[i+1][j-1] + 2$ 个。</p>
+
+  <p>直接把两部分相加会重复计算「内部本来就以 <code class="language-plaintext highlighter-rouge">c</code> 为首尾」的那些串，因为它们既属于内部集合，又能被外层包裹的形式生成。所以先写出朴素的 $2 \cdot dp[i+1][j-1] + 2$，再减掉重复量，而重复量取决于 <code class="language-plaintext highlighter-rouge">c</code> 在开区间 $(i, j)$ 内出现了几次：</p>
+
+  <ul>
+    <li>
+<strong>一次都没出现</strong>：内部不可能有以 <code class="language-plaintext highlighter-rouge">c</code> 开头的串，无重复，$dp[i][j] = 2 \cdot dp[i+1][j-1] + 2$。新增的 2 个就是 <code class="language-plaintext highlighter-rouge">c</code> 和 <code class="language-plaintext highlighter-rouge">cc</code>。</li>
+    <li>
+<strong>恰好出现一次</strong>（记位置为 $l = r$）：内部以 <code class="language-plaintext highlighter-rouge">c</code> 为首尾的串只有单字符 <code class="language-plaintext highlighter-rouge">c</code> 一个（凑不出两个 <code class="language-plaintext highlighter-rouge">c</code>），重复量为 1，$dp[i][j] = 2 \cdot dp[i+1][j-1] + 1$。</li>
+    <li>
+<strong>出现两次及以上</strong>（首次在 $l$、末次在 $r$，$l &lt; r$）：内部以 <code class="language-plaintext highlighter-rouge">c</code> 为首尾的串包括 <code class="language-plaintext highlighter-rouge">c</code>、<code class="language-plaintext highlighter-rouge">cc</code>，以及所有形如 <code class="language-plaintext highlighter-rouge">c + Y + c</code> 的串，其中 <code class="language-plaintext highlighter-rouge">Y</code> 是 <code class="language-plaintext highlighter-rouge">s[l+1..r-1]</code> 中的回文子序列。这类串的总数是 $dp[l+1][r-1] + 2$。于是 $dp[i][j] = 2 \cdot dp[i+1][j-1] + 2 - (dp[l+1][r-1] + 2) = 2 \cdot dp[i+1][j-1] - dp[l+1][r-1]$。</li>
+  </ul>
+
+  <p>第三种情况里为什么取的是<strong>最靠内的一对</strong> <code class="language-plaintext highlighter-rouge">c</code>（首次出现 $l$ 与末次出现 $r$）：因为「内部以 <code class="language-plaintext highlighter-rouge">c</code> 为首尾的回文子序列」这个集合，其内容只由最外一对可用的 <code class="language-plaintext highlighter-rouge">c</code> 之间的自由部分决定。用 $l$ 和 $r$ 界定，才能不重不漏地刻画 <code class="language-plaintext highlighter-rouge">s[l+1..r-1]</code> 这段自由区。若取了中间某一对 <code class="language-plaintext highlighter-rouge">c</code>，就会漏掉那些跨度更大的串。</p>
+
+  <p>要在 $O(1)$ 时间拿到 $l$ 和 $r$，就得靠字符集只有 4 这个条件：预处理两张表，<code class="language-plaintext highlighter-rouge">nextPos[i][c]</code> 记录下标不小于 <code class="language-plaintext highlighter-rouge">i</code> 的第一个字符 <code class="language-plaintext highlighter-rouge">c</code> 的位置，<code class="language-plaintext highlighter-rouge">prevPos[i][c]</code> 记录下标不超过 <code class="language-plaintext highlighter-rouge">i</code> 的最后一个字符 <code class="language-plaintext highlighter-rouge">c</code> 的位置，各 $4n$ 个格子。查询时 $l = $ <code class="language-plaintext highlighter-rouge">nextPos[i+1][c]</code>、$r = $ <code class="language-plaintext highlighter-rouge">prevPos[j-1][c]</code>，并用 $l = -1$ 或 $l &gt; r$ 统一表示「区间内没有 <code class="language-plaintext highlighter-rouge">c</code>」——这个判断同时覆盖了「整串右侧没有 <code class="language-plaintext highlighter-rouge">c</code>」和「有 <code class="language-plaintext highlighter-rouge">c</code> 但都在 <code class="language-plaintext highlighter-rouge">j-1</code> 之外」两种情形，不需要分开写。</p>
+
+  <p>最后是遍历顺序。所有转移都引用比当前区间更短的区间（$[i+1, j]$、$[i, j-1]$、$[i+1, j-1]$、$[l+1, r-1]$ 全部严格更短），所以<strong>按区间长度从小到大</strong>填表即可保证依赖已就绪。第四个引用 $[l+1, r-1]$ 尤其值得注意：它满足 $i &lt; l+1$ 且 $r-1 &lt; j$，长度确实更小，但它不是前三个的邻接区间，靠「按长度递增」这个顺序才能一并覆盖。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>第一步，预处理 <code class="language-plaintext highlighter-rouge">prevPos</code>。</strong> 正序扫描，维护一个长度为 4 的 <code class="language-plaintext highlighter-rouge">last</code> 数组记录每种字符最近一次出现的位置，每到一个下标就先更新 <code class="language-plaintext highlighter-rouge">last</code>，再把 <code class="language-plaintext highlighter-rouge">last</code> 整体拷进 <code class="language-plaintext highlighter-rouge">prevPos[i]</code>。为什么先更新再拷贝：<code class="language-plaintext highlighter-rouge">prevPos[i][c]</code> 的定义是「下标<strong>不超过</strong> <code class="language-plaintext highlighter-rouge">i</code>」，包含 <code class="language-plaintext highlighter-rouge">i</code> 自身，所以当前字符必须先记进去。</li>
+    <li>
+<strong>第二步，预处理 <code class="language-plaintext highlighter-rouge">nextPos</code>。</strong> 逆序扫描，同样的模式。为什么要单独扫一遍而不是从 <code class="language-plaintext highlighter-rouge">prevPos</code> 推导：两张表的方向不同，逆序扫描是唯一能在 $O(n)$ 内得到「不小于 <code class="language-plaintext highlighter-rouge">i</code> 的首次出现」的方式。</li>
+    <li>
+<strong>第三步，初始化 $dp[i][i] = 1$。</strong> 为什么是 1：单个字符自身就是一个回文子序列，且只有这一个。其余格子保持 0，其中 $i &gt; j$ 的非法格子的 0 恰好表示「空区间没有回文子序列」，转移式会直接引用这个语义。</li>
+    <li>
+<strong>第四步，按区间长度 <code class="language-plaintext highlighter-rouge">len</code> 从 2 递增到 <code class="language-plaintext highlighter-rouge">n</code>，内层枚举左端点 <code class="language-plaintext highlighter-rouge">i</code>，右端点 <code class="language-plaintext highlighter-rouge">j = i + len - 1</code>。</strong> 为什么必须按长度而不是按下标：转移引用的四个区间全部更短，但它们的左端点可能比 <code class="language-plaintext highlighter-rouge">i</code> 大、右端点可能比 <code class="language-plaintext highlighter-rouge">j</code> 小，只有「长度递增」这一个顺序能保证它们无一例外都已算好。</li>
+    <li>
+<strong>第五步，两端不同走容斥式。</strong> 为什么要减 $dp[i+1][j-1]$：$P(i+1,j)$ 与 $P(i,j-1)$ 都包含了完全落在 <code class="language-plaintext highlighter-rouge">s[i+1..j-1]</code> 中的那些串，不减就会把它们数两遍。</li>
+    <li>
+<strong>第六步，两端相同时先查 $l$、$r$，再按三种情况取式子。</strong> 为什么要区分三种而不是统一用第三式：$l$ 不存在或 $l &gt; r$ 时 $dp[l+1][r-1]$ 根本没有意义；$l = r$ 时 $dp[l+1][r-1]$ 是空区间的 0，代入第三式会得到 $2 \cdot dp + 0$，比正确答案 $2 \cdot dp + 1$ 少 1。三个分支互不可替代。</li>
+    <li>
+<strong>第七步，每个格子算完立刻取模，并在结果为负时加回模数。</strong> 为什么必须修正：容斥式和去重式都含减法，两个已取模的数相减可能落到 $(-mod, 0)$ 区间；不修正的话这个负数会一路传播，最终返回负值。</li>
+    <li><strong>第八步，返回 $dp[0][n-1]$。</strong></li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">s = "bccb"</code> 走一遍，下标 0 到 3 分别是 <code class="language-plaintext highlighter-rouge">b</code> <code class="language-plaintext highlighter-rouge">c</code> <code class="language-plaintext highlighter-rouge">c</code> <code class="language-plaintext highlighter-rouge">b</code>。</p>
+
+  <p>预处理后，<code class="language-plaintext highlighter-rouge">prevPos[1][c] = 1</code>（下标 ≤ 1 的最后一个 <code class="language-plaintext highlighter-rouge">c</code> 在 1），<code class="language-plaintext highlighter-rouge">prevPos[2][b] = 0</code>（下标 ≤ 2 的最后一个 <code class="language-plaintext highlighter-rouge">b</code> 在 0），<code class="language-plaintext highlighter-rouge">nextPos[1][b] = 3</code>，<code class="language-plaintext highlighter-rouge">nextPos[2][c] = 2</code>。初始化 $dp[0][0] = dp[1][1] = dp[2][2] = dp[3][3] = 1$。</p>
+
+  <p>长度 2。区间 $[0,1]$ 是 <code class="language-plaintext highlighter-rouge">bc</code>，两端不同：$dp = dp[1][1] + dp[0][0] - dp[1][0] = 1 + 1 - 0 = 2$，对应 <code class="language-plaintext highlighter-rouge">b</code> 和 <code class="language-plaintext highlighter-rouge">c</code>。这里 $dp[1][0]$ 是非法区间，取 0，正是「两个单字符集合不相交」的体现。区间 $[1,2]$ 是 <code class="language-plaintext highlighter-rouge">cc</code>，两端相同，$c = $ <code class="language-plaintext highlighter-rouge">c</code>：$l = $ <code class="language-plaintext highlighter-rouge">nextPos[2][c]</code> $= 2$，$r = $ <code class="language-plaintext highlighter-rouge">prevPos[1][c]</code> $= 1$，$l &gt; r$ 说明开区间 $(1,2)$ 内没有 <code class="language-plaintext highlighter-rouge">c</code>，走第一式：$dp = 2 \cdot dp[2][1] + 2 = 0 + 2 = 2$，对应 <code class="language-plaintext highlighter-rouge">c</code> 和 <code class="language-plaintext highlighter-rouge">cc</code>。区间 $[2,3]$ 是 <code class="language-plaintext highlighter-rouge">cb</code>，两端不同：$dp = 1 + 1 - 0 = 2$。</p>
+
+  <p>长度 3。区间 $[0,2]$ 是 <code class="language-plaintext highlighter-rouge">bcc</code>，两端 <code class="language-plaintext highlighter-rouge">b</code> 与 <code class="language-plaintext highlighter-rouge">c</code> 不同：$dp = dp[1][2] + dp[0][1] - dp[1][1] = 2 + 2 - 1 = 3$，对应 <code class="language-plaintext highlighter-rouge">b</code>、<code class="language-plaintext highlighter-rouge">c</code>、<code class="language-plaintext highlighter-rouge">cc</code>。减掉的 1 正是被两个子区间重复计入的 <code class="language-plaintext highlighter-rouge">c</code>。区间 $[1,3]$ 是 <code class="language-plaintext highlighter-rouge">ccb</code>，同理得 $2 + 2 - 1 = 3$，对应 <code class="language-plaintext highlighter-rouge">c</code>、<code class="language-plaintext highlighter-rouge">cc</code>、<code class="language-plaintext highlighter-rouge">b</code>。</p>
+
+  <p>长度 4。区间 $[0,3]$ 是 <code class="language-plaintext highlighter-rouge">bccb</code>，两端都是 <code class="language-plaintext highlighter-rouge">b</code>：$l = $ <code class="language-plaintext highlighter-rouge">nextPos[1][b]</code> $= 3$，$r = $ <code class="language-plaintext highlighter-rouge">prevPos[2][b]</code> $= 0$，$l = 3 &gt; r = 0$，说明开区间 $(0,3)$ 内没有 <code class="language-plaintext highlighter-rouge">b</code>，走第一式：$dp = 2 \cdot dp[1][2] + 2 = 2 \cdot 2 + 2 = 6$。</p>
+
+  <p>返回 6。逐一列出验证：<code class="language-plaintext highlighter-rouge">b</code>、<code class="language-plaintext highlighter-rouge">c</code>、<code class="language-plaintext highlighter-rouge">bb</code>、<code class="language-plaintext highlighter-rouge">cc</code>、<code class="language-plaintext highlighter-rouge">bcb</code>、<code class="language-plaintext highlighter-rouge">bccb</code>，恰好 6 个。其中 $2 \cdot dp[1][2]$ 的两份分别是「内部 <code class="language-plaintext highlighter-rouge">cc</code> 的两个回文 <code class="language-plaintext highlighter-rouge">c</code> 和 <code class="language-plaintext highlighter-rouge">cc</code>」以及「把它们用 <code class="language-plaintext highlighter-rouge">b</code> 包起来得到的 <code class="language-plaintext highlighter-rouge">bcb</code> 和 <code class="language-plaintext highlighter-rouge">bccb</code>」，额外的 2 是 <code class="language-plaintext highlighter-rouge">b</code> 和 <code class="language-plaintext highlighter-rouge">bb</code>。</p>
+
+  <p>另外两个分支各举一例便于对照。<code class="language-plaintext highlighter-rouge">s = "aaa"</code> 求 $dp[0][2]$：两端都是 <code class="language-plaintext highlighter-rouge">a</code>，$l = $ <code class="language-plaintext highlighter-rouge">nextPos[1][a]</code> $= 1$，$r = $ <code class="language-plaintext highlighter-rouge">prevPos[1][a]</code> $= 1$，$l = r$ 走第二式，$dp = 2 \cdot dp[1][1] + 1 = 3$，对应 <code class="language-plaintext highlighter-rouge">a</code>、<code class="language-plaintext highlighter-rouge">aa</code>、<code class="language-plaintext highlighter-rouge">aaa</code>。若误用第一式会得到 4，多出来的一个正是被数了两次的 <code class="language-plaintext highlighter-rouge">a</code>。<code class="language-plaintext highlighter-rouge">s = "aaaa"</code> 求 $dp[0][3]$：$l = 1$、$r = 2$，$l &lt; r$ 走第三式，$dp = 2 \cdot dp[1][2] - dp[2][1] = 2 \cdot 2 - 0 = 4$，对应 <code class="language-plaintext highlighter-rouge">a</code>、<code class="language-plaintext highlighter-rouge">aa</code>、<code class="language-plaintext highlighter-rouge">aaa</code>、<code class="language-plaintext highlighter-rouge">aaaa</code>。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">countPalindromicSubsequences</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">mod</span> <span class="o">=</span> <span class="mi">1_000_000_007</span><span class="o">;</span>
+        <span class="kt">char</span><span class="o">[]</span> <span class="n">a</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">();</span>
+
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">nextPos</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="mi">4</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">prevPos</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="mi">4</span><span class="o">];</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">last</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">4</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">last</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="n">last</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">;</span> <span class="n">t</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">prevPos</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">t</span><span class="o">]</span> <span class="o">=</span> <span class="n">last</span><span class="o">[</span><span class="n">t</span><span class="o">];</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">last</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+            <span class="n">last</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">;</span> <span class="n">t</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">nextPos</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">t</span><span class="o">]</span> <span class="o">=</span> <span class="n">last</span><span class="o">[</span><span class="n">t</span><span class="o">];</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kt">long</span><span class="o">[][]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span> <span class="n">len</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">len</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">+</span> <span class="n">len</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">!=</span> <span class="n">a</span><span class="o">[</span><span class="n">j</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">+</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">-</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">ch</span> <span class="o">=</span> <span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">;</span>
+                    <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="n">nextPos</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">ch</span><span class="o">];</span>
+                    <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">prevPos</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">ch</span><span class="o">];</span>
+
+                    <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">l</span> <span class="o">==</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">dp</span><span class="o">[</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">%=</span> <span class="n">mod</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">+=</span> <span class="n">mod</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">countPalindromicSubsequences</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="n">mod</span> <span class="kt">int64</span> <span class="o">=</span> <span class="m">1_000_000_007</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="n">nextPos</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][</span><span class="m">4</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">prevPos</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][</span><span class="m">4</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+    <span class="n">last</span> <span class="o">:=</span> <span class="p">[</span><span class="m">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">last</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="m">4</span><span class="p">;</span> <span class="n">t</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">prevPos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">last</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">last</span> <span class="o">=</span> <span class="p">[</span><span class="m">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">n</span> <span class="o">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span> <span class="p">{</span>
+        <span class="n">last</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="m">4</span><span class="p">;</span> <span class="n">t</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">nextPos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">last</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">dp</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">dp</span> <span class="p">{</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">length</span> <span class="o">:=</span> <span class="m">2</span><span class="p">;</span> <span class="n">length</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">length</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="o">+</span><span class="n">length</span><span class="o">-</span><span class="m">1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">j</span> <span class="o">:=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">length</span> <span class="o">-</span> <span class="m">1</span>
+            <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">{</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">ch</span> <span class="o">:=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'a'</span>
+                <span class="n">l</span> <span class="o">:=</span> <span class="n">nextPos</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">ch</span><span class="p">]</span>
+                <span class="n">r</span> <span class="o">:=</span> <span class="n">prevPos</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="n">ch</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="o">-</span><span class="m">1</span> <span class="o">||</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span> <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">*</span><span class="m">2</span> <span class="o">+</span> <span class="m">2</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="n">r</span> <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">*</span><span class="m">2</span> <span class="o">+</span> <span class="m">1</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">*</span><span class="m">2</span> <span class="o">-</span> <span class="n">dp</span><span class="p">[</span><span class="n">l</span><span class="o">+</span><span class="m">1</span><span class="p">][</span><span class="n">r</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">%=</span> <span class="n">mod</span>
+            <span class="k">if</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="p">{</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">mod</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="kt">int</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="m">0</span><span class="p">][</span><span class="n">n</span><span class="o">-</span><span class="m">1</span><span class="p">])</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n^2)$。两次预处理各扫一遍字符串、每个位置拷贝 4 个值，是 $O(4n)$；主循环枚举 $O(n^2)$ 个区间，每个区间的转移只做常数次查表与算术，没有任何内层循环。$n \le 1000$ 时约 $10^6$ 次转移，轻松通过。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n^2)$。$dp$ 表是 $n \times n$ 的 64 位整数数组，占用主导地位；两张位置表各 $4n$，是低阶项。这里不能改成滚动数组，因为转移会引用 $[l+1, r-1]$ 这个与当前行相距任意远的区间，压缩维度就取不到它了。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>「计数」与「计数不同的」是两类问题</strong>。前者可以随意累加，后者必须保证每个对象只在唯一一个分支里被产生。识别出题目要的是集合大小之后，状态定义就必须以「内容」而非「下标组合」为单位，这一步想不清楚，后面所有公式都无从谈起。</li>
+    <li>
+<strong>两端相同时的三分支，本质是「内部有多少个同字符可用」</strong>。零个、一个、两个及以上分别对应「无重复」「重复一个单字符」「重复一整族串」。这种「按某个关键量的取值分档」的去重思路，在带去重的子序列计数题里反复出现，值得当成模板记住。</li>
+    <li>
+<strong>容斥是区间 DP 处理「并集」的默认工具</strong>。两端不同时 $dp[i+1][j] + dp[i][j-1] - dp[i+1][j-1]$ 的形式，和二维前缀和、区间覆盖问题的加减法完全同构。看到「要么不含左端、要么不含右端」的分解，就该条件反射地写出这个式子。</li>
+    <li>
+<strong>字符集大小是隐藏的复杂度参数</strong>。本题若字符集是 26，$4n$ 的表变成 $26n$，依然可行；但若是任意 Unicode，就必须换成按需查找的结构。约束里写死 <code class="language-plaintext highlighter-rouge">a</code> 到 <code class="language-plaintext highlighter-rouge">d</code> 是出题人给的许可证，看到这种异常具体的限定要立刻意识到「这里允许我按字符枚举」。</li>
+    <li>
+<strong>含减法的取模一律要做非负修正</strong>。这不是本题特有的，而是所有带容斥、带差分的取模计数题的固定收尾动作。写完减法转移后立刻补上修正，比事后调试负数结果高效得多。</li>
+    <li>
+<strong>面试视角</strong>：这题在面试里极少要求当场写完整代码，更常见的是让你讲清楚「去重是怎么做到的」。回答的黄金路径是：先说朴素区间 DP 会重复计数并举 <code class="language-plaintext highlighter-rouge">aaa</code> 为例，再说按「是否以两端字符为首尾」切分集合，最后按内部同字符出现次数分三档给出扣除量。能主动指出「$[l+1][r-1]$ 的引用导致无法滚动数组压缩空间」和「取模减法要修正符号」，是把这题讲透的两个加分点。如果面试官改问「字符集变成 26 怎么办」，要能立刻答出预处理表从 $4n$ 变 $26n$、算法结构完全不变。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：两端相同时统一用 $2 \cdot dp[i+1][j-1] + 2$，不分三档</strong>。以 <code class="language-plaintext highlighter-rouge">s = "aaa"</code> 为例，会算出 $2 \cdot 1 + 2 = 4$，而正确答案是 3——多出来的那个 <code class="language-plaintext highlighter-rouge">a</code> 被数了两遍（一次来自内部集合，一次来自「单字符 <code class="language-plaintext highlighter-rouge">c</code>」）。这是本题最核心的错误。</li>
+    <li>
+<strong>错误写法：$l = r$ 的情况并入第三式，即用 $2 \cdot dp[i+1][j-1] - dp[l+1][r-1]$</strong>。以 <code class="language-plaintext highlighter-rouge">s = "aaa"</code> 为例，$l = r = 1$，$dp[2][0]$ 是非法区间取 0，结果为 $2 \cdot 1 - 0 = 2$，比正确答案 3 少 1，漏掉了 <code class="language-plaintext highlighter-rouge">aa</code>。三个分支的常数项各不相同，不能合并。</li>
+    <li>
+<strong>错误写法：第三档取的不是最内侧一对同字符，比如用 $l$ 和 $l+1$ 处的两个 <code class="language-plaintext highlighter-rouge">c</code></strong>。以 <code class="language-plaintext highlighter-rouge">s = "acaca"</code> 为例，求 $dp[0][4]$ 时正确的 $l = 2$、$r = 2$（开区间 $(0,4)$ 内 <code class="language-plaintext highlighter-rouge">a</code> 只出现在下标 2），走第二式得 $2 \cdot dp[1][3] + 1$；若错取了别的位置对，扣除量会覆盖错误的自由区，答案偏离。$l$ 必须是首次出现、$r$ 必须是末次出现。</li>
+    <li>
+<strong>错误写法：两端不同时忘记减 $dp[i+1][j-1]$</strong>。以 <code class="language-plaintext highlighter-rouge">s = "bcc"</code> 为例，$dp[0][2] = dp[1][2] + dp[0][1] = 2 + 2 = 4$，而正确答案是 3——<code class="language-plaintext highlighter-rouge">c</code> 同时出现在两个子区间的答案里被数了两遍。</li>
+    <li>
+<strong>错误写法：遍历顺序按左端点从 0 递增、右端点从 <code class="language-plaintext highlighter-rouge">i</code> 递增</strong>。以任意长度不小于 3 的串为例，计算 $dp[0][2]$ 时需要 $dp[1][2]$，但在这种顺序下 $dp[1][2]$ 尚未计算，读到的是 0，整张表从此全错。必须按区间长度递增。</li>
+    <li>
+<strong>错误写法：取模后不做负数修正</strong>。构造一个含大量 <code class="language-plaintext highlighter-rouge">a</code> 的长串（例如 900 个 <code class="language-plaintext highlighter-rouge">a</code> 加若干 <code class="language-plaintext highlighter-rouge">b</code>）时，$2 \cdot dp[i+1][j-1] - dp[l+1][r-1]$ 在两项都已取模的情况下可能得到负值，该负值随转移逐层放大，最终返回一个负数，判题直接判错。</li>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">dp</code> 用 <code class="language-plaintext highlighter-rouge">int</code> 而非 64 位整数</strong>。以任意会让 $dp[i+1][j-1]$ 接近 $10^9$ 的输入为例，$dp[i+1][j-1] \times 2$ 达到约 $2 \times 10^9$，超过 32 位有符号上限而溢出成负数，即便之后取模也无法还原，结果错误。</li>
+    <li>
+<strong>错误写法：预处理 <code class="language-plaintext highlighter-rouge">prevPos</code> 时先拷贝 <code class="language-plaintext highlighter-rouge">last</code> 再更新</strong>。以 <code class="language-plaintext highlighter-rouge">s = "cc"</code> 求 $dp[0][1]$ 为例，<code class="language-plaintext highlighter-rouge">prevPos[1][c]</code> 会变成 0 而不是 1，$r$ 取错，$l = 2 &gt; r = 0$ 的判断虽然仍走第一式而侥幸不错；但换成 <code class="language-plaintext highlighter-rouge">s = "cac"</code>，<code class="language-plaintext highlighter-rouge">prevPos[1][c]</code> 应为 0，若顺序反了会变成 -1，<code class="language-plaintext highlighter-rouge">l &gt; r</code> 的判断结果改变，走进错误分支。定义里含不含当前下标，决定了更新与拷贝的先后。</li>
+    <li>
+<strong>错误写法：<code class="language-plaintext highlighter-rouge">nextPos</code> 与 <code class="language-plaintext highlighter-rouge">prevPos</code> 的查询下标写成 <code class="language-plaintext highlighter-rouge">nextPos[i][ch]</code> 和 <code class="language-plaintext highlighter-rouge">prevPos[j][ch]</code></strong>。以 <code class="language-plaintext highlighter-rouge">s = "cc"</code> 为例，$l = $ <code class="language-plaintext highlighter-rouge">nextPos[0][c]</code> $= 0$、$r = $ <code class="language-plaintext highlighter-rouge">prevPos[1][c]</code> $= 1$，$l &lt; r$ 走第三式得 $2 \cdot 0 - dp[1][0] = 0$，而正确答案是 2。查询范围必须是<strong>开区间</strong> $(i, j)$，所以起点是 <code class="language-plaintext highlighter-rouge">i+1</code>、终点是 <code class="language-plaintext highlighter-rouge">j-1</code>。</li>
+    <li>
+<strong>错误写法：判断内部无同字符时只写 <code class="language-plaintext highlighter-rouge">l == -1</code>，漏掉 <code class="language-plaintext highlighter-rouge">l &gt; r</code></strong>。以 <code class="language-plaintext highlighter-rouge">s = "cabc"</code> 求 $dp[0][3]$ 为例（两端都是 <code class="language-plaintext highlighter-rouge">c</code>），$l = $ <code class="language-plaintext highlighter-rouge">nextPos[1][c]</code> $= 3$，但 3 已经超出了开区间的右界；$r = $ <code class="language-plaintext highlighter-rouge">prevPos[2][c]</code> $= 0$，同样在左界之外。若只判 <code class="language-plaintext highlighter-rouge">l == -1</code>，这里 $l = 3 \ne -1$ 会走到 $l &gt; r$ 之外的分支，把 $dp[4][-1]$ 读成越界或错值。两个条件必须一起判。</li>
+    <li>
+<strong>错误写法：为省空间把 <code class="language-plaintext highlighter-rouge">dp</code> 压成滚动数组</strong>。以 <code class="language-plaintext highlighter-rouge">s = "abcba"</code> 为例，计算 $dp[0][4]$ 时第三档会引用 $dp[l+1][r-1]$，其左端点与当前 <code class="language-plaintext highlighter-rouge">i</code> 相距不定，滚动后这一行早已被覆盖，读到的是别的区间的值，答案随输入而随机出错。本题的空间无法压缩。</li>
+    <li>
+<strong>错误写法：把 $dp[i][i] = 1$ 写成 $dp[i][i] = 0$，或忘记初始化</strong>。以 <code class="language-plaintext highlighter-rouge">s = "ab"</code> 为例，$dp[0][1] = dp[1][1] + dp[0][0] - dp[1][0] = 0 + 0 - 0 = 0$，返回 0 而正确答案是 2。单字符的基准值是整张表的地基。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-palindromic-subsequence/">516. 最长回文子序列</a></td>
+      <td>中等</td>
+      <td>同样的区间 DP 骨架，但求最值不求个数，无需去重，转移只有两分支</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/palindromic-substrings/">647. 回文子串</a></td>
+      <td>中等</td>
+      <td>统计的是连续子串且按位置计数（允许内容重复），中心扩展即可，无需 DP 表</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-palindromic-substring/">5. 最长回文子串</a></td>
+      <td>中等</td>
+      <td>连续子串求最长，重点在中心扩展或 Manacher，与子序列的区间转移是两套思路</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/distinct-subsequences-ii/">940. 不同的子序列 II</a></td>
+      <td>困难</td>
+      <td>同样是「不同子序列」计数但不要求回文，用线性 DP 按末位字符去重</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/distinct-subsequences/">115. 不同的子序列</a></td>
+      <td>困难</td>
+      <td>数的是匹配目标串的下标组合数，恰恰<strong>不</strong>去重，是本题的镜像对照</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/burst-balloons/">312. 戳气球</a></td>
+      <td>困难</td>
+      <td>区间 DP 的另一经典形态，按「最后戳破谁」划分而非按两端字符关系</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/palindrome-partitioning-ii/">132. 分割回文串 II</a></td>
+      <td>困难</td>
+      <td>先预处理回文判定表再做线性 DP 求最少切割，回文只是约束而非计数对象</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-common-subsequence/">1143. 最长公共子序列</a></td>
+      <td>中等</td>
+      <td>双串二维 DP，把本题的「区间两端」换成「两串末尾」，是子序列 DP 的入门形态</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-chunked-palindrome-decomposition/">1147. 段式回文</a></td>
+      <td>困难</td>
+      <td>求最多能切成几段使整体对称，靠双端贪心匹配而非区间 DP</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/85991345" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 759. 员工空闲时间</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/85697259" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1584. 连接所有点的最小费用</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/93389645">https://hgnulb.github.io/blog/2022/93389645</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

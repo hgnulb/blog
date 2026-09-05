@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1475. 商品折扣后的最终价格 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,单调栈,字节跳动,数组,栈" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1475. 商品折扣后的最终价格" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/93609742" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/93609742" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-05-06T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-05-06T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1475. 商品折扣后的最终价格" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-05-06T00:00:00+08:00","datePublished":"2021-05-06T00:00:00+08:00","description":"题目描述","headline":"LeetCode 1475. 商品折扣后的最终价格","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/93609742"},"url":"https://hgnulb.github.io/blog/2021/93609742"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法单调栈寻找右侧首个不大于元素">解法：单调栈寻找右侧首个不大于元素</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1475. 商品折扣后的最终价格">LeetCode 1475. 商品折扣后的最终价格</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-05-06 00:00:00"
+                    datetime="2021-05-06T00:00:00+08:00"
+            >
+                2021-05-06
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2449 字 · 英文 86 词 · 代码 38 行"
+            aria-label="预计阅读时间约 8 分钟，正文 2449 字 · 英文 86 词 · 代码 38 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 8 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4923693516/" title="简单">
+        简单
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2085989135/" title="单调栈">
+        单调栈
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法单调栈寻找右侧首个不大于元素">解法：单调栈寻找右侧首个不大于元素</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/final-prices-with-a-special-discount-in-a-shop/">1475. 商品折扣后的最终价格</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给一个价格数组 <code class="language-plaintext highlighter-rouge">prices</code>。买第 <code class="language-plaintext highlighter-rouge">i</code> 件商品时，可以获得一份折扣：折扣额等于 <code class="language-plaintext highlighter-rouge">prices[j]</code>，其中 <code class="language-plaintext highlighter-rouge">j</code> 是<strong>满足 <code class="language-plaintext highlighter-rouge">j &gt; i</code> 且 <code class="language-plaintext highlighter-rouge">prices[j] &lt;= prices[i]</code> 的最小下标</strong>。如果不存在这样的 <code class="language-plaintext highlighter-rouge">j</code>，就没有折扣。要求返回每件商品折扣后的实际支付价格数组。</p>
+</blockquote>
+
+<blockquote>
+  <p>两个限定词必须同时抠死。<strong>「最小下标」</strong>意味着只取右边<strong>第一个</strong>符合条件的，不是最小的那个价格，也不是任意一个；<strong>「<code class="language-plaintext highlighter-rouge">&lt;=</code>」</strong>意味着相等也算，这一点和大多数「下一个更大/更小元素」题里的严格不等号不同，写错会让相同价格的商品拿不到折扣。</p>
+</blockquote>
+
+<blockquote>
+  <p>折扣是<strong>一次性的减法</strong>，不是打折率，也不会叠加：结果就是 <code class="language-plaintext highlighter-rouge">prices[i] - prices[j]</code>。由于条件里 <code class="language-plaintext highlighter-rouge">prices[j] &lt;= prices[i]</code>，结果一定非负，不用担心出现负价格。</p>
+</blockquote>
+
+<blockquote>
+  <p>约束里 <code class="language-plaintext highlighter-rouge">prices.length &lt;= 500</code>，$O(n^2)$ 的双重循环稳过。所以这道题被归为「简单」。但它出现在面试里的意义完全不在于能不能过，而在于<strong>能不能认出这是「下一个更小或相等元素」的模板题并写出 $O(n)$ 的单调栈</strong>——面试官问这题，等的就是这个词。</p>
+</blockquote>
+
+<blockquote>
+  <p>边界：最后一件商品右边没有任何元素，必然没有折扣；数组严格递增时每件商品右边都没有更小或相等的，全部无折扣；数组元素全部相同时，除最后一件外每件都能拿到等于自身的折扣，结果全是 0。</p>
+</blockquote>
+
+<h2 id="解法单调栈寻找右侧首个不大于元素">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%8D%95%E8%B0%83%E6%A0%88%E5%AF%BB%E6%89%BE%E5%8F%B3%E4%BE%A7%E9%A6%96%E4%B8%AA%E4%B8%8D%E5%A4%A7%E4%BA%8E%E5%85%83%E7%B4%A0" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：单调栈寻找右侧首个不大于元素</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力解是对每个 <code class="language-plaintext highlighter-rouge">i</code> 向右扫描，遇到的第一个 <code class="language-plaintext highlighter-rouge">prices[j] &lt;= prices[i]</code> 就是折扣来源，$O(n^2)$。观察这个过程会发现大量重复：如果 <code class="language-plaintext highlighter-rouge">prices[3]</code> 向右走了很远才找到答案，<code class="language-plaintext highlighter-rouge">prices[4]</code>、<code class="language-plaintext highlighter-rouge">prices[5]</code> 很可能又要沿着同一段路再走一遍。</p>
+</blockquote>
+
+<blockquote>
+  <p>换个视角能看清结构。把暴力的「对每个 <code class="language-plaintext highlighter-rouge">i</code> 找它的 <code class="language-plaintext highlighter-rouge">j</code>」反过来，变成<strong>「对每个 <code class="language-plaintext highlighter-rouge">j</code>，它能为哪些还没找到折扣的 <code class="language-plaintext highlighter-rouge">i</code> 结算」</strong>。当我们从左到右扫描到位置 <code class="language-plaintext highlighter-rouge">j</code> 时，左边那些还没找到折扣的下标里，凡是 <code class="language-plaintext highlighter-rouge">prices[i] &gt;= prices[j]</code> 的，答案就都是 <code class="language-plaintext highlighter-rouge">j</code>——因为 <code class="language-plaintext highlighter-rouge">j</code> 是它们向右遇到的第一个不大于自己的元素。</p>
+</blockquote>
+
+<blockquote>
+  <p>关键在于：这些「还没找到折扣的下标」在栈里天然是<strong>价格单调递增</strong>的（从栈底到栈顶）。为什么？因为一旦某个新元素小于等于它前面的某个待定元素，那个待定元素立刻就被结算并出栈了，留在栈里的必然是「一路严格递增」的一串。于是不变量可以写成：<strong>栈中自底向上保存的是尚未找到折扣的下标，且它们对应的价格严格递增</strong>。</p>
+</blockquote>
+
+<blockquote>
+  <p>有了这条不变量，扫描到 <code class="language-plaintext highlighter-rouge">j</code> 时只需要不断检查栈顶：只要 <code class="language-plaintext highlighter-rouge">prices[stack.top] &gt;= prices[j]</code>，就说明栈顶这件商品找到了它的折扣，弹出并写答案 <code class="language-plaintext highlighter-rouge">res[top] = prices[top] - prices[j]</code>；直到栈顶价格严格小于 <code class="language-plaintext highlighter-rouge">prices[j]</code> 为止（此时栈里剩下的都更小，<code class="language-plaintext highlighter-rouge">j</code> 帮不了它们）。然后把 <code class="language-plaintext highlighter-rouge">j</code> 自己压栈，等待后面的元素来结算它。</p>
+</blockquote>
+
+<blockquote>
+  <p>因为每个下标只入栈一次、出栈一次，总操作数是 $O(n)$。扫描结束后仍留在栈里的下标就是「右边找不到更小或相等元素」的商品，它们没有折扣——只要一开始把结果数组初始化成 <code class="language-plaintext highlighter-rouge">prices</code> 的副本，这批就不需要任何额外处理。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>结果数组初始化为 <code class="language-plaintext highlighter-rouge">prices</code> 的副本</strong>：默认「无折扣」。这样扫描结束后栈里的残留元素自动保留原价，也避免修改调用方传入的数组。原地结算同样能做对，但这里选择副本让输入与输出职责更清晰。</li>
+    <li>
+<strong>栈里存下标而不是价格</strong>：结算时既要写 <code class="language-plaintext highlighter-rouge">res[idx]</code>，又要读 <code class="language-plaintext highlighter-rouge">prices[idx]</code>，只存价格就丢了位置信息。这是单调栈题的通用选择。</li>
+    <li>
+<strong>从左到右遍历 <code class="language-plaintext highlighter-rouge">i</code></strong>：把 <code class="language-plaintext highlighter-rouge">i</code> 当作「可能为左侧待定元素提供折扣」的候选。</li>
+    <li>
+<strong>弹栈条件用 <code class="language-plaintext highlighter-rouge">&gt;=</code> 而不是 <code class="language-plaintext highlighter-rouge">&gt;</code></strong>：<code class="language-plaintext highlighter-rouge">prices[stack.top] &gt;= prices[i]</code> 时结算。题目条件是 <code class="language-plaintext highlighter-rouge">prices[j] &lt;= prices[i]</code>，等价于「栈顶价格 ≥ 当前价格」，相等必须算进去。</li>
+    <li>
+<strong>弹栈时立刻写答案</strong>：<code class="language-plaintext highlighter-rouge">res[idx] = prices[idx] - prices[i]</code>。用 <code class="language-plaintext highlighter-rouge">prices</code> 而不是 <code class="language-plaintext highlighter-rouge">res</code> 取原价——<code class="language-plaintext highlighter-rouge">res[idx]</code> 此刻还是原价没错，但语义上折扣是基于原价计算的，读 <code class="language-plaintext highlighter-rouge">prices</code> 更不容易在改写代码时踩坑。</li>
+    <li>
+<strong>弹完再把 <code class="language-plaintext highlighter-rouge">i</code> 压栈</strong>：顺序不能反。先压栈会让 <code class="language-plaintext highlighter-rouge">i</code> 和自己比较（<code class="language-plaintext highlighter-rouge">prices[i] &gt;= prices[i]</code> 恒成立），把自己弹出并结算成 <code class="language-plaintext highlighter-rouge">res[i] = 0</code>，全盘皆错。</li>
+    <li>
+<strong>循环结束直接返回 <code class="language-plaintext highlighter-rouge">res</code></strong>：栈里的残留就是无折扣商品，副本初始化已经处理好了。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>以 <code class="language-plaintext highlighter-rouge">prices = [8, 4, 6, 2, 3]</code> 走一遍。初始 <code class="language-plaintext highlighter-rouge">res = [8, 4, 6, 2, 3]</code>，栈为空。</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">i = 0</code>（价格 8）：栈空，无可结算。压入 0。栈 = <code class="language-plaintext highlighter-rouge">[0]</code>（价格视图 <code class="language-plaintext highlighter-rouge">[8]</code>）。</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">i = 1</code>（价格 4）：栈顶下标 0 的价格 8 &gt;= 4，结算 <code class="language-plaintext highlighter-rouge">res[0] = 8 - 4 = 4</code>，弹出。栈空，停止。压入 1。栈 = <code class="language-plaintext highlighter-rouge">[1]</code>（<code class="language-plaintext highlighter-rouge">[4]</code>）。</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">i = 2</code>（价格 6）：栈顶下标 1 的价格 4 &gt;= 6？不成立，不弹。压入 2。栈 = <code class="language-plaintext highlighter-rouge">[1, 2]</code>（<code class="language-plaintext highlighter-rouge">[4, 6]</code>，自底向上递增，符合不变量）。</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">i = 3</code>（价格 2）：栈顶下标 2 的价格 6 &gt;= 2，结算 <code class="language-plaintext highlighter-rouge">res[2] = 6 - 2 = 4</code>，弹出。新栈顶下标 1 的价格 4 &gt;= 2，结算 <code class="language-plaintext highlighter-rouge">res[1] = 4 - 2 = 2</code>，弹出。栈空，停止。压入 3。栈 = <code class="language-plaintext highlighter-rouge">[3]</code>（<code class="language-plaintext highlighter-rouge">[2]</code>）。</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">i = 4</code>（价格 3）：栈顶下标 3 的价格 2 &gt;= 3？不成立，不弹。压入 4。栈 = <code class="language-plaintext highlighter-rouge">[3, 4]</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p>遍历结束，栈里残留下标 3 和 4，它们右边没有更小或相等的价格，保持原价 2 和 3。</p>
+</blockquote>
+
+<blockquote>
+  <p>返回 <code class="language-plaintext highlighter-rouge">res = [4, 2, 4, 2, 3]</code>，与期望一致。注意 <code class="language-plaintext highlighter-rouge">i = 3</code> 那一步一次弹出了两个元素——这正是单调栈相对暴力的收益来源：下标 1 和 2 各自向右的搜索被合并进了同一次弹栈。</p>
+</blockquote>
+
+<blockquote>
+  <p>再用 <code class="language-plaintext highlighter-rouge">prices = [10, 1, 1, 6]</code> 检验 <code class="language-plaintext highlighter-rouge">&gt;=</code> 的必要性：<code class="language-plaintext highlighter-rouge">i = 2</code>（价格 1）时栈顶是下标 1 的价格 1，<code class="language-plaintext highlighter-rouge">1 &gt;= 1</code> 成立，结算 <code class="language-plaintext highlighter-rouge">res[1] = 1 - 1 = 0</code>。若弹栈条件写成 <code class="language-plaintext highlighter-rouge">&gt;</code>，下标 1 拿不到折扣，输出 <code class="language-plaintext highlighter-rouge">[9, 1, 1, 6]</code>，而正确答案是 <code class="language-plaintext highlighter-rouge">[9, 0, 1, 6]</code>。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Deque</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">finalPrices</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">prices</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 先按「无折扣」初始化，扫描结束后仍在栈里的元素自动保留原价。</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
+        <span class="c1">// 栈里存下标：结算时既要写 res[idx] 又要读 prices[idx]。</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">prices</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="c1">// 条件是 prices[j] &lt;= prices[i]，相等也要算，所以弹栈用 &gt;=。</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">prices</span><span class="o">[</span><span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">()]</span> <span class="o">&gt;=</span> <span class="n">prices</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+                <span class="n">res</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">=</span> <span class="n">prices</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">-</span> <span class="n">prices</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="o">}</span>
+            <span class="c1">// 必须弹完再压，否则自己会把自己结算成 0。</span>
+            <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">finalPrices</span><span class="p">(</span><span class="n">prices</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="c">// 先按「无折扣」初始化，扫描结束后仍在栈里的元素自动保留原价。</span>
+	<span class="n">res</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">prices</span><span class="p">))</span>
+	<span class="nb">copy</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">prices</span><span class="p">)</span>
+	<span class="c">// 栈里存下标：结算时既要写 res[idx] 又要读 prices[idx]。</span>
+	<span class="n">stack</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{}</span>
+
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">price</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">prices</span> <span class="p">{</span>
+		<span class="c">// 条件是 prices[j] &lt;= prices[i]，相等也要算，所以弹栈用 &gt;=。</span>
+		<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">prices</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="n">price</span> <span class="p">{</span>
+			<span class="n">idx</span> <span class="o">:=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+			<span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+			<span class="n">res</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">prices</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">-</span> <span class="n">price</span>
+		<span class="p">}</span>
+		<span class="c">// 必须弹完再压，否则自己会把自己结算成 0。</span>
+		<span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$。外层遍历 <code class="language-plaintext highlighter-rouge">n</code> 次；内层 <code class="language-plaintext highlighter-rouge">while</code> 看似嵌套，但每个下标一生只入栈一次、出栈一次，所有弹栈操作加起来不超过 <code class="language-plaintext highlighter-rouge">n</code> 次，因此总操作是 $O(n)$ 而非 $O(n^2)$。这个「均摊」论证是单调栈题被追问时的标准答法，务必能讲清楚。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。栈最坏存下全部下标（数组严格递增时没有任何元素被弹出）；结果数组是题目要求的输出，另计 $O(n)$。相比 $O(n^2)$ 时间的暴力，这是用线性空间换来的线性时间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>认出题型比写对代码更重要</strong>：「右边第一个满足某种大小关系的元素」是单调栈的标准触发词。本题的变体是「不大于」（含等于），对应弹栈条件 <code class="language-plaintext highlighter-rouge">&gt;=</code>。面试时先说出「这是下一个更小或相等元素问题」，再动手写，节奏会好很多。</li>
+    <li>
+<strong>视角反转是单调栈的思想内核</strong>：从「我去找我的答案」改成「我来为之前的人结算答案」。想清楚这一点，弹栈时机、栈内单调性、以及为什么是 $O(n)$ 就全都通了。</li>
+    <li>
+<strong>不变量要能一句话说出来</strong>：栈内自底向上下标递增、价格严格递增，且都是尚未确定答案的元素。被问「栈里存的是什么」时，这就是标准答案。</li>
+    <li>
+<strong>严格与非严格的选择直接由题面决定</strong>：本题是 <code class="language-plaintext highlighter-rouge">prices[j] &lt;= prices[i]</code>，所以弹栈用 <code class="language-plaintext highlighter-rouge">&gt;=</code>。改成严格小于就要用 <code class="language-plaintext highlighter-rouge">&gt;</code>。这一个符号是本题唯一的语义陷阱。</li>
+    <li>
+<strong>结果数组预填原值</strong>，把「找不到答案」的情况变成不需要处理的默认态。这个技巧在 496、739 等题里同样适用（那里是预填 -1 或 0）。</li>
+    <li>
+<strong>先弹后压</strong>，且栈存下标。两条都是模板级别的固定动作，写反任何一条都会得到系统性错误。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>弹栈条件写成 <code class="language-plaintext highlighter-rouge">&gt;</code> 而不是 <code class="language-plaintext highlighter-rouge">&gt;=</code></strong>：<code class="language-plaintext highlighter-rouge">prices = [10, 1, 1, 6]</code> 时下标 1 遇到相等的价格 1 不会被结算，输出 <code class="language-plaintext highlighter-rouge">[9, 1, 1, 6]</code>，正确答案是 <code class="language-plaintext highlighter-rouge">[9, 0, 1, 6]</code>。</li>
+    <li>
+<strong>先压栈再弹栈</strong>：<code class="language-plaintext highlighter-rouge">i</code> 刚入栈就满足 <code class="language-plaintext highlighter-rouge">prices[i] &gt;= prices[i]</code>，立刻把自己弹出结算成 <code class="language-plaintext highlighter-rouge">res[i] = 0</code>，<code class="language-plaintext highlighter-rouge">prices = [8, 4, 6, 2, 3]</code> 会输出全 0。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">res</code> 初始化为全 0</strong>：栈里残留的无折扣商品最终留下 0 而不是原价，<code class="language-plaintext highlighter-rouge">prices = [1, 2, 3, 4]</code>（严格递增，全部无折扣）会输出 <code class="language-plaintext highlighter-rouge">[0, 0, 0, 0]</code>，正确答案是 <code class="language-plaintext highlighter-rouge">[1, 2, 3, 4]</code>。</li>
+    <li>
+<strong>栈里存价格而不是下标</strong>：弹栈时知道被结算的价格却不知道该写进 <code class="language-plaintext highlighter-rouge">res</code> 的哪一格，只能退回额外维护映射，重复价格时映射还会冲突。</li>
+    <li>
+<strong>循环结束后又对栈内残留做一次结算</strong>：把栈里剩下的下标减去某个默认值（如 0 或最后一个元素），<code class="language-plaintext highlighter-rouge">prices = [1, 2, 3]</code> 会把 2 和 3 错误折扣掉，正确行为是原价保留。</li>
+    <li>
+<strong>误以为要找「右边最小的价格」而不是「右边第一个不大于的价格」</strong>：<code class="language-plaintext highlighter-rouge">prices = [8, 4, 6, 2, 3]</code> 中下标 0 会被折扣成 <code class="language-plaintext highlighter-rouge">8 - 2 = 6</code>，而正确答案是 <code class="language-plaintext highlighter-rouge">8 - 4 = 4</code>。题目要的是最小<strong>下标</strong>，不是最小<strong>价格</strong>。</li>
+    <li>
+<strong>Go 里弹栈时忘记先取出 <code class="language-plaintext highlighter-rouge">idx</code> 就截断切片</strong>：先执行 <code class="language-plaintext highlighter-rouge">stack = stack[:len(stack)-1]</code> 再读 <code class="language-plaintext highlighter-rouge">stack[len(stack)-1]</code>，拿到的是下一个元素，结算对象整体错位一位。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/next-greater-element-i/">496. 下一个更大元素 I</a></td>
+      <td>简单</td>
+      <td>方向相反（找更大），还要额外用哈希表把结果映射回子集查询</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/next-greater-element-ii/">503. 下一个更大元素 II</a></td>
+      <td>中等</td>
+      <td>数组是环形的，需要遍历两遍或对下标取模来模拟绕回</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/daily-temperatures/">739. 每日温度</a></td>
+      <td>中等</td>
+      <td>要的是下标之差而非值之差，找不到时补 0，是「下一个更大元素」的裸模板</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/online-stock-span/">901. 股票价格跨度</a></td>
+      <td>中等</td>
+      <td>在线数据流场景，栈中需合并已弹出元素的跨度，考察设计与单调栈的结合</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/trapping-rain-water/">42. 接雨水</a></td>
+      <td>困难</td>
+      <td>弹栈时要同时用到左右两个边界来计算面积，是单调栈的「横向结算」变体</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/largest-rectangle-in-histogram/">84. 柱状图中最大的矩形</a></td>
+      <td>困难</td>
+      <td>需要同时求左右两侧第一个更小元素，常配合哨兵简化边界处理</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2021/67992061" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 637. 二叉树的层平均值</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/62239190" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 355. 设计推特</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/93609742">https://hgnulb.github.io/blog/2021/93609742</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

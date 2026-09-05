@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode LCP 04. 覆盖 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,LCP,位掩码,位运算,动态规划,图,字节跳动,数组" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode LCP 04. 覆盖" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/27094461" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/27094461" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-04-03T03:08:32+08:00" />
+<meta property="article:modified_time" content="2021-04-03T03:08:32+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode LCP 04. 覆盖" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-04-03T03:08:32+08:00","datePublished":"2021-04-03T03:08:32+08:00","description":"题目描述","headline":"LeetCode LCP 04. 覆盖","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/27094461"},"url":"https://hgnulb.github.io/blog/2021/27094461"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法二分图最大匹配匈牙利算法">解法：二分图最大匹配（匈牙利算法）</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode LCP 04. 覆盖">LeetCode LCP 04. 覆盖</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-04-03 03:08:32"
+                    datetime="2021-04-03T03:08:32+08:00"
+            >
+                2021-04-03
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3368 字 · 英文 97 词 · 代码 165 行"
+            aria-label="预计阅读时间约 14 分钟，正文 3368 字 · 英文 97 词 · 代码 165 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 14 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    7 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2535886171/" title="位运算">
+        位运算
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5789791753/" title="图">
+        图
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4822032622/" title="位掩码">
+        位掩码
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4908789587/" title="LCP">
+        LCP
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法二分图最大匹配匈牙利算法">解法：二分图最大匹配（匈牙利算法）</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/broken-board-dominoes/">LCP 04. 覆盖</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>一块 <code class="language-plaintext highlighter-rouge">n × m</code> 的棋盘，其中 <code class="language-plaintext highlighter-rouge">broken</code> 列出的格子已经损坏不可使用。现在用 1×2 的多米诺骨牌去铺，每张骨牌横放或竖放，覆盖两个<strong>相邻的完好格子</strong>，骨牌之间不能重叠。求最多能放多少张。</p>
+
+  <p>把题目翻译成图论语言：每张骨牌就是「一对相邻的完好格子」，而「骨牌之间不重叠」意味着<strong>每个格子最多被用一次</strong>。于是问题变成——在「格子为点、相邻完好格子间连边」的图上，选出尽可能多的边，使得这些边两两不共享端点。这正是<strong>最大匹配</strong>的定义。识别出这一步，整道题就从「怎么摆放」变成了一个标准图论问题。</p>
+
+  <p>进一步，棋盘有一个天然的性质：按 <code class="language-plaintext highlighter-rouge">(r + c)</code> 的奇偶给格子染成黑白两色，那么<strong>任意一对相邻格子必然一黑一白</strong>（横向或纵向移动一格，<code class="language-plaintext highlighter-rouge">r + c</code> 的奇偶必然翻转）。这说明这张图是<strong>二分图</strong>，黑格构成左部、白格构成右部，所有边都跨越两部。二分图最大匹配有成熟算法，而一般图的最大匹配要用带花树，复杂得多——所以染色这一步不是锦上添花，而是把问题拉进可解范围的关键。</p>
+
+  <p>约束里 <code class="language-plaintext highlighter-rouge">n</code> 与 <code class="language-plaintext highlighter-rouge">m</code> 都不超过 8，格子总数不超过 64，边数不超过 100 出头。规模极小，$O(V \cdot E)$ 的匈牙利算法绰绰有余，不必上 Hopcroft–Karp。规模小也提示了另一条路：状态压缩 DP 逐行转移同样可行（每行状态 $2^8$），两条路都是标准解。</p>
+
+  <p>边界方面：<code class="language-plaintext highlighter-rouge">broken</code> 可能为空（棋盘完好），也可能把整块棋盘占满（答案为 0）；损坏格子既不能作为骨牌的任一端，也不能被跨越，所以建图时两端都要检查完好性。</p>
+</blockquote>
+
+<h2 id="解法二分图最大匹配匈牙利算法">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E4%BA%8C%E5%88%86%E5%9B%BE%E6%9C%80%E5%A4%A7%E5%8C%B9%E9%85%8D%E5%8C%88%E7%89%99%E5%88%A9%E7%AE%97%E6%B3%95" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：二分图最大匹配（匈牙利算法）</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先说为什么不能贪心。「从左上往右下扫，遇到能放就放」这类策略会失败：某个位置的放置可能堵死后面两个更优的放置。举个直观的例子，一条 1×3 的走廊里，中间格如果被先来的骨牌以「左中」方式占住，右边的格子就孤立了；而实际上最优放法可能需要错开一格。局部选择会影响全局，贪心的「不劣性」证不出来。</p>
+
+  <p>暴力搜索则是枚举每个格子的放/不放，$2^{64}$ 级别，不可行。</p>
+
+  <p>正确的路径是上一节推出的建模：<strong>答案 = 二分图最大匹配数</strong>。匹配的定义（边两两不共端点）与骨牌不重叠完全对应，因此两者的最优值相等——每一组合法的骨牌摆放对应一组匹配，反之亦然。</p>
+
+  <p>求二分图最大匹配用匈牙利算法。它的核心是<strong>增广路</strong>：对左部的每个点 <code class="language-plaintext highlighter-rouge">u</code> 尝试为它找一个匹配对象，做法是遍历 <code class="language-plaintext highlighter-rouge">u</code> 的所有邻居 <code class="language-plaintext highlighter-rouge">v</code>——</p>
+
+  <ul>
+    <li>若 <code class="language-plaintext highlighter-rouge">v</code> 尚未被匹配，直接把 <code class="language-plaintext highlighter-rouge">u</code> 与 <code class="language-plaintext highlighter-rouge">v</code> 配上，匹配数加一；</li>
+    <li>若 <code class="language-plaintext highlighter-rouge">v</code> 已被某个 <code class="language-plaintext highlighter-rouge">u'</code> 占用，就递归地问 <code class="language-plaintext highlighter-rouge">u'</code>：「你能不能换一个对象？」。如果 <code class="language-plaintext highlighter-rouge">u'</code> 能找到别的空位，那 <code class="language-plaintext highlighter-rouge">v</code> 就腾出来给 <code class="language-plaintext highlighter-rouge">u</code>，匹配数同样加一；如果 <code class="language-plaintext highlighter-rouge">u'</code> 也换不动，就继续尝试 <code class="language-plaintext highlighter-rouge">u</code> 的下一个邻居。</li>
+  </ul>
+
+  <p>这个「让对方腾位置」的递归过程就是在寻找一条增广路。匈牙利算法的正确性由<strong>König 定理</strong>背后的增广路定理保证：一个匹配是最大匹配，当且仅当不存在增广路。所以对每个左部点各尝试一次增广，做完就是最大匹配。</p>
+
+  <p>维持的<strong>不变量</strong>是：处理完前 <code class="language-plaintext highlighter-rouge">i</code> 个左部点后，<code class="language-plaintext highlighter-rouge">matchRight</code> 描述的是「前 <code class="language-plaintext highlighter-rouge">i</code> 个左部点与右部之间的一个最大匹配」；每一轮增广要么让匹配数加一，要么证明当前点无法加入任何最大匹配（此时也不必再管它）。关键是<strong>增广过程只会改变匹配的配对方式，绝不会减少匹配总数</strong>——腾位置的那一方一定同时找到了新位置，这是递归返回 <code class="language-plaintext highlighter-rouge">true</code> 才执行改写的原因。</p>
+
+  <p>每次为一个新的左部点做增广时，<code class="language-plaintext highlighter-rouge">seen</code> 数组必须<strong>重新清零</strong>。它记录的是「本次增广中，右部点是否已经被尝试过」，作用是防止在交错路上绕圈死循环。它的作用域严格限定在一次增广内，跨轮复用会让后面的点找不到本可用的空位。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>标记损坏格子</strong>：把 <code class="language-plaintext highlighter-rouge">broken</code> 里的坐标写进布尔矩阵 <code class="language-plaintext highlighter-rouge">bad</code>。为什么先做这一步：后面建图时要频繁判断格子是否可用，用矩阵查询是 $O(1)$，比每次遍历 <code class="language-plaintext highlighter-rouge">broken</code> 快得多也更清晰。</li>
+    <li>
+<strong>黑白染色并分别编号</strong>：遍历所有完好格子，<code class="language-plaintext highlighter-rouge">(r + c)</code> 为偶数的记进 <code class="language-plaintext highlighter-rouge">leftId</code>（左部），为奇数的记进 <code class="language-plaintext highlighter-rouge">rightId</code>（右部），各自从 0 开始连续编号。为什么要重新编号而不直接用 <code class="language-plaintext highlighter-rouge">(r, c)</code>：匈牙利算法要用一维数组存匹配关系与访问标记，连续编号能让这些数组紧凑且下标直观。为什么用 <code class="language-plaintext highlighter-rouge">-1</code> 作为「不属于该部或已损坏」的标记：便于建图时一眼跳过。</li>
+    <li>
+<strong>建邻接表</strong>：对每个左部格子，沿上下左右四个方向找邻居；邻居必须在棋盘内、未损坏，且它的 <code class="language-plaintext highlighter-rouge">rightId</code> 不为 <code class="language-plaintext highlighter-rouge">-1</code>，才把这条边加进 <code class="language-plaintext highlighter-rouge">adj[u]</code>。为什么只从左部往右部连单向边：二分图匹配只需从左部发起搜索，反向边用 <code class="language-plaintext highlighter-rouge">matchRight</code> 隐式表达即可，存双向反而浪费。为什么要判 <code class="language-plaintext highlighter-rouge">bad[nr][nc]</code>：损坏格子不能作为骨牌的另一端。</li>
+    <li>
+<strong>初始化 <code class="language-plaintext highlighter-rouge">matchRight</code> 为全 <code class="language-plaintext highlighter-rouge">-1</code></strong>：语义是「每个右部点当前匹配到的左部点，<code class="language-plaintext highlighter-rouge">-1</code> 表示空闲」。</li>
+    <li>
+<strong>对每个左部点做一次增广</strong>：先给本轮开一个全新的 <code class="language-plaintext highlighter-rouge">seen</code>（长度为右部点数），再调 <code class="language-plaintext highlighter-rouge">dfs(u)</code>；返回 <code class="language-plaintext highlighter-rouge">true</code> 就把答案加一。为什么每轮都要新的 <code class="language-plaintext highlighter-rouge">seen</code>：它只服务于本次增广的防重，跨轮残留会误判「已尝试过」而错过可行位置。</li>
+    <li>
+<strong>增广的递归体</strong>：遍历 <code class="language-plaintext highlighter-rouge">u</code> 的邻居 <code class="language-plaintext highlighter-rouge">v</code>，跳过 <code class="language-plaintext highlighter-rouge">seen[v]</code> 为真的；标记 <code class="language-plaintext highlighter-rouge">seen[v] = true</code>；若 <code class="language-plaintext highlighter-rouge">matchRight[v] == -1</code>（空闲）或 <code class="language-plaintext highlighter-rouge">dfs(matchRight[v])</code> 成功（原主人挪走了），就令 <code class="language-plaintext highlighter-rouge">matchRight[v] = u</code> 并返回 <code class="language-plaintext highlighter-rouge">true</code>。为什么标记要在递归<strong>之前</strong>：防止递归回到同一个 <code class="language-plaintext highlighter-rouge">v</code> 形成环。为什么改写 <code class="language-plaintext highlighter-rouge">matchRight[v]</code> 要在条件成立<strong>之后</strong>：只有确认整条增广路可行，才能落实改动，否则会破坏已有匹配。</li>
+    <li>
+<strong>返回答案</strong>：成功增广的次数即最大匹配数，也就是能放的骨牌数。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">n = 2</code>、<code class="language-plaintext highlighter-rouge">m = 3</code>、<code class="language-plaintext highlighter-rouge">broken = [[1, 0], [1, 1]]</code> 走一遍（预期答案 2）。<br>
+棋盘完好格子是 <code class="language-plaintext highlighter-rouge">(0,0)</code>、<code class="language-plaintext highlighter-rouge">(0,1)</code>、<code class="language-plaintext highlighter-rouge">(0,2)</code>、<code class="language-plaintext highlighter-rouge">(1,2)</code>。染色：<code class="language-plaintext highlighter-rouge">(0,0)</code> 的 <code class="language-plaintext highlighter-rouge">r+c=0</code> 为偶，是左部 0 号；<code class="language-plaintext highlighter-rouge">(0,2)</code> 的 <code class="language-plaintext highlighter-rouge">r+c=2</code> 为偶，是左部 1 号；<code class="language-plaintext highlighter-rouge">(0,1)</code> 的 <code class="language-plaintext highlighter-rouge">r+c=1</code> 为奇，是右部 0 号；<code class="language-plaintext highlighter-rouge">(1,2)</code> 的 <code class="language-plaintext highlighter-rouge">r+c=3</code> 为奇，是右部 1 号。<br>
+建图：左部 0 号 <code class="language-plaintext highlighter-rouge">(0,0)</code> 的四邻中只有 <code class="language-plaintext highlighter-rouge">(0,1)</code> 可用，<code class="language-plaintext highlighter-rouge">adj[0] = [0]</code>；左部 1 号 <code class="language-plaintext highlighter-rouge">(0,2)</code> 的四邻中 <code class="language-plaintext highlighter-rouge">(0,1)</code> 与 <code class="language-plaintext highlighter-rouge">(1,2)</code> 都可用，<code class="language-plaintext highlighter-rouge">adj[1] = [0, 1]</code>。<br>
+增广左部 0 号：<code class="language-plaintext highlighter-rouge">seen</code> 清零，尝试右部 0 号，它空闲，直接配对，<code class="language-plaintext highlighter-rouge">matchRight[0] = 0</code>，答案变 1。<br>
+增广左部 1 号：<code class="language-plaintext highlighter-rouge">seen</code> 清零，先尝试右部 0 号，标记 <code class="language-plaintext highlighter-rouge">seen[0] = true</code>；它已被左部 0 号占用，于是递归问左部 0 号能不能换——左部 0 号只有右部 0 号一个邻居，而它已被 <code class="language-plaintext highlighter-rouge">seen</code> 标记，递归返回 <code class="language-plaintext highlighter-rouge">false</code>。回到左部 1 号，继续尝试下一个邻居右部 1 号，它空闲，配对成功，<code class="language-plaintext highlighter-rouge">matchRight[1] = 1</code>，答案变 2。<br>
+返回 2，对应两张骨牌：<code class="language-plaintext highlighter-rouge">(0,0)-(0,1)</code> 与 <code class="language-plaintext highlighter-rouge">(0,2)-(1,2)</code>，正确。</p>
+
+  <p>这一趟正好展示了增广的两种分支：第一次是「直接占空位」，第二次先尝试「让对方腾位置」失败、再回退去找别的空位。若把 <code class="language-plaintext highlighter-rouge">broken</code> 改成 <code class="language-plaintext highlighter-rouge">[[1,0]]</code>，左部 0 号仍配右部 0 号，而左部 1 号会先尝试让左部 0 号挪走——左部 0 号此时多了一个邻居（<code class="language-plaintext highlighter-rouge">(1,0)</code> 若完好则属于右部），就能挪成功，从而整体匹配数增加，这正是增广路的价值。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span><span class="o">[]</span> <span class="no">DR</span> <span class="o">=</span> <span class="o">{-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">};</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span><span class="o">[]</span> <span class="no">DC</span> <span class="o">=</span> <span class="o">{</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">};</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">domino</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span> <span class="n">m</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">broken</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">boolean</span><span class="o">[][]</span> <span class="n">bad</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">m</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">b</span> <span class="o">:</span> <span class="n">broken</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">bad</span><span class="o">[</span><span class="n">b</span><span class="o">[</span><span class="mi">0</span><span class="o">]][</span><span class="n">b</span><span class="o">[</span><span class="mi">1</span><span class="o">]]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">leftId</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">m</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">rightId</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">][</span><span class="n">m</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">leftId</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+            <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">rightId</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 黑白染色：(r + c) 的奇偶决定归属，相邻格子必然异色。</span>
+        <span class="kt">int</span> <span class="n">leftCnt</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">rightCnt</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">r</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="n">c</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">bad</span><span class="o">[</span><span class="n">r</span><span class="o">][</span><span class="n">c</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(((</span><span class="n">r</span> <span class="o">+</span> <span class="n">c</span><span class="o">)</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">leftId</span><span class="o">[</span><span class="n">r</span><span class="o">][</span><span class="n">c</span><span class="o">]</span> <span class="o">=</span> <span class="n">leftCnt</span><span class="o">++;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="n">rightId</span><span class="o">[</span><span class="n">r</span><span class="o">][</span><span class="n">c</span><span class="o">]</span> <span class="o">=</span> <span class="n">rightCnt</span><span class="o">++;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 只从左部向右部建单向边，反向关系由 matchRight 隐式表达。</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;[]</span> <span class="n">adj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">List</span><span class="o">[</span><span class="n">leftCnt</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">leftCnt</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">adj</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">r</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">;</span> <span class="n">c</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">leftId</span><span class="o">[</span><span class="n">r</span><span class="o">][</span><span class="n">c</span><span class="o">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="kt">int</span> <span class="n">u</span> <span class="o">=</span> <span class="n">leftId</span><span class="o">[</span><span class="n">r</span><span class="o">][</span><span class="n">c</span><span class="o">];</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">;</span> <span class="n">d</span><span class="o">++)</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">nr</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="no">DR</span><span class="o">[</span><span class="n">d</span><span class="o">];</span>
+                    <span class="kt">int</span> <span class="n">nc</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="no">DC</span><span class="o">[</span><span class="n">d</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">nr</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">nr</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="n">nc</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">nc</span> <span class="o">&gt;=</span> <span class="n">m</span> <span class="o">||</span> <span class="n">bad</span><span class="o">[</span><span class="n">nr</span><span class="o">][</span><span class="n">nc</span><span class="o">])</span> <span class="o">{</span>
+                        <span class="k">continue</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">rightId</span><span class="o">[</span><span class="n">nr</span><span class="o">][</span><span class="n">nc</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">adj</span><span class="o">[</span><span class="n">u</span><span class="o">].</span><span class="na">add</span><span class="o">(</span><span class="n">v</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">matchRight</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">rightCnt</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">matchRight</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">answer</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">u</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">u</span> <span class="o">&lt;</span> <span class="n">leftCnt</span><span class="o">;</span> <span class="n">u</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="c1">// seen 只服务于本次增广，必须每轮重建。</span>
+            <span class="kt">boolean</span><span class="o">[]</span> <span class="n">seen</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">rightCnt</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">dfs</span><span class="o">(</span><span class="n">u</span><span class="o">,</span> <span class="n">adj</span><span class="o">,</span> <span class="n">matchRight</span><span class="o">,</span> <span class="n">seen</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">answer</span><span class="o">++;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">int</span> <span class="n">u</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;[]</span> <span class="n">adj</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">matchRight</span><span class="o">,</span> <span class="kt">boolean</span><span class="o">[]</span> <span class="n">seen</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">adj</span><span class="o">[</span><span class="n">u</span><span class="o">])</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">seen</span><span class="o">[</span><span class="n">v</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">seen</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="c1">// v 空闲，或它的原主人能腾走，都算增广成功。</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">matchRight</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="n">dfs</span><span class="o">(</span><span class="n">matchRight</span><span class="o">[</span><span class="n">v</span><span class="o">],</span> <span class="n">adj</span><span class="o">,</span> <span class="n">matchRight</span><span class="o">,</span> <span class="n">seen</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">matchRight</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">=</span> <span class="n">u</span><span class="o">;</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">domino</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">m</span> <span class="kt">int</span><span class="p">,</span> <span class="n">broken</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">bad</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">bad</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">b</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">broken</span> <span class="p">{</span>
+        <span class="n">bad</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="m">0</span><span class="p">]][</span><span class="n">b</span><span class="p">[</span><span class="m">1</span><span class="p">]]</span> <span class="o">=</span> <span class="no">true</span>
+    <span class="p">}</span>
+
+    <span class="n">leftId</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">rightId</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">leftId</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+        <span class="n">rightId</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">leftId</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+            <span class="n">rightId</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c">// 黑白染色：(r + c) 的奇偶决定归属，相邻格子必然异色。</span>
+    <span class="n">leftCnt</span><span class="p">,</span> <span class="n">rightCnt</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">r</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">c</span><span class="o">++</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">bad</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="p">{</span>
+                <span class="k">continue</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">+</span><span class="n">c</span><span class="p">)</span><span class="o">%</span><span class="m">2</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+                <span class="n">leftId</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">leftCnt</span>
+                <span class="n">leftCnt</span><span class="o">++</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">rightId</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">rightCnt</span>
+                <span class="n">rightCnt</span><span class="o">++</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c">// 只从左部向右部建单向边，反向关系由 matchRight 隐式表达。</span>
+    <span class="n">adj</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">leftCnt</span><span class="p">)</span>
+    <span class="n">dr</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">}</span>
+    <span class="n">dc</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">r</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">c</span><span class="o">++</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">leftId</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+                <span class="k">continue</span>
+            <span class="p">}</span>
+            <span class="n">u</span> <span class="o">:=</span> <span class="n">leftId</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">c</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="m">4</span><span class="p">;</span> <span class="n">d</span><span class="o">++</span> <span class="p">{</span>
+                <span class="n">nr</span><span class="p">,</span> <span class="n">nc</span> <span class="o">:=</span> <span class="n">r</span><span class="o">+</span><span class="n">dr</span><span class="p">[</span><span class="n">d</span><span class="p">],</span> <span class="n">c</span><span class="o">+</span><span class="n">dc</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">nr</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="n">nr</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">||</span> <span class="n">nc</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="n">nc</span> <span class="o">&gt;=</span> <span class="n">m</span> <span class="o">||</span> <span class="n">bad</span><span class="p">[</span><span class="n">nr</span><span class="p">][</span><span class="n">nc</span><span class="p">]</span> <span class="p">{</span>
+                    <span class="k">continue</span>
+                <span class="p">}</span>
+                <span class="n">v</span> <span class="o">:=</span> <span class="n">rightId</span><span class="p">[</span><span class="n">nr</span><span class="p">][</span><span class="n">nc</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+                    <span class="n">adj</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">adj</span><span class="p">[</span><span class="n">u</span><span class="p">],</span> <span class="n">v</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">matchRight</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">rightCnt</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">rightCnt</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">matchRight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+    <span class="p">}</span>
+
+    <span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="n">u</span> <span class="kt">int</span><span class="p">,</span> <span class="n">seen</span> <span class="p">[]</span><span class="kt">bool</span><span class="p">)</span> <span class="kt">bool</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">u</span> <span class="kt">int</span><span class="p">,</span> <span class="n">seen</span> <span class="p">[]</span><span class="kt">bool</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">adj</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">seen</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="p">{</span>
+                <span class="k">continue</span>
+            <span class="p">}</span>
+            <span class="n">seen</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+            <span class="c">// v 空闲，或它的原主人能腾走，都算增广成功。</span>
+            <span class="k">if</span> <span class="n">matchRight</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="m">1</span> <span class="o">||</span> <span class="n">dfs</span><span class="p">(</span><span class="n">matchRight</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="n">seen</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">matchRight</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span>
+                <span class="k">return</span> <span class="no">true</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="no">false</span>
+    <span class="p">}</span>
+
+    <span class="n">answer</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">u</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">u</span> <span class="o">&lt;</span> <span class="n">leftCnt</span><span class="p">;</span> <span class="n">u</span><span class="o">++</span> <span class="p">{</span>
+        <span class="c">// seen 只服务于本次增广，必须每轮重建。</span>
+        <span class="n">seen</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="n">rightCnt</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dfs</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">seen</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">answer</span><span class="o">++</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">answer</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(V \cdot E)$，其中 <code class="language-plaintext highlighter-rouge">V</code> 是左部点数、<code class="language-plaintext highlighter-rouge">E</code> 是边数。凭什么：对每个左部点各做一次增广，单次增广最坏会遍历全部边一遍（每条边至多被走一次，由 <code class="language-plaintext highlighter-rouge">seen</code> 保证），因此总量是点数乘边数。代入本题约束，格子不超过 64、边不超过 112，实际运算量在万级以内，远低于时限。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(V + E)$。凭什么：邻接表存下所有边是 $O(E)$；<code class="language-plaintext highlighter-rouge">leftId</code>、<code class="language-plaintext highlighter-rouge">rightId</code>、<code class="language-plaintext highlighter-rouge">bad</code> 三个矩阵合计 $O(n \cdot m)$；<code class="language-plaintext highlighter-rouge">matchRight</code> 与每轮的 <code class="language-plaintext highlighter-rouge">seen</code> 各是 $O(V)$；递归栈深度不超过左部点数。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「若干对相邻元素，每个元素最多用一次，求最多能选几对」是最大匹配的标准形态。看到这个形态就该往图论上靠，而不是纠结摆放顺序。</li>
+    <li>棋盘按 <code class="language-plaintext highlighter-rouge">(r + c)</code> 奇偶染色后相邻必异色，这是网格题里最常用的二分性证明；有了二分性才能用匈牙利算法，否则要上带花树，难度完全不同。</li>
+    <li>匈牙利算法的灵魂是增广路：不是「找空位」而是「找一条能让别人腾位置的链」。能把这句话讲清楚，就说明真的理解了它为什么能得到最大值而不是极大值。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">seen</code> 数组的作用域是<strong>一次增广</strong>，每轮必须重置；<code class="language-plaintext highlighter-rouge">matchRight</code> 的作用域是<strong>整个算法</strong>，全程保留。把两者的生命周期分清楚，是这段代码最容易写错的地方。</li>
+    <li>匹配关系只在递归确认成功后才写入，绝不能边试边改——否则失败的尝试会留下破损的匹配。</li>
+    <li>面试视角：先把「骨牌 = 边、不重叠 = 不共端点」的等价关系说出来，再讲染色得到二分图，最后才提匈牙利算法。<strong>建模那两步才是考点</strong>，算法本身是模板。若被追问其他解法，可以说棋盘只有 8 列，逐行做状态压缩 DP（用一个 8 位掩码表示本行哪些格子被上一行的竖放骨牌占用）同样是标准解，且复杂度更可控。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：每轮增广不重建 <code class="language-plaintext highlighter-rouge">seen</code>，复用同一个数组 → 用例 <code class="language-plaintext highlighter-rouge">n = 2, m = 3, broken = [[1,0],[1,1]]</code> 中左部 1 号发现右部 0 号已被标记而直接跳过腾位尝试，虽然本例侥幸仍得 2，但在需要连续多次腾位的棋盘上会漏掉匹配，答案偏小。</li>
+    <li>
+<strong>错误写法</strong>：在递归之前就写 <code class="language-plaintext highlighter-rouge">matchRight[v] = u</code> → 用例中一旦深层递归失败，已经被改写的匹配无法回滚，原有匹配被破坏，答案比真实值更小。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">seen[v] = true</code> 写在递归之后 → 用例中两个左部点互相尝试对方的匹配对象时形成环，递归无限下降直至栈溢出。</li>
+    <li>
+<strong>错误写法</strong>：建图时只判邻居越界不判 <code class="language-plaintext highlighter-rouge">bad[nr][nc]</code> → 用例 <code class="language-plaintext highlighter-rouge">broken = [[1,0],[1,1]]</code> 中损坏格子被当成可用端点，骨牌被放到坏格上，答案偏大。</li>
+    <li>
+<strong>错误写法</strong>：染色用 <code class="language-plaintext highlighter-rouge">r % 2</code> 而不是 <code class="language-plaintext highlighter-rouge">(r + c) % 2</code> → 用例中同一行的相邻格子被分到同一部，横放的骨牌对应的边根本建不出来，答案严重偏小。</li>
+    <li>
+<strong>错误写法</strong>：建双向边并对左右两部都发起增广 → 用例中每张骨牌被从两端各匹配一次，答案翻倍。</li>
+    <li>
+<strong>错误写法</strong>：直接用 <code class="language-plaintext highlighter-rouge">(r, c)</code> 的一维压缩值 <code class="language-plaintext highlighter-rouge">r * m + c</code> 当左右部编号，但 <code class="language-plaintext highlighter-rouge">matchRight</code> 只开 <code class="language-plaintext highlighter-rouge">leftCnt</code> 长度 → 用例中右部编号超出数组范围，Java 抛数组越界异常，Go 直接 panic。</li>
+    <li>
+<strong>错误写法</strong>：用贪心「从左上到右下，能横放就横放」 → 用例 <code class="language-plaintext highlighter-rouge">n = 3, m = 3, broken = [[0,0],[2,2]]</code> 中贪心会先占住中间格导致后续无处可放，答案比最大匹配小。</li>
+    <li>
+<strong>错误写法</strong>：把答案理解成「完好格子数除以 2」 → 用例 <code class="language-plaintext highlighter-rouge">n = 1, m = 3, broken = [[0,1]]</code> 中完好格子有两个但互不相邻，答案是 0 而不是 1。</li>
+    <li>
+<strong>错误写法</strong>：认为损坏格子只是「不能放骨牌」而仍可被跨越 → 骨牌只覆盖相邻两格，本就不存在跨越；但若据此在建图时把隔着坏格的两格连边，用例 <code class="language-plaintext highlighter-rouge">n = 1, m = 3, broken = [[0,1]]</code> 会错误地返回 1。</li>
+    <li>
+<strong>错误写法</strong>：<code class="language-plaintext highlighter-rouge">broken</code> 为空时未初始化 <code class="language-plaintext highlighter-rouge">bad</code> 矩阵就直接使用 → Java 中布尔数组默认全 <code class="language-plaintext highlighter-rouge">false</code> 无碍，Go 中 <code class="language-plaintext highlighter-rouge">make</code> 同样为零值，但若改用哈希集合且忘记初始化，会在查询时空指针。</li>
+    <li>
+<strong>错误写法</strong>：递归函数忘记在遍历完所有邻居后返回 <code class="language-plaintext highlighter-rouge">false</code> → 用例中函数返回默认值，Java 编译报错，Go 中同样编译不过；若改成默认返回 <code class="language-plaintext highlighter-rouge">true</code>，匹配数会被虚增到左部点数。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/is-graph-bipartite/">785. 判断二分图</a></td>
+      <td>中等</td>
+      <td>只判定二分性本身，用染色 BFS/DFS，是本题建模第一步的独立练习</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/possible-bipartition/">886. 可能的二分法</a></td>
+      <td>中等</td>
+      <td>由「互相讨厌」的约束建图后做二染色，考的是把关系翻译成边</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/partition-to-k-equal-sum-subsets/">698. 划分为k个相等的子集</a></td>
+      <td>中等</td>
+      <td>同为「元素不可重复使用」的分组问题，但用回溯加剪枝或状压 DP 求解</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/matchsticks-to-square/">473. 火柴拼正方形</a></td>
+      <td>中等</td>
+      <td>698 的特例，练的是搜索顺序与剪枝而非匹配理论</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/n-queens/">51. N 皇后</a></td>
+      <td>困难</td>
+      <td>同为棋盘上的互斥摆放，但约束是行列对角线冲突，用回溯而非匹配</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-path-visiting-all-nodes/">847. 访问所有节点的最短路径</a></td>
+      <td>困难</td>
+      <td>点数极小的图上用位掩码表示已访问集合，是本题「规模小可状压」的同类</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-islands/">200. 岛屿数量</a></td>
+      <td>中等</td>
+      <td>网格四方向建图的基础题，重点在连通性而不是配对</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2021/40069970" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 871. 最低加油次数</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/42495272" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 面试题 03.03. 堆盘子</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/27094461">https://hgnulb.github.io/blog/2021/27094461</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>Java 基础-this 关键字 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,Java 基础" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Java 基础-this 关键字" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="this 关键字的应用" />
+<meta name="twitter:description" property="og:description" content="this 关键字的应用" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2020/98860960" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2020/98860960" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-26T23:56:03+08:00" />
+<meta property="article:modified_time" content="2020-10-26T23:56:03+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Java 基础-this 关键字" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2020-10-26T23:56:03+08:00","datePublished":"2020-10-26T23:56:03+08:00","description":"this 关键字的应用","headline":"Java 基础-this 关键字","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2020/98860960"},"url":"https://hgnulb.github.io/blog/2020/98860960"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#this-关键字的应用">this 关键字的应用</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#使用-this-关键字引用当前类的实例变量">使用 this 关键字引用当前类的实例变量</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#使用-this-关键字调用当前类的实例方法">使用 this 关键字调用当前类的实例方法</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#在构造方法中使用-this-关键字作为参数">在构造方法中使用 this 关键字作为参数</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#使用-this-关键字作为方法调用中的参数传递">使用 this 关键字作为方法调用中的参数传递</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#使用-this-关键字调用当前类的其它构造方法必须放在构造方法的第一行">使用 this() 关键字调用当前类的其它构造方法（必须放在构造方法的第一行）</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#使用-this-关键字返回当前类的实例">使用 this 关键字返回当前类的实例</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#this-面试考点">this 面试考点</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#this-关键字注意事项">this 关键字注意事项</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#参考资料">参考资料</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article" data-blockquote-color="green">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="Java 基础-this 关键字">Java 基础-this 关键字</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2020-10-26 23:56:03"
+                    datetime="2020-10-26T23:56:03+08:00"
+            >
+                2020-10-26
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1174 字 · 英文 133 词 · 代码 99 行 · 图片 1 张"
+            aria-label="预计阅读时间约 7 分钟，正文 1174 字 · 英文 133 词 · 代码 99 行 · 图片 1 张"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 7 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    1 个分类
+                    <span aria-hidden="true"> · </span>
+                    1 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7502060927/" title="Java 专题">
+        Java 专题
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5848467958/" title="Java 基础">
+        Java 基础
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#this-关键字的应用">this 关键字的应用</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#使用-this-关键字引用当前类的实例变量">使用 this 关键字引用当前类的实例变量</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#使用-this-关键字调用当前类的实例方法">使用 this 关键字调用当前类的实例方法</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#在构造方法中使用-this-关键字作为参数">在构造方法中使用 this 关键字作为参数</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#使用-this-关键字作为方法调用中的参数传递">使用 this 关键字作为方法调用中的参数传递</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#使用-this-关键字调用当前类的其它构造方法必须放在构造方法的第一行">使用 this() 关键字调用当前类的其它构造方法（必须放在构造方法的第一行）</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#使用-this-关键字返回当前类的实例">使用 this 关键字返回当前类的实例</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#this-面试考点">this 面试考点</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#this-关键字注意事项">this 关键字注意事项</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#参考资料">参考资料</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="this-关键字的应用">
+<a class="anchor" href="#this-%E5%85%B3%E9%94%AE%E5%AD%97%E7%9A%84%E5%BA%94%E7%94%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>this 关键字的应用</h2>
+
+<blockquote>
+  <p>[!blue]</p>
+
+  <ol>
+    <li>使用 this 关键字引用当前类的实例变量</li>
+    <li>使用 this 关键字调用当前类的实例方法</li>
+    <li>在构造方法中使用 this 关键字作为参数</li>
+    <li>使用 this 关键字作为方法调用中的参数传递</li>
+    <li>使用 this() 关键字调用当前类的其它构造方法<strong class="text-color-red">（必须放在构造方法的第一行）</strong>
+</li>
+    <li>使用 this 关键字返回当前类的实例</li>
+  </ol>
+</blockquote>
+
+<p><img src="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/post-list/image-20201107215347992.png" alt="image-20201107215347992" decoding="async" loading="lazy" width="777" height="353"></p>
+
+<h3 id="使用-this-关键字引用当前类的实例变量">
+<a class="anchor" href="#%E4%BD%BF%E7%94%A8-this-%E5%85%B3%E9%94%AE%E5%AD%97%E5%BC%95%E7%94%A8%E5%BD%93%E5%89%8D%E7%B1%BB%E7%9A%84%E5%AE%9E%E4%BE%8B%E5%8F%98%E9%87%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>使用 this 关键字引用当前类的实例变量</h3>
+
+<blockquote>
+  <p>this 指向<strong>当前对象自身</strong>。当构造方法或 setter 的参数名与实例变量同名时，参数会<strong>遮蔽</strong>实例变量，直接写变量名访问到的是参数。此时用 <code class="language-plaintext highlighter-rouge">this.变量名</code> 明确指向当前对象的实例变量，这是 this 最常见的用法。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="o">;</span>
+
+    <span class="nc">Test</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">a</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">b</span> <span class="o">=</span> <span class="n">b</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">display</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a = "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">+</span> <span class="s">" b = "</span> <span class="o">+</span> <span class="n">b</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Test</span> <span class="n">object</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Test</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="mi">20</span><span class="o">);</span>
+        <span class="n">object</span><span class="o">.</span><span class="na">display</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[!green-fold] 运行结果<br>
+a = 10 b = 20</p>
+</blockquote>
+
+<blockquote>
+  <p>构造方法中 <code class="language-plaintext highlighter-rouge">this.a = a</code> 把参数 a 的值赋给了实例变量 a。如果漏写 this，就变成参数自己赋值给自己，实例变量将保持默认值 0——这是面试和实际编码中的经典坑。</p>
+</blockquote>
+
+<h3 id="使用-this-关键字调用当前类的实例方法">
+<a class="anchor" href="#%E4%BD%BF%E7%94%A8-this-%E5%85%B3%E9%94%AE%E5%AD%97%E8%B0%83%E7%94%A8%E5%BD%93%E5%89%8D%E7%B1%BB%E7%9A%84%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95" aria-hidden="true"><span class="octicon octicon-link"></span></a>使用 this 关键字调用当前类的实例方法</h3>
+
+<blockquote>
+  <p>在实例方法内部调用本类的其他实例方法时，可以写 <code class="language-plaintext highlighter-rouge">this.方法名()</code>。这里的 this 通常<strong>可以省略</strong>，编译器会自动补上，显式写出主要是为了可读性。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">display</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">show</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Inside display function"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">show</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Inside show function"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Test</span> <span class="n">t1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Test</span><span class="o">();</span>
+        <span class="n">t1</span><span class="o">.</span><span class="na">display</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[!green-fold] 运行结果<br>
+Inside show function</p>
+
+  <p>Inside display function</p>
+</blockquote>
+
+<blockquote>
+  <p>display() 第一行的 this.show() 先执行完，才轮到它自己的打印语句，效果与直接写 show() 完全相同。</p>
+</blockquote>
+
+<h3 id="在构造方法中使用-this-关键字作为参数">
+<a class="anchor" href="#%E5%9C%A8%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%AD%E4%BD%BF%E7%94%A8-this-%E5%85%B3%E9%94%AE%E5%AD%97%E4%BD%9C%E4%B8%BA%E5%8F%82%E6%95%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>在构造方法中使用 this 关键字作为参数</h3>
+
+<blockquote>
+  <p>this 代表当前正在构造或运行的对象，因此可以把它作为参数<strong>传给别的类</strong>，让对方持有当前对象的引用。这是事件回调、对象之间建立关联的常见写法。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">A</span> <span class="o">{</span>
+    <span class="no">B</span> <span class="n">obj</span><span class="o">;</span>
+
+    <span class="no">A</span><span class="o">(</span><span class="no">B</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">obj</span> <span class="o">=</span> <span class="n">obj</span><span class="o">;</span>
+        <span class="n">obj</span><span class="o">.</span><span class="na">display</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">B</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
+
+    <span class="no">B</span><span class="o">()</span> <span class="o">{</span>
+        <span class="no">A</span> <span class="n">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="no">A</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">display</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Value of x in Class B: "</span> <span class="o">+</span> <span class="n">x</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="no">B</span> <span class="n">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="no">B</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[!green-fold] 运行结果<br>
+Value of x in Class B: 5</p>
+</blockquote>
+
+<blockquote>
+  <p>B 的构造方法把自身引用 this 传给 A，A 通过这个引用回调 obj.display()，访问到的正是这个 B 对象的 x。</p>
+</blockquote>
+
+<h3 id="使用-this-关键字作为方法调用中的参数传递">
+<a class="anchor" href="#%E4%BD%BF%E7%94%A8-this-%E5%85%B3%E9%94%AE%E5%AD%97%E4%BD%9C%E4%B8%BA%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E4%B8%AD%E7%9A%84%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92" aria-hidden="true"><span class="octicon octicon-link"></span></a>使用 this 关键字作为方法调用中的参数传递</h3>
+
+<blockquote>
+  <p>与上一节类似，在实例方法中也可以把 this 作为实参传给其他方法，常用于把「自己」交给别的方法处理。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="o">;</span>
+
+    <span class="nc">Test</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="mi">20</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">display</span><span class="o">(</span><span class="nc">Test</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a = "</span> <span class="o">+</span> <span class="n">obj</span><span class="o">.</span><span class="na">a</span> <span class="o">+</span> <span class="s">" b = "</span> <span class="o">+</span> <span class="n">obj</span><span class="o">.</span><span class="na">b</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">get</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">display</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Test</span> <span class="n">object</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Test</span><span class="o">();</span>
+        <span class="n">object</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[!green-fold] 运行结果<br>
+a = 10 b = 20</p>
+</blockquote>
+
+<blockquote>
+  <p>get() 中的 this 就是 main 里创建的 object，display(this) 因此打印出该对象的 a 和 b。</p>
+</blockquote>
+
+<h3 id="使用-this-关键字调用当前类的其它构造方法必须放在构造方法的第一行">
+<a class="anchor" href="#%E4%BD%BF%E7%94%A8-this-%E5%85%B3%E9%94%AE%E5%AD%97%E8%B0%83%E7%94%A8%E5%BD%93%E5%89%8D%E7%B1%BB%E7%9A%84%E5%85%B6%E5%AE%83%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E5%BF%85%E9%A1%BB%E6%94%BE%E5%9C%A8%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E7%9A%84%E7%AC%AC%E4%B8%80%E8%A1%8C" aria-hidden="true"><span class="octicon octicon-link"></span></a>使用 this() 关键字调用当前类的其它构造方法（必须放在构造方法的第一行）</h3>
+
+<blockquote>
+  <p>当多个构造方法存在重复的初始化逻辑时，可以用 <code class="language-plaintext highlighter-rouge">this(参数列表)</code> 让一个构造方法<strong>复用</strong>另一个，避免代码重复。注意 this() 只能出现在构造方法中，且必须是<strong>第一条语句</strong>。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="o">;</span>
+
+    <span class="nc">Test</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="mi">20</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Inside default constructor"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nc">Test</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">a</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">b</span> <span class="o">=</span> <span class="n">b</span><span class="o">;</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Inside parameterized constructor"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Test</span> <span class="n">object</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Test</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[!green-fold] 运行结果<br>
+Inside parameterized constructor</p>
+
+  <p>Inside default constructor</p>
+</blockquote>
+
+<blockquote>
+  <p>无参构造方法第一行的 this(10, 20) 会先把有参构造方法完整执行一遍，再回来执行自己剩下的语句，所以 parameterized 那一行先输出。</p>
+</blockquote>
+
+<h3 id="使用-this-关键字返回当前类的实例">
+<a class="anchor" href="#%E4%BD%BF%E7%94%A8-this-%E5%85%B3%E9%94%AE%E5%AD%97%E8%BF%94%E5%9B%9E%E5%BD%93%E5%89%8D%E7%B1%BB%E7%9A%84%E5%AE%9E%E4%BE%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>使用 this 关键字返回当前类的实例</h3>
+
+<blockquote>
+  <p>实例方法返回 this，调用方拿到的就是当前对象本身，可以继续调用它的其他方法。这正是<strong>链式调用</strong>（如 StringBuilder 的 append）的实现原理：每个方法做完自己的事后 <code class="language-plaintext highlighter-rouge">return this;</code>，下一个方法调用仍然作用在同一个对象上。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="o">;</span>
+
+    <span class="nc">Test</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="mi">20</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nc">Test</span> <span class="nf">get</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kt">void</span> <span class="nf">display</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a = "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">+</span> <span class="s">" b = "</span> <span class="o">+</span> <span class="n">b</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Test</span> <span class="n">object</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Test</span><span class="o">();</span>
+        <span class="n">object</span><span class="o">.</span><span class="na">get</span><span class="o">().</span><span class="na">display</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[!green-fold] 运行结果<br>
+a = 10 b = 20</p>
+</blockquote>
+
+<blockquote>
+  <p>get() 返回的就是 object 自身，所以 <code class="language-plaintext highlighter-rouge">object.get().display()</code> 等价于 <code class="language-plaintext highlighter-rouge">object.display()</code>。</p>
+</blockquote>
+
+<h2 id="this-面试考点">
+<a class="anchor" href="#this-%E9%9D%A2%E8%AF%95%E8%80%83%E7%82%B9" aria-hidden="true"><span class="octicon octicon-link"></span></a>this 面试考点</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>静态上下文不可用</strong>：this 依赖当前对象，static 方法和 static 代码块属于类而不属于任何对象，没有「当前对象」可指，其中使用 this 直接编译报错，main 方法也不例外。</li>
+    <li>
+<strong>this() 的三条限制</strong>：只能出现在构造方法中；必须是第一条语句（因此与 super() 二选一，且最多出现一次）；构造方法之间不能通过 this() 形成循环调用，否则编译器报 recursive constructor invocation 错误。</li>
+    <li>
+<strong>链式调用原理</strong>：方法末尾 <code class="language-plaintext highlighter-rouge">return this;</code> 把当前对象交还给调用方，于是 <code class="language-plaintext highlighter-rouge">obj.a().b().c()</code> 每一步都作用在同一个对象上，StringBuilder 的 append 就是这样实现的。</li>
+    <li>
+<strong>this 是只读引用</strong>：不能对它赋值，<code class="language-plaintext highlighter-rouge">this = xxx</code> 无法通过编译。</li>
+    <li>
+<strong>参数遮蔽</strong>：构造方法或 setter 中漏写 this（写成 <code class="language-plaintext highlighter-rouge">a = a</code>）是参数给自己赋值，实例变量保持默认值，编译不报错但逻辑出错。</li>
+  </ul>
+</blockquote>
+
+<h2 id="this-关键字注意事项">
+<a class="anchor" href="#this-%E5%85%B3%E9%94%AE%E5%AD%97%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" aria-hidden="true"><span class="octicon octicon-link"></span></a>this 关键字注意事项</h2>
+
+<blockquote>
+  <p>[!amber]</p>
+
+  <ul>
+    <li>this 依赖当前对象，<strong class="text-color-red">不能在 static 方法和 static 代码块中使用</strong>——静态上下文属于类而不属于任何对象，没有「当前对象」可指，编译直接报错，main 方法也不例外。</li>
+    <li>this() 只能出现在构造方法中，且必须是第一条语句；因此在同一个构造方法里，this() 与 super() 只能二选一，且最多出现一次。</li>
+    <li>构造方法之间不能通过 this() 形成循环调用（例如两个构造方法互相用 this() 调用对方），编译器会报 recursive constructor invocation 错误。</li>
+    <li>this 是一个只读引用，不能对它赋值，<code class="language-plaintext highlighter-rouge">this = xxx</code> 无法通过编译。</li>
+  </ul>
+</blockquote>
+
+<h2 id="参考资料">
+<a class="anchor" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99" aria-hidden="true"><span class="octicon octicon-link"></span></a>参考资料</h2>
+
+<ul>
+  <li><a href="https://www.javatpoint.com/this-keyword">https://www.javatpoint.com/this-keyword</a></li>
+  <li><a href="https://www.geeksforgeeks.org/this-reference-in-java/">https://www.geeksforgeeks.org/this-reference-in-java/</a></li>
+</ul>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2020/76825998" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 307. 区域和检索 - 数组可修改</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2020/51258992" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">Java 基础-super 关键字</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2020/98860960">https://hgnulb.github.io/blog/2020/98860960</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 727. 最小窗口子序列 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,动态规划,字符串,滑动窗口,虾皮" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 727. 最小窗口子序列" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/66376032" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/66376032" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-01-16T15:19:56+08:00" />
+<meta property="article:modified_time" content="2022-01-16T15:19:56+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 727. 最小窗口子序列" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-01-16T15:19:56+08:00","datePublished":"2022-01-16T15:19:56+08:00","description":"题目描述","headline":"LeetCode 727. 最小窗口子序列","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/66376032"},"url":"https://hgnulb.github.io/blog/2022/66376032"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法双指针扫描--回溯收缩">解法：双指针扫描 + 回溯收缩</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 727. 最小窗口子序列">LeetCode 727. 最小窗口子序列</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-01-16 15:19:56"
+                    datetime="2022-01-16T15:19:56+08:00"
+            >
+                2022-01-16
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2153 字 · 英文 214 词 · 代码 88 行"
+            aria-label="预计阅读时间约 9 分钟，正文 2153 字 · 英文 214 词 · 代码 88 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 9 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6901340989/" title="虾皮">
+        虾皮
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5692196181/" title="滑动窗口">
+        滑动窗口
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法双指针扫描--回溯收缩">解法：双指针扫描 + 回溯收缩</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/minimum-window-subsequence/">727. 最小窗口子序列</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给定 s 和 t，要在 s 中找一段连续子串，使 t 是这段子串的子序列，并让这段子串尽可能短；长度相同时取起点最靠左的那个，找不到就返回空串。</p>
+
+  <p>约束给了很明确的信号：s 最长两万级，t 最长一百级，两者差了两个数量级。这意味着允许把 t 的长度当成一个可以接受的乘数因子，但绝不允许对 s 做平方级的区间枚举。</p>
+
+  <p>边界上有三件事必须先想清楚。第一，t 根本没在 s 中出现时要返回空串，而不是返回某个「最接近」的区间。第二，答案窗口的首字符必然等于 t 的首字符、尾字符必然等于 t 的尾字符，否则还能继续截短。第三，等长答案可能不止一个，取最左意味着更新答案的比较必须是严格小于。</p>
+</blockquote>
+
+<h2 id="解法双指针扫描--回溯收缩">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%8F%8C%E6%8C%87%E9%92%88%E6%89%AB%E6%8F%8F--%E5%9B%9E%E6%BA%AF%E6%94%B6%E7%BC%A9" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：双指针扫描 + 回溯收缩</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最直接的做法是枚举 s 的每一个左端点和右端点，对每个区间再用一次双指针判断 t 是不是它的子序列，取所有合法区间里最短的。复杂度是 $O(n^2 m)$，n 到两万就完全跑不动。</p>
+
+  <p>瓶颈在于枚举出来的区间绝大多数两端都是废料：要么左边多带了几个与匹配无关的字符，要么右边还没匹配完就被切断。既然合法窗口的两端一定分别压在 t 的首尾字符上，盲目枚举端点本身就是浪费。</p>
+
+  <p>于是观察到一对可以配合使用的性质。从某个起点 i 出发向右贪心匹配 t，第一次把 t 匹配完的位置 r，是「以 i 为起点时最小的右端点」；反过来固定这个 r，从 r 向左倒着匹配 t，第一次倒着匹配完的位置 l，是「以 r 为右端点时最大的左端点」。两次方向相反的扫描一前一后，就把一个候选窗口从两侧同时夹死了。</p>
+
+  <p>由此得到贯穿外层循环的不变量：每轮开始时，所有小于 i 的起点所对应的最优窗口都已被考察过；正向扫描结束后 j - 1 是本轮的右端点；反向收缩结束后 start 是以 j - 1 为右端点时最短合法窗口的左端点。下一轮把起点推进到 start + 1，既不会漏掉更优解，也不会重复考察同一个窗口。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>用 i 表示本轮扫描的起点，初值为 0，同时准备 bestLen 与 bestStart 记录全局最优窗口。bestLen 的初值必须严格大于任何可能出现的窗口长度，否则长度恰好等于 n 的唯一答案会被漏掉。</li>
+    <li>正向扫描：从 i 开始让 j 向右走，指针 k 指向 t 中待匹配的字符，字符相等时 k 前进。这一步的目的是找到从 i 出发最早能把 t 匹配完的位置，而不是任意一个能匹配完的位置。</li>
+    <li>如果 j 已经走到 s 末尾而 k 仍未走完 t，说明从 i 往后再也凑不齐 t，起点更靠右只会更凑不齐，直接结束整个外层循环。这个提前退出不是优化而是必需，否则后面会拿一个没匹配完的 j 去构造窗口。</li>
+    <li>反向收缩：把 end 放在 j - 1，把 k 放在 m - 1，让 end 向左走并倒着匹配 t，k 减到 -1 时立即停下。停下时 end 正好压在 t 首字符对应的位置上，它是仍能保持窗口合法的最靠右的左端点，也就是本轮的最短左界。</li>
+    <li>用 j - start 作为本轮窗口长度更新答案，比较用严格小于，这样等长时会保留先出现的窗口，符合题目取最左的要求。</li>
+    <li>把起点推进到 start + 1 再进入下一轮。之所以不是 i + 1，是因为区间 [i, start] 里的任何起点最终都只会收缩到同一个窗口或更长的窗口，跳过它们不影响正确性，却能保证起点严格单调右移。</li>
+  </ul>
+
+  <p><strong>以 <code class="language-plaintext highlighter-rouge">s = "abcdebdde"</code>、<code class="language-plaintext highlighter-rouge">t = "bde"</code> 走一遍</strong>：第一轮 i = 0，正向扫描在下标 1 匹配上 b、下标 3 匹配上 d、下标 4 匹配上 e，退出时 j = 5，本轮右端点是 4；反向收缩从 end = 4 起，下标 4 对上 e、下标 3 对上 d、下标 1 对上 b，k 变成 -1 后停在 end = 1，窗口为 [1, 4]，长度 5 - 1 = 4，记下 bestStart = 1、bestLen = 4，答案暂定「bcde」，起点推进到 2。第二轮 i = 2，正向扫描在下标 5 匹配上 b、下标 6 匹配上 d、下标 8 匹配上 e，退出时 j = 9，右端点是 8；反向收缩从 end = 8 起，下标 8 对上 e、下标 7 对上 d、下标 5 对上 b，停在 end = 5，窗口为 [5, 8]，长度 9 - 5 = 4，不小于 bestLen 所以不更新，起点推进到 6。第三轮 i = 6，从下标 6 一直扫到末尾都没能匹配上 t 的首字符 b，k 停在 0，触发提前退出。最终返回从下标 1 开始、长度为 4 的子串「bcde」。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 然后向左回溯，尽量收缩窗口以得到最短左边界。</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">minWindow</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="nc">String</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">bestLen</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">bestStart</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+            <span class="k">while</span> <span class="o">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span><span class="o">)</span> <span class="o">==</span> <span class="n">t</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">k</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">k</span><span class="o">++;</span>
+                <span class="o">}</span>
+                <span class="n">j</span><span class="o">++;</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="kt">int</span> <span class="n">end</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">end</span> <span class="o">&gt;=</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">end</span><span class="o">)</span> <span class="o">==</span> <span class="n">t</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">k</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">k</span><span class="o">--;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+                <span class="n">end</span><span class="o">--;</span>
+            <span class="o">}</span>
+
+            <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="n">end</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">start</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">len</span> <span class="o">&lt;</span> <span class="n">bestLen</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">bestLen</span> <span class="o">=</span> <span class="n">len</span><span class="o">;</span>
+                <span class="n">bestStart</span> <span class="o">=</span> <span class="n">start</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="n">i</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">bestStart</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="s">""</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">bestStart</span><span class="o">,</span> <span class="n">bestStart</span> <span class="o">+</span> <span class="n">bestLen</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 然后向左回溯，尽量收缩窗口以得到最短左边界。</span>
+<span class="k">func</span> <span class="n">minWindow</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">,</span> <span class="n">t</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">bestLen</span> <span class="o">:=</span> <span class="n">n</span> <span class="o">+</span> <span class="m">1</span>
+    <span class="n">bestStart</span> <span class="o">:=</span> <span class="o">-</span><span class="m">1</span>
+    <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="p">{</span>
+        <span class="n">j</span> <span class="o">:=</span> <span class="n">i</span>
+        <span class="n">k</span> <span class="o">:=</span> <span class="m">0</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="p">{</span>
+                <span class="n">k</span><span class="o">++</span>
+            <span class="p">}</span>
+            <span class="n">j</span><span class="o">++</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="p">{</span>
+            <span class="k">break</span>
+        <span class="p">}</span>
+
+        <span class="n">end</span> <span class="o">:=</span> <span class="n">j</span> <span class="o">-</span> <span class="m">1</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">m</span> <span class="o">-</span> <span class="m">1</span>
+        <span class="k">for</span> <span class="n">end</span> <span class="o">&gt;=</span> <span class="n">i</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">end</span><span class="p">]</span> <span class="o">==</span> <span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="p">{</span>
+                <span class="n">k</span><span class="o">--</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="p">{</span>
+                    <span class="k">break</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="n">end</span><span class="o">--</span>
+        <span class="p">}</span>
+
+        <span class="n">start</span> <span class="o">:=</span> <span class="n">end</span>
+        <span class="n">length</span> <span class="o">:=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">start</span>
+        <span class="k">if</span> <span class="n">length</span> <span class="o">&lt;</span> <span class="n">bestLen</span> <span class="p">{</span>
+            <span class="n">bestLen</span> <span class="o">=</span> <span class="n">length</span>
+            <span class="n">bestStart</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="p">}</span>
+
+        <span class="n">i</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="m">1</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">bestStart</span> <span class="o">==</span> <span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s">""</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="n">bestStart</span> <span class="o">:</span> <span class="n">bestStart</span><span class="o">+</span><span class="n">bestLen</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n \cdot m)$，其中 n、m 分别是 s 和 t 的长度。起点 i 严格单调右移，外层最多进行 n 轮；每一轮的反向收缩长度就是本轮窗口长度，而窗口长度由完成一次 t 匹配所需的跨度决定，摊还之后与 m 成正比。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(1)$，只用了若干个下标与长度变量，返回的子串不计入额外空间。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>求「最短合法区间」时，先固定一端再向内收缩另一端，通常比同时枚举两端便宜一个量级，这个套路可以直接迁移到大量区间与窗口题上。</li>
+    <li>正向找最早右端点、反向找最右左端点，两次方向相反的贪心匹配互为验证，是本题唯一需要想出来的构造，其余都是实现细节。</li>
+    <li>起点推进到 start + 1 而不是 i + 1，本质上是「跳过必然不更优的候选」，这一步把外层循环从平方级压回线性级。</li>
+    <li>面试视角：这题常被拿来和 76. 最小覆盖子串对比，面试官真正想听的是你能说清区别——覆盖子串只要求字符计数够，所以窗口能自由伸缩；子序列要求保持顺序，计数窗口那套判定直接失效。先讲透这一点再写代码，比上来就敲键盘更容易拿分。</li>
+    <li>面试视角：写完后主动补一句「本题还有一个 $O(n \cdot m)$ 的 DP 解法，<code class="language-plaintext highlighter-rouge">dp[i][j]</code> 表示 s 前 i 个字符里匹配完 t 前 j 个字符时窗口能取到的最大起始下标」，能表明你知道不止一条路，通常会引出对其中一条的追问。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法</strong>：bestLen 的初值取成 n 而不是 n + 1（Go 版尤其容易写错）：<code class="language-plaintext highlighter-rouge">s = "bde"</code>、<code class="language-plaintext highlighter-rouge">t = "bde"</code> → 唯一答案的长度恰好等于 n，<code class="language-plaintext highlighter-rouge">len &lt; bestLen</code> 不成立，答案从未被记录，最终返回空串。</li>
+    <li>
+<strong>错误写法</strong>：反向收缩时 k 减到 -1 后不立即 break，继续执行 <code class="language-plaintext highlighter-rouge">end--</code> 并在下一轮读 <code class="language-plaintext highlighter-rouge">t[k]</code>：<code class="language-plaintext highlighter-rouge">s = "bbde"</code>、<code class="language-plaintext highlighter-rouge">t = "bde"</code> → k 已经是 -1，下一次比较就去访问 t 的 -1 号位，直接抛出下标越界。</li>
+    <li>
+<strong>错误写法</strong>：正向扫描结束后不检查 <code class="language-plaintext highlighter-rouge">k &lt; m</code> 就把 <code class="language-plaintext highlighter-rouge">j - 1</code> 当右端点：<code class="language-plaintext highlighter-rouge">s = "abc"</code>、<code class="language-plaintext highlighter-rouge">t = "d"</code> → 拿一个根本没匹配完的位置去反向收缩，start 停在起点上，返回一个完全不含 t 的子串。</li>
+    <li>
+<strong>错误写法</strong>：省掉反向收缩，直接把 <code class="language-plaintext highlighter-rouge">[i, j - 1]</code> 当答案：<code class="language-plaintext highlighter-rouge">s = "abcdebdde"</code>、<code class="language-plaintext highlighter-rouge">t = "bde"</code> → 第一轮返回 [0, 4] 也就是「abcde」，比最优解多带了一个开头的 a。</li>
+    <li>
+<strong>错误写法</strong>：右端点写成 j 而不是 <code class="language-plaintext highlighter-rouge">j - 1</code>，或长度写成 <code class="language-plaintext highlighter-rouge">j - start + 1</code>：<code class="language-plaintext highlighter-rouge">s = "abcdebdde"</code>、<code class="language-plaintext highlighter-rouge">t = "bde"</code> → 每个窗口都多算一个字符，返回「bcdeb」这类比最优解长 1 的结果。</li>
+    <li>
+<strong>错误写法</strong>：Java 里写成 <code class="language-plaintext highlighter-rouge">s.substring(bestStart, bestLen)</code>：本题最优解 bestStart = 1、bestLen = 4 → 实际截出的是 <code class="language-plaintext highlighter-rouge">[1, 4)</code> 即「bcd」，比正确答案少一个字符。</li>
+    <li>
+<strong>错误写法</strong>：更新答案时用 <code class="language-plaintext highlighter-rouge">len &lt;= bestLen</code>：输入中存在两个等长的最短窗口时 → 后出现的窗口会覆盖先出现的，返回的不是题目要求的最左答案。</li>
+    <li>
+<strong>错误写法</strong>：下一轮起点写成 <code class="language-plaintext highlighter-rouge">i = i + 1</code>：s 中夹杂大段与 t 无关的字符时 → 答案仍然正确，但每个起点都要重跑一次完整的正向扫描，复杂度退化，长输入会超时。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-window-substring/">76. 最小覆盖子串</a></td>
+      <td>困难</td>
+      <td>只要求字符计数覆盖、不要求保序，可用可伸缩滑动窗口</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/is-subsequence/">392. 判断子序列</a></td>
+      <td>简单</td>
+      <td>只判断是否为子序列，一次正向双指针即可，无需收缩</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-matching-subsequences/">792. 匹配子序列的单词数</a></td>
+      <td>中等</td>
+      <td>同一个主串上批量匹配多个模式串，重点是按待匹配字符分桶</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/distinct-subsequences/">115. 不同的子序列</a></td>
+      <td>困难</td>
+      <td>求匹配方案数而非最短窗口，只能上二维计数 DP</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/73812732" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 342. 4的幂</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/90616184" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1690. 石子游戏 VII</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/66376032">https://hgnulb.github.io/blog/2022/66376032</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

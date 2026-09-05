@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1087. 花括号展开 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,回溯,字符串,广度优先搜索,微软,拼多多,排序,栈" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1087. 花括号展开" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2024/41435667" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2024/41435667" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-09-22T15:50:28+08:00" />
+<meta property="article:modified_time" content="2024-09-22T15:50:28+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1087. 花括号展开" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2024-09-22T15:50:28+08:00","datePublished":"2024-09-22T15:50:28+08:00","description":"题目描述","headline":"LeetCode 1087. 花括号展开","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2024/41435667"},"url":"https://hgnulb.github.io/blog/2024/41435667"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法逐段展开">解法：逐段展开</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1087. 花括号展开">LeetCode 1087. 花括号展开</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2024-09-22 15:50:28"
+                    datetime="2024-09-22T15:50:28+08:00"
+            >
+                2024-09-22
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3216 字 · 英文 53 词 · 代码 63 行"
+            aria-label="预计阅读时间约 10 分钟，正文 3216 字 · 英文 53 词 · 代码 63 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 10 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    7 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/7041841112/" title="拼多多">
+        拼多多
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0175134788/" title="微软">
+        微软
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3320177889/" title="排序">
+        排序
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5534332481/" title="栈">
+        栈
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9755043388/" title="回溯">
+        回溯
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法逐段展开">解法：逐段展开</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/brace-expansion/">1087. 花括号展开</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>输入是一个由小写字母、逗号和花括号组成的字符串。它可以被理解成若干个「槽位」从左到右串起来：一个裸露的字母是只有一种取值的槽位，一对花括号 <code class="language-plaintext highlighter-rouge">{x,y,z}</code> 是有多种取值的槽位。要求输出所有可能的字符串，也就是每个槽位各挑一个字母拼起来的全部组合，并且结果必须按字典序排列。</p>
+</blockquote>
+
+<blockquote>
+  <p>约束里有几条决定性的信息。花括号不会嵌套，这意味着不需要递归文法解析，一次从左到右的线性扫描就能把整个串切成槽位序列。花括号里的每一项都是单个小写字母，所以「解析一个选项」等价于「读一个字符」，不用处理多字符 token。字符串长度上限很小（五十以内），槽位数量因此有限，结果规模虽然是各槽位选项数的乘积，但在这个规模下完全可以把所有结果显式生成出来，说明这题考的是「把结构解析对、把组合枚举全」，而不是任何计数或压缩技巧。</p>
+</blockquote>
+
+<blockquote>
+  <p>边界有三处需要留意：花括号内部的字母不保证已经排好序，题目给的例子里就出现过 <code class="language-plaintext highlighter-rouge">{b,a}</code> 这种形式，所以不能假设扫描顺序就是字典序；输入可能完全没有花括号，此时答案只有一个字符串；单个花括号里也可能只有一个字母，退化成和裸字母等价的槽位，代码不该为它单开分支。</p>
+</blockquote>
+
+<h2 id="解法逐段展开">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E9%80%90%E6%AE%B5%E5%B1%95%E5%BC%80" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：逐段展开</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最直接的想法是回溯：写一个递归函数，参数是「当前解析到的下标」和「已经拼好的前缀」，遇到字母就把它接到前缀上往后递归，遇到花括号就先把括号内的所有字母收集出来，对每个字母各递归一次。这个做法是对的，但它有个不太舒服的地方：解析下标的推进逻辑和递归的分支逻辑纠缠在一起，写在白板上很容易把「括号闭合后下标应该跳到哪」写错，而且每条分支都要把括号重新解析一遍，做了大量重复的解析工作。</p>
+</blockquote>
+
+<blockquote>
+  <p>换个角度观察这个结构：由于花括号不嵌套，整个串其实就是槽位的线性拼接，槽位之间是完全独立的——第二个槽位选什么，跟第一个槽位选了什么毫无关系。既然如此，就没必要用递归去表达这种独立性，直接按顺序把槽位一个个「乘」进结果集合即可，这就是笛卡尔积的迭代形式。解析只做一遍，组合过程变成纯粹的两层循环，逻辑上比回溯更平坦。</p>
+</blockquote>
+
+<blockquote>
+  <p>显式写出这个算法维护的不变量：设 <code class="language-plaintext highlighter-rouge">res</code> 是当前的结果集合，<code class="language-plaintext highlighter-rouge">i</code> 是解析指针，那么任意时刻恒有「<code class="language-plaintext highlighter-rouge">res</code> 恰好等于 <code class="language-plaintext highlighter-rouge">s</code> 的前缀 <code class="language-plaintext highlighter-rouge">s[0..i)</code> 所能展开出的全部字符串，不重不漏」。初始时 <code class="language-plaintext highlighter-rouge">i = 0</code>、<code class="language-plaintext highlighter-rouge">res = [""]</code>，空前缀只能展开出空串，不变量成立。每一轮从 <code class="language-plaintext highlighter-rouge">i</code> 处解析出一个完整槽位，得到它的候选字母列表 <code class="language-plaintext highlighter-rouge">options</code>，用 <code class="language-plaintext highlighter-rouge">res × options</code> 生成新的 <code class="language-plaintext highlighter-rouge">res</code> 并把 <code class="language-plaintext highlighter-rouge">i</code> 推到槽位之后，不变量依然成立——因为新前缀的任何展开结果，都唯一地分解为「旧前缀的某个展开」拼上「本槽位的某个候选」。当 <code class="language-plaintext highlighter-rouge">i</code> 走到串尾时，前缀就是全串，<code class="language-plaintext highlighter-rouge">res</code> 即为答案集合。</p>
+</blockquote>
+
+<blockquote>
+  <p>最后剩一个字典序的问题。上面的过程只保证结果集合正确，不保证有序：花括号内的字母顺序会原样传导到结果的相对顺序上，<code class="language-plaintext highlighter-rouge">{b,a}</code> 就会先产出 <code class="language-plaintext highlighter-rouge">b</code> 开头的串。与其在解析时对每个 <code class="language-plaintext highlighter-rouge">options</code> 排序（那样确实也能让生成顺序天然有序，因为前缀相同时后缀的顺序就是字典序），不如在最后对结果整体排一次序，逻辑更直白，也不依赖「前缀有序推出整体有序」这个需要额外论证的性质。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>初始化 <code class="language-plaintext highlighter-rouge">res</code> 为只含空串的列表，解析指针 <code class="language-plaintext highlighter-rouge">i = 0</code>。用空串而不是空列表作为起点，是因为空列表在做笛卡尔积时会把一切都乘成空，而空串是拼接运算的单位元，能让第一个槽位自然地生成初始结果。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>进入主循环，条件是 <code class="language-plaintext highlighter-rouge">i &lt; s.length()</code>。每一轮的职责固定为两件事：解析出一个槽位的候选列表，然后用它更新 <code class="language-plaintext highlighter-rouge">res</code>。把这两件事严格分开，是为了让「不管槽位是裸字母还是花括号，后半段的合并代码完全一致」，避免写两套重复的乘积逻辑。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>解析时先看 <code class="language-plaintext highlighter-rouge">s.charAt(i)</code> 是不是 <code class="language-plaintext highlighter-rouge">{</code>。如果是，先 <code class="language-plaintext highlighter-rouge">i++</code> 跳过左括号，然后一路前进直到遇到 <code class="language-plaintext highlighter-rouge">}</code>，途中把非逗号的字符收进 <code class="language-plaintext highlighter-rouge">options</code>，最后再 <code class="language-plaintext highlighter-rouge">i++</code> 跳过右括号。用「跳过所有逗号」而不是「按逗号切分」，是因为选项保证是单字符，遇到字母就收即可，不需要维护 token 缓冲区。两次 <code class="language-plaintext highlighter-rouge">i++</code> 一个都不能少，否则指针会停在括号上导致死循环或误解析。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>如果当前字符不是 <code class="language-plaintext highlighter-rouge">{</code>，说明是一个裸字母，直接把它作为唯一候选放进 <code class="language-plaintext highlighter-rouge">options</code> 并 <code class="language-plaintext highlighter-rouge">i++</code>。这条分支让裸字母和只有一个选项的花括号在后续处理上完全等价。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>合并阶段新建一个 <code class="language-plaintext highlighter-rouge">next</code> 列表，外层遍历 <code class="language-plaintext highlighter-rouge">res</code> 中的每个前缀，内层遍历 <code class="language-plaintext highlighter-rouge">options</code> 中的每个候选，把拼接结果放进 <code class="language-plaintext highlighter-rouge">next</code>，最后令 <code class="language-plaintext highlighter-rouge">res = next</code>。必须新建列表而不是原地修改 <code class="language-plaintext highlighter-rouge">res</code>，否则一边遍历一边追加会读到本轮刚生成的元素，导致同一个槽位被重复乘上去。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>全部解析完后对 <code class="language-plaintext highlighter-rouge">res</code> 做一次字典序排序再返回。排序放在最后而不是解析中途，是因为只有此时每个字符串才是完整的，中途排序对最终顺序没有任何保证。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>以 <code class="language-plaintext highlighter-rouge">s = "{a,b}c{d,e}f"</code> 走一遍。初始 <code class="language-plaintext highlighter-rouge">res = [""]</code>，<code class="language-plaintext highlighter-rouge">i = 0</code>。第一轮，<code class="language-plaintext highlighter-rouge">s[0]</code> 是 <code class="language-plaintext highlighter-rouge">{</code>，<code class="language-plaintext highlighter-rouge">i</code> 推到 1，依次读到 <code class="language-plaintext highlighter-rouge">a</code>（收入）、<code class="language-plaintext highlighter-rouge">,</code>（跳过）、<code class="language-plaintext highlighter-rouge">b</code>（收入），<code class="language-plaintext highlighter-rouge">i</code> 停在 4 处的 <code class="language-plaintext highlighter-rouge">}</code>，再 <code class="language-plaintext highlighter-rouge">i++</code> 变成 5，<code class="language-plaintext highlighter-rouge">options = ["a","b"]</code>，合并后 <code class="language-plaintext highlighter-rouge">res = ["a","b"]</code>。第二轮 <code class="language-plaintext highlighter-rouge">i = 5</code>，<code class="language-plaintext highlighter-rouge">s[5]</code> 是裸字母 <code class="language-plaintext highlighter-rouge">c</code>，<code class="language-plaintext highlighter-rouge">options = ["c"]</code>，<code class="language-plaintext highlighter-rouge">i</code> 变成 6，合并后 <code class="language-plaintext highlighter-rouge">res = ["ac","bc"]</code>——注意这里 <code class="language-plaintext highlighter-rouge">options</code> 只有一个元素，乘积等于给每个前缀统一追加一个字符，规模没有膨胀。第三轮 <code class="language-plaintext highlighter-rouge">i = 6</code> 又是 <code class="language-plaintext highlighter-rouge">{</code>，同样解析出 <code class="language-plaintext highlighter-rouge">options = ["d","e"]</code>，<code class="language-plaintext highlighter-rouge">i</code> 推到 11，合并后 <code class="language-plaintext highlighter-rouge">res = ["acd","ace","bcd","bce"]</code>，元素数从 2 翻到 4。第四轮 <code class="language-plaintext highlighter-rouge">i = 11</code>，裸字母 <code class="language-plaintext highlighter-rouge">f</code>，<code class="language-plaintext highlighter-rouge">options = ["f"]</code>，<code class="language-plaintext highlighter-rouge">i</code> 变成 12，<code class="language-plaintext highlighter-rouge">res = ["acdf","acef","bcdf","bcef"]</code>。循环退出，排序后顺序不变，返回这四个字符串。如果把输入换成 <code class="language-plaintext highlighter-rouge">"{b,a}c"</code>，第一轮的 <code class="language-plaintext highlighter-rouge">options</code> 会是 <code class="language-plaintext highlighter-rouge">["b","a"]</code>，中途 <code class="language-plaintext highlighter-rouge">res = ["bc","ac"]</code> 是乱序的，正是最后那次排序把它纠正成 <code class="language-plaintext highlighter-rouge">["ac","bc"]</code>。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// 遇到花括号时解析备选字符列表，与当前结果做笛卡尔积。</span>
+    <span class="kd">public</span> <span class="nc">String</span><span class="o">[]</span> <span class="nf">expand</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">""</span><span class="o">);</span>
+
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">())</span> <span class="o">{</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">options</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'{'</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">i</span><span class="o">++;</span>
+                <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">!=</span> <span class="sc">'}'</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">!=</span> <span class="sc">','</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">options</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)));</span>
+                    <span class="o">}</span>
+                    <span class="n">i</span><span class="o">++;</span>
+                <span class="o">}</span>
+                <span class="n">i</span><span class="o">++;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">options</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)));</span>
+                <span class="n">i</span><span class="o">++;</span>
+            <span class="o">}</span>
+
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">next</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">prefix</span> <span class="o">:</span> <span class="n">res</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">opt</span> <span class="o">:</span> <span class="n">options</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">next</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">opt</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">next</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">res</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="na">toArray</span><span class="o">(</span><span class="k">new</span> <span class="nc">String</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">expand</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+    <span class="c">// 遇到花括号时解析备选字符列表，与当前结果做笛卡尔积。</span>
+    <span class="n">res</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">""</span><span class="p">}</span>
+
+    <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">options</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'{'</span> <span class="p">{</span>
+            <span class="n">i</span><span class="o">++</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'}'</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">','</span> <span class="p">{</span>
+                    <span class="n">options</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="kt">string</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                <span class="p">}</span>
+                <span class="n">i</span><span class="o">++</span>
+            <span class="p">}</span>
+            <span class="n">i</span><span class="o">++</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="kt">string</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+            <span class="n">i</span><span class="o">++</span>
+        <span class="p">}</span>
+
+        <span class="n">next</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">res</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">opt</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">options</span> <span class="p">{</span>
+                <span class="n">next</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">next</span><span class="p">,</span> <span class="n">prefix</span><span class="o">+</span><span class="n">opt</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">next</span>
+    <span class="p">}</span>
+
+    <span class="n">sort</span><span class="o">.</span><span class="n">Strings</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(k \cdot r \log r)$，其中 $r$ 为结果数量（等于各槽位候选数的乘积），$k$ 为单个结果的长度。解析只扫一遍原串是 $O(n)$；生成阶段每个最终结果都被逐字符构造出来，是 $O(k \cdot r)$；排序做 $O(r \log r)$ 次字符串比较，每次比较代价 $O(k)$，这一项主导了总量。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(k \cdot r)$，凭的是必须把全部 $r$ 个长度为 $k$ 的结果同时保存下来才能排序并返回，其余只有一个大小不超过字符集的候选列表和几个指针。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>只要子结构之间彼此独立、没有嵌套依赖，就可以把回溯改写成迭代的笛卡尔积。判断标准是问自己「后面的选择会不会受前面选择的影响」，答案是「不会」时，两层循环就够了，不必上递归。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>用空串而不是空列表作为结果集合的初值，是所有增量式组合枚举的通用起手式：它是拼接运算的单位元，能让第一轮循环和后续循环走完全相同的代码路径。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>解析和合并两个阶段要严格分离。解析只负责「把指针推到下一个槽位并产出候选列表」，合并只负责乘积，这样裸字母和花括号共用同一段合并代码，分支数量减半，白板上出错的机会也随之减半。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>迭代地扩展集合时必须写进新容器再整体替换，绝不能一边遍历一边往同一个容器里追加，这是这类写法最典型的自我污染陷阱。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>面试视角上，被问到这题应该主动说明两点：一是「花括号不嵌套」这条约束是选择线性扫描而非递归下降解析的依据，二是如果面试官追问嵌套情况（也就是 1096），解法必须换成递归文法解析并用集合去重，这两问基本就是这道题的全部考察意图。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>顺序要求要单独当成一个阶段处理。生成过程只保证集合正确，字典序是额外的输出约束，把它放在最后一次排序里解决，比试图让生成顺序天然有序更稳妥，也更容易向面试官解释正确性。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>错误写法：把 <code class="language-plaintext highlighter-rouge">res</code> 初始化成空列表 <code class="language-plaintext highlighter-rouge">new ArrayList&lt;&gt;()</code> 而不是含空串的列表。用例 <code class="language-plaintext highlighter-rouge">"abc"</code>，第一轮合并时外层循环一次都不执行，<code class="language-plaintext highlighter-rouge">next</code> 始终为空，最终返回空数组。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：解析花括号后忘记最后那个 <code class="language-plaintext highlighter-rouge">i++</code>，指针停在 <code class="language-plaintext highlighter-rouge">}</code> 上。用例 <code class="language-plaintext highlighter-rouge">"{a,b}c"</code>，下一轮读到 <code class="language-plaintext highlighter-rouge">}</code> 会走裸字母分支，把 <code class="language-plaintext highlighter-rouge">}</code> 当成一个候选字符拼进结果，输出 <code class="language-plaintext highlighter-rouge">["a}c","b}c"]</code>。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：进入花括号分支后没有先 <code class="language-plaintext highlighter-rouge">i++</code> 跳过 <code class="language-plaintext highlighter-rouge">{</code>。用例 <code class="language-plaintext highlighter-rouge">"{a,b}"</code>，内层循环第一次就读到 <code class="language-plaintext highlighter-rouge">{</code> 并把它收进 <code class="language-plaintext highlighter-rouge">options</code>，结果里混入括号字符，同时指针推进节奏全乱。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：内层解析循环的条件只写 <code class="language-plaintext highlighter-rouge">s.charAt(i) != '}'</code>，漏掉 <code class="language-plaintext highlighter-rouge">i &lt; s.length()</code>。用例是任何以花括号结尾且解析出错导致越过右括号的情况，会抛出字符串下标越界异常。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：在合并阶段直接对 <code class="language-plaintext highlighter-rouge">res</code> 原地追加，写成 <code class="language-plaintext highlighter-rouge">for (String prefix : res) res.add(prefix + opt);</code>。用例 <code class="language-plaintext highlighter-rouge">"{a,b}"</code> 会在遍历中修改集合，Java 里直接抛 <code class="language-plaintext highlighter-rouge">ConcurrentModificationException</code>，Go 里则会读到本轮新加的元素并无限膨胀。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：合并时把两层循环写反，外层遍历 <code class="language-plaintext highlighter-rouge">options</code>、内层遍历 <code class="language-plaintext highlighter-rouge">res</code>，同时仍然原地覆盖 <code class="language-plaintext highlighter-rouge">res</code>。用例 <code class="language-plaintext highlighter-rouge">"{a,b}{c,d}"</code> 会漏掉部分组合，输出只有两个结果而不是四个。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：省掉最后的排序，认为按扫描顺序生成就是字典序。用例 <code class="language-plaintext highlighter-rouge">"{b,a}c"</code> 会输出 <code class="language-plaintext highlighter-rouge">["bc","ac"]</code>，字典序不满足题目要求。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：改成在每次解析出 <code class="language-plaintext highlighter-rouge">options</code> 后对 <code class="language-plaintext highlighter-rouge">options</code> 排序，但仍然把结果原样返回且中途某个槽位是裸字母。这条本身可行，但如果只对花括号分支的 <code class="language-plaintext highlighter-rouge">options</code> 排序而漏掉整体校验，用例 <code class="language-plaintext highlighter-rouge">"{b,a}"</code> 单独测能过，<code class="language-plaintext highlighter-rouge">"{c,a}{b,a}"</code> 这类多槽位组合一旦合并顺序写反就会漏掉排序保护，输出乱序。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：把逗号也收进 <code class="language-plaintext highlighter-rouge">options</code>，即去掉 <code class="language-plaintext highlighter-rouge">if (s.charAt(i) != ',')</code> 判断。用例 <code class="language-plaintext highlighter-rouge">"{a,b}"</code> 会得到 <code class="language-plaintext highlighter-rouge">["a", ",", "b"]</code> 三个候选，输出里出现含逗号的字符串。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>错误写法：用 <code class="language-plaintext highlighter-rouge">s.split("[{}]")</code> 之类的正则一把切开来做。用例 <code class="language-plaintext highlighter-rouge">"a{b,c}d"</code> 切出的片段无法区分「这一段原本在括号里」还是「原本是裸字母」，空片段的产生位置也依赖实现细节，恢复槽位语义比手写指针扫描更容易出错。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/letter-combinations-of-a-phone-number/">17. 电话号码的字母组合</a></td>
+      <td>中等</td>
+      <td>槽位候选来自固定映射表，是笛卡尔积最纯粹的形态</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/generate-parentheses/">22. 括号生成</a></td>
+      <td>中等</td>
+      <td>候选由合法性剪枝动态决定，无法预先列成独立槽位</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/combination-sum/">39. 组合总和</a></td>
+      <td>中等</td>
+      <td>元素可重复选取，靠剩余目标值剪枝而非固定槽位数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/permutations/">46. 全排列</a></td>
+      <td>中等</td>
+      <td>每层候选随已用集合变化，槽位之间不再独立</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/combinations/">77. 组合</a></td>
+      <td>中等</td>
+      <td>靠起始下标单调递增来天然去重，不需要额外集合</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/restore-ip-addresses/">93. 复原 IP 地址</a></td>
+      <td>中等</td>
+      <td>分段长度不定，切分点要配合数值合法性一起枚举</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/palindrome-partitioning/">131. 分割回文串</a></td>
+      <td>中等</td>
+      <td>切分点合法性依赖回文判断，常配预处理表加速</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/decode-string/">394. 字符串解码</a></td>
+      <td>中等</td>
+      <td>括号可嵌套，必须用栈保存外层上下文再回填</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-atoms/">726. 原子的数量</a></td>
+      <td>困难</td>
+      <td>嵌套括号加乘数下推，还要按字典序输出计数结果</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/letter-case-permutation/">784. 字母大小写全排列</a></td>
+      <td>中等</td>
+      <td>每个字母槽位固定两种取值，数字位则只有一种</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/brace-expansion-ii/">1096. 花括号展开 II</a></td>
+      <td>困难</td>
+      <td>花括号可嵌套且含并集语义，需要递归文法解析并对结果去重</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2024/77742227" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 907. 子数组的最小值之和</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2024/55155236" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 547. 省份数量</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2024/41435667">https://hgnulb.github.io/blog/2024/41435667</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

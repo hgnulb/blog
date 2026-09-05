@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 面试题 17.25. 单词矩阵 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,回溯,字典树,字符串,数组" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 面试题 17.25. 单词矩阵" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/56760955" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/56760955" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-29T01:59:06+08:00" />
+<meta property="article:modified_time" content="2026-03-29T01:59:06+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 面试题 17.25. 单词矩阵" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-03-29T01:59:06+08:00","datePublished":"2026-03-29T01:59:06+08:00","description":"题目描述","headline":"LeetCode 面试题 17.25. 单词矩阵","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/56760955"},"url":"https://hgnulb.github.io/blog/2026/56760955"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法长度分组--列前缀剪枝回溯">解法：长度分组 + 列前缀剪枝回溯</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 面试题 17.25. 单词矩阵">LeetCode 面试题 17.25. 单词矩阵</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-03-29 01:59:06"
+                    datetime="2026-03-29T01:59:06+08:00"
+            >
+                2026-03-29
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1194 字 · 英文 64 词 · 代码 188 行"
+            aria-label="预计阅读时间约 10 分钟，正文 1194 字 · 英文 64 词 · 代码 188 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 10 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    3 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7723837750/" title="程序员面试金典（第 6 版）">
+        程序员面试金典（第 6 版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9755043388/" title="回溯">
+        回溯
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1523889636/" title="字典树">
+        字典树
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法长度分组--列前缀剪枝回溯">解法：长度分组 + 列前缀剪枝回溯</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/word-rectangle-lcci/">面试题 17.25. 单词矩阵</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>从单词表中构造面积最大的字符矩形：每一行自左向右是表中单词，每一列自上而下也必须是表中单词。行等长、列等高，单词允许按题意重复使用。</p>
+
+  <p>若矩形有 r 行、c 列，那么行单词长度必须是 c，列单词长度必须是 r。尺寸选择与内容搜索相互独立，先按长度分组能快速排除词表中不存在的维度。</p>
+
+  <p>逐行回溯时，已经形成的每一列虽然还不是完整单词，但必须是某个长度为 r 的单词前缀；否则无论后面补什么行都不可能成功。这是最关键的剪枝。</p>
+</blockquote>
+
+<h2 id="解法长度分组--列前缀剪枝回溯">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E9%95%BF%E5%BA%A6%E5%88%86%E7%BB%84--%E5%88%97%E5%89%8D%E7%BC%80%E5%89%AA%E6%9E%9D%E5%9B%9E%E6%BA%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：长度分组 + 列前缀剪枝回溯</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>预处理三类数据：长度到单词列表、长度到完整单词集合、长度到所有前缀集合。</p>
+
+  <p>对候选尺寸 <code class="language-plaintext highlighter-rouge">r×c</code>，只从长度 c 的单词中选行。加入一行后，构造当前 c 个列前缀，并确认它们都存在于“长度 r 的单词前缀集合”。深度达到 r 时，再确认每列都是完整单词。</p>
+
+  <p>回溯不变量是：rectangle 中所有行长度为 c，且每个已形成列串都是某个长度 r 单词的前缀。它保证当前部分解仍有完成矩形的可能。</p>
+
+  <p>尺寸列表按长度降序枚举，并维护 bestArea。若 <code class="language-plaintext highlighter-rouge">c×maxLength &lt;= bestArea</code>，后续更小 c 不可能改善；固定 c 时若 <code class="language-plaintext highlighter-rouge">r×c &lt;= bestArea</code>，后续更小 r 也可以停止。</p>
+
+  <p>例：词表包含 <code class="language-plaintext highlighter-rouge">["this","real","hard","trh","hea","iar","sld"]</code>。选择 3 行、4 列：加入 "this" 后列前缀是 t/h/i/s；加入 "real" 后是 tr/he/ia/sl；加入 "hard" 后四列成为 trh/hea/iar/sld，全部在词表中，得到面积 12 的矩形。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>按单词长度建立列表、完整集合和前缀集合。</li>
+    <li>取所有存在的长度并降序排列。</li>
+    <li>枚举行宽 c 与行数 r，跳过面积不可能超过当前最优的尺寸。</li>
+    <li>清空当前 rectangle，从长度 c 的行单词列表开始回溯。</li>
+    <li>每加入一行，检查 c 个列前缀是否都属于长度 r 的前缀集合。</li>
+    <li>深度达到 r 时检查所有列是否为完整单词；成功则保存矩形并更新 bestArea。</li>
+    <li>搜完所有仍可能改进的尺寸后返回答案。</li>
+  </ul>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">wordsByLength</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">wordSetByLength</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">prefixSetByLength</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">rectangle</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">answer</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">String</span><span class="o">[]</span> <span class="nf">maxRectangle</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">words</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">buildWordData</span><span class="o">(</span><span class="n">words</span><span class="o">);</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">lengths</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">wordsByLength</span><span class="o">.</span><span class="na">keySet</span><span class="o">());</span>
+        <span class="n">lengths</span><span class="o">.</span><span class="na">sort</span><span class="o">((</span><span class="n">first</span><span class="o">,</span> <span class="n">second</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">second</span> <span class="o">-</span> <span class="n">first</span><span class="o">);</span>
+
+        <span class="n">answer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">bestArea</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">maxLength</span> <span class="o">=</span> <span class="n">lengths</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">lengths</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">cols</span> <span class="o">:</span> <span class="n">lengths</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cols</span> <span class="o">*</span> <span class="n">maxLength</span> <span class="o">&lt;=</span> <span class="n">bestArea</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">rowWords</span> <span class="o">=</span> <span class="n">wordsByLength</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">cols</span><span class="o">);</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">rows</span> <span class="o">:</span> <span class="n">lengths</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">area</span> <span class="o">=</span> <span class="n">rows</span> <span class="o">*</span> <span class="n">cols</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">area</span> <span class="o">&lt;=</span> <span class="n">bestArea</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">wordSetByLength</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">rows</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="n">rectangle</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">backtrack</span><span class="o">(</span><span class="n">rowWords</span><span class="o">,</span> <span class="n">rows</span><span class="o">,</span> <span class="n">cols</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">bestArea</span> <span class="o">=</span> <span class="n">area</span><span class="o">;</span>
+                    <span class="n">answer</span> <span class="o">=</span> <span class="n">rectangle</span><span class="o">.</span><span class="na">toArray</span><span class="o">(</span><span class="k">new</span> <span class="nc">String</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">buildWordData</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">words</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">wordsByLength</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">wordSetByLength</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">prefixSetByLength</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">word</span> <span class="o">:</span> <span class="n">words</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+            <span class="n">wordsByLength</span><span class="o">.</span><span class="na">computeIfAbsent</span><span class="o">(</span><span class="n">length</span><span class="o">,</span> <span class="n">key</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;()).</span><span class="na">add</span><span class="o">(</span><span class="n">word</span><span class="o">);</span>
+            <span class="n">wordSetByLength</span><span class="o">.</span><span class="na">computeIfAbsent</span><span class="o">(</span><span class="n">length</span><span class="o">,</span> <span class="n">key</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;()).</span><span class="na">add</span><span class="o">(</span><span class="n">word</span><span class="o">);</span>
+            <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">prefixes</span> <span class="o">=</span> <span class="n">prefixSetByLength</span><span class="o">.</span><span class="na">computeIfAbsent</span><span class="o">(</span><span class="n">length</span><span class="o">,</span> <span class="n">key</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;());</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">end</span> <span class="o">&lt;=</span> <span class="n">length</span><span class="o">;</span> <span class="n">end</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">prefixes</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">word</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">end</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">backtrack</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">rowWords</span><span class="o">,</span> <span class="kt">int</span> <span class="n">rows</span><span class="o">,</span> <span class="kt">int</span> <span class="n">cols</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">rectangle</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="n">rows</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nf">allColumnsAreWords</span><span class="o">(</span><span class="n">rows</span><span class="o">,</span> <span class="n">cols</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">word</span> <span class="o">:</span> <span class="n">rowWords</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">rectangle</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">word</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">allColumnPrefixesExist</span><span class="o">(</span><span class="n">rows</span><span class="o">,</span> <span class="n">cols</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">backtrack</span><span class="o">(</span><span class="n">rowWords</span><span class="o">,</span> <span class="n">rows</span><span class="o">,</span> <span class="n">cols</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">rectangle</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">rectangle</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">allColumnPrefixesExist</span><span class="o">(</span><span class="kt">int</span> <span class="n">rows</span><span class="o">,</span> <span class="kt">int</span> <span class="n">cols</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">prefixes</span> <span class="o">=</span> <span class="n">prefixSetByLength</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">rows</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="n">cols</span><span class="o">;</span> <span class="n">col</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nc">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">rowWord</span> <span class="o">:</span> <span class="n">rectangle</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">builder</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">rowWord</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">col</span><span class="o">));</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">prefixes</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">builder</span><span class="o">.</span><span class="na">toString</span><span class="o">()))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">allColumnsAreWords</span><span class="o">(</span><span class="kt">int</span> <span class="n">rows</span><span class="o">,</span> <span class="kt">int</span> <span class="n">cols</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">wordSet</span> <span class="o">=</span> <span class="n">wordSetByLength</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">rows</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="n">cols</span><span class="o">;</span> <span class="n">col</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nc">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">rowWord</span> <span class="o">:</span> <span class="n">rectangle</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">builder</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">rowWord</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">col</span><span class="o">));</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">wordSet</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">builder</span><span class="o">.</span><span class="na">toString</span><span class="o">()))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">wordsByLength</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">][]</span><span class="kt">string</span>
+<span class="k">var</span> <span class="n">wordSetByLength</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span>
+<span class="k">var</span> <span class="n">prefixSetByLength</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span>
+<span class="k">var</span> <span class="n">rectangle</span> <span class="p">[]</span><span class="kt">string</span>
+
+<span class="k">func</span> <span class="n">maxRectangle</span><span class="p">(</span><span class="n">words</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+    <span class="n">buildWordData</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+    <span class="n">lengths</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">wordsByLength</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">length</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">wordsByLength</span> <span class="p">{</span>
+        <span class="n">lengths</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">lengths</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">sort</span><span class="o">.</span><span class="n">Sort</span><span class="p">(</span><span class="n">sort</span><span class="o">.</span><span class="n">Reverse</span><span class="p">(</span><span class="n">sort</span><span class="o">.</span><span class="n">IntSlice</span><span class="p">(</span><span class="n">lengths</span><span class="p">)))</span>
+
+    <span class="n">answer</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{}</span>
+    <span class="n">bestArea</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="n">maxLength</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="n">maxLength</span> <span class="o">=</span> <span class="n">lengths</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">cols</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">lengths</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">cols</span><span class="o">*</span><span class="n">maxLength</span> <span class="o">&lt;=</span> <span class="n">bestArea</span> <span class="p">{</span>
+            <span class="k">break</span>
+        <span class="p">}</span>
+
+        <span class="n">rowWords</span> <span class="o">:=</span> <span class="n">wordsByLength</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">rows</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">lengths</span> <span class="p">{</span>
+            <span class="n">area</span> <span class="o">:=</span> <span class="n">rows</span> <span class="o">*</span> <span class="n">cols</span>
+            <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;=</span> <span class="n">bestArea</span> <span class="p">{</span>
+                <span class="k">break</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">wordSetByLength</span><span class="p">[</span><span class="n">rows</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+                <span class="k">continue</span>
+            <span class="p">}</span>
+
+            <span class="n">rectangle</span> <span class="o">=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{}</span>
+            <span class="k">if</span> <span class="n">backtrackRectangle</span><span class="p">(</span><span class="n">rowWords</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">bestArea</span> <span class="o">=</span> <span class="n">area</span>
+                <span class="n">answer</span> <span class="o">=</span> <span class="nb">append</span><span class="p">([]</span><span class="kt">string</span><span class="p">{},</span> <span class="n">rectangle</span><span class="o">...</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">answer</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">buildWordData</span><span class="p">(</span><span class="n">words</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">wordsByLength</span> <span class="o">=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">][]</span><span class="kt">string</span><span class="p">{}</span>
+    <span class="n">wordSetByLength</span> <span class="o">=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
+    <span class="n">prefixSetByLength</span> <span class="o">=</span> <span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">word</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">words</span> <span class="p">{</span>
+        <span class="n">length</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+        <span class="n">wordsByLength</span><span class="p">[</span><span class="n">length</span><span class="p">]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">wordsByLength</span><span class="p">[</span><span class="n">length</span><span class="p">],</span> <span class="n">word</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">wordSetByLength</span><span class="p">[</span><span class="n">length</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="n">wordSetByLength</span><span class="p">[</span><span class="n">length</span><span class="p">]</span> <span class="o">=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">prefixSetByLength</span><span class="p">[</span><span class="n">length</span><span class="p">]</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+            <span class="n">prefixSetByLength</span><span class="p">[</span><span class="n">length</span><span class="p">]</span> <span class="o">=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
+        <span class="p">}</span>
+
+        <span class="n">wordSetByLength</span><span class="p">[</span><span class="n">length</span><span class="p">][</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+        <span class="k">for</span> <span class="n">end</span> <span class="o">:=</span> <span class="m">1</span><span class="p">;</span> <span class="n">end</span> <span class="o">&lt;=</span> <span class="n">length</span><span class="p">;</span> <span class="n">end</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">prefixSetByLength</span><span class="p">[</span><span class="n">length</span><span class="p">][</span><span class="n">word</span><span class="p">[</span><span class="o">:</span><span class="n">end</span><span class="p">]]</span> <span class="o">=</span> <span class="no">true</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">backtrackRectangle</span><span class="p">(</span><span class="n">rowWords</span> <span class="p">[]</span><span class="kt">string</span><span class="p">,</span> <span class="n">rows</span> <span class="kt">int</span><span class="p">,</span> <span class="n">cols</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rectangle</span><span class="p">)</span> <span class="o">==</span> <span class="n">rows</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">allColumnsAreWords</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">word</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">rowWords</span> <span class="p">{</span>
+        <span class="n">rectangle</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">rectangle</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">allColumnPrefixesExist</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">backtrackRectangle</span><span class="p">(</span><span class="n">rowWords</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="no">true</span>
+        <span class="p">}</span>
+        <span class="n">rectangle</span> <span class="o">=</span> <span class="n">rectangle</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">rectangle</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="no">false</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">allColumnPrefixesExist</span><span class="p">(</span><span class="n">rows</span> <span class="kt">int</span><span class="p">,</span> <span class="n">cols</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="n">prefixes</span> <span class="o">:=</span> <span class="n">prefixSetByLength</span><span class="p">[</span><span class="n">rows</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="n">cols</span><span class="p">;</span> <span class="n">col</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">column</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rectangle</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">rowWord</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">rectangle</span> <span class="p">{</span>
+            <span class="n">column</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">rowWord</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="o">!</span><span class="n">prefixes</span><span class="p">[</span><span class="kt">string</span><span class="p">(</span><span class="n">column</span><span class="p">)]</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="no">false</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">allColumnsAreWords</span><span class="p">(</span><span class="n">rows</span> <span class="kt">int</span><span class="p">,</span> <span class="n">cols</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="n">wordSet</span> <span class="o">:=</span> <span class="n">wordSetByLength</span><span class="p">[</span><span class="n">rows</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="n">cols</span><span class="p">;</span> <span class="n">col</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">column</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rectangle</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">rowWord</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">rectangle</span> <span class="p">{</span>
+            <span class="n">column</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">rowWord</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="o">!</span><span class="n">wordSet</span><span class="p">[</span><span class="kt">string</span><span class="p">(</span><span class="n">column</span><span class="p">)]</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="no">false</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>设 <code class="language-plaintext highlighter-rouge">W_c</code> 为长度 c 的可选行单词数。对固定 <code class="language-plaintext highlighter-rouge">r×c</code>，最坏回溯树有 <code class="language-plaintext highlighter-rouge">O(W_c^r)</code> 个叶子；每个节点重建并检查列前缀最多 <code class="language-plaintext highlighter-rouge">O(rc)</code>，所以上界为 <code class="language-plaintext highlighter-rouge">O(W_c^r·rc)</code>。实际会被前缀集合大量剪枝。</li>
+    <li>预处理若把每个单词的所有前缀物化，设字典总字符数为 D、最长词长为 L，时间与空间最坏为 <code class="language-plaintext highlighter-rouge">O(DL)</code>（哈希前缀需要读取前缀字符）。</li>
+    <li>
+<strong>时间复杂度</strong>：<code class="language-plaintext highlighter-rouge">O(DL + Σ_(r,c) W_c^r·rc)</code>，求和范围是所有未被面积上界剪掉的候选尺寸；该问题本身需要回溯搜索，不能笼统写成多项式。</li>
+    <li>
+<strong>空间复杂度</strong>：<code class="language-plaintext highlighter-rouge">O(DL + r)</code>，前缀/单词索引占主导，递归路径保存 r 行；不计返回结果。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>行长决定列数、列长决定行数，两个维度不要写反。</li>
+    <li>“每列是合法前缀”是从穷举降到可运行规模的核心剪枝。</li>
+    <li>面积上界剪枝只依赖剩余最大长度，不会漏掉更优尺寸。</li>
+    <li>面试追问可继续优化：回溯时增量维护 c 个列字符串，避免每层从头拼接；或为每个长度建立 Trie，用节点状态代替前缀字符串哈希。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：把行、列长度分组写反</strong>。以 3×4 矩形为反例，行应取长度 4、列应匹配长度 3；反过来会找不到示例答案。</li>
+    <li>
+<strong>只在放满 r 行后验证列</strong>：每层分支数都是 <code class="language-plaintext highlighter-rouge">W_c</code>，搜索接近完整的 <code class="language-plaintext highlighter-rouge">W_c^r</code>；示例中若首行前缀就不存在，本可立即剪掉。</li>
+    <li>
+<strong>前缀集合不按目标列长分组</strong>：某串可能是长度 5 单词的前缀，却无法补成长度 3 的列，错误保留死分支。</li>
+    <li>
+<strong>命中一个矩形立即结束全部搜索</strong>：当前枚举顺序不保证每个 <code class="language-plaintext highlighter-rouge">(c,r)</code> 组合严格按面积全局降序，必须维护 bestArea 并继续检查仍可能更大的尺寸。</li>
+    <li>
+<strong>回溯返回时忘记删除最后一行</strong>：下一分支会带着上一分支的残留行，列前缀与深度全部错位。</li>
+    <li>
+<strong>最终只检查前缀、不检查完整单词</strong>：若前缀集合实现不包含完整词，可能把未结束的列当成答案；显式完整集合检查更稳。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/word-squares/">425. 单词方块</a></td>
+      <td>困难</td>
+      <td>行列长度相等的前缀回溯</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/word-search-ii/">212. 单词搜索 II</a></td>
+      <td>困难</td>
+      <td>Trie 多词剪枝搜索</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/implement-trie-prefix-tree/">208. 实现 Trie</a></td>
+      <td>中等</td>
+      <td>前缀索引基础</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/77907531" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 面试题 17.23. 最大黑方阵</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/84425278" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 面试题 17.26. 稀疏相似度</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/56760955">https://hgnulb.github.io/blog/2026/56760955</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

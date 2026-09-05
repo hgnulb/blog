@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 549. 二叉树最长连续序列 II | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,二叉树,树,树形 DP,深度优先搜索,阿里巴巴" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 549. 二叉树最长连续序列 II" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2021/67002729" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2021/67002729" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-03-05T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-03-05T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 549. 二叉树最长连续序列 II" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2021-03-05T00:00:00+08:00","datePublished":"2021-03-05T00:00:00+08:00","description":"题目描述","headline":"LeetCode 549. 二叉树最长连续序列 II","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2021/67002729"},"url":"https://hgnulb.github.io/blog/2021/67002729"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dfs-返回上升下降长度">解法：DFS 返回上升/下降长度</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 549. 二叉树最长连续序列 II">LeetCode 549. 二叉树最长连续序列 II</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2021-03-05 00:00:00"
+                    datetime="2021-03-05T00:00:00+08:00"
+            >
+                2021-03-05
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 2943 字 · 英文 55 词 · 代码 81 行"
+            aria-label="预计阅读时间约 10 分钟，正文 2943 字 · 英文 55 词 · 代码 81 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 10 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8699249851/" title="阿里巴巴">
+        阿里巴巴
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2805463697/" title="树">
+        树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3241866243/" title="二叉树">
+        二叉树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3684495289/" title="树形 DP">
+        树形 DP
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dfs-返回上升下降长度">解法：DFS 返回上升/下降长度</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/binary-tree-longest-consecutive-sequence-ii/">549. 二叉树最长连续序列 II</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>在一棵二叉树里找一条最长的路径，要求路径上的节点值构成<strong>连续整数序列</strong>（相邻两个节点的值相差恰好 1），返回这条路径的节点个数。与前一题（298 题）不同的是，这里的路径<strong>不必自顶向下</strong>：它可以先沿着某条边向上走到某个祖先，再拐下去走另一条分支；同时序列既可以递增也可以递减，只要方向在整条路径上保持一致即可。</p>
+
+  <p>「可以拐弯」这四个字是全部难点所在。一旦允许拐弯，路径就不再是「某个节点到它某个后代」的直链，而是「以某个节点为最高点、向左右各伸出一条腿」的 V 字形。而值必须连续单调，意味着从最高点看出去：<strong>一条腿必须是递增下去的，另一条腿必须是递减下去的</strong>——只有这样，把递减那条腿反过来读，整条路径才是一路递增。</p>
+
+  <p>由此确定了枚举方式：<strong>每个节点都可能是那个拐点</strong>，答案就是所有拐点方案里的最大值。这也解释了为什么单纯记录一个方向的链长不够——每个节点必须同时知道自己「向下递增能走多远」和「向下递减能走多远」两个量。</p>
+
+  <p>约束方面，树的节点数是线性规模，说明目标是一趟遍历 $O(n)$；任何「对每个节点都重新往下搜一遍」的 $O(n^2)$ 做法都不是期待的答案。节点值可以为负、也可以重复出现，所以判断连续必须用<strong>严格的 <code class="language-plaintext highlighter-rouge">+1</code> / <code class="language-plaintext highlighter-rouge">-1</code> 相等判断</strong>，不能用差的绝对值等于 1 来含糊处理（那样会把方向弄丢）。</p>
+
+  <p>边界：空树返回 <code class="language-plaintext highlighter-rouge">0</code>；单个节点本身就是长度为 <code class="language-plaintext highlighter-rouge">1</code> 的合法序列；父子值相等时既不算递增也不算递减，链在此断开，双方都从 <code class="language-plaintext highlighter-rouge">1</code> 重新起算。</p>
+</blockquote>
+
+<h2 id="解法dfs-返回上升下降长度">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95dfs-%E8%BF%94%E5%9B%9E%E4%B8%8A%E5%8D%87%E4%B8%8B%E9%99%8D%E9%95%BF%E5%BA%A6" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：DFS 返回上升/下降长度</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>先看暴力：以每个节点为拐点，分别向左右子树做一次深搜，找出最长的递增腿和最长的递减腿。这样每个节点都要遍历一次自己的子树，总复杂度 $O(n^2)$（链状树时退化明显），而且左右两次搜索里大量子问题被重复求解。</p>
+
+  <p>瓶颈显而易见：<strong>同一棵子树被它的每个祖先各搜了一遍</strong>。而仔细看会发现，某个节点的「向下递增最长链」这个量，只依赖它自己和它两个孩子的同名量——是一个可以自底向上一次算完的量。于是把它做成后序遍历的返回值，每个节点只算一次。</p>
+
+  <p>定义两个状态，注意都以<strong>当前节点为起点、一路向下</strong>：</p>
+
+  <p><code class="language-plaintext highlighter-rouge">inc(node)</code> = 从 <code class="language-plaintext highlighter-rouge">node</code> 出发向下走，值每步加 1 的最长路径节点数；<code class="language-plaintext highlighter-rouge">dec(node)</code> = 从 <code class="language-plaintext highlighter-rouge">node</code> 出发向下走，值每步减 1 的最长路径节点数。两者最小值都是 <code class="language-plaintext highlighter-rouge">1</code>（就是节点自己）。</p>
+
+  <p>转移写出来是：对每个非空孩子 <code class="language-plaintext highlighter-rouge">c</code>，若 <code class="language-plaintext highlighter-rouge">c.val == node.val + 1</code>，则 <code class="language-plaintext highlighter-rouge">inc(node)</code> 可以取 <code class="language-plaintext highlighter-rouge">inc(c) + 1</code>；若 <code class="language-plaintext highlighter-rouge">c.val == node.val - 1</code>，则 <code class="language-plaintext highlighter-rouge">dec(node)</code> 可以取 <code class="language-plaintext highlighter-rouge">dec(c) + 1</code>；两个孩子各算一遍取最大。注意这两个条件天然互斥——一个孩子的值不可能同时是 <code class="language-plaintext highlighter-rouge">node.val + 1</code> 和 <code class="language-plaintext highlighter-rouge">node.val - 1</code>，所以写 <code class="language-plaintext highlighter-rouge">else if</code> 是安全的。</p>
+
+  <p>答案的合成在每个节点处完成：<strong>以 <code class="language-plaintext highlighter-rouge">node</code> 为拐点的最长连续路径 = <code class="language-plaintext highlighter-rouge">inc(node) + dec(node) - 1</code></strong>。为什么减 1？因为两条腿都把 <code class="language-plaintext highlighter-rouge">node</code> 自己算进去了，合并时重复了一次。这个式子同时覆盖了三种形态：只有一条递增腿（<code class="language-plaintext highlighter-rouge">dec = 1</code>）、只有一条递减腿（<code class="language-plaintext highlighter-rouge">inc = 1</code>）、以及真正的 V 字形。</p>
+
+  <p>这里有个容易被忽略但至关重要的正确性论证：<strong><code class="language-plaintext highlighter-rouge">inc</code> 和 <code class="language-plaintext highlighter-rouge">dec</code> 若都大于 1，它们必然来自不同的孩子</strong>，所以拼起来是一条合法的简单路径，不会重复经过同一个节点。理由就是上面那条互斥性——同一个孩子只能贡献给 <code class="language-plaintext highlighter-rouge">inc</code> 和 <code class="language-plaintext highlighter-rouge">dec</code> 其中之一。</p>
+
+  <p>用一个全局变量在后序遍历中不断打擂台记录最大值，遍历结束即为答案。返回值只负责向上传递两条腿的长度，答案的合成留在本地——这是所有「路径可拐弯」类树形 DP 的通用范式（124 题、543 题同理）。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>准备一个全局答案 <code class="language-plaintext highlighter-rouge">answer = 0</code>，写一个后序 DFS，返回 <code class="language-plaintext highlighter-rouge">(inc, dec)</code> 二元组</strong>。<strong>为什么</strong>：返回值和答案是两套不同的口径——返回的是「从我出发向下的单向链」，供父节点继续拼接；答案是「以我为拐点的完整路径」，无法向上传递（拐点路径接不到父亲上），只能就地记录。混淆这两者是本题最根本的错误。</li>
+    <li>
+<strong>空节点返回 <code class="language-plaintext highlighter-rouge">(0, 0)</code></strong>。<strong>为什么</strong>：返回 <code class="language-plaintext highlighter-rouge">0</code> 而不是 <code class="language-plaintext highlighter-rouge">1</code>，是因为空节点不贡献任何节点数；不过下面的代码并不依赖这个返回值——真正拦住空孩子的是 <code class="language-plaintext highlighter-rouge">node.left != null</code> 的判断，返回 <code class="language-plaintext highlighter-rouge">(0, 0)</code> 只是让递归有个安全的出口。</li>
+    <li>
+<strong>非空节点先令 <code class="language-plaintext highlighter-rouge">inc = 1, dec = 1</code></strong>。<strong>为什么</strong>：节点自己就是一条长度为 1 的合法链，这是所有转移的下界；用它作初值，叶子节点和「孩子值不连续」的情况都不需要额外分支。</li>
+    <li>
+<strong>递归左孩子，若左孩子非空，按值关系更新</strong>：<code class="language-plaintext highlighter-rouge">left.val == node.val + 1</code> 时 <code class="language-plaintext highlighter-rouge">inc = max(inc, leftInc + 1)</code>；<code class="language-plaintext highlighter-rouge">left.val == node.val - 1</code> 时 <code class="language-plaintext highlighter-rouge">dec = max(dec, leftDec + 1)</code>。<strong>为什么</strong>：必须用<strong>孩子的同向状态</strong>接上——递增链要接孩子的 <code class="language-plaintext highlighter-rouge">inc</code>，接 <code class="language-plaintext highlighter-rouge">dec</code> 就把方向拧断了；<code class="language-plaintext highlighter-rouge">+1</code> 是把当前节点算进去；两个条件互斥所以用 <code class="language-plaintext highlighter-rouge">else if</code>，值相等或相差大于 1 时两个分支都不进，链自然从 <code class="language-plaintext highlighter-rouge">1</code> 重新起算。</li>
+    <li>
+<strong>对右孩子重复同样的处理</strong>。<strong>为什么</strong>：两条腿可能分别来自左右孩子，也可能同一侧孩子同时是两个方向的更优来源之一；对两侧都跑一遍并取 <code class="language-plaintext highlighter-rouge">max</code>，才能覆盖所有情况。</li>
+    <li>
+<strong>更新 <code class="language-plaintext highlighter-rouge">answer = max(answer, inc + dec - 1)</code></strong>。<strong>为什么</strong>：这一步必须在两个孩子都处理完之后做，此时 <code class="language-plaintext highlighter-rouge">inc</code> 与 <code class="language-plaintext highlighter-rouge">dec</code> 才是最终值；减 1 是去掉 <code class="language-plaintext highlighter-rouge">node</code> 被两条腿各算一次的重复。</li>
+    <li>
+<strong>返回 <code class="language-plaintext highlighter-rouge">(inc, dec)</code></strong>。<strong>为什么</strong>：父节点只关心「从我这里能不能继续单向延伸」，拐点信息已经在本地结算过了。</li>
+  </ul>
+
+  <p><strong>以树 <code class="language-plaintext highlighter-rouge">[2, 1, 3]</code>（根 <code class="language-plaintext highlighter-rouge">2</code>，左孩子 <code class="language-plaintext highlighter-rouge">1</code>，右孩子 <code class="language-plaintext highlighter-rouge">3</code>）走一遍</strong>。</p>
+
+  <p>后序先到左孩子 <code class="language-plaintext highlighter-rouge">1</code>：它是叶子，<code class="language-plaintext highlighter-rouge">inc = dec = 1</code>，更新 <code class="language-plaintext highlighter-rouge">answer = max(0, 1 + 1 - 1) = 1</code>，返回 <code class="language-plaintext highlighter-rouge">(1, 1)</code>。</p>
+
+  <p>再到右孩子 <code class="language-plaintext highlighter-rouge">3</code>：同样是叶子，返回 <code class="language-plaintext highlighter-rouge">(1, 1)</code>，<code class="language-plaintext highlighter-rouge">answer</code> 仍是 <code class="language-plaintext highlighter-rouge">1</code>。</p>
+
+  <p>回到根 <code class="language-plaintext highlighter-rouge">2</code>：初值 <code class="language-plaintext highlighter-rouge">inc = dec = 1</code>。看左孩子，<code class="language-plaintext highlighter-rouge">1 == 2 - 1</code> 成立，走 <code class="language-plaintext highlighter-rouge">dec</code> 分支，<code class="language-plaintext highlighter-rouge">dec = max(1, 1 + 1) = 2</code>。看右孩子，<code class="language-plaintext highlighter-rouge">3 == 2 + 1</code> 成立，走 <code class="language-plaintext highlighter-rouge">inc</code> 分支，<code class="language-plaintext highlighter-rouge">inc = max(1, 1 + 1) = 2</code>。更新 <code class="language-plaintext highlighter-rouge">answer = max(1, 2 + 2 - 1) = 3</code>。返回 <code class="language-plaintext highlighter-rouge">(2, 2)</code>。</p>
+
+  <p>最终答案 <code class="language-plaintext highlighter-rouge">3</code>，对应路径 <code class="language-plaintext highlighter-rouge">1 → 2 → 3</code>——它先从左孩子向上走到根，再拐下去到右孩子，正是本题相对 298 题新增的「拐弯」形态。注意根节点的 <code class="language-plaintext highlighter-rouge">dec = 2</code> 来自左孩子、<code class="language-plaintext highlighter-rouge">inc = 2</code> 来自右孩子，两条腿分处两侧，拼起来是一条不重复经过节点的合法路径。</p>
+
+  <p>再看一个反例式的细节：若把右孩子的值改成 <code class="language-plaintext highlighter-rouge">2</code>（与根相等），则右孩子既不满足 <code class="language-plaintext highlighter-rouge">+1</code> 也不满足 <code class="language-plaintext highlighter-rouge">-1</code>，两个分支都不进，根的 <code class="language-plaintext highlighter-rouge">inc</code> 保持 <code class="language-plaintext highlighter-rouge">1</code>，<code class="language-plaintext highlighter-rouge">answer = max(1, 1 + 2 - 1) = 2</code>，对应路径 <code class="language-plaintext highlighter-rouge">1 → 2</code>。这说明「值相等」必须被当作断点，而不是当作连续。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">answer</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">longestConsecutive</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="n">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// 返回 {inc, dec}：从 node 向下的最长递增链、最长递减链的节点数。</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">dfs</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">};</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 节点自身就是长度为 1 的合法链，作为所有转移的下界。</span>
+        <span class="kt">int</span> <span class="n">inc</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">dec</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">left</span> <span class="o">=</span> <span class="n">dfs</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 递增链只能接孩子的递增链，两个条件天然互斥。</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">.</span><span class="na">val</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="na">val</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">inc</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">inc</span><span class="o">,</span> <span class="n">left</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">.</span><span class="na">val</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="na">val</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">dec</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">dec</span><span class="o">,</span> <span class="n">left</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">right</span> <span class="o">=</span> <span class="n">dfs</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">.</span><span class="na">val</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="na">val</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">inc</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">inc</span><span class="o">,</span> <span class="n">right</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">.</span><span class="na">val</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="na">val</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">dec</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">dec</span><span class="o">,</span> <span class="n">right</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 以 node 为拐点：两条腿都算了自己一次，合并时减 1。</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">answer</span><span class="o">,</span> <span class="n">inc</span> <span class="o">+</span> <span class="n">dec</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="n">inc</span><span class="o">,</span> <span class="n">dec</span><span class="o">};</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">longestConsecutive</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">answer</span> <span class="o">:=</span> <span class="m">0</span>
+
+	<span class="c">// 返回 (inc, dec)：从 node 向下的最长递增链、最长递减链的节点数。</span>
+	<span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">)</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span>
+		<span class="p">}</span>
+		<span class="c">// 节点自身就是长度为 1 的合法链，作为所有转移的下界。</span>
+		<span class="n">inc</span><span class="p">,</span> <span class="n">dec</span> <span class="o">:=</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span>
+
+		<span class="n">li</span><span class="p">,</span> <span class="n">ld</span> <span class="o">:=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Left</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">Left</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="c">// 递增链只能接孩子的递增链，两个条件天然互斥。</span>
+			<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">Left</span><span class="o">.</span><span class="n">Val</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="n">Val</span><span class="o">+</span><span class="m">1</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="n">li</span><span class="o">+</span><span class="m">1</span> <span class="o">&gt;</span> <span class="n">inc</span> <span class="p">{</span>
+					<span class="n">inc</span> <span class="o">=</span> <span class="n">li</span> <span class="o">+</span> <span class="m">1</span>
+				<span class="p">}</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">Left</span><span class="o">.</span><span class="n">Val</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="n">Val</span><span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="n">ld</span><span class="o">+</span><span class="m">1</span> <span class="o">&gt;</span> <span class="n">dec</span> <span class="p">{</span>
+					<span class="n">dec</span> <span class="o">=</span> <span class="n">ld</span> <span class="o">+</span> <span class="m">1</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+		<span class="n">ri</span><span class="p">,</span> <span class="n">rd</span> <span class="o">:=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Right</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">Right</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">Right</span><span class="o">.</span><span class="n">Val</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="n">Val</span><span class="o">+</span><span class="m">1</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="n">ri</span><span class="o">+</span><span class="m">1</span> <span class="o">&gt;</span> <span class="n">inc</span> <span class="p">{</span>
+					<span class="n">inc</span> <span class="o">=</span> <span class="n">ri</span> <span class="o">+</span> <span class="m">1</span>
+				<span class="p">}</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">Right</span><span class="o">.</span><span class="n">Val</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="n">Val</span><span class="o">-</span><span class="m">1</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="n">rd</span><span class="o">+</span><span class="m">1</span> <span class="o">&gt;</span> <span class="n">dec</span> <span class="p">{</span>
+					<span class="n">dec</span> <span class="o">=</span> <span class="n">rd</span> <span class="o">+</span> <span class="m">1</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+		<span class="c">// 以 node 为拐点：两条腿都算了自己一次，合并时减 1。</span>
+		<span class="k">if</span> <span class="n">inc</span><span class="o">+</span><span class="n">dec</span><span class="o">-</span><span class="m">1</span> <span class="o">&gt;</span> <span class="n">answer</span> <span class="p">{</span>
+			<span class="n">answer</span> <span class="o">=</span> <span class="n">inc</span> <span class="o">+</span> <span class="n">dec</span> <span class="o">-</span> <span class="m">1</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span>
+	<span class="p">}</span>
+
+	<span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">answer</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$，<code class="language-plaintext highlighter-rouge">n</code> 为节点数。凭什么：每个节点在后序遍历中被访问且仅被访问一次，节点内部只做常数次比较与取最大；答案的合成也在节点内就地完成，没有任何二次遍历。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(h)$，<code class="language-plaintext highlighter-rouge">h</code> 为树高，最坏 $O(n)$。凭什么：唯一的额外开销是递归调用栈，深度等于树高；链状树时 <code class="language-plaintext highlighter-rouge">h = n</code>，完全平衡时 <code class="language-plaintext highlighter-rouge">h = \log n</code>。每层只保存两个 <code class="language-plaintext highlighter-rouge">int</code>（Java 版为一个长度 2 的数组），是常数。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>「路径可以拐弯」是一个强信号：立刻想到「枚举每个节点作为路径最高点，向左右各取一条腿」的树形 DP 范式。124 题（最大路径和）、543 题（直径）与本题是同一个模子刻出来的。</li>
+    <li>分清「向上返回的量」和「就地结算的答案」是这个范式的命门。返回值必须是能被父节点继续拼接的单向链，拐点路径接不上父亲，只能用全局变量记录。面试时把这句话讲明白，基本就过了。</li>
+    <li>单调方向不能丢。递增链只能接孩子的递增链、递减链只能接孩子的递减链，接反了会拼出先升后降再升的非法序列。</li>
+    <li>一个节点需要几个状态，取决于「向上拼接时父亲需要知道什么」。本题父亲既可能比我大 1 也可能比我小 1，所以必须同时返回两个方向的长度。</li>
+    <li>正确性依赖一条隐含论证：<code class="language-plaintext highlighter-rouge">inc</code> 与 <code class="language-plaintext highlighter-rouge">dec</code> 的来源孩子必然不同（因为一个孩子的值不能同时是 <code class="language-plaintext highlighter-rouge">+1</code> 和 <code class="language-plaintext highlighter-rouge">-1</code>），所以拼接结果一定是简单路径。能主动补上这句证明，是从「会写」到「懂了」的分界。</li>
+    <li>用严格的 <code class="language-plaintext highlighter-rouge">== val + 1</code> / <code class="language-plaintext highlighter-rouge">== val - 1</code> 判断，而不是 <code class="language-plaintext highlighter-rouge">abs(diff) == 1</code>。后者虽然也能识别相邻，却丢掉了方向信息，无法决定该接 <code class="language-plaintext highlighter-rouge">inc</code> 还是 <code class="language-plaintext highlighter-rouge">dec</code>。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>用 <code class="language-plaintext highlighter-rouge">Math.abs(child.val - node.val) == 1</code> 判断连续</strong>：树 <code class="language-plaintext highlighter-rouge">[2, 1, 1]</code>（根 <code class="language-plaintext highlighter-rouge">2</code>，两个孩子都是 <code class="language-plaintext highlighter-rouge">1</code>）→ 两个孩子都被同时算进 <code class="language-plaintext highlighter-rouge">inc</code> 和 <code class="language-plaintext highlighter-rouge">dec</code>，得出 <code class="language-plaintext highlighter-rouge">1 + 2 - 1</code> 甚至更大的错误结果，实际答案是 <code class="language-plaintext highlighter-rouge">2</code>。</li>
+    <li>
+<strong>递增链接了孩子的 <code class="language-plaintext highlighter-rouge">dec</code>（或反之）</strong>：树 <code class="language-plaintext highlighter-rouge">[1, 2, null, null, 1]</code>（<code class="language-plaintext highlighter-rouge">1 → 2 → 1</code>）→ 会把先升后降的折线当成连续序列，返回 <code class="language-plaintext highlighter-rouge">3</code>，正确答案是 <code class="language-plaintext highlighter-rouge">2</code>。</li>
+    <li>
+<strong>把 <code class="language-plaintext highlighter-rouge">inc + dec - 1</code> 作为返回值传给父节点</strong>：树 <code class="language-plaintext highlighter-rouge">[2, 1, 3]</code> 的父层拿到 <code class="language-plaintext highlighter-rouge">3</code> 后继续加 1 → 拼出根本不存在的路径，答案越算越大。返回值必须只含单向链长。</li>
+    <li>
+<strong>忘记减 1</strong>：树 <code class="language-plaintext highlighter-rouge">[2, 1, 3]</code> → 得到 <code class="language-plaintext highlighter-rouge">2 + 2 = 4</code>，比实际路径 <code class="language-plaintext highlighter-rouge">1 → 2 → 3</code> 的 <code class="language-plaintext highlighter-rouge">3</code> 个节点多了一个，因为根被算了两次。</li>
+    <li>
+<strong>只在根节点更新答案</strong>：树的最长连续序列出现在某棵子树内部（如根值为 <code class="language-plaintext highlighter-rouge">100</code>、左子树是 <code class="language-plaintext highlighter-rouge">1 → 2 → 3</code>）→ 根处的 <code class="language-plaintext highlighter-rouge">inc + dec - 1</code> 只有 <code class="language-plaintext highlighter-rouge">1</code>，答案错报为 <code class="language-plaintext highlighter-rouge">1</code>。答案必须在每个节点都打擂台。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">inc</code>、<code class="language-plaintext highlighter-rouge">dec</code> 初值写成 <code class="language-plaintext highlighter-rouge">0</code></strong>：任意单节点树 → 答案算成 <code class="language-plaintext highlighter-rouge">0 + 0 - 1 = -1</code>，返回负数；正确答案是 <code class="language-plaintext highlighter-rouge">1</code>。</li>
+    <li>
+<strong>空节点返回 <code class="language-plaintext highlighter-rouge">(1, 1)</code></strong>：叶子节点会误以为自己有一个长度为 1 的孩子链 → 若同时去掉 <code class="language-plaintext highlighter-rouge">node.left != null</code> 的判断，叶子会算出 <code class="language-plaintext highlighter-rouge">inc = 2</code>，全树答案整体偏大。</li>
+    <li>
+<strong>漏掉 <code class="language-plaintext highlighter-rouge">node.left != null</code> / <code class="language-plaintext highlighter-rouge">node.right != null</code> 的判断</strong>：直接访问 <code class="language-plaintext highlighter-rouge">node.left.val</code> → 叶子节点处空指针异常。</li>
+    <li>
+<strong>答案更新写在处理右孩子之前</strong>：树 <code class="language-plaintext highlighter-rouge">[2, 1, 3]</code> → 结算时 <code class="language-plaintext highlighter-rouge">inc</code> 还是 <code class="language-plaintext highlighter-rouge">1</code>，得到 <code class="language-plaintext highlighter-rouge">1 + 2 - 1 = 2</code>，漏掉了右腿，正确答案是 <code class="language-plaintext highlighter-rouge">3</code>。</li>
+    <li>
+<strong>值相等时仍延续链条</strong>：树 <code class="language-plaintext highlighter-rouge">[1, 1, 1]</code> → 把等值当成连续，返回 <code class="language-plaintext highlighter-rouge">3</code>，正确答案是 <code class="language-plaintext highlighter-rouge">1</code>。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/binary-tree-longest-consecutive-sequence/">298. 二叉树最长连续序列</a></td>
+      <td>中等</td>
+      <td>路径必须自顶向下且只能递增，只需一个状态、无需拐点合并</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/binary-tree-maximum-path-sum/">124. 二叉树中的最大路径和</a></td>
+      <td>困难</td>
+      <td>同为拐点合并，但腿长可为负要与 0 取舍，权衡在于「这条腿要不要」</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/diameter-of-binary-tree/">543. 二叉树的直径</a></td>
+      <td>简单</td>
+      <td>拐点合并的最简形态，两条腿无任何值约束，直接取左右深度之和</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-univalue-path/">687. 最长同值路径</a></td>
+      <td>中等</td>
+      <td>约束从「差 1」变成「相等」，方向消失所以只需一个状态</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-zigzag-path-in-a-binary-tree/">1372. 二叉树中的最长交错路径</a></td>
+      <td>中等</td>
+      <td>状态同样是两个，但区分的是「上一步走左还是走右」而非值的升降</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-consecutive-sequence/">128. 最长连续序列</a></td>
+      <td>中等</td>
+      <td>同样求连续整数，但载体是无序数组，靠哈希集合找序列起点而非树结构</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/path-sum-iii/">437. 路径总和 III</a></td>
+      <td>中等</td>
+      <td>路径仍须自顶向下但起点任意，用前缀和加哈希表统计而非返回链长</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/maximum-average-subtree/">1120. 子树的最大平均值</a></td>
+      <td>中等</td>
+      <td>同为后序返回多元组（和与节点数），但结算对象是整棵子树而非路径</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2021/61841011" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 609. 在系统中查找重复文件</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2021/53728246" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1411. 给 N x 3 网格图涂色的方案数</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2021/67002729">https://hgnulb.github.io/blog/2021/67002729</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 1059. 从起点到终点的所有路径 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,Kosaraju 算法,Tarjan 强连通分量算法,图,字节跳动,拓扑排序,美团" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 1059. 从起点到终点的所有路径" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/11960605" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/11960605" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-03-30T17:15:18+08:00" />
+<meta property="article:modified_time" content="2022-03-30T17:15:18+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 1059. 从起点到终点的所有路径" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-03-30T17:15:18+08:00","datePublished":"2022-03-30T17:15:18+08:00","description":"题目描述","headline":"LeetCode 1059. 从起点到终点的所有路径","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/11960605"},"url":"https://hgnulb.github.io/blog/2022/11960605"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dfs--访问状态">解法：DFS + 访问状态</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 1059. 从起点到终点的所有路径">LeetCode 1059. 从起点到终点的所有路径</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-03-30 17:15:18"
+                    datetime="2022-03-30T17:15:18+08:00"
+            >
+                2022-03-30
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3097 字 · 英文 144 词 · 代码 56 行"
+            aria-label="预计阅读时间约 10 分钟，正文 3097 字 · 英文 144 词 · 代码 56 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 10 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    6 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1091248904/" title="字节跳动">
+        字节跳动
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/0416977247/" title="美团">
+        美团
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5789791753/" title="图">
+        图
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1845450306/" title="拓扑排序">
+        拓扑排序
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2275122292/" title="Kosaraju 算法">
+        Kosaraju 算法
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6014177744/" title="Tarjan 强连通分量算法">
+        Tarjan 强连通分量算法
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法dfs--访问状态">解法：DFS + 访问状态</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/all-paths-from-source-lead-to-destination/">1059. 从起点到终点的所有路径</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给定一张 n 个节点的有向图、一个起点 source 和一个终点 destination，要判断是否满足三个条件：从起点出发的每一条路径最终都能走到终点、走到终点后就再也走不动了（终点出度为 0）、并且从起点出发的路径条数是有限的。三条同时成立才返回 true。</p>
+
+  <p>标题里的「所有路径」很容易被误读成要枚举路径并返回，其实题目问的是一个全称判断：不存在任何一条从起点出发却没能停在终点的走法。这类全称命题的反面往往更好判定——只要能找出一条反例路径，答案就是 false。反例只有两种形态：走着走着卡在了一个出度为 0 且不是终点的节点上，或者走进了一个环里永远绕不出来。第三个条件「路径条数有限」其实等价于「从起点可达的部分不含环」，因为一旦有环就能绕任意多圈，路径条数立刻变成无限。</p>
+
+  <p>约束里的信号很明确：节点数最多一万、边数最多一万，允许 $O(n + m)$ 的一次遍历，但不允许真的去枚举所有路径——即使无环，路径条数也可能随节点数指数增长。图可能有重边、可能不连通，起点也可能等于终点。</p>
+
+  <p>边界方面要留意：起点若本身出度为 0，则唯一的「路径」就是原地不动，此时答案取决于起点是不是终点；终点若有出边，那么走到终点还能继续走出去，直接违反第二个条件。</p>
+</blockquote>
+
+<h2 id="解法dfs--访问状态">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95dfs--%E8%AE%BF%E9%97%AE%E7%8A%B6%E6%80%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：DFS + 访问状态</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>直接枚举所有路径的做法立刻就死在指数爆炸上：哪怕是一张无环图，从起点到终点的路径条数也可能达到 $2^{n}$ 量级，逐条检查根本跑不完。瓶颈在于它把「所有路径都合法」拆成了一条条独立验证，忽略了这些路径之间共享了大量的后缀。</p>
+
+  <p>关键观察是把判定沿着节点递归下去：定义「节点 u 是安全的」为「从 u 出发的每一条路径都终止于 destination」。这个性质有一个漂亮的递归结构——若 u 没有出边，则 u 安全当且仅当 u 就是 destination；若 u 有出边，则 u 安全当且仅当它的每一个后继都安全。这样一来，答案就是「source 是否安全」，而每个节点的安全性只需要计算一次，共享后缀带来的重复被彻底消除。</p>
+
+  <p>剩下的问题是环。递归到一半可能又转回自己，必须能识别出来。这里用经典的三色标记：<strong>状态 0 表示尚未访问，状态 1 表示正在当前递归路径上（灰色），状态 2 表示已经确认安全（黑色）</strong>。这就是整个算法的不变量——只要递归过程中遇到一个状态为 1 的节点，说明沿着当前这条路走回了祖先，环被找到，整条路径永远到不了终点，直接判 false；遇到状态为 2 的节点则说明它的安全性早已论证过，可以立即复用结论。</p>
+
+  <p>注意这里不存在「已确认不安全」的第三种终态，因为一旦发现某个节点不安全，整个函数会立刻一路返回 false，不会再有别的分支需要查询它，所以两个非零状态就足够了。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <p>第一步，把边列表转成邻接表。原始的 <code class="language-plaintext highlighter-rouge">edges</code> 是一堆二元组，按它逐次查找某个节点的后继需要扫描全部边，转成邻接表后可以 $O(1)$ 拿到出边集合，这是所有图论遍历的标准前置步骤。Java 版本要先为 n 个节点各建一个空列表再灌边，Go 版本用 <code class="language-plaintext highlighter-rouge">make([][]int, n)</code> 拿到 n 个 nil 切片后直接 <code class="language-plaintext highlighter-rouge">append</code> 即可。</p>
+
+  <p>第二步，开一个长度为 n 的 <code class="language-plaintext highlighter-rouge">state</code> 数组，全部初始化为 0。用整型数组而不是两个布尔数组，是为了让三种状态在一个变量里表达，也让「正在路径上」和「已确认安全」这两层含义不会互相覆盖。</p>
+
+  <p>第三步，从 source 发起递归，返回值直接就是答案。递归函数的语义要钉死：<code class="language-plaintext highlighter-rouge">dfs(u)</code> 返回「从 u 出发的所有路径是否都终止于 destination」。</p>
+
+  <p>第四步，在递归入口先处理非零状态：<code class="language-plaintext highlighter-rouge">state[node] != 0</code> 时返回 <code class="language-plaintext highlighter-rouge">state[node] == 2</code>。这一句同时干了两件事——状态为 2 说明结论已知且为安全，直接复用，这是记忆化，避免重复展开子图；状态为 1 说明当前节点还在递归栈上就又被访问到了，形成环，返回 false。把两种情况合并成一行是因为它们的返回值恰好可以用同一个比较表达出来。</p>
+
+  <p>第五步，处理出度为 0 的节点：<code class="language-plaintext highlighter-rouge">graph.get(node).isEmpty()</code> 时返回 <code class="language-plaintext highlighter-rouge">node == dest</code>。这是唯一的正向终止条件——走不动了的地方必须正好是终点。这一步必须写在染色之前，因为叶子节点不会进入任何环，没必要标记灰色。</p>
+
+  <p>第六步，把当前节点染成灰色 <code class="language-plaintext highlighter-rouge">state[node] = 1</code>，表示它已进入当前递归路径。染色时机必须在遍历后继之前，否则环回来时看到的还是 0，检测不出来。</p>
+
+  <p>第七步，遍历所有后继递归判断，只要有一个后继返回 false 就立刻返回 false。这里用的是「全称条件」的短路求值：一条坏路径就足以否定全局，不需要看完剩下的分支。注意提前返回时并没有把 <code class="language-plaintext highlighter-rouge">state[node]</code> 复位成 0，这不会出问题，因为返回 false 会沿调用链一路传播到最外层，后续不会再有查询发生。</p>
+
+  <p>第八步，所有后继都安全时把当前节点染成黑色 <code class="language-plaintext highlighter-rouge">state[node] = 2</code> 并返回 true。染黑意味着结论已经确定且不再变化，之后任何路径再走到它都可以直接复用，这正是把指数级路径枚举压成线性遍历的关键。</p>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">n = 4</code>、<code class="language-plaintext highlighter-rouge">edges = [[0,1],[0,2],[1,3],[2,3]]</code>、<code class="language-plaintext highlighter-rouge">source = 0</code>、<code class="language-plaintext highlighter-rouge">destination = 3</code> 走一遍：邻接表为 <code class="language-plaintext highlighter-rouge">0 -&gt; [1, 2]</code>、<code class="language-plaintext highlighter-rouge">1 -&gt; [3]</code>、<code class="language-plaintext highlighter-rouge">2 -&gt; [3]</code>、<code class="language-plaintext highlighter-rouge">3 -&gt; []</code>。调用 <code class="language-plaintext highlighter-rouge">dfs(0)</code>，状态为 0 且有出边，染灰 <code class="language-plaintext highlighter-rouge">state[0] = 1</code>，先递归 <code class="language-plaintext highlighter-rouge">dfs(1)</code>；节点 1 状态为 0 且有出边，染灰后递归 <code class="language-plaintext highlighter-rouge">dfs(3)</code>；节点 3 出度为 0，判断 <code class="language-plaintext highlighter-rouge">3 == 3</code> 成立返回 true（注意它没有被染色，下次访问会重新走一遍这个 $O(1)$ 判断）；于是节点 1 的所有后继都安全，染黑 <code class="language-plaintext highlighter-rouge">state[1] = 2</code> 返回 true。回到节点 0 继续递归 <code class="language-plaintext highlighter-rouge">dfs(2)</code>，同样路径染灰、访问节点 3 返回 true、染黑 <code class="language-plaintext highlighter-rouge">state[2] = 2</code> 返回 true。节点 0 的两个后继都安全，染黑并返回 true，最终答案为 true。再看一个带环的例子 <code class="language-plaintext highlighter-rouge">n = 4</code>、<code class="language-plaintext highlighter-rouge">edges = [[0,1],[0,3],[1,2],[2,1]]</code>、<code class="language-plaintext highlighter-rouge">source = 0</code>、<code class="language-plaintext highlighter-rouge">destination = 3</code>：<code class="language-plaintext highlighter-rouge">dfs(0)</code> 染灰后先进 <code class="language-plaintext highlighter-rouge">dfs(1)</code>，节点 1 染灰后进 <code class="language-plaintext highlighter-rouge">dfs(2)</code>，节点 2 染灰后进 <code class="language-plaintext highlighter-rouge">dfs(1)</code>——此时 <code class="language-plaintext highlighter-rouge">state[1]</code> 为 1，命中环检测，返回 <code class="language-plaintext highlighter-rouge">1 == 2</code> 即 false；这个 false 逐层向上传播，节点 2、节点 1、节点 0 依次立即返回 false，节点 0 的另一条通往终点 3 的好路径根本没被访问，因为一条坏路径已经足以否定全局，最终答案为 false。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// 对每个节点记录状态：0 未访问，1 正在访问，2 已确认安全。</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">leadsToDestination</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span><span class="o">[][]</span> <span class="n">edges</span><span class="o">,</span> <span class="kt">int</span> <span class="n">source</span><span class="o">,</span> <span class="kt">int</span> <span class="n">destination</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">graph</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">graph</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;());</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">e</span> <span class="o">:</span> <span class="n">edges</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">graph</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">]).</span><span class="na">add</span><span class="o">(</span><span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">state</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="k">return</span> <span class="nf">dfs</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">destination</span><span class="o">,</span> <span class="n">graph</span><span class="o">,</span> <span class="n">state</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">int</span> <span class="n">node</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dest</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">graph</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">state</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">state</span><span class="o">[</span><span class="n">node</span><span class="o">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">state</span><span class="o">[</span><span class="n">node</span><span class="o">]</span> <span class="o">==</span> <span class="mi">2</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">graph</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">node</span><span class="o">).</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">node</span> <span class="o">==</span> <span class="n">dest</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="n">state</span><span class="o">[</span><span class="n">node</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">next</span> <span class="o">:</span> <span class="n">graph</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">node</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">dfs</span><span class="o">(</span><span class="n">next</span><span class="o">,</span> <span class="n">dest</span><span class="o">,</span> <span class="n">graph</span><span class="o">,</span> <span class="n">state</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="n">state</span><span class="o">[</span><span class="n">node</span><span class="o">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">leadsToDestination</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">,</span> <span class="n">edges</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">source</span> <span class="kt">int</span><span class="p">,</span> <span class="n">destination</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="c">// 对每个节点记录状态：0 未访问，1 正在访问，2 已确认安全。</span>
+    <span class="n">graph</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">e</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">edges</span> <span class="p">{</span>
+        <span class="n">graph</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="m">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">graph</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="m">0</span><span class="p">]],</span> <span class="n">e</span><span class="p">[</span><span class="m">1</span><span class="p">])</span>
+    <span class="p">}</span>
+
+    <span class="n">state</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+    <span class="k">var</span> <span class="n">dfs</span> <span class="k">func</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="k">func</span><span class="p">(</span><span class="n">node</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">state</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">!=</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">state</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">==</span> <span class="m">2</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">])</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">node</span> <span class="o">==</span> <span class="n">destination</span>
+        <span class="p">}</span>
+
+        <span class="n">state</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">next</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="o">!</span><span class="n">dfs</span><span class="p">(</span><span class="n">next</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="no">false</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">state</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="m">2</span>
+        <span class="k">return</span> <span class="no">true</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">dfs</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n + m)$，其中 n 为节点数、m 为边数。建邻接表遍历一次全部边；递归中每个节点最多被真正展开一次（展开后即被染成 1 或直接返回），展开时枚举它的全部出边，因此所有节点的出边总共只被扫描一遍。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n + m)$。邻接表存下全部边占 $O(m)$，状态数组占 $O(n)$，递归栈深度不超过最长简单路径的长度也就是 $O(n)$，三者相加即为总量。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>全称判断要转成「找反例」：与其证明每条路径都好，不如去找唯一一条坏路径，反例只有「卡在非终点的死路」和「陷入环」两种形态，问题立刻具体化，这是处理「所有…都…」型题目的通用起手式。</li>
+    <li>三色标记是有向图判环的标准工具：灰色代表「在当前递归栈上」，黑色代表「已彻底处理完」，只有回边指向灰色节点才算环，若只用一个布尔 <code class="language-plaintext highlighter-rouge">visited</code>，会把「访问过的旁支」误判成环。</li>
+    <li>把递归函数的语义写成一句可验证的话：「从 u 出发的所有路径是否都终止于 destination」，有了这句话，终止条件、记忆化复用、返回值的含义才能自洽，也才能向面试官论证正确性。</li>
+    <li>记忆化让指数级的路径枚举退化成线性遍历：路径数可能指数爆炸，但节点数是线性的，把结论挂在节点上而不是路径上，是这道题从不可行到可行的转折点。</li>
+    <li>面试视角：先说清楚题目其实是三个条件的合取以及为什么「路径有限」等价于「无环」，再给出三色 DFS，并主动解释为什么不需要「已确认不安全」这第四种状态；如果面试官追问非递归写法，可以补充用拓扑排序反向推导，或者用显式栈模拟递归以规避一万层的栈深风险。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>只用一个布尔 <code class="language-plaintext highlighter-rouge">visited</code> 判环：<code class="language-plaintext highlighter-rouge">n = 3</code>、<code class="language-plaintext highlighter-rouge">edges = [[0,1],[0,2],[1,2]]</code>、<code class="language-plaintext highlighter-rouge">source = 0</code>、<code class="language-plaintext highlighter-rouge">destination = 2</code> 中节点 2 被两条不同路径先后访问，第二次会被误判成环，返回 false，正确答案是 true。</li>
+    <li>染灰的时机放在遍历后继之后：<code class="language-plaintext highlighter-rouge">n = 2</code>、<code class="language-plaintext highlighter-rouge">edges = [[0,1],[1,0]]</code>、<code class="language-plaintext highlighter-rouge">source = 0</code>、<code class="language-plaintext highlighter-rouge">destination = 1</code> 时递归回到节点 0 看到的状态仍是 0，环检测失效，程序无限递归直到栈溢出。</li>
+    <li>忘记「出度为 0 必须是终点」这一条，直接对空邻接表返回 true：<code class="language-plaintext highlighter-rouge">n = 2</code>、<code class="language-plaintext highlighter-rouge">edges = [[0,1]]</code>、<code class="language-plaintext highlighter-rouge">source = 0</code>、<code class="language-plaintext highlighter-rouge">destination = 0</code> 会误判为 true，实际上从 0 出发会停在 1，而 1 不是终点，答案是 false。</li>
+    <li>没有检查终点是否有出边：<code class="language-plaintext highlighter-rouge">n = 2</code>、<code class="language-plaintext highlighter-rouge">edges = [[0,1],[1,0]]</code>、<code class="language-plaintext highlighter-rouge">source = 0</code>、<code class="language-plaintext highlighter-rouge">destination = 1</code> 中终点 1 还能走回 0，本解法靠环检测顺带否定了它；但如果有人为了「优化」而在递归入口加上 <code class="language-plaintext highlighter-rouge">if (node == dest) return true</code>，这个用例就会错误返回 true。</li>
+    <li>把后继循环写成「有一个后继安全就返回 true」：<code class="language-plaintext highlighter-rouge">n = 3</code>、<code class="language-plaintext highlighter-rouge">edges = [[0,1],[0,2],[1,2]]</code>、<code class="language-plaintext highlighter-rouge">source = 0</code>、<code class="language-plaintext highlighter-rouge">destination = 1</code> 会因为第一个后继 1 合法就返回 true，忽略了走向 2 的那条坏路径，正确答案是 false。</li>
+    <li>在返回 false 前把状态复位成 0 却仍复用黑色缓存：<code class="language-plaintext highlighter-rouge">n = 4</code>、<code class="language-plaintext highlighter-rouge">edges = [[0,1],[1,2],[2,1],[0,3]]</code> 这类图会让同一段子图被反复展开，虽然结果仍对，但复杂度退化到指数级。</li>
+    <li>递归结束后把状态统一置回 0（标准回溯写法）：<code class="language-plaintext highlighter-rouge">n</code> 较大且分支密集时，例如一条链上挂满交叉边，记忆化完全失效，测试用例直接超时。</li>
+    <li>Java 里建图时忘了先为 n 个节点补齐空列表：<code class="language-plaintext highlighter-rouge">n = 3</code>、<code class="language-plaintext highlighter-rouge">edges = [[0,1]]</code> 时 <code class="language-plaintext highlighter-rouge">graph.get(2)</code> 会抛出下标越界，因为列表里只塞进了不足 n 个元素。</li>
+    <li>直接把 <code class="language-plaintext highlighter-rouge">edges</code> 当无向图双向建边：<code class="language-plaintext highlighter-rouge">n = 2</code>、<code class="language-plaintext highlighter-rouge">edges = [[0,1]]</code>、<code class="language-plaintext highlighter-rouge">source = 0</code>、<code class="language-plaintext highlighter-rouge">destination = 1</code> 会凭空造出 1 到 0 的反向边，形成环并返回 false。</li>
+    <li>忽略递归深度上限：节点数一万且图退化成一条链时，<code class="language-plaintext highlighter-rouge">edges = [[0,1],[1,2],...,[9998,9999]]</code> 会压出一万层栈帧，Java 默认栈大小下有溢出风险，面试中应主动提出可改用显式栈。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/clone-graph/">133. 克隆图</a></td>
+      <td>中等</td>
+      <td>同为图遍历，但用哈希表记录映射以避免重复建点</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/course-schedule/">207. 课程表</a></td>
+      <td>中等</td>
+      <td>只判有向图是否有环，可用入度队列做拓扑排序</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/course-schedule-ii/">210. 课程表 II</a></td>
+      <td>中等</td>
+      <td>在判环基础上还要输出一个合法拓扑序</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/number-of-connected-components-in-an-undirected-graph/">323. 无向图中连通分量的数目</a></td>
+      <td>中等</td>
+      <td>无向图连通性统计，并查集比深搜更直接</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/longest-increasing-path-in-a-matrix/">329. 矩阵中的最长递增路径</a></td>
+      <td>困难</td>
+      <td>同样把结论记忆化在节点上，但求的是最长长度而非布尔判定</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/reconstruct-itinerary/">332. 重新安排行程</a></td>
+      <td>困难</td>
+      <td>要求真正输出一条经过所有边的路径，考察欧拉路径的后序构造</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/redundant-connection/">684. 冗余连接</a></td>
+      <td>中等</td>
+      <td>找出使无向图成环的那条边，靠并查集在加边时检测</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/is-graph-bipartite/">785. 判断二分图</a></td>
+      <td>中等</td>
+      <td>遍历时给节点染两色，冲突即失败，标记的语义换成了分组</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/all-paths-from-source-to-target/">797. 所有可能的路径</a></td>
+      <td>中等</td>
+      <td>真的要枚举并返回全部路径，因图无环所以回溯可行</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/keys-and-rooms/">841. 钥匙和房间</a></td>
+      <td>中等</td>
+      <td>判断可达集合能否覆盖全部节点，不涉及环与终止性</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/course-schedule-iv/">1462. 课程表 IV</a></td>
+      <td>中等</td>
+      <td>需要回答任意两点间的可达性查询，靠传递闭包或按拓扑序合并集合</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/06137859" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 66. 加一</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/61144602" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 剑指 Offer 32 - I. 从上到下打印二叉树</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/11960605">https://hgnulb.github.io/blog/2022/11960605</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

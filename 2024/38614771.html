@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 823. 带因子的二叉树 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,动态规划,哈希表,排序,数组,腾讯" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 823. 带因子的二叉树" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2024/38614771" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2024/38614771" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-03-11T00:00:00+08:00" />
+<meta property="article:modified_time" content="2024-03-11T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 823. 带因子的二叉树" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2024-03-11T00:00:00+08:00","datePublished":"2024-03-11T00:00:00+08:00","description":"题目描述","headline":"LeetCode 823. 带因子的二叉树","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2024/38614771"},"url":"https://hgnulb.github.io/blog/2024/38614771"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法排序--dp--哈希表">解法：排序 + DP + 哈希表</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 823. 带因子的二叉树">LeetCode 823. 带因子的二叉树</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2024-03-11 00:00:00"
+                    datetime="2024-03-11T00:00:00+08:00"
+            >
+                2024-03-11
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 3811 字 · 英文 612 词 · 代码 57 行"
+            aria-label="预计阅读时间约 14 分钟，正文 3811 字 · 英文 612 词 · 代码 57 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 14 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/6062901042/" title="1-2">
+        1-2
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2381712535/" title="腾讯">
+        腾讯
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3320177889/" title="排序">
+        排序
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法排序--dp--哈希表">解法：排序 + DP + 哈希表</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/binary-trees-with-factors/">823. 带因子的二叉树</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>给定一个各元素互不相同、且都大于 1 的整数数组 <code class="language-plaintext highlighter-rouge">arr</code>，用这些数作为节点值构造二叉树。每个值可以<strong>重复使用任意多次</strong>，但每个非叶节点的值必须<strong>等于它两个子节点值的乘积</strong>。求能构造出多少棵这样的树，结果对 $10^9+7$ 取模。</p>
+
+  <p>先把规则读细。「非叶节点的值等于两个子节点的乘积」隐含了一个重要事实：<strong>每个非叶节点必须恰好有两个孩子</strong>，不存在只有一个孩子的节点——否则乘积无从谈起。所以合法的树要么是单个叶子，要么每个内部节点都是满二叉的。</p>
+
+  <p>「每个值可以重复使用任意多次」意味着不同子树可以复用同一个数，甚至左右子树可以是完全相同的两棵树（当根值是完全平方数且平方根在数组里时）。</p>
+
+  <p>还有一处必须明确：<strong>左右子树是有区别的</strong>。同一个乘积分解 $x = a \times b$（$a \ne b$）会产生两棵不同的树——$a$ 在左 $b$ 在右，和 $a$ 在右 $b$ 在左。所以枚举因子对时要枚举<strong>有序对</strong>，不能只枚举一半再乘二（乘二会在 $a = b$ 时多算）。</p>
+
+  <p>约束是 $1 \le n \le 1000$，$2 \le arr[i] \le 10^9$，元素互不相同。$n$ 只有一千，$O(n^2)$ 是四十万次操作，完全允许「对每个数枚举所有可能的较小因子」；而值域高达 $10^9$ 则排除了任何按数值开数组的做法，只能用哈希表做「值 → 位置」的映射。「元素互不相同」这条保证了映射是单射，不需要处理重复键。</p>
+
+  <p>边界方面：每个数自己就能构成一棵单节点的树，所以答案至少是 $n$；数组只有一个元素时答案就是 1；所有元素都是质数时，任何数都无法被分解，答案恰好是 $n$。</p>
+</blockquote>
+
+<h2 id="解法排序--dp--哈希表">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E6%8E%92%E5%BA%8F--dp--%E5%93%88%E5%B8%8C%E8%A1%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：排序 + DP + 哈希表</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>暴力思路是递归构造：以每个值为根，枚举所有分解方式，递归地构造左右子树并计数。这会重复计算大量相同的子问题——以值 $x$ 为根的树的数量，只取决于 $x$ 本身，与它出现在哪棵大树的哪个位置无关。这个观察直接指向记忆化，也就是动态规划。</p>
+
+  <p>显式写下状态定义：<strong>$dp[i]$ 表示以 <code class="language-plaintext highlighter-rouge">arr[i]</code> 这个值作为根节点，能构造出的二叉树的数量。</strong></p>
+
+  <p>转移基于「根值等于两子节点乘积」这条规则。以 $x = arr[i]$ 为根的树分两类：</p>
+
+  <ul>
+    <li>
+<strong>$x$ 单独成为叶子</strong>，这算一棵树，贡献 1。这就是 $dp$ 的初始值。</li>
+    <li>
+<strong>$x$ 有两个孩子</strong>，设左孩子的值是 $a$、右孩子的值是 $b$，则必须 $a \times b = x$，且 $a$、$b$ 都要出现在数组里。此时左子树的形态数是 $dp[a]$、右子树的形态数是 $dp[b]$，两者独立，所以这一对分解贡献 $dp[a] \times dp[b]$ 棵树。</li>
+  </ul>
+
+  <p>于是转移式是</p>
+
+  <p>$dp[i] = 1 + \sum_{a \cdot b = arr[i],\ a,b \in arr} dp[a] \cdot dp[b]$</p>
+
+  <p>求和遍历的是<strong>有序对</strong>，所以 $a$ 从数组中所有可能的因子里取，$b$ 由 $arr[i] / a$ 唯一确定。当 $a \ne b$ 时，$(a,b)$ 与 $(b,a)$ 会被分别枚举到，恰好对应两棵不同的树；当 $a = b$（根值是完全平方数）时只被枚举一次，贡献 $dp[a]^2$，也正确。这就是为什么直接枚举有序对比「枚举无序对再乘二」更省心。</p>
+
+  <p>接下来是两个让转移能落地的技术选择。</p>
+
+  <p><strong>第一，先把数组升序排序。</strong> 因为 $arr[i]$ 的任何真因子都严格小于它自身（数组元素都大于 1），排序后这些因子必然位于更靠前的下标上，$dp$ 值已经计算完毕。这就建立了合法的计算顺序——本质上是给这个隐式的依赖图做了拓扑排序，而排序恰好是它最简单的实现。</p>
+
+  <p><strong>第二，用哈希表建立「值 → 下标」的映射。</strong> 枚举因子 $a = arr[j]$（$j &lt; i$）后，另一个因子是 $arr[i] / arr[j]$，需要在 $O(1)$ 时间判断它是否在数组中并取出它的 $dp$ 值。值域到 $10^9$，只能用哈希表。</p>
+
+  <p>有了这两点，内层循环就变成：对每个 $j &lt; i$，先判断 $arr[i] \bmod arr[j] = 0$（不整除就不可能构成分解），再查另一个因子是否存在，存在则累加 $dp[j] \times dp[k]$。</p>
+
+  <p>最后一个细节是取模与溢出。$dp$ 值都已对 $10^9+7$ 取模，两者相乘可达 $10^{18}$ 量级，超出 32 位整型的范围，所以 $dp$ 数组必须用 64 位整型，且乘完立即取模。</p>
+
+  <p>答案是所有 $dp[i]$ 之和——每棵树都有唯一的根，按根分类求和不重不漏。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>第一步，把 <code class="language-plaintext highlighter-rouge">arr</code> 升序排序。</strong> 为什么必须排序：转移要用到两个因子的 $dp$ 值，而因子严格小于被分解的数。排序保证了「计算 $dp[i]$ 时，所有比 $arr[i]$ 小的数的 $dp$ 都已就绪」，这是整个递推的合法性前提。不排序的话，$dp[k]$ 可能还是初始值 1，导致漏算。</li>
+    <li>
+<strong>第二步，建立「值 → 下标」的哈希映射。</strong> 为什么用哈希表而不是二分查找：两者都可行，哈希是 $O(1)$、二分是 $O(\log n)$，在 $O(n^2)$ 的内层循环里哈希更划算；更关键的是值域 $10^9$ 排除了直接开数组的可能。为什么可以放心用值作键：题目保证元素互不相同。</li>
+    <li>
+<strong>第三步，把所有 $dp[i]$ 初始化为 1。</strong> 为什么初值是 1 而不是 0：每个值自身就是一棵合法的单节点树。这个 1 不是「空树」也不是占位符，而是一个真实的计数，写成 0 会让所有答案系统性偏小。</li>
+    <li>
+<strong>第四步，外层 $i$ 从小到大遍历，内层 $j$ 从 0 到 $i-1$ 遍历。</strong> 为什么内层上界是 $i$ 而不是 $n$：因子必须严格小于当前值，$j \ge i$ 的元素不小于 $arr[i]$，不可能是它的真因子。把上界写成 $n$ 虽然靠整除判断也能筛掉大部分，但会引入 $arr[j] = arr[i]$ 时另一个因子为 1 的情形，而 1 不在数组里，恰好被哈希查询挡住——不出错但白跑一半循环。</li>
+    <li>
+<strong>第五步，若 $arr[i] \bmod arr[j] \ne 0$ 就跳过。</strong> 为什么先判整除：只有整除才可能构成乘积分解，这一步是最廉价的过滤，能挡掉绝大多数无效的 $j$。</li>
+    <li>
+<strong>第六步，计算另一个因子 $right = arr[i] / arr[j]$，在哈希表中查它的下标 $k$；存在则令 $dp[i] \leftarrow (dp[i] + dp[j] \times dp[k]) \bmod (10^9+7)$。</strong> 为什么是相乘而不是相加：左右子树的选择相互独立，方案数是乘法关系。为什么 $k$ 可以等于 $j$：当 $arr[i]$ 是完全平方数且平方根在数组里时，左右子树用同一个值，$dp[j] \times dp[j]$ 正是这种情形的方案数，不需要特殊处理。</li>
+    <li>
+<strong>第七步，把所有 $dp[i]$ 求和并取模，返回结果。</strong> 为什么按根求和不会重复：每棵树的根是唯一确定的，按根分类是一个不重不漏的划分。</li>
+  </ul>
+
+  <p>以 <code class="language-plaintext highlighter-rouge">arr = [2, 4, 5, 10]</code> 走一遍（期望答案 7）。</p>
+
+  <p>排序后仍是 <code class="language-plaintext highlighter-rouge">[2, 4, 5, 10]</code>。哈希映射为 $2 \to 0$、$4 \to 1$、$5 \to 2$、$10 \to 3$。初始 $dp = [1, 1, 1, 1]$。</p>
+
+  <p><strong>$i = 0$（值 2）</strong>：内层循环范围为空，$dp[0]$ 保持 1。含义是 2 是质数，只能作单节点树。</p>
+
+  <p><strong>$i = 1$（值 4）</strong>：$j = 0$，$arr[0] = 2$，$4 \bmod 2 = 0$，另一个因子是 $4 / 2 = 2$，哈希查到下标 0。累加 $dp[0] \times dp[0] = 1 \times 1 = 1$，$dp[1] = 1 + 1 = 2$。含义是以 4 为根有两棵树：单节点的 <code class="language-plaintext highlighter-rouge">4</code>，以及左右孩子都是 2 的 <code class="language-plaintext highlighter-rouge">4(2,2)</code>。注意这里 $j = k = 0$，左右子树用了同一个值，只被枚举一次，贡献 1——如果按「枚举无序对再乘二」处理，这里会错误地算成 2。</p>
+
+  <p><strong>$i = 2$（值 5）</strong>：$j = 0$ 时 $5 \bmod 2 = 1$，跳过；$j = 1$ 时 $5 \bmod 4 = 1$，跳过。$dp[2]$ 保持 1。5 是质数。</p>
+
+  <p><strong>$i = 3$（值 10）</strong>：<br>
+$j = 0$，$arr[0] = 2$，$10 \bmod 2 = 0$，另一因子 $10/2 = 5$，哈希查到下标 2。累加 $dp[0] \times dp[2] = 1 \times 1 = 1$，$dp[3] = 2$。这对应树 <code class="language-plaintext highlighter-rouge">10(2,5)</code>。<br>
+$j = 1$，$arr[1] = 4$，$10 \bmod 4 = 2 \ne 0$，跳过。<br>
+$j = 2$，$arr[2] = 5$，$10 \bmod 5 = 0$，另一因子 $10/5 = 2$，哈希查到下标 0。累加 $dp[2] \times dp[0] = 1$，$dp[3] = 3$。这对应树 <code class="language-plaintext highlighter-rouge">10(5,2)</code>——与上一棵是左右镜像，属于两棵不同的树。这一步正是「枚举有序对」的价值所在：同一个无序分解 ${2,5}$ 被 $j=0$ 和 $j=2$ 各枚举一次，自动得到 2 的计数。</p>
+
+  <p>最终 $dp = [1, 2, 1, 3]$，求和得 $1 + 2 + 1 + 3 = 7$。</p>
+
+  <p>逐一列出这 7 棵树验证：单节点的 <code class="language-plaintext highlighter-rouge">2</code>、<code class="language-plaintext highlighter-rouge">4</code>、<code class="language-plaintext highlighter-rouge">5</code>、<code class="language-plaintext highlighter-rouge">10</code> 共 4 棵；<code class="language-plaintext highlighter-rouge">4(2,2)</code> 1 棵；<code class="language-plaintext highlighter-rouge">10(2,5)</code> 与 <code class="language-plaintext highlighter-rouge">10(5,2)</code> 共 2 棵。合计 7，与计算结果一致。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">numFactoredBinaryTrees</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">mod</span> <span class="o">=</span> <span class="mi">1_000_000_007L</span><span class="o">;</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">arr</span><span class="o">);</span>
+
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">indexMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">indexMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="kt">long</span><span class="o">[]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="o">[</span><span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">dp</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">%</span> <span class="n">arr</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">/</span> <span class="n">arr</span><span class="o">[</span><span class="n">j</span><span class="o">];</span>
+                <span class="nc">Integer</span> <span class="n">k</span> <span class="o">=</span> <span class="n">indexMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">right</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">dp</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">*</span> <span class="n">dp</span><span class="o">[</span><span class="n">k</span><span class="o">])</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kt">long</span> <span class="n">answer</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">long</span> <span class="n">v</span> <span class="o">:</span> <span class="n">dp</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="o">(</span><span class="n">answer</span> <span class="o">+</span> <span class="n">v</span><span class="o">)</span> <span class="o">%</span> <span class="n">mod</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">numFactoredBinaryTrees</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="n">MOD</span> <span class="kt">int64</span> <span class="o">=</span> <span class="m">1_000_000_007</span>
+
+    <span class="n">sort</span><span class="o">.</span><span class="n">Ints</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+
+    <span class="n">indexMap</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">arr</span> <span class="p">{</span>
+        <span class="n">indexMap</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="p">}</span>
+
+    <span class="n">dp</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">dp</span> <span class="p">{</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="m">1</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">%</span><span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+                <span class="n">right</span> <span class="o">:=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">k</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">indexMap</span><span class="p">[</span><span class="n">right</span><span class="p">];</span> <span class="n">ok</span> <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">dp</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">%</span> <span class="n">MOD</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">var</span> <span class="n">answer</span> <span class="kt">int64</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">dp</span> <span class="p">{</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="p">(</span><span class="n">answer</span> <span class="o">+</span> <span class="n">v</span><span class="p">)</span> <span class="o">%</span> <span class="n">MOD</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kt">int</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n^2)$。排序是 $O(n \log n)$，建映射是 $O(n)$，主循环是标准的双层枚举 $O(n^2)$，每次内层迭代只做一次取模、一次除法和一次哈希查询，都是常数。$n \le 1000$ 时约 $5 \times 10^5$ 次内层迭代，运行时间可以忽略。注意这里<strong>不能</strong>改成「对每个 $x$ 枚举到 $\sqrt{x}$」——值域到 $10^9$，$\sqrt{x}$ 是 $3 \times 10^4$ 量级，反而比枚举数组里的 $n \le 1000$ 个候选更慢。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(n)$。$dp$ 数组和哈希映射各占 $O(n)$。这里的哈希表是不可省的——值域 $10^9$ 让「值 → 下标」无法用数组直接索引。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>子问题只与「根的值」有关，与它所处的位置无关</strong>，这是可以做动态规划的判据。识别出这一点之后，状态定义 $dp[值]$ 几乎是自动写出来的。凡是递归构造类的计数题，先问一句「这个子问题的结果依赖哪些参数」，参数越少越好做。</li>
+    <li>
+<strong>排序为隐式的依赖图提供了拓扑序</strong>。因子严格小于原数，所以升序处理就保证了「用到的 $dp$ 都已算好」。这个技巧在最大整除子集、整数拆分等题里通用——凡是依赖关系与数值大小同向，排序就是最省事的拓扑排序。</li>
+    <li>
+<strong>枚举有序对可以自动处理左右子树的区分与自乘的特例</strong>。直接对每个 $j$ 枚举，让 $(a,b)$ 与 $(b,a)$ 各来一次，$a = b$ 时只来一次，正好对应实际的树数量。相比「枚举一半再乘二、遇到平方数特判」的写法，出错面小得多。</li>
+    <li>
+<strong>值域大而元素少，就用哈希表把值映射成下标</strong>。$10^9$ 的值域不允许开数组，$1000$ 的元素数又让哈希表极小。这是「离散化」最轻量的形态，遇到「值很大但个数很少」的输入立刻想到它。</li>
+    <li>
+<strong>计数题的乘法结果要用 64 位承接并立即取模</strong>。两个已取模的数相乘可达 $10^{18}$，32 位整型必然溢出。习惯性地把 $dp$ 声明成 64 位、乘完立刻取模，能消除一整类隐蔽的错误。</li>
+    <li>
+<strong>面试视角</strong>：这题的关键陈述是「以某个值为根的树的数量，只取决于这个值」。说出来之后，状态定义、排序保证拓扑序、哈希表查另一半因子这三步会自然展开。常见追问有两个：一是「左右子树要不要区分」，要能给出 <code class="language-plaintext highlighter-rouge">10(2,5)</code> 与 <code class="language-plaintext highlighter-rouge">10(5,2)</code> 这个具体例子；二是「能不能优化到 $O(n \sqrt{V})$」，正确回答是不能——$V$ 到 $10^9$ 时 $\sqrt{V}$ 远大于 $n$，枚举数组里的候选反而更快，这体现你会根据约束选择枚举维度。能主动指出「$dp$ 初值是 1 因为单节点也算一棵树」，也是很实在的细节意识。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>错误写法：$dp$ 初始化为 0</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [2, 4]</code> 为例，正确答案是 3（单节点 <code class="language-plaintext highlighter-rouge">2</code>、单节点 <code class="language-plaintext highlighter-rouge">4</code>、以及 <code class="language-plaintext highlighter-rouge">4(2,2)</code>）；初值为 0 时 $dp = [0, 0]$，内层累加 $dp[0] \times dp[0] = 0$，最终返回 0。每个值自身就是一棵合法的树，这个 1 是真实计数而非占位。</li>
+    <li>
+<strong>错误写法：不排序直接双层循环</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [4, 2]</code> 为例，$i = 0$ 是 4，内层为空，$dp[0] = 1$；$i = 1$ 是 2，$4 \bmod 2$ 的方向反了，$2 \bmod 4 \ne 0$ 跳过，最终返回 2，而正确答案是 3。必须保证计算 $dp[i]$ 时因子的 $dp$ 已就绪。</li>
+    <li>
+<strong>错误写法：内层循环写成 <code class="language-plaintext highlighter-rouge">j &lt; n</code> 并允许 $j = i$</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [2, 4]</code> 中的 $i = 1$ 为例，$j = 1$ 时 $arr[1] \bmod arr[1] = 0$，另一因子是 $4/4 = 1$；1 不在数组里所以侥幸被哈希挡住。但若数组恰好含有值 1（本题约束下不会，迁移到其它题时会），就会把 <code class="language-plaintext highlighter-rouge">4(4,1)</code> 这种非法分解算进去。内层上界应严格为 $i$。</li>
+    <li>
+<strong>错误写法：只枚举 $a \le \sqrt{x}$ 的因子再把结果乘二</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [2, 4]</code> 为例，$x = 4$ 时唯一分解是 $2 \times 2$，乘二会算成 2 棵，$dp[1]$ 变成 3，最终返回 4，而正确答案是 3。$a = b$ 的情形不能乘二，直接枚举有序对可以规避这个特判。</li>
+    <li>
+<strong>错误写法：忘记另一个因子也必须在数组中，直接用 $dp$ 的默认值 1</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [2, 6]</code> 为例，$6 \bmod 2 = 0$，另一因子是 3 但 3 不在数组里，这个分解非法；若不查哈希表就按 $dp[j] \times 1$ 累加，$dp[1]$ 变成 2，返回 3，而正确答案是 2。两个孩子的值都必须是数组中的元素。</li>
+    <li>
+<strong>错误写法：$dp$ 用 32 位整型</strong>。以一个精心构造的、$dp$ 值接近 $10^9$ 的输入为例，$dp[j] \times dp[k]$ 达到 $10^{18}$，32 位整型直接溢出成负数或截断值，取模也无法还原，结果错误。$dp$ 必须用 64 位。</li>
+    <li>
+<strong>错误写法：只在最后求和时取模，累加过程中不取模</strong>。以 $n = 1000$ 且分解关系密集的输入为例，$dp[i]$ 在内层循环里会被累加上千次，即便用 64 位也可能在多次乘法叠加后逼近溢出；更直接的问题是 $dp$ 值超过模数后，后续以它为因子的乘积会偏离正确的同余类。每次累加后立即取模是标准做法。</li>
+    <li>
+<strong>错误写法：答案只取 $\max dp[i]$ 或只取 $dp[n-1]$</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [2, 4, 5, 10]</code> 为例，$\max dp = 3$、$dp[n-1] = 3$，而正确答案是所有 $dp$ 之和 7。题目问的是树的总数，必须按根分类求和。</li>
+    <li>
+<strong>错误写法：认为左右子树相同的树只算一棵，于是对 $a \ne b$ 的分解只计一次</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [2, 5, 10]</code> 为例，<code class="language-plaintext highlighter-rouge">10(2,5)</code> 与 <code class="language-plaintext highlighter-rouge">10(5,2)</code> 是两棵不同的树，只计一次会返回 4，而正确答案是 5。二叉树的左右孩子有序。</li>
+    <li>
+<strong>错误写法：哈希表建成「值 → dp 值」并在循环中同步更新</strong>。以任意输入为例，这看似省掉了一次下标间接寻址，但 $dp[i]$ 在内层循环中会被多次修改，若映射里存的是旧值就会算错；更糟的是当 $k = i$（不可能发生但代码上无法排除）时会读到半成品。存下标、每次现取 $dp[k]$ 才是安全的。</li>
+    <li>
+<strong>错误写法：用二分查找代替哈希表，但忘了数组已被排序过而在原数组上查</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [10, 2, 5]</code> 为例，排序后是 <code class="language-plaintext highlighter-rouge">[2, 5, 10]</code>，若二分时用的是排序前的引用或未同步的副本，查找结果完全错乱。用哈希表能从根本上避开「查找依赖有序性」这个耦合。</li>
+    <li>
+<strong>错误写法：把「每个值只能用一次」当成隐含约束</strong>。以 <code class="language-plaintext highlighter-rouge">arr = [2, 4]</code> 为例，<code class="language-plaintext highlighter-rouge">4(2,2)</code> 用了两次值 2，是合法的；若限制每个值只用一次会返回 2，正确答案是 3。题目明确说每个值可以重复使用任意多次。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/unique-binary-search-trees/">96. 不同的二叉搜索树</a></td>
+      <td>中等</td>
+      <td>同样按「根是谁」划分并让左右子树数量相乘，但划分依据是下标区间而非因子分解</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/unique-binary-search-trees-ii/">95. 不同的二叉搜索树 II</a></td>
+      <td>中等</td>
+      <td>要真正构造出所有树而不只是计数，需在递归返回时做左右子树的笛卡尔积</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/different-ways-to-add-parentheses/">241. 为运算表达式设计优先级</a></td>
+      <td>中等</td>
+      <td>按「最后计算哪个运算符」划分，左右结果集相乘组合，是同一种分治计数骨架</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/largest-divisible-subset/">368. 最大整除子集</a></td>
+      <td>中等</td>
+      <td>同样靠排序建立整除方向上的拓扑序，但求的是最长链而非方案数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/combination-sum-iv/">377. 组合总和 Ⅳ</a></td>
+      <td>中等</td>
+      <td>元素可重复使用的顺序敏感计数，循环嵌套顺序决定了是否区分排列</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/combination-sum/">39. 组合总和</a></td>
+      <td>中等</td>
+      <td>元素可重复使用但要求输出方案本身，用回溯而非计数 DP，可对照两者的取舍</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/two-sum/">1. 两数之和</a></td>
+      <td>简单</td>
+      <td>同样用哈希表把「另一半是否存在」压成 $O(1)$ 查询，是本题查因子的最简形态</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2024/90074598" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 184. 部门工资最高的员工</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2024/43665371" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 833. 字符串中的查找与替换</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2024/38614771">https://hgnulb.github.io/blog/2024/38614771</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>

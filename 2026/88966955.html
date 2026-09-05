@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode LCR 042. 最近的请求次数 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,LCR,数据流,设计,队列" name="keywords" />
+
+<script>
+  document.documentElement.classList.add('content-toggle-pending')
+  window.setTimeout(() => {
+    document.documentElement.classList.remove('content-toggle-pending')
+  }, 4000)
+</script>
+
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode LCR 042. 最近的请求次数" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/88966955" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/88966955" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-29T01:59:06+08:00" />
+<meta property="article:modified_time" content="2026-03-29T01:59:06+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode LCR 042. 最近的请求次数" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-03-29T01:59:06+08:00","datePublished":"2026-03-29T01:59:06+08:00","description":"题目描述","headline":"LeetCode LCR 042. 最近的请求次数","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/88966955"},"url":"https://hgnulb.github.io/blog/2026/88966955"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/theme/logo.jpg?v=20260906040222" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=20260906040222" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: ["腾讯","字节跳动","阿里巴巴","小红书","快手","携程","百度","网易","美团","滴滴","哔哩哔哩","京东","贝壳","拼多多","猿辅导","作业帮","陌陌","小米","华为","商汤","旷视","图森","微软","虾皮","亚马逊"]
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索关键词…</label>
+            <i class="fa-solid fa-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索关键词…" role="searchbox" spellcheck="false" tabindex="-1" type="text" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="toc-chevron fa-solid fa-chevron-down"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法lcr处理">解法：LCR处理</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+<div id="page">
+  
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="文章数 1387">
+                <img class="site-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="fas fa-search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="文章共 1387 篇"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>文章</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 34"><i class="fa-regular fa-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 239"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/logo.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>全部</dt><dd>1387</dd></div>
+                    <div><dt>分类</dt><dd>34</dd></div>
+                    <div><dt>标签</dt><dd>239</dd></div>
+                    <div><dt>归档</dt><dd>78</dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="fa-regular fa-file-lines" aria-hidden="true"></i><span class="mobile-menu-link-label">文章</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="fa-regular fa-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode LCR 042. 最近的请求次数">LeetCode LCR 042. 最近的请求次数</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="fa-regular fa-calendar article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-03-29 01:59:06"
+                    datetime="2026-03-29T01:59:06+08:00"
+            >
+                2026-03-29
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="fa-regular fa-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1986 字 · 英文 56 词 · 代码 30 行"
+            aria-label="预计阅读时间约 6 分钟，正文 1986 字 · 英文 56 词 · 代码 30 行"
+        >
+            <i class="fa-regular fa-clock article-icon" aria-hidden="true"></i>
+            <span>约 6 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    5 个分类
+                    <span aria-hidden="true"> · </span>
+                    4 个标签
+                </span>
+                <i class="fa-solid fa-chevron-down post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4923693516/" title="简单">
+        简单
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3007053882/" title="119 经典题变种挑战">
+        119 经典题变种挑战
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3355311990/" title="剑指 Offer">
+        剑指 Offer
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7450658006/" title="剑指 Offer（专项突击版）">
+        剑指 Offer（专项突击版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="fa-regular fa-bookmark article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/6142931175/" title="LCR">
+        LCR
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/9802070269/" title="设计">
+        设计
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1903280772/" title="队列">
+        队列
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8438014738/" title="数据流">
+        数据流
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="fa-solid fa-list-ul"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="toc-chevron fa-solid fa-chevron-down"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法lcr处理">解法：LCR处理</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/H8086Q/">LCR 042. 最近的请求次数</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p><strong>题目目标</strong>：设计一个计数器，每次 <code class="language-plaintext highlighter-rouge">ping(t)</code> 表示在毫秒时刻 <code class="language-plaintext highlighter-rouge">t</code> 发生了一次请求，返回值是发生在时间区间 <code class="language-plaintext highlighter-rouge">[t - 3000, t]</code> 内的请求总数（含两端）。<br>
+<strong>核心约束</strong>：题目保证每次传入的 <code class="language-plaintext highlighter-rouge">t</code> 严格大于上一次，这是最关键的信号——请求天然按时间有序到达，不需要任何排序或查找，只要从最早的一端逐个淘汰过期记录即可。<br>
+<strong>边界处理</strong>：区间左端闭合，恰好等于 <code class="language-plaintext highlighter-rouge">t - 3000</code> 的请求必须计入；本次请求自身也在区间内，答案至少为 1；<code class="language-plaintext highlighter-rouge">t</code> 可能小于 3000，此时 <code class="language-plaintext highlighter-rouge">t - 3000</code> 为负数，所有历史请求都还有效。<br>
+<strong>实现取舍</strong>：过期的请求一旦被淘汰，就永远不可能因为后续更大的 <code class="language-plaintext highlighter-rouge">t</code> 而重新变得有效，所以淘汰是不可逆的，可以放心地物理删除而不必打标记。</p>
+</blockquote>
+
+<h2 id="解法lcr处理">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95lcr%E5%A4%84%E7%90%86" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：LCR处理</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>最朴素的做法是把所有时刻存进一个数组，每次 <code class="language-plaintext highlighter-rouge">ping</code> 从头到尾扫一遍统计落在 <code class="language-plaintext highlighter-rouge">[t - 3000, t]</code> 内的个数。这样单次是 $O(n)$，<code class="language-plaintext highlighter-rouge">n</code> 次调用总代价 $O(n^2)$；即便借助有序性改成二分找左端点，也仍要保留全部历史，内存没有上限。<br>
+瓶颈在于每次都重新审视那些早已过期的记录。观察到两点：其一，右端点随调用单调右移，因此左边界 <code class="language-plaintext highlighter-rouge">t - 3000</code> 也单调右移；其二，先到达的请求一定先过期。两个"先进先出"叠在一起，说明有效记录构成的是一个只在尾部进入、只在头部离开的连续区间。<br>
+由此确定不变量：任意一次 <code class="language-plaintext highlighter-rouge">ping</code> 返回之前，容器里从头到尾保存的恰好是当前仍然有效（时刻不小于 <code class="language-plaintext highlighter-rouge">t - 3000</code>）的全部请求时刻，且严格升序排列。既然容器里的元素全部有效且不重不漏，答案就直接是容器长度，连遍历统计都可以省掉。<br>
+维护这条不变量只需两步：先把新时刻 <code class="language-plaintext highlighter-rouge">t</code> 追加到尾部（它一定是最大的，升序性得以保持），再从头部不断弹出小于 <code class="language-plaintext highlighter-rouge">t - 3000</code> 的时刻。头部是最小值，一旦头部合法就说明后面全部合法，可以立刻停止。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>准备一个双端容器 <code class="language-plaintext highlighter-rouge">q</code> 作为唯一状态。为什么选双端结构：新请求只从尾部进入、过期请求只从头部离开，两端操作都必须是 $O(1)$，若用普通数组从头删除，每次都要整体搬移元素。</li>
+    <li>每次 <code class="language-plaintext highlighter-rouge">ping(t)</code> 先执行 <code class="language-plaintext highlighter-rouge">q.offerLast(t)</code> 把当前时刻入队。为什么先入队再清理：<code class="language-plaintext highlighter-rouge">t</code> 本身一定落在 <code class="language-plaintext highlighter-rouge">[t - 3000, t]</code> 内，先入队既保证接下来的清理循环里容器非空、不必额外判空，也让"长度即答案"这条不变量在返回时立刻成立。</li>
+    <li>用 <code class="language-plaintext highlighter-rouge">while (q.peekFirst() &lt; t - 3000) q.pollFirst()</code> 清除过期记录。为什么用严格小于而不是小于等于：区间左端是闭的，时刻恰好等于 <code class="language-plaintext highlighter-rouge">t - 3000</code> 的请求仍然有效，写成 <code class="language-plaintext highlighter-rouge">&lt;=</code> 会把它误删，答案少 1。</li>
+    <li>为什么循环可以在头部合法时立即停止：容器内时刻严格升序，头部是最小值，它都不过期，后面的更不可能过期，因此不存在"漏掉某个过期元素"的风险。</li>
+    <li>返回 <code class="language-plaintext highlighter-rouge">q.size()</code>。为什么不需要再遍历计数：不变量保证容器里的每个元素都是有效请求，且有效请求都在容器里，长度就是答案。</li>
+    <li>以 <code class="language-plaintext highlighter-rouge">具体用例</code>：依次调用 <code class="language-plaintext highlighter-rouge">ping(1)</code>、<code class="language-plaintext highlighter-rouge">ping(100)</code>、<code class="language-plaintext highlighter-rouge">ping(3001)</code>、<code class="language-plaintext highlighter-rouge">ping(3002)</code> 走一遍。第一次入队后 <code class="language-plaintext highlighter-rouge">q = [1]</code>，左边界为 <code class="language-plaintext highlighter-rouge">-2999</code>，头部 1 不小于它，不弹出，返回 1。第二次入队后 <code class="language-plaintext highlighter-rouge">q = [1, 100]</code>，左边界为 <code class="language-plaintext highlighter-rouge">-2900</code>，头部仍合法，返回 2。第三次入队后 <code class="language-plaintext highlighter-rouge">q = [1, 100, 3001]</code>，左边界为 <code class="language-plaintext highlighter-rouge">3001 - 3000 = 1</code>，头部是 1，判定 <code class="language-plaintext highlighter-rouge">1 &lt; 1</code> 为假恰好保留，这正是闭区间左端的体现，返回 3。第四次入队后 <code class="language-plaintext highlighter-rouge">q = [1, 100, 3001, 3002]</code>，左边界为 2，头部 1 满足 <code class="language-plaintext highlighter-rouge">1 &lt; 2</code> 被弹出，新头部 100 判定 <code class="language-plaintext highlighter-rouge">100 &lt; 2</code> 为假，循环停止，容器变成 <code class="language-plaintext highlighter-rouge">[100, 3001, 3002]</code>，返回 3。</li>
+  </ul>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 核心实现：LCR处理，维护必要状态并避免重复处理。</span>
+<span class="kd">class</span> <span class="nc">RecentCounter</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">q</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">RecentCounter</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">ping</span><span class="o">(</span><span class="kt">int</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">q</span><span class="o">.</span><span class="na">offerLast</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">q</span><span class="o">.</span><span class="na">peekFirst</span><span class="o">()</span> <span class="o">&lt;</span> <span class="n">t</span> <span class="o">-</span> <span class="mi">3000</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">q</span><span class="o">.</span><span class="na">pollFirst</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">q</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// 核心实现：LCR处理，维护必要状态并避免重复处理。</span>
+<span class="k">type</span> <span class="n">RecentCounter</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">q</span> <span class="p">[]</span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">RecentCounter</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">RecentCounter</span><span class="p">{</span>
+        <span class="n">q</span><span class="o">:</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{},</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">RecentCounter</span><span class="p">)</span> <span class="n">Ping</span><span class="p">(</span><span class="n">t</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">this</span><span class="o">.</span><span class="n">q</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">t</span><span class="o">-</span><span class="m">3000</span> <span class="p">{</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">q</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">q</span><span class="p">)]</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：<code class="language-plaintext highlighter-rouge">n</code> 次调用总计 $O(n)$，单次均摊 $O(1)$。凭什么：每个时刻最多入队一次、出队一次，清理循环的总迭代次数被出队总数卡死，不会因为某次调用弹出很多元素而让总量变大。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(w)$，其中 <code class="language-plaintext highlighter-rouge">w</code> 是 3000 毫秒窗口内可能出现的最大请求数。凭什么：过期记录被物理删除，容器长度始终等于当前有效请求数，与总调用次数无关。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>当查询区间的两个端点都随时间单调移动时，维护"当前有效元素恰好构成一段连续区间"这条不变量，就能把每次查询压成常数级，这是所有滑动区间计数题的共同骨架。</li>
+    <li>均摊分析是这类写法的关键论据：内层循环单次可能弹出很多元素，但每个元素一生只被弹出一次，总量仍是线性的，面试时要主动把这句话讲出来。</li>
+    <li>先入队再清理，可以让"容器非空"成为循环的天然前提，省掉判空分支；这种"先建立后修复"的顺序往往比"先修复后建立"少一堆边界。</li>
+    <li>区间开闭直接决定比较符号，把"闭区间左端用严格小于淘汰"当成固定对应关系记住，比每次临场推导更稳。</li>
+    <li>面试视角：题面里"<code class="language-plaintext highlighter-rouge">t</code> 严格递增"这句话是本解法的许可证，答题时应第一时间指出它，并顺势补充"如果时刻可以乱序到达，就得改用按时间有序的结构或转成离线处理"，展示对约束的敏感度。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>错误写法：清理条件写成 <code class="language-plaintext highlighter-rouge">while (q.peekFirst() &lt;= t - 3000)</code> → 依次 <code class="language-plaintext highlighter-rouge">ping(1)</code>、<code class="language-plaintext highlighter-rouge">ping(3001)</code>，第二次把时刻 1 弹出，返回 1 而不是正确的 2。</li>
+    <li>错误写法：先清理再把 <code class="language-plaintext highlighter-rouge">t</code> 入队 → 首次调用 <code class="language-plaintext highlighter-rouge">ping(1)</code> 时容器为空，<code class="language-plaintext highlighter-rouge">peekFirst()</code> 返回 <code class="language-plaintext highlighter-rouge">null</code> 触发拆箱空指针异常，Go 里则是对空切片取 <code class="language-plaintext highlighter-rouge">q[0]</code> 直接越界 panic。</li>
+    <li>错误写法：用 <code class="language-plaintext highlighter-rouge">if</code> 代替 <code class="language-plaintext highlighter-rouge">while</code> 只弹出一个过期元素 → 依次 <code class="language-plaintext highlighter-rouge">ping(1)</code>、<code class="language-plaintext highlighter-rouge">ping(2)</code>、<code class="language-plaintext highlighter-rouge">ping(3002)</code>，只有时刻 1 被弹出，时刻 2 残留，返回 3 而不是正确的 1。</li>
+    <li>错误写法：把判定改写成 <code class="language-plaintext highlighter-rouge">t - q.peekFirst() &gt; 3000</code> 时顺手用了 <code class="language-plaintext highlighter-rouge">&gt;=</code> → <code class="language-plaintext highlighter-rouge">ping(1)</code> 后再 <code class="language-plaintext highlighter-rouge">ping(3001)</code>，差值恰为 3000 被判为过期，同样丢掉边界上的那次请求。</li>
+    <li>错误写法：返回值改成遍历容器重新统计 <code class="language-plaintext highlighter-rouge">count</code> → 结果虽仍正确，但单次退化为 $O(w)$，在 $10^4$ 次调用且窗口内请求密集时明显变慢，也说明没有意识到"容器内元素全部有效"这条不变量。</li>
+    <li>错误写法：Go 中方法写成值接收者 <code class="language-plaintext highlighter-rouge">func (this RecentCounter) Ping(t int) int</code> → 每次操作的是结构体副本，入队结果不会写回，第二次 <code class="language-plaintext highlighter-rouge">ping</code> 时容器仍为空，返回值永远是 1。</li>
+    <li>错误写法：用一个整型变量记录上次计数再增量修正，只减 1 → 依次 <code class="language-plaintext highlighter-rouge">ping(1)</code>、<code class="language-plaintext highlighter-rouge">ping(2)</code>、<code class="language-plaintext highlighter-rouge">ping(3003)</code>，实际有两条同时过期却只减掉一条，返回 2 而不是 1。</li>
+    <li>错误写法：把时刻存成 <code class="language-plaintext highlighter-rouge">int</code> 之外的窄类型，或在自定义变种里用 <code class="language-plaintext highlighter-rouge">short</code> 承载毫秒时间戳 → <code class="language-plaintext highlighter-rouge">t</code> 达到 $10^9$ 级别时直接溢出成负数，左边界比较全部失效。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/qIsx9U/">LCR 041. 数据流中的移动平均值</a></td>
+      <td>简单</td>
+      <td>窗口按元素个数而非时间界定，还要增量维护窗口和</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-hit-counter/">362. 敲击计数器</a></td>
+      <td>中等</td>
+      <td>同一秒可能多次敲击，需要按秒分桶聚合而非逐条入队</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/online-stock-span/">901. 股票价格跨度</a></td>
+      <td>中等</td>
+      <td>淘汰依据从时间变成大小关系，需要单调栈而非先进先出</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/sliding-window-maximum/">239. 滑动窗口最大值</a></td>
+      <td>困难</td>
+      <td>窗口内要的是极值，出队规则同时来自窗口和单调性</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/design-circular-queue/">622. 设计循环队列</a></td>
+      <td>中等</td>
+      <td>关注队列本身的定长实现与队空队满的区分</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2026/81678186" rel="prev">
+            <span class="post-navigation-label"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode LCR 041. 数据流中的移动平均值</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2026/91226978" rel="next">
+            <span class="post-navigation-label">下一页<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode LCR 043. 完全二叉树插入器</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <aside class="post-copyright" aria-labelledby="post-copyright-title">
+    <h2 class="post-copyright-title" id="post-copyright-title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>转载与许可</h2>
+    <div class="post-copyright-author">
+        <span class="post-copyright-meta">作者</span>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <span class="post-copyright-meta">链接</span>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2026/88966955">https://hgnulb.github.io/blog/2026/88966955</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <span class="post-copyright-meta">许可</span>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</aside>
+
+  </div>
+</article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+        <nav class="footer-links" aria-label="个人链接">
+            <a href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-tippy-content="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+            <a href="mailto:hgnulb@163.com" aria-label="Email" data-tippy-content="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+            <a href="https://leetcode.cn/u/hgnulb/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode" data-tippy-content="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span class="sr-only">LeetCode</span></a>
+        </nav>
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+
+<script src="/blog/assets/js/blog.bundle.min.js?v=20260906040222"></script>
+
+
+  </body>
+</html>
