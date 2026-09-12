@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 752. 打开转盘锁 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,双向搜索,哈希表,字符串,广度优先搜索,数组" name="keywords" />
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 752. 打开转盘锁" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2024/50393373" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2024/50393373" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-10-18T15:35:18+08:00" />
+<meta property="article:modified_time" content="2024-10-18T15:35:18+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 752. 打开转盘锁" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2024-10-18T15:35:18+08:00","datePublished":"2024-10-18T15:35:18+08:00","description":"题目描述","headline":"LeetCode 752. 打开转盘锁","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2024/50393373"},"url":"https://hgnulb.github.io/blog/2024/50393373"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="/blog/assets/images/theme/profile.jpg?v=81bed7858f99" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Regular.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Medium.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Semibold.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicSerif-Display-Semibold.woff2" as="font" type="font/woff2" crossorigin />
+<link href="/blog/assets/libs/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=becd1054bea2" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    companies: ["字节跳动","微软","美团","阿里巴巴","快手","腾讯","猿辅导","百度","滴滴","京东","华为","拼多多","网易","小米","商汤","旷视","亚马逊","虾皮","图森","携程","哔哩哔哩","小红书","贝壳","作业帮","陌陌"],
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","字节跳动": "字节跳动","微软": "微软","美团": "美团","阿里巴巴": "阿里巴巴","快手": "快手","腾讯": "腾讯","猿辅导": "猿辅导","百度": "百度","滴滴": "滴滴","京东": "京东","华为": "华为","拼多多": "拼多多","网易": "网易","小米": "小米","商汤": "商汤","旷视": "旷视","亚马逊": "亚马逊","虾皮": "虾皮","图森": "图森","携程": "携程","哔哩哔哩": "哔哩哔哩","小红书": "小红书","贝壳": "贝壳","作业帮": "作业帮","陌陌": "陌陌","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","字节跳动","微软","美团","阿里巴巴","快手","腾讯","猿辅导","百度","滴滴","京东","华为","拼多多","网易","小米","商汤","旷视","亚马逊","虾皮","图森","携程","哔哩哔哩","小红书","贝壳","作业帮","陌陌","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: []
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索标题、标签、分类…</label>
+            <i class="lucide-icon search-leading-icon" data-lucide="search" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索标题、标签、分类…" role="searchbox" spellcheck="false" tabindex="-1" type="search" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="lucide-icon" data-lucide="x" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+<div id="page">
+  
+
+
+
+
+
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="lucide-icon" data-lucide="menu" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="题库共 1374 篇题解">
+                <img class="site-avatar" src="/blog/assets/images/theme/profile.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="lucide-icon" data-lucide="search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/notes/" title="笔记共 10 篇"><i class="lucide-icon" data-lucide="library-big" aria-hidden="true"></i><span>笔记</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="题库共 1374 篇题解"><i class="lucide-icon" data-lucide="code-xml" aria-hidden="true"></i><span>题库</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 59"><i class="lucide-icon" data-lucide="folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 214"><i class="lucide-icon" data-lucide="bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="lucide-icon" data-lucide="archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="lucide-icon" data-lucide="search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+            <li><a class="nav-link nav-icon-link" href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub（新窗口打开）" title="GitHub"><i class="github-brand-icon" aria-hidden="true"></i></a></li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/profile.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>笔记</dt><dd><a href="/blog/notes/" aria-label="查看 10 篇笔记">10</a></dd></div>
+                    <div><dt>题库</dt><dd><a href="/blog/" aria-label="查看题库 1374 篇题解">1374</a></dd></div>
+                    <div><dt>分类</dt><dd><a href="/blog/categories/" aria-label="查看 59 个分类">59</a></dd></div>
+                    <div><dt>标签</dt><dd><a href="/blog/tags/" aria-label="查看 214 个标签">214</a></dd></div>
+                    <div><dt>归档</dt><dd><a href="/blog/archives/" aria-label="查看 78 个月的归档">78</a></dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/notes/"><i class="lucide-icon" data-lucide="library-big" aria-hidden="true"></i><span class="mobile-menu-link-label">笔记</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="lucide-icon" data-lucide="code-xml" aria-hidden="true"></i><span class="mobile-menu-link-label">题库</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="lucide-icon" data-lucide="folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="lucide-icon" data-lucide="bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="lucide-icon" data-lucide="archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+                <li><a class="nav-link" href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub（新窗口打开）"><i class="github-brand-icon" aria-hidden="true"></i><span class="mobile-menu-link-label">GitHub</span></a></li>
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 752. 打开转盘锁">LeetCode 752. 打开转盘锁</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="ph ph-calendar-blank article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2024-10-18 15:35:18"
+                    datetime="2024-10-18T15:35:18+08:00"
+            >
+                2024-10-18
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="lucide-icon article-icon" data-lucide="user" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1382 字 · 英文 95 词 · 代码 104 行"
+            aria-label="预计阅读时间约 7 分钟，正文 1382 字 · 英文 95 词 · 代码 104 行"
+        >
+            <i class="lucide-icon article-icon" data-lucide="clock" aria-hidden="true"></i>
+            <span>约 7 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="lucide-icon" data-lucide="file" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    9 个分类
+                    <span aria-hidden="true"> · </span>
+                    5 个标签
+                </span>
+                <i class="ph-fill ph-caret-down disclosure-icon post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="lucide-icon article-icon" data-lucide="folder" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        <i class="lucide-icon" data-lucide="grid-2x2" aria-hidden="true"></i>
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        <i class="lucide-icon" data-lucide="grid-2x2" aria-hidden="true"></i>
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        <i class="lucide-icon" data-lucide="grid-2x2" aria-hidden="true"></i>
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        <i class="lucide-icon" data-lucide="grid-2x2" aria-hidden="true"></i>
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/9362659490/" title="10-20">
+        <i class="lucide-icon" data-lucide="grid-2x2" aria-hidden="true"></i>
+        10-20
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/1091248904/" title="字节跳动">
+        <i class="lucide-icon" data-lucide="grid-2x2" aria-hidden="true"></i>
+        字节跳动
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0175134788/" title="微软">
+        <i class="lucide-icon" data-lucide="grid-2x2" aria-hidden="true"></i>
+        微软
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/1259449732/" title="快手">
+        <i class="lucide-icon" data-lucide="grid-2x2" aria-hidden="true"></i>
+        快手
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7041841112/" title="拼多多">
+        <i class="lucide-icon" data-lucide="grid-2x2" aria-hidden="true"></i>
+        拼多多
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="lucide-icon article-icon" data-lucide="bookmark" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        <i class="lucide-icon" data-lucide="hash" aria-hidden="true"></i>
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        <i class="lucide-icon" data-lucide="hash" aria-hidden="true"></i>
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        <i class="lucide-icon" data-lucide="hash" aria-hidden="true"></i>
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3104557691/" title="广度优先搜索">
+        <i class="lucide-icon" data-lucide="hash" aria-hidden="true"></i>
+        广度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1430553855/" title="双向搜索">
+        <i class="lucide-icon" data-lucide="hash" aria-hidden="true"></i>
+        双向搜索
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="lucide-icon" data-lucide="list"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="ph-fill ph-caret-down disclosure-icon toc-chevron"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法bfs-按层扩展状态">解法：BFS 按层扩展状态</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/open-the-lock/">752. 打开转盘锁</a></p>
+</blockquote>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>四个拨轮各有 <code class="language-plaintext highlighter-rouge">0</code> 到 <code class="language-plaintext highlighter-rouge">9</code> 十个刻度且首尾相连，初始状态是 <code class="language-plaintext highlighter-rouge">0000</code>，每一次操作只能把某一位向上或向下拨一格；给定一批 <code class="language-plaintext highlighter-rouge">deadends</code>（死亡数字），锁一旦转到其中任意一个就再也拨不动了，问最少拨多少次能到达 <code class="language-plaintext highlighter-rouge">target</code>，到不了返回 <code class="language-plaintext highlighter-rouge">-1</code>。</p>
+
+  <p>把每个四位字符串看成一个节点，一次拨动看成连接两个节点的一条边，那么每条边的代价都是 1——<strong>这是一个无权图上的最短路问题</strong>，而不是需要按代价排序的加权最短路。所有拨法从 <code class="language-plaintext highlighter-rouge">0000</code> 出发一层层扩散，第一次碰到 <code class="language-plaintext highlighter-rouge">target</code> 时经过的层数就是答案。</p>
+
+  <p><strong>死亡数字是这张图上被挖掉的点</strong>：它们既不能作为终点，也不能作为中转，扩展时必须整个跳过。特别地，起点 <code class="language-plaintext highlighter-rouge">0000</code> 本身也可能出现在 <code class="language-plaintext highlighter-rouge">deadends</code> 里，此时一步都拨不了，必须直接返回 <code class="language-plaintext highlighter-rouge">-1</code>。</p>
+
+  <p>约束信号：状态总数固定是 $10^4$，<code class="language-plaintext highlighter-rouge">deadends</code> 长度上限五百，规模极小，说明朴素的逐层扩散就足够，不需要任何启发式；同时也提示要用集合去重，否则状态会被反复访问。</p>
+
+  <p>边界包括：起点在死亡列表中；<code class="language-plaintext highlighter-rouge">target</code> 就是 <code class="language-plaintext highlighter-rouge">0000</code>（答案为 0）；<code class="language-plaintext highlighter-rouge">target</code> 被死亡数字完全包围而不可达；拨轮的环形跨越，即 <code class="language-plaintext highlighter-rouge">9</code> 向上变 <code class="language-plaintext highlighter-rouge">0</code>、<code class="language-plaintext highlighter-rouge">0</code> 向下变 <code class="language-plaintext highlighter-rouge">9</code>。</p>
+</blockquote>
+
+<h2 id="解法bfs-按层扩展状态">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95bfs-%E6%8C%89%E5%B1%82%E6%89%A9%E5%B1%95%E7%8A%B6%E6%80%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：BFS 按层扩展状态</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>把每个四位数字看成图中的一个状态。每次只能转动一个拨轮一格，所以每个状态最多有 8 个相邻状态；每条边的代价都是 1，问题就是从 <code class="language-plaintext highlighter-rouge">0000</code> 到 <code class="language-plaintext highlighter-rouge">target</code> 的<strong>无权图最短路</strong>。</p>
+
+  <p>BFS 按距离逐层扩展：第 <code class="language-plaintext highlighter-rouge">step</code> 层中的状态都恰好距离起点 <code class="language-plaintext highlighter-rouge">step</code> 次操作，因此第一次取出 <code class="language-plaintext highlighter-rouge">target</code> 时，<code class="language-plaintext highlighter-rouge">step</code> 就是最少操作数。DFS 只能找到一条路径，不能保证第一次命中的是最短路径。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">deadends</code> 是从状态图中删除的节点：既不能进入，也不能从中继续扩展。起点 <code class="language-plaintext highlighter-rouge">0000</code> 不经过邻居过滤，所以若它本身是死亡状态，必须在 BFS 前直接返回 <code class="language-plaintext highlighter-rouge">-1</code>。</p>
+
+  <p>层序 BFS 的不变量是：每轮开始时，队列当前的 <code class="language-plaintext highlighter-rouge">size</code> 个元素都位于同一距离层；所有已入队状态都已经标记为访问。固定 <code class="language-plaintext highlighter-rouge">size</code> 能避免下一层混入本层，入队时标记则能避免同一状态被多条路径重复加入。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ol>
+    <li>将所有死亡状态加入哈希集合，先检查 <code class="language-plaintext highlighter-rouge">0000</code> 是否被封锁。</li>
+    <li>将 <code class="language-plaintext highlighter-rouge">0000</code> 入队并立即加入访问集合，令 <code class="language-plaintext highlighter-rouge">step = 0</code>。</li>
+    <li>每轮记录当前队列长度 <code class="language-plaintext highlighter-rouge">size</code>，只处理这 <code class="language-plaintext highlighter-rouge">size</code> 个同层状态。</li>
+    <li>出队状态若等于 <code class="language-plaintext highlighter-rouge">target</code>，立即返回 <code class="language-plaintext highlighter-rouge">step</code>。</li>
+    <li>对四个拨轮分别生成向上、向下转一格的 8 个邻居；<code class="language-plaintext highlighter-rouge">9</code> 向上回到 <code class="language-plaintext highlighter-rouge">0</code>，<code class="language-plaintext highlighter-rouge">0</code> 向下回到 <code class="language-plaintext highlighter-rouge">9</code>。</li>
+    <li>跳过死亡或已访问状态，其余状态在入队时立刻标记。</li>
+    <li>当前层处理完后执行 <code class="language-plaintext highlighter-rouge">step++</code>；队列耗尽仍未命中则返回 <code class="language-plaintext highlighter-rouge">-1</code>。</li>
+  </ol>
+
+  <p>例如从 <code class="language-plaintext highlighter-rouge">0000</code> 到 <code class="language-plaintext highlighter-rouge">0009</code>，第四位向下转一次即可到达，BFS 会在第 1 层命中。若 <code class="language-plaintext highlighter-rouge">0009</code> 在死亡集合中，它不会被加入队列，搜索最终返回 <code class="language-plaintext highlighter-rouge">-1</code>。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.HashSet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Queue</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">openLock</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">deadends</span><span class="o">,</span> <span class="nc">String</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">dead</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">state</span> <span class="o">:</span> <span class="n">deadends</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">dead</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">state</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">dead</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">"0000"</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">visited</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="s">"0000"</span><span class="o">);</span>
+        <span class="n">visited</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"0000"</span><span class="o">);</span>
+
+        <span class="kt">int</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">queue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="nc">String</span> <span class="n">current</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">target</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="n">step</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">next</span> <span class="o">:</span> <span class="n">nextStates</span><span class="o">(</span><span class="n">current</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">dead</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">next</span><span class="o">)</span> <span class="o">||</span> <span class="o">!</span><span class="n">visited</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">next</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="k">continue</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">next</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="n">step</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">nextStates</span><span class="o">(</span><span class="nc">String</span> <span class="n">state</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">next</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;(</span><span class="mi">8</span><span class="o">);</span>
+        <span class="kt">char</span><span class="o">[]</span> <span class="n">digits</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">char</span> <span class="n">original</span> <span class="o">=</span> <span class="n">digits</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+
+            <span class="n">digits</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">original</span> <span class="o">==</span> <span class="sc">'9'</span> <span class="o">?</span> <span class="sc">'0'</span> <span class="o">:</span> <span class="o">(</span><span class="kt">char</span><span class="o">)</span> <span class="o">(</span><span class="n">original</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="n">next</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">String</span><span class="o">(</span><span class="n">digits</span><span class="o">));</span>
+
+            <span class="n">digits</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">original</span> <span class="o">==</span> <span class="sc">'0'</span> <span class="o">?</span> <span class="sc">'9'</span> <span class="o">:</span> <span class="o">(</span><span class="kt">char</span><span class="o">)</span> <span class="o">(</span><span class="n">original</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="n">next</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">String</span><span class="o">(</span><span class="n">digits</span><span class="o">));</span>
+
+            <span class="n">digits</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">original</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">next</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">openLock</span><span class="p">(</span><span class="n">deadends</span> <span class="p">[]</span><span class="kt">string</span><span class="p">,</span> <span class="n">target</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">dead</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">deadends</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">state</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">deadends</span> <span class="p">{</span>
+        <span class="n">dead</span><span class="p">[</span><span class="n">state</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">dead</span><span class="p">[</span><span class="s">"0000"</span><span class="p">]</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+    <span class="p">}</span>
+
+    <span class="n">queue</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"0000"</span><span class="p">}</span>
+    <span class="n">visited</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">{</span><span class="s">"0000"</span><span class="o">:</span> <span class="no">true</span><span class="p">}</span>
+    <span class="n">step</span> <span class="o">:=</span> <span class="m">0</span>
+
+    <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="n">size</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+            <span class="n">current</span> <span class="o">:=</span> <span class="n">queue</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+            <span class="n">queue</span> <span class="o">=</span> <span class="n">queue</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">current</span> <span class="o">==</span> <span class="n">target</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="n">step</span>
+            <span class="p">}</span>
+
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">next</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nextLockStates</span><span class="p">(</span><span class="n">current</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="n">dead</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">||</span> <span class="n">visited</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="p">{</span>
+                    <span class="k">continue</span>
+                <span class="p">}</span>
+                <span class="n">visited</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+                <span class="n">queue</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">next</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">step</span><span class="o">++</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">nextLockStates</span><span class="p">(</span><span class="n">state</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+    <span class="n">next</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">8</span><span class="p">)</span>
+    <span class="n">digits</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">original</span> <span class="o">:=</span> <span class="n">digits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">original</span> <span class="o">==</span> <span class="sc">'9'</span> <span class="p">{</span>
+            <span class="n">digits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'0'</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">digits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">original</span> <span class="o">+</span> <span class="m">1</span>
+        <span class="p">}</span>
+        <span class="n">next</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">next</span><span class="p">,</span> <span class="kt">string</span><span class="p">(</span><span class="n">digits</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">original</span> <span class="o">==</span> <span class="sc">'0'</span> <span class="p">{</span>
+            <span class="n">digits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'9'</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">digits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">original</span> <span class="o">-</span> <span class="m">1</span>
+        <span class="p">}</span>
+        <span class="n">next</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">next</span><span class="p">,</span> <span class="kt">string</span><span class="p">(</span><span class="n">digits</span><span class="p">))</span>
+
+        <span class="n">digits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">original</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">next</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <p>设状态图中最多有 <code class="language-plaintext highlighter-rouge">V = 10000</code> 个状态，每个状态最多连接 8 个邻居。</p>
+
+  <ul>
+    <li>
+<strong>时间复杂度：</strong>$O(V)$。每个可达状态最多入队一次，生成邻居的数量和字符串长度都是常数。</li>
+    <li>
+<strong>空间复杂度：</strong>$O(V)$。队列、访问集合和死亡集合最多共同保存常数倍的全部状态。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <ul>
+    <li>边权全部为 1，BFS 的层数天然就是最少拨动次数。</li>
+    <li>死亡状态不能入队；起点是死亡状态必须单独特判。</li>
+    <li>
+<code class="language-plaintext highlighter-rouge">visited</code> 要在入队时标记，而不是出队时标记，才能避免同层重复入队。</li>
+    <li>每层先固定 <code class="language-plaintext highlighter-rouge">size</code>，处理结束后再增加 <code class="language-plaintext highlighter-rouge">step</code>，否则距离会与出队次数混淆。</li>
+    <li>生成某一位的两个邻居后要恢复原字符，才能继续正确修改下一位。</li>
+    <li>面试若追问优化，可说明双向 BFS 从起点和终点同时扩展，并始终扩展较小的一侧；但状态只有一万个，单向 BFS 已足够稳定。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <ul>
+    <li>起点 <code class="language-plaintext highlighter-rouge">0000</code> 在 <code class="language-plaintext highlighter-rouge">deadends</code> 中仍启动搜索，会从一个本应不可移动的状态走出去。</li>
+    <li>忘记过滤死亡状态，会让最短路径非法穿过禁区。</li>
+    <li>出队时才标记访问，同一状态可能在同一层被多次入队，导致队列快速膨胀。</li>
+    <li>把 <code class="language-plaintext highlighter-rouge">step++</code> 放在单个状态的循环里，计算出的会是出队次数而不是最短距离。</li>
+    <li>没处理拨轮环形边界：<code class="language-plaintext highlighter-rouge">0</code> 向下应为 <code class="language-plaintext highlighter-rouge">9</code>，<code class="language-plaintext highlighter-rouge">9</code> 向上应为 <code class="language-plaintext highlighter-rouge">0</code>。</li>
+    <li>修改一位后没有恢复原字符，会生成同时改变多位的非法邻居。</li>
+    <li>只在生成邻居时判断目标，会漏掉 <code class="language-plaintext highlighter-rouge">target = "0000"</code> 的零步答案；出队时判断可自然覆盖。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>考察点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/word-ladder/">127. 单词接龙</a></td>
+      <td>困难</td>
+      <td>字符串状态图建边</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/minimum-genetic-mutation/">433. 最小基因变化</a></td>
+      <td>中等</td>
+      <td>有限字符集逐位替换</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/sliding-puzzle/">773. 滑动谜题</a></td>
+      <td>困难</td>
+      <td>棋盘状态编码与还原</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/rotting-oranges/">994. 腐烂的橘子</a></td>
+      <td>中等</td>
+      <td>多源 BFS 计层数</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-path-in-binary-matrix/">1091. 二进制矩阵中的最短路径</a></td>
+      <td>中等</td>
+      <td>网格八方向最短路</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/shortest-path-with-alternating-colors/">1129. 颜色交替的最短路径</a></td>
+      <td>中等</td>
+      <td>带附加维度的状态最短路</td>
+    </tr>
+    <tr>
+      <td><a href="https://leetcode.cn/problems/jump-game-iv/">1345. 跳跃游戏 IV</a></td>
+      <td>困难</td>
+      <td>建图去重压缩边数</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2024/85039853" rel="prev">
+            <span class="post-navigation-label"><i class="lucide-icon" data-lucide="arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 904. 水果成篮</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2024/75452796" rel="next">
+            <span class="post-navigation-label">下一页<i class="lucide-icon" data-lucide="arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1116. 打印零与奇偶数</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <details class="post-copyright">
+    <summary class="post-copyright-title"><i class="lucide-icon" data-lucide="copyright" aria-hidden="true"></i>转载与许可<i class="ph-fill ph-caret-down disclosure-icon post-copyright-chevron" aria-hidden="true"></i></summary>
+    <div class="post-copyright-author">
+        <strong class="post-copyright-meta">作者</strong>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <strong class="post-copyright-meta">链接</strong>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2024/50393373">https://hgnulb.github.io/blog/2024/50393373</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <strong class="post-copyright-meta">许可</strong>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</details>
+
+  </div>
+</article>
+
+    </div>
+    
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="lucide-icon" data-lucide="chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="lucide-icon" data-lucide="list"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="ph-fill ph-caret-down disclosure-icon toc-chevron"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法bfs-按层扩展状态">解法：BFS 按层扩展状态</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+<script type="module" src="/blog/assets/js/blog.bundle.min.js?v=b73299c75a7f"></script>
+
+
+  </body>
+</html>

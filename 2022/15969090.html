@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>数据结构与算法-单调栈 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,单调栈" name="keywords" />
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="数据结构与算法-单调栈" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="一、相邻最值" />
+<meta name="twitter:description" property="og:description" content="一、相邻最值" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/15969090" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/15969090" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-11-06T16:08:02+08:00" />
+<meta property="article:modified_time" content="2022-11-06T16:08:02+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="数据结构与算法-单调栈" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-11-06T16:08:02+08:00","datePublished":"2022-11-06T16:08:02+08:00","description":"一、相邻最值","headline":"数据结构与算法-单调栈","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/15969090"},"url":"https://hgnulb.github.io/blog/2022/15969090"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="/blog/assets/images/theme/profile.jpg?v=81bed7858f99" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Regular.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Medium.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Semibold.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicSerif-Display-Semibold.woff2" as="font" type="font/woff2" crossorigin />
+<link href="/blog/assets/libs/modern-normalize.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=becd1054bea2" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    companies: ["字节跳动","微软","美团","阿里巴巴","快手","腾讯","猿辅导","百度","滴滴","京东","华为","拼多多","网易","小米","商汤","旷视","亚马逊","虾皮","图森","携程","哔哩哔哩","小红书","贝壳","作业帮","陌陌"],
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","字节跳动": "字节跳动","微软": "微软","美团": "美团","阿里巴巴": "阿里巴巴","快手": "快手","腾讯": "腾讯","猿辅导": "猿辅导","百度": "百度","滴滴": "滴滴","京东": "京东","华为": "华为","拼多多": "拼多多","网易": "网易","小米": "小米","商汤": "商汤","旷视": "旷视","亚马逊": "亚马逊","虾皮": "虾皮","图森": "图森","携程": "携程","哔哩哔哩": "哔哩哔哩","小红书": "小红书","贝壳": "贝壳","作业帮": "作业帮","陌陌": "陌陌","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","字节跳动","微软","美团","阿里巴巴","快手","腾讯","猿辅导","百度","滴滴","京东","华为","拼多多","网易","小米","商汤","旷视","亚马逊","虾皮","图森","携程","哔哩哔哩","小红书","贝壳","作业帮","陌陌","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: []
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索标题、标签、分类…</label>
+            <i class="lucide-icon search-leading-icon" data-lucide="search" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索标题、标签、分类…" role="searchbox" spellcheck="false" tabindex="-1" type="search" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="lucide-icon" data-lucide="x" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+<div id="page">
+  
+
+
+
+
+
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="lucide-icon" data-lucide="menu" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="题库共 1374 篇题解">
+                <img class="site-avatar" src="/blog/assets/images/theme/profile.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="lucide-icon" data-lucide="search" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/notes/" aria-current="page" title="笔记共 10 篇"><i class="lucide-icon" data-lucide="library-big" aria-hidden="true"></i><span>笔记</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/" title="题库共 1374 篇题解"><i class="lucide-icon" data-lucide="code-xml" aria-hidden="true"></i><span>题库</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 59"><i class="lucide-icon" data-lucide="folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 214"><i class="lucide-icon" data-lucide="bookmark" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="lucide-icon" data-lucide="archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="lucide-icon" data-lucide="search" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+            <li><a class="nav-link nav-icon-link" href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub（新窗口打开）" title="GitHub"><i class="github-brand-icon" aria-hidden="true"></i></a></li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/profile.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>笔记</dt><dd><a href="/blog/notes/" aria-label="查看 10 篇笔记">10</a></dd></div>
+                    <div><dt>题库</dt><dd><a href="/blog/" aria-label="查看题库 1374 篇题解">1374</a></dd></div>
+                    <div><dt>分类</dt><dd><a href="/blog/categories/" aria-label="查看 59 个分类">59</a></dd></div>
+                    <div><dt>标签</dt><dd><a href="/blog/tags/" aria-label="查看 214 个标签">214</a></dd></div>
+                    <div><dt>归档</dt><dd><a href="/blog/archives/" aria-label="查看 78 个月的归档">78</a></dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/notes/" aria-current="page"><i class="lucide-icon" data-lucide="library-big" aria-hidden="true"></i><span class="mobile-menu-link-label">笔记</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/"><i class="lucide-icon" data-lucide="code-xml" aria-hidden="true"></i><span class="mobile-menu-link-label">题库</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="lucide-icon" data-lucide="folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="lucide-icon" data-lucide="bookmark" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="lucide-icon" data-lucide="archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+                <li><a class="nav-link" href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub（新窗口打开）"><i class="github-brand-icon" aria-hidden="true"></i><span class="mobile-menu-link-label">GitHub</span></a></li>
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article" data-blockquote-color="blue">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="数据结构与算法-单调栈">数据结构与算法-单调栈</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="ph ph-calendar-blank article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-11-06 16:08:02"
+                    datetime="2022-11-06T16:08:02+08:00"
+            >
+                2022-11-06
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="lucide-icon article-icon" data-lucide="user" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1430 字 · 英文 45 词 · 代码 861 行"
+            aria-label="预计阅读时间约 33 分钟，正文 1430 字 · 英文 45 词 · 代码 861 行"
+        >
+            <i class="lucide-icon article-icon" data-lucide="clock" aria-hidden="true"></i>
+            <span>约 33 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="lucide-icon" data-lucide="file" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    1 个分类
+                    <span aria-hidden="true"> · </span>
+                    1 个标签
+                </span>
+                <i class="ph-fill ph-caret-down disclosure-icon post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="lucide-icon article-icon" data-lucide="folder" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/1787634722/" title="数据结构与算法">
+        <i class="lucide-icon" data-lucide="grid-2x2" aria-hidden="true"></i>
+        数据结构与算法
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="lucide-icon article-icon" data-lucide="bookmark" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2085989135/" title="单调栈">
+        <i class="lucide-icon" data-lucide="hash" aria-hidden="true"></i>
+        单调栈
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="lucide-icon" data-lucide="list"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="ph-fill ph-caret-down disclosure-icon toc-chevron"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#一相邻最值">一、相邻最值</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#496-下一个更大元素-i">496. 下一个更大元素 I</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#503-下一个更大元素-ii">503. 下一个更大元素 II</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#739-每日温度">739. 每日温度</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#1019-链表中的下一个更大节点">1019. 链表中的下一个更大节点</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#1475-商品折扣后的最终价格">1475. 商品折扣后的最终价格</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#二价格跨度">二、价格跨度</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#901-股票价格跨度">901. 股票价格跨度</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#三矩形与雨水">三、矩形与雨水</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#84-柱状图中最大的矩形">84. 柱状图中最大的矩形</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#85-最大矩形">85. 最大矩形</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#42-接雨水">42. 接雨水</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#四最小字典序">四、最小字典序</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#316-去除重复字母">316. 去除重复字母</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#402-移掉-k-位数字">402. 移掉 K 位数字</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#1673-找出最具竞争力的子序列">1673. 找出最具竞争力的子序列</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#五最大字典序">五、最大字典序</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#321-拼接最大数">321. 拼接最大数</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#六区间贡献">六、区间贡献</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#907-子数组的最小值之和">907. 子数组的最小值之和</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#七排序边界">七、排序边界</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#581-最短无序连续子数组">581. 最短无序连续子数组</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#八模式检测">八、模式检测</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#456-132-模式">456. 132 模式</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#九最大宽度坡">九、最大宽度坡</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#962-最大宽度坡">962. 最大宽度坡</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#十树的构造">十、树的构造</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#654-最大二叉树">654. 最大二叉树</a></li>
+</ol>
+</li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="一相邻最值">
+<a class="anchor" href="#%E4%B8%80%E7%9B%B8%E9%82%BB%E6%9C%80%E5%80%BC" aria-hidden="true"><span class="octicon octicon-link"></span></a>一、相邻最值</h2>
+
+<h3 id="496-下一个更大元素-i">
+<a class="anchor" href="#496-%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E5%85%83%E7%B4%A0-i" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/next-greater-element-i/">496. 下一个更大元素 I</a>
+</h3>
+
+<blockquote>
+  <p>先为 nums2 中每个值寻找右侧第一个更大值，再回答 nums1 的查询。栈保存尚未找到答案的值，当前值更大时弹栈并写入映射；nums2 没有重复值，可以直接用值作为键，没有答案时返回 -1。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Deque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">nextGreaterElement</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums1</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">nums2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">nextGreater</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums2</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 当前值弹出所有比它小的栈顶，栈顶的答案就是当前值</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">nextGreater</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">(),</span> <span class="n">num</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">num</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">nums1</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums1</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">res</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">nextGreater</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">nums1</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">nextGreaterElement</span><span class="p">(</span><span class="n">nums1</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">nums2</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="n">nextGreater</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span>
+    <span class="k">var</span> <span class="n">stack</span> <span class="p">[]</span><span class="kt">int</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">num</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums2</span> <span class="p">{</span>
+        <span class="c">// 当前值弹出所有比它小的栈顶，栈顶的答案就是当前值</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">nextGreater</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">num</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">res</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">num</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums1</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">v</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="n">nextGreater</span><span class="p">[</span><span class="n">num</span><span class="p">];</span> <span class="n">ok</span> <span class="p">{</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="503-下一个更大元素-ii">
+<a class="anchor" href="#503-%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E5%85%83%E7%B4%A0-ii" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/next-greater-element-ii/">503. 下一个更大元素 II</a>
+</h3>
+
+<blockquote>
+  <p>用下标取模模拟两轮遍历，为数组尾部寻找环绕后的答案。栈保存待结算下标，当前值严格更大时弹栈；只在第一轮入栈，第二轮只结算。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Deque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">nextGreaterElements</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">fill</span><span class="o">(</span><span class="n">res</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span> <span class="o">%</span> <span class="n">n</span><span class="o">];</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="o">[</span><span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">()])</span> <span class="o">{</span>
+                <span class="n">res</span><span class="o">[</span><span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">()]</span> <span class="o">=</span> <span class="n">num</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="c1">// 只在第一轮入栈，第二轮只结算</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">nextGreaterElements</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">res</span> <span class="p">{</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span>
+    <span class="p">}</span>
+
+    <span class="k">var</span> <span class="n">stack</span> <span class="p">[]</span><span class="kt">int</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">2</span><span class="o">*</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">num</span> <span class="o">:=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="n">n</span><span class="p">]</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="p">{</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">num</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="c">// 只在第一轮入栈，第二轮只结算</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="p">{</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="739-每日温度">
+<a class="anchor" href="#739-%E6%AF%8F%E6%97%A5%E6%B8%A9%E5%BA%A6" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/daily-temperatures/">739. 每日温度</a>
+</h3>
+
+<blockquote>
+  <p>栈保存还未遇到更高温度的日期下标，对应温度从栈底到栈顶非递增。当前温度严格更高时弹出下标，等待天数就是当前下标减去被弹出的下标；相等温度不能结算。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Deque</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">dailyTemperatures</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">temperatures</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">temperatures</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">temperatures</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">temperatures</span><span class="o">[</span><span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">()])</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">pre</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+                <span class="c1">// 弹出时结算等待天数</span>
+                <span class="n">res</span><span class="o">[</span><span class="n">pre</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">pre</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">dailyTemperatures</span><span class="p">(</span><span class="n">temperatures</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">temperatures</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">var</span> <span class="n">stack</span> <span class="p">[]</span><span class="kt">int</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">temperatures</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">temperatures</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="p">{</span>
+            <span class="n">pre</span> <span class="o">:=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="c">// 弹出时结算等待天数</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">pre</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">pre</span>
+        <span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="1019-链表中的下一个更大节点">
+<a class="anchor" href="#1019-%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E8%8A%82%E7%82%B9" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/next-greater-node-in-linked-list/">1019. 链表中的下一个更大节点</a>
+</h3>
+
+<blockquote>
+  <p>先将链表节点值转成数组，再用单调栈保存尚未找到答案的下标。遇到严格更大值时弹栈并填写答案，没有更大值的位置保持 0。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Deque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// 栈中保存还没有找到下一个更大值的节点下标，且对应值保持单调递减。</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">nextLargerNodes</span><span class="o">(</span><span class="nc">ListNode</span> <span class="n">head</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">values</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">head</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">values</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">head</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">values</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">())</span> <span class="o">&lt;</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">res</span><span class="o">[</span><span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">()]</span> <span class="o">=</span> <span class="n">val</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">nextLargerNodes</span><span class="p">(</span><span class="n">head</span> <span class="o">*</span><span class="n">ListNode</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="c">// 栈中保存还没有找到下一个更大值的节点下标，且对应值保持单调递减。</span>
+    <span class="n">values</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">head</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">head</span><span class="o">.</span><span class="n">Val</span><span class="p">)</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="n">Next</span>
+    <span class="p">}</span>
+
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">stack</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">values</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">values</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">val</span> <span class="p">{</span>
+            <span class="n">idx</span> <span class="o">:=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="1475-商品折扣后的最终价格">
+<a class="anchor" href="#1475-%E5%95%86%E5%93%81%E6%8A%98%E6%89%A3%E5%90%8E%E7%9A%84%E6%9C%80%E7%BB%88%E4%BB%B7%E6%A0%BC" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/final-prices-with-a-special-discount-in-a-shop/">1475. 商品折扣后的最终价格</a>
+</h3>
+
+<blockquote>
+  <p>寻找右侧第一个小于等于当前价格的商品。栈保存待折扣下标，当前价格不大于栈顶价格时弹出并扣减；相等也有折扣，未结算的商品保持原价。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Deque</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">finalPrices</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">prices</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 先按「无折扣」初始化，扫描结束后仍在栈里的元素自动保留原价。</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
+        <span class="c1">// 栈里存下标：结算时既要写 res[idx] 又要读 prices[idx]。</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">prices</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="c1">// 条件是 prices[j] &lt;= prices[i]，相等也要算，所以弹栈用 &gt;=。</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">prices</span><span class="o">[</span><span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">()]</span> <span class="o">&gt;=</span> <span class="n">prices</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+                <span class="n">res</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">=</span> <span class="n">prices</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">-</span> <span class="n">prices</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="o">}</span>
+            <span class="c1">// 必须弹完再压，否则自己会把自己结算成 0。</span>
+            <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">finalPrices</span><span class="p">(</span><span class="n">prices</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="c">// 先按「无折扣」初始化，扫描结束后仍在栈里的元素自动保留原价。</span>
+	<span class="n">res</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">prices</span><span class="p">))</span>
+	<span class="nb">copy</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">prices</span><span class="p">)</span>
+	<span class="c">// 栈里存下标：结算时既要写 res[idx] 又要读 prices[idx]。</span>
+	<span class="n">stack</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{}</span>
+
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">price</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">prices</span> <span class="p">{</span>
+		<span class="c">// 条件是 prices[j] &lt;= prices[i]，相等也要算，所以弹栈用 &gt;=。</span>
+		<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">prices</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="n">price</span> <span class="p">{</span>
+			<span class="n">idx</span> <span class="o">:=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+			<span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+			<span class="n">res</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">prices</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">-</span> <span class="n">price</span>
+		<span class="p">}</span>
+		<span class="c">// 必须弹完再压，否则自己会把自己结算成 0。</span>
+		<span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="二价格跨度">
+<a class="anchor" href="#%E4%BA%8C%E4%BB%B7%E6%A0%BC%E8%B7%A8%E5%BA%A6" aria-hidden="true"><span class="octicon octicon-link"></span></a>二、价格跨度</h2>
+
+<h3 id="901-股票价格跨度">
+<a class="anchor" href="#901-%E8%82%A1%E7%A5%A8%E4%BB%B7%E6%A0%BC%E8%B7%A8%E5%BA%A6" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/online-stock-span/">901. 股票价格跨度</a>
+</h3>
+
+<blockquote>
+  <p>栈保存价格和累计跨度，价格从栈底到栈顶严格递减。新价格大于等于栈顶时，弹出并合并对应跨度，再把当前价格与总跨度压栈；每个历史记录只进出栈一次。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Deque</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">StockSpanner</span> <span class="o">{</span>
+    <span class="c1">// 栈存 [价格, 跨度]，价格从栈底到栈顶严格递减</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="nf">StockSpanner</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">next</span><span class="o">(</span><span class="kt">int</span> <span class="n">price</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">span</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">()[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">price</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 被吞并价格的跨度合并到当前价格上</span>
+            <span class="n">span</span> <span class="o">+=</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">()[</span><span class="mi">1</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="n">price</span><span class="o">,</span> <span class="n">span</span><span class="o">});</span>
+        <span class="k">return</span> <span class="n">span</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">StockSpanner</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">stack</span> <span class="p">[][</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span> <span class="c">// [价格, 跨度]，价格从栈底到栈顶严格递减</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Constructor</span><span class="p">()</span> <span class="n">StockSpanner</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">StockSpanner</span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">s</span> <span class="o">*</span><span class="n">StockSpanner</span><span class="p">)</span> <span class="n">Next</span><span class="p">(</span><span class="n">price</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">span</span> <span class="o">:=</span> <span class="m">1</span>
+    <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="m">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">price</span> <span class="p">{</span>
+        <span class="c">// 被吞并价格的跨度合并到当前价格上</span>
+        <span class="n">span</span> <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">][</span><span class="m">1</span><span class="p">]</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">stack</span><span class="p">,</span> <span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="n">price</span><span class="p">,</span> <span class="n">span</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">span</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="三矩形与雨水">
+<a class="anchor" href="#%E4%B8%89%E7%9F%A9%E5%BD%A2%E4%B8%8E%E9%9B%A8%E6%B0%B4" aria-hidden="true"><span class="octicon octicon-link"></span></a>三、矩形与雨水</h2>
+
+<h3 id="84-柱状图中最大的矩形">
+<a class="anchor" href="#84-%E6%9F%B1%E7%8A%B6%E5%9B%BE%E4%B8%AD%E6%9C%80%E5%A4%A7%E7%9A%84%E7%9F%A9%E5%BD%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/largest-rectangle-in-histogram/">84. 柱状图中最大的矩形</a>
+</h3>
+
+<blockquote>
+  <p>栈保存柱子下标，柱高从栈底到栈顶非递减。遇到更矮柱子时弹栈，以弹出柱高为矩形高度，用当前下标与新栈顶之间的距离计算宽度；等高柱子暂时留栈，由靠左的等高柱子最终覆盖更宽区间。末尾用高度为 0 的哨兵结算剩余候选。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">largestRectangleArea</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">heights</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">heights</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">top</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">i</span> <span class="o">==</span> <span class="n">n</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">heights</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">top</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">heights</span><span class="o">[</span><span class="n">stack</span><span class="o">[</span><span class="n">top</span><span class="o">]]</span> <span class="o">&gt;</span> <span class="n">cur</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">height</span> <span class="o">=</span> <span class="n">heights</span><span class="o">[</span><span class="n">stack</span><span class="o">[</span><span class="n">top</span><span class="o">--]];</span>
+                <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">top</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">stack</span><span class="o">[</span><span class="n">top</span><span class="o">]</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">height</span> <span class="o">*</span> <span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="mi">1</span><span class="o">));</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">[++</span><span class="n">top</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">largestRectangleArea</span><span class="p">(</span><span class="n">heights</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">stack</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">heights</span><span class="p">))</span>
+    <span class="n">ans</span> <span class="o">:=</span> <span class="m">0</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">heights</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">cur</span> <span class="o">:=</span> <span class="m">0</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">heights</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">heights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">heights</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">cur</span> <span class="p">{</span>
+            <span class="n">height</span> <span class="o">:=</span> <span class="n">heights</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">left</span> <span class="o">:=</span> <span class="o">-</span><span class="m">1</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="p">}</span>
+            <span class="n">area</span> <span class="o">:=</span> <span class="n">height</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="m">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">ans</span> <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">area</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">heights</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="85-最大矩形">
+<a class="anchor" href="#85-%E6%9C%80%E5%A4%A7%E7%9F%A9%E5%BD%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/maximal-rectangle/">85. 最大矩形</a>
+</h3>
+
+<blockquote>
+  <p>逐行累计每列连续为 1 的高度，遇到 0 就清零，将每一行转成柱状图最大矩形。每行用单调栈计算面积，再取全局最大值，空矩阵直接返回 0。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maximalRectangle</span><span class="o">(</span><span class="kt">char</span><span class="o">[][]</span> <span class="n">matrix</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">matrix</span><span class="o">.</span><span class="na">length</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">matrix</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">heights</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">matrix</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">length</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">char</span><span class="o">[]</span> <span class="n">row</span> <span class="o">:</span> <span class="n">matrix</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="n">row</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">col</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">heights</span><span class="o">[</span><span class="n">col</span><span class="o">]</span> <span class="o">=</span> <span class="n">row</span><span class="o">[</span><span class="n">col</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'1'</span> <span class="o">?</span> <span class="n">heights</span><span class="o">[</span><span class="n">col</span><span class="o">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">largestRectangleArea</span><span class="o">(</span><span class="n">heights</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">largestRectangleArea</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">heights</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">heights</span><span class="o">.</span><span class="na">length</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">top</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">heights</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">current</span> <span class="o">=</span> <span class="n">i</span> <span class="o">==</span> <span class="n">heights</span><span class="o">.</span><span class="na">length</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">heights</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">top</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">heights</span><span class="o">[</span><span class="n">stack</span><span class="o">[</span><span class="n">top</span><span class="o">]]</span> <span class="o">&gt;=</span> <span class="n">current</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">height</span> <span class="o">=</span> <span class="n">heights</span><span class="o">[</span><span class="n">stack</span><span class="o">[</span><span class="n">top</span><span class="o">--]];</span>
+                <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">top</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">stack</span><span class="o">[</span><span class="n">top</span><span class="o">]</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">height</span> <span class="o">*</span> <span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="mi">1</span><span class="o">));</span>
+            <span class="o">}</span>
+            <span class="n">stack</span><span class="o">[++</span><span class="n">top</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">maximalRectangle</span><span class="p">(</span><span class="n">matrix</span> <span class="p">[][]</span><span class="kt">byte</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span> <span class="o">||</span> <span class="nb">len</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="m">0</span><span class="p">])</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="m">0</span>
+    <span class="p">}</span>
+
+    <span class="n">heights</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="m">0</span><span class="p">]))</span>
+    <span class="n">ans</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">matrix</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">row</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'1'</span> <span class="p">{</span>
+                <span class="n">heights</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">++</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">heights</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="m">0</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">area</span> <span class="o">:=</span> <span class="n">largestRectangleArea</span><span class="p">(</span><span class="n">heights</span><span class="p">);</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">ans</span> <span class="p">{</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">area</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">largestRectangleArea</span><span class="p">(</span><span class="n">heights</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">stack</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">heights</span><span class="p">)</span><span class="o">+</span><span class="m">1</span><span class="p">)</span>
+    <span class="n">ans</span> <span class="o">:=</span> <span class="m">0</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">heights</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">current</span> <span class="o">:=</span> <span class="m">0</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">heights</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">heights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">heights</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="n">current</span> <span class="p">{</span>
+            <span class="n">height</span> <span class="o">:=</span> <span class="n">heights</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">left</span> <span class="o">:=</span> <span class="o">-</span><span class="m">1</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">area</span> <span class="o">:=</span> <span class="n">height</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="m">1</span><span class="p">);</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">ans</span> <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">area</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ans</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="42-接雨水">
+<a class="anchor" href="#42-%E6%8E%A5%E9%9B%A8%E6%B0%B4" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/trapping-rain-water/">42. 接雨水</a>
+</h3>
+
+<blockquote>
+  <p>栈保存高度非递增的柱子下标。遇到更高柱子时弹出凹槽底部，新栈顶和当前柱子分别作为左右挡板，按两侧较低高度与底部的差乘宽度，逐层累计水量；没有左挡板时不能接水。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Deque</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">trap</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">height</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span> <span class="c1">// 存下标，高度从栈底到栈顶递减</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">height</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">height</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">height</span><span class="o">[</span><span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">()])</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">bottom</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span> <span class="c1">// 凹槽底部</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+                    <span class="k">break</span><span class="o">;</span> <span class="c1">// 左边没有挡板，接不住水</span>
+                <span class="o">}</span>
+                <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">();</span>
+                <span class="kt">int</span> <span class="n">width</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="kt">int</span> <span class="n">depth</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">height</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">height</span><span class="o">[</span><span class="n">left</span><span class="o">])</span> <span class="o">-</span> <span class="n">height</span><span class="o">[</span><span class="n">bottom</span><span class="o">];</span>
+                <span class="n">res</span> <span class="o">+=</span> <span class="n">width</span> <span class="o">*</span> <span class="n">depth</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">trap</span><span class="p">(</span><span class="n">height</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">res</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">var</span> <span class="n">stack</span> <span class="p">[]</span><span class="kt">int</span> <span class="c">// 存下标，高度从栈底到栈顶递减</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">h</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">height</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">h</span> <span class="o">&gt;</span> <span class="n">height</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="p">{</span>
+            <span class="n">bottom</span> <span class="o">:=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="c">// 凹槽底部</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
+                <span class="k">break</span> <span class="c">// 左边没有挡板，接不住水</span>
+            <span class="p">}</span>
+            <span class="n">left</span> <span class="o">:=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">width</span> <span class="o">:=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="m">1</span>
+            <span class="n">depth</span> <span class="o">:=</span> <span class="n">min</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">height</span><span class="p">[</span><span class="n">left</span><span class="p">])</span> <span class="o">-</span> <span class="n">height</span><span class="p">[</span><span class="n">bottom</span><span class="p">]</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="n">width</span> <span class="o">*</span> <span class="n">depth</span>
+        <span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="四最小字典序">
+<a class="anchor" href="#%E5%9B%9B%E6%9C%80%E5%B0%8F%E5%AD%97%E5%85%B8%E5%BA%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>四、最小字典序</h2>
+
+<h3 id="316-去除重复字母">
+<a class="anchor" href="#316-%E5%8E%BB%E9%99%A4%E9%87%8D%E5%A4%8D%E5%AD%97%E6%AF%8D" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/remove-duplicate-letters/">316. 去除重复字母</a>
+</h3>
+
+<blockquote>
+  <p>记录每个字符最后出现的位置和是否已入栈，用栈构造最小字典序结果。只有栈顶更大、且该字符后面还会出现时才能弹出；已选字符直接跳过，保证每种字符恰好保留一次。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">removeDuplicateLetters</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">last</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">26</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">last</span><span class="o">[</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nc">StringBuilder</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+        <span class="kt">boolean</span><span class="o">[]</span> <span class="n">inStack</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="mi">26</span><span class="o">];</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">inStack</span><span class="o">[</span><span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="c1">// 栈顶更大且后面还会出现时，才能放心弹出</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">stack</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">last</span><span class="o">[</span><span class="n">stack</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">inStack</span><span class="o">[</span><span class="n">stack</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">]</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">deleteCharAt</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">stack</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+            <span class="n">inStack</span><span class="o">[</span><span class="n">c</span> <span class="o">-</span> <span class="sc">'a'</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">stack</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">removeDuplicateLetters</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="n">last</span> <span class="p">[</span><span class="m">26</span><span class="p">]</span><span class="kt">int</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">last</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="p">}</span>
+
+    <span class="k">var</span> <span class="n">stack</span> <span class="p">[]</span><span class="kt">byte</span>
+    <span class="k">var</span> <span class="n">inStack</span> <span class="p">[</span><span class="m">26</span><span class="p">]</span><span class="kt">bool</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">c</span> <span class="o">:=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">inStack</span><span class="p">[</span><span class="n">c</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span> <span class="p">{</span>
+            <span class="k">continue</span>
+        <span class="p">}</span>
+        <span class="c">// 栈顶更大且后面还会出现时，才能放心弹出</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">last</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="p">{</span>
+            <span class="n">inStack</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span> <span class="o">=</span> <span class="no">false</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+        <span class="n">inStack</span><span class="p">[</span><span class="n">c</span><span class="o">-</span><span class="sc">'a'</span><span class="p">]</span> <span class="o">=</span> <span class="no">true</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kt">string</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="402-移掉-k-位数字">
+<a class="anchor" href="#402-%E7%A7%BB%E6%8E%89-k-%E4%BD%8D%E6%95%B0%E5%AD%97" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/remove-k-digits/">402. 移掉 K 位数字</a>
+</h3>
+
+<blockquote>
+  <p>从高位到低位扫描，当前数字更小时，在剩余删除额度内弹出前面更大的数字。扫描结束后若仍有额度，从尾部继续删除，再去掉前导零；结果为空时返回 0。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">removeKdigits</span><span class="o">(</span><span class="nc">String</span> <span class="n">num</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">StringBuilder</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="c1">// 高位出现更小的数字时，删掉栈顶的大数字</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&gt;</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">deleteCharAt</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+                <span class="n">k</span><span class="o">--;</span>
+            <span class="o">}</span>
+            <span class="n">stack</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 额度没用完，从末尾删掉最大的几位</span>
+        <span class="n">stack</span><span class="o">.</span><span class="na">setLength</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="n">k</span><span class="o">);</span>
+
+        <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">start</span> <span class="o">&lt;</span> <span class="n">stack</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">start</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'0'</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">start</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="nc">String</span> <span class="n">res</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">start</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">?</span> <span class="s">"0"</span> <span class="o">:</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">removeKdigits</span><span class="p">(</span><span class="n">num</span> <span class="kt">string</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="n">stack</span> <span class="p">[]</span><span class="kt">byte</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">num</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="c">// 高位出现更小的数字时，删掉栈顶的大数字</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">k</span><span class="o">--</span>
+        <span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="p">}</span>
+
+    <span class="c">// 额度没用完，从末尾删掉最大的几位</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="n">k</span><span class="p">]</span>
+
+    <span class="n">start</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">for</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'0'</span> <span class="p">{</span>
+        <span class="n">start</span><span class="o">++</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">start</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s">"0"</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kt">string</span><span class="p">(</span><span class="n">stack</span><span class="p">[</span><span class="n">start</span><span class="o">:</span><span class="p">])</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="1673-找出最具竞争力的子序列">
+<a class="anchor" href="#1673-%E6%89%BE%E5%87%BA%E6%9C%80%E5%85%B7%E7%AB%9E%E4%BA%89%E5%8A%9B%E7%9A%84%E5%AD%90%E5%BA%8F%E5%88%97" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/find-the-most-competitive-subsequence/">1673. 找出最具竞争力的子序列</a>
+</h3>
+
+<blockquote>
+  <p>保留长度为 k 的最小字典序子序列，相当于允许删除 n - k 个元素。当前值更小时，只在删除额度允许时弹出栈顶；结果已满时跳过当前元素也消耗额度，保证最终恰好保留 k 个元素。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">mostCompetitive</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">k</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">remove</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="n">k</span><span class="o">;</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">value</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">remove</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="o">[</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">size</span><span class="o">--;</span>
+                <span class="n">remove</span><span class="o">--;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">&lt;</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">[</span><span class="n">size</span><span class="o">++]</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">remove</span><span class="o">--;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">stack</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">mostCompetitive</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="n">stack</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+	<span class="n">remove</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">-</span> <span class="n">k</span>
+
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">remove</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">value</span> <span class="p">{</span>
+			<span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+			<span class="n">remove</span><span class="o">--</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">k</span> <span class="p">{</span>
+			<span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="n">remove</span><span class="o">--</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">stack</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="五最大字典序">
+<a class="anchor" href="#%E4%BA%94%E6%9C%80%E5%A4%A7%E5%AD%97%E5%85%B8%E5%BA%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>五、最大字典序</h2>
+
+<h3 id="321-拼接最大数">
+<a class="anchor" href="#321-%E6%8B%BC%E6%8E%A5%E6%9C%80%E5%A4%A7%E6%95%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/create-maximum-number/">321. 拼接最大数</a>
+</h3>
+
+<blockquote>
+  <p>枚举两个数组分别选取多少位，用单调栈各自选出指定长度的最大字典序子序列，再进行贪心合并。首位相等时必须比较剩余后缀，不能只比较当前一位；最后取所有分配方案中的最大结果。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">maxNumber</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums1</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">nums2</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">lower</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">k</span> <span class="o">-</span> <span class="n">nums2</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">upper</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">k</span><span class="o">,</span> <span class="n">nums1</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">best</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">k</span><span class="o">];</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">take1</span> <span class="o">=</span> <span class="n">lower</span><span class="o">;</span> <span class="n">take1</span> <span class="o">&lt;=</span> <span class="n">upper</span><span class="o">;</span> <span class="n">take1</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">part1</span> <span class="o">=</span> <span class="n">maxSubsequence</span><span class="o">(</span><span class="n">nums1</span><span class="o">,</span> <span class="n">take1</span><span class="o">);</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">part2</span> <span class="o">=</span> <span class="n">maxSubsequence</span><span class="o">(</span><span class="n">nums2</span><span class="o">,</span> <span class="n">k</span> <span class="o">-</span> <span class="n">take1</span><span class="o">);</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">candidate</span> <span class="o">=</span> <span class="n">merge</span><span class="o">(</span><span class="n">part1</span><span class="o">,</span> <span class="n">part2</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">greater</span><span class="o">(</span><span class="n">candidate</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">best</span><span class="o">,</span> <span class="mi">0</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">best</span> <span class="o">=</span> <span class="n">candidate</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">best</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">maxSubsequence</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">length</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">length</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">top</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">drop</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="n">length</span><span class="o">;</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">top</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">drop</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="o">[</span><span class="n">top</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">top</span><span class="o">--;</span>
+                <span class="n">drop</span><span class="o">--;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">length</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">[</span><span class="n">top</span><span class="o">++]</span> <span class="o">=</span> <span class="n">num</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">drop</span><span class="o">--;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">stack</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">merge</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums1</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">nums2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">merged</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">nums1</span><span class="o">.</span><span class="na">length</span> <span class="o">+</span> <span class="n">nums2</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">index1</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">index2</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">merged</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">greater</span><span class="o">(</span><span class="n">nums1</span><span class="o">,</span> <span class="n">index1</span><span class="o">,</span> <span class="n">nums2</span><span class="o">,</span> <span class="n">index2</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">merged</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">nums1</span><span class="o">[</span><span class="n">index1</span><span class="o">++];</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">merged</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">nums2</span><span class="o">[</span><span class="n">index2</span><span class="o">++];</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">merged</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">greater</span><span class="o">(</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">nums1</span><span class="o">,</span>
+            <span class="kt">int</span> <span class="n">index1</span><span class="o">,</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">nums2</span><span class="o">,</span>
+            <span class="kt">int</span> <span class="n">index2</span>
+    <span class="o">)</span> <span class="o">{</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">index1</span> <span class="o">&lt;</span> <span class="n">nums1</span><span class="o">.</span><span class="na">length</span>
+                <span class="o">&amp;&amp;</span> <span class="n">index2</span> <span class="o">&lt;</span> <span class="n">nums2</span><span class="o">.</span><span class="na">length</span>
+                <span class="o">&amp;&amp;</span> <span class="n">nums1</span><span class="o">[</span><span class="n">index1</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums2</span><span class="o">[</span><span class="n">index2</span><span class="o">])</span> <span class="o">{</span>
+            <span class="n">index1</span><span class="o">++;</span>
+            <span class="n">index2</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">index2</span> <span class="o">==</span> <span class="n">nums2</span><span class="o">.</span><span class="na">length</span>
+                <span class="o">||</span> <span class="o">(</span><span class="n">index1</span> <span class="o">&lt;</span> <span class="n">nums1</span><span class="o">.</span><span class="na">length</span>
+                <span class="o">&amp;&amp;</span> <span class="n">nums1</span><span class="o">[</span><span class="n">index1</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">nums2</span><span class="o">[</span><span class="n">index2</span><span class="o">]);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">maxNumber</span><span class="p">(</span><span class="n">nums1</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">nums2</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="n">lower</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">if</span> <span class="n">k</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">nums2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">lower</span> <span class="p">{</span>
+        <span class="n">lower</span> <span class="o">=</span> <span class="n">k</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums2</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">upper</span> <span class="o">:=</span> <span class="n">k</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">upper</span> <span class="p">{</span>
+        <span class="n">upper</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums1</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">best</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">take1</span> <span class="o">:=</span> <span class="n">lower</span><span class="p">;</span> <span class="n">take1</span> <span class="o">&lt;=</span> <span class="n">upper</span><span class="p">;</span> <span class="n">take1</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">part1</span> <span class="o">:=</span> <span class="n">maxSubsequence</span><span class="p">(</span><span class="n">nums1</span><span class="p">,</span> <span class="n">take1</span><span class="p">)</span>
+        <span class="n">part2</span> <span class="o">:=</span> <span class="n">maxSubsequence</span><span class="p">(</span><span class="n">nums2</span><span class="p">,</span> <span class="n">k</span><span class="o">-</span><span class="n">take1</span><span class="p">)</span>
+        <span class="n">candidate</span> <span class="o">:=</span> <span class="n">mergeMax</span><span class="p">(</span><span class="n">part1</span><span class="p">,</span> <span class="n">part2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">greaterSeq</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">best</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="n">candidate</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">best</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">maxSubsequence</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">length</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="n">stack</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+    <span class="n">drop</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">-</span> <span class="n">length</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">num</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">drop</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span>
+            <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">num</span> <span class="p">{</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">drop</span><span class="o">--</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">length</span> <span class="p">{</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">drop</span><span class="o">--</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">stack</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">mergeMax</span><span class="p">(</span><span class="n">nums1</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">nums2</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+    <span class="n">merged</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums1</span><span class="p">)</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">nums2</span><span class="p">))</span>
+    <span class="n">index1</span><span class="p">,</span> <span class="n">index2</span> <span class="o">:=</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">merged</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">greaterSeq</span><span class="p">(</span><span class="n">nums1</span><span class="p">,</span> <span class="n">index1</span><span class="p">,</span> <span class="n">nums2</span><span class="p">,</span> <span class="n">index2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">merged</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums1</span><span class="p">[</span><span class="n">index1</span><span class="p">]</span>
+            <span class="n">index1</span><span class="o">++</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">merged</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums2</span><span class="p">[</span><span class="n">index2</span><span class="p">]</span>
+            <span class="n">index2</span><span class="o">++</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">merged</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">greaterSeq</span><span class="p">(</span><span class="n">nums1</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">index1</span> <span class="kt">int</span><span class="p">,</span> <span class="n">nums2</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">index2</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">index1</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums1</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">index2</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums2</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+        <span class="n">nums1</span><span class="p">[</span><span class="n">index1</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums2</span><span class="p">[</span><span class="n">index2</span><span class="p">]</span> <span class="p">{</span>
+        <span class="n">index1</span><span class="o">++</span>
+        <span class="n">index2</span><span class="o">++</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">index2</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums2</span><span class="p">)</span> <span class="o">||</span>
+        <span class="p">(</span><span class="n">index1</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums1</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">nums1</span><span class="p">[</span><span class="n">index1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums2</span><span class="p">[</span><span class="n">index2</span><span class="p">])</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="六区间贡献">
+<a class="anchor" href="#%E5%85%AD%E5%8C%BA%E9%97%B4%E8%B4%A1%E7%8C%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>六、区间贡献</h2>
+
+<h3 id="907-子数组的最小值之和">
+<a class="anchor" href="#907-%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%B0%8F%E5%80%BC%E4%B9%8B%E5%92%8C" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/sum-of-subarray-minimums/">907. 子数组的最小值之和</a>
+</h3>
+
+<blockquote>
+  <p>计算每个元素作为最小值时覆盖的子数组数量。当前值小于等于栈顶时弹栈，新栈顶给出左侧严格更小边界，当前位置给出右侧小于等于边界；贡献为元素值乘左右可选长度。一侧严格、一侧非严格，避免重复值重复计数。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Deque</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">sumSubarrayMins</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="no">MOD</span> <span class="o">=</span> <span class="mi">1_000_000_007</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">long</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="c1">// i == n 作为哨兵，把栈清空</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">n</span> <span class="o">||</span> <span class="n">arr</span><span class="o">[</span><span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">()]</span> <span class="o">&gt;=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]))</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">top</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+                <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">();</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="o">(</span><span class="n">res</span> <span class="o">+</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span> <span class="n">arr</span><span class="o">[</span><span class="n">top</span><span class="o">]</span> <span class="o">*</span> <span class="o">(</span><span class="n">top</span> <span class="o">-</span> <span class="n">left</span><span class="o">)</span> <span class="o">*</span> <span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">top</span><span class="o">))</span> <span class="o">%</span> <span class="no">MOD</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">sumSubarrayMins</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="n">mod</span> <span class="o">=</span> <span class="m">1_000_000_007</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="k">var</span> <span class="n">stack</span> <span class="p">[]</span><span class="kt">int</span> <span class="c">// 单调递增栈，存下标</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="c">// i == n 作为哨兵，把栈清空</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">n</span> <span class="o">||</span> <span class="n">arr</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">top</span> <span class="o">:=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">left</span> <span class="o">:=</span> <span class="o">-</span><span class="m">1</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="p">}</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="n">res</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">top</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">top</span><span class="o">-</span><span class="n">left</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">top</span><span class="p">))</span> <span class="o">%</span> <span class="n">mod</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="p">{</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="七排序边界">
+<a class="anchor" href="#%E4%B8%83%E6%8E%92%E5%BA%8F%E8%BE%B9%E7%95%8C" aria-hidden="true"><span class="octicon octicon-link"></span></a>七、排序边界</h2>
+
+<h3 id="581-最短无序连续子数组">
+<a class="anchor" href="#581-%E6%9C%80%E7%9F%AD%E6%97%A0%E5%BA%8F%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/">581. 最短无序连续子数组</a>
+</h3>
+
+<blockquote>
+  <p>正向扫描时，遇到更小值就弹出候选下标并更新最左重排位置；反向扫描时，遇到更大值更新最右重排位置。两个边界之间就是需要排序的最短区间，没有逆序时返回 0。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Deque</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">findUnsortedSubarray</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">n</span><span class="o">,</span> <span class="n">right</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+
+        <span class="c1">// 从左往右：被弹出的下标右侧存在更小值，必须重排</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">()]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">left</span><span class="o">,</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">());</span>
+            <span class="o">}</span>
+            <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="n">stack</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+        <span class="c1">// 从右往左：被弹出的下标左侧存在更大值，必须重排</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">()]</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">right</span><span class="o">,</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">());</span>
+            <span class="o">}</span>
+            <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">right</span> <span class="o">&gt;</span> <span class="n">left</span> <span class="o">?</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">findUnsortedSubarray</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+    <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">:=</span> <span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span>
+    <span class="k">var</span> <span class="n">stack</span> <span class="p">[]</span><span class="kt">int</span>
+
+    <span class="c">// 从左往右：被弹出的下标右侧存在更小值，必须重排</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">top</span> <span class="o">:=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">top</span> <span class="o">&lt;</span> <span class="n">left</span> <span class="p">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">top</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="m">0</span><span class="p">]</span>
+    <span class="c">// 从右往左：被弹出的下标左侧存在更大值，必须重排</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">n</span> <span class="o">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">top</span> <span class="o">:=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">top</span> <span class="o">&gt;</span> <span class="n">right</span> <span class="p">{</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">top</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">right</span> <span class="o">&lt;=</span> <span class="n">left</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="m">0</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="m">1</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="八模式检测">
+<a class="anchor" href="#%E5%85%AB%E6%A8%A1%E5%BC%8F%E6%A3%80%E6%B5%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>八、模式检测</h2>
+
+<h3 id="456-132-模式">
+<a class="anchor" href="#456-132-%E6%A8%A1%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/132-pattern/">456. 132 模式</a>
+</h3>
+
+<blockquote>
+  <p>从右向左扫描，栈维护候选的“3”，另一个变量记录已确认的最大“2”。当前值大于栈顶时，弹出的较小值成为“2”的候选；在更左侧遇到比“2”还小的值，就构成下标有序、大小满足 1 &lt; 2 &lt; 3 的 132 模式。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Deque</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">find132pattern</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span> <span class="c1">// 候选的 "3"，从栈底到栈顶递减</span>
+        <span class="kt">int</span> <span class="n">second</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MIN_VALUE</span><span class="o">;</span> <span class="c1">// 已确认的最大的 "2"</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">second</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span> <span class="c1">// nums[i] 就是 "1"</span>
+            <span class="o">}</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">second</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="s">"math"</span>
+
+<span class="k">func</span> <span class="n">find132pattern</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="n">stack</span> <span class="p">[]</span><span class="kt">int</span>         <span class="c">// 候选的 "3"，从栈底到栈顶递减</span>
+    <span class="n">second</span> <span class="o">:=</span> <span class="n">math</span><span class="o">.</span><span class="n">MinInt</span> <span class="c">// 已确认的最大的 "2"</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">second</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="no">true</span> <span class="c">// nums[i] 就是 "1"</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="p">{</span>
+            <span class="n">second</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="no">false</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="九最大宽度坡">
+<a class="anchor" href="#%E4%B9%9D%E6%9C%80%E5%A4%A7%E5%AE%BD%E5%BA%A6%E5%9D%A1" aria-hidden="true"><span class="octicon octicon-link"></span></a>九、最大宽度坡</h2>
+
+<h3 id="962-最大宽度坡">
+<a class="anchor" href="#962-%E6%9C%80%E5%A4%A7%E5%AE%BD%E5%BA%A6%E5%9D%A1" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/maximum-width-ramp/">962. 最大宽度坡</a>
+</h3>
+
+<blockquote>
+  <p>正向扫描时，只把刷新前缀最小值的下标入栈，保留可能的左端点。再从右向左扫描，当前值不小于栈顶对应值时结算宽度并弹栈；从最右侧开始匹配，确保每个左端点首次匹配到的就是最宽结果。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxWidthRamp</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">top</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+
+        <span class="c1">// 只有创造了新前缀最小值的下标，才有资格当左端点。</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">top</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">[</span><span class="n">stack</span><span class="o">[</span><span class="n">top</span><span class="o">]])</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">[++</span><span class="n">top</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">answer</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="c1">// 从右往左，保证第一次匹配到的就是该左端点的最右伙伴。</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">top</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="o">[</span><span class="n">stack</span><span class="o">[</span><span class="n">top</span><span class="o">]])</span> <span class="o">{</span>
+                <span class="n">answer</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">answer</span><span class="o">,</span> <span class="n">j</span> <span class="o">-</span> <span class="n">stack</span><span class="o">[</span><span class="n">top</span><span class="o">]);</span>
+                <span class="n">top</span><span class="o">--;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">answer</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">maxWidthRamp</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+    <span class="n">stack</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="c">// 只有创造了新前缀最小值的下标，才有资格当左端点。</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span> <span class="o">||</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="p">{</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">answer</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="c">// 从右往左，保证第一次匹配到的就是该左端点的最右伙伴。</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">n</span> <span class="o">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span><span class="o">--</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]]</span> <span class="p">{</span>
+            <span class="n">i</span> <span class="o">:=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">j</span><span class="o">-</span><span class="n">i</span> <span class="o">&gt;</span> <span class="n">answer</span> <span class="p">{</span>
+                <span class="n">answer</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">i</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">answer</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="十树的构造">
+<a class="anchor" href="#%E5%8D%81%E6%A0%91%E7%9A%84%E6%9E%84%E9%80%A0" aria-hidden="true"><span class="octicon octicon-link"></span></a>十、树的构造</h2>
+
+<h3 id="654-最大二叉树">
+<a class="anchor" href="#654-%E6%9C%80%E5%A4%A7%E4%BA%8C%E5%8F%89%E6%A0%91" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://leetcode.cn/problems/maximum-binary-tree/">654. 最大二叉树</a>
+</h3>
+
+<blockquote>
+  <p>按数组顺序构造节点，用递减栈维护候选父子关系。当前值更大时连续弹栈，最后弹出的节点作为当前节点的左子树；栈中仍有节点时，将当前节点接为栈顶的右子树。栈底是全局最大值，对应整棵树的根。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayDeque</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="c1">// 线性单调栈能用一次扫描保持“候选父子关系”，避免每次在区间里重新找最大值。</span>
+    <span class="kd">public</span> <span class="nc">TreeNode</span> <span class="nf">constructMaximumBinaryTree</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">ArrayDeque</span><span class="o">&lt;</span><span class="nc">TreeNode</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayDeque</span><span class="o">&lt;&gt;();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">v</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">TreeNode</span> <span class="n">cur</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TreeNode</span><span class="o">(</span><span class="n">v</span><span class="o">);</span>
+            <span class="nc">TreeNode</span> <span class="n">left</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">().</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="n">cur</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">left</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">().</span><span class="na">right</span> <span class="o">=</span> <span class="n">cur</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">cur</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="c1">// push 从头部入栈，栈底在尾部；栈底即全局最大值，也就是树根。</span>
+        <span class="k">return</span> <span class="n">stack</span><span class="o">.</span><span class="na">peekLast</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">constructMaximumBinaryTree</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="n">TreeNode</span> <span class="p">{</span>
+    <span class="c">// 线性单调栈能用一次扫描保持“候选父子关系”，避免每次在区间里重新找最大值。</span>
+    <span class="n">stack</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="n">TreeNode</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">nums</span> <span class="p">{</span>
+        <span class="n">cur</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">TreeNode</span><span class="p">{</span><span class="n">Val</span><span class="o">:</span> <span class="n">v</span><span class="p">}</span>
+        <span class="k">var</span> <span class="n">left</span> <span class="o">*</span><span class="n">TreeNode</span>
+        <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">.</span><span class="n">Val</span> <span class="o">&lt;</span> <span class="n">v</span> <span class="p">{</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">:</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">Left</span> <span class="o">=</span> <span class="n">left</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">{</span>
+            <span class="n">stack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span><span class="o">.</span><span class="n">Right</span> <span class="o">=</span> <span class="n">cur</span>
+        <span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">cur</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c">// 切片头部是栈底，存放的正是全局最大值。</span>
+    <span class="k">return</span> <span class="n">stack</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2022/48338292" rel="prev">
+            <span class="post-navigation-label"><i class="lucide-icon" data-lucide="arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 217. 存在重复元素</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2022/98843001" rel="next">
+            <span class="post-navigation-label">下一页<i class="lucide-icon" data-lucide="arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 1375. 二进制字符串前缀一致的次数</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <details class="post-copyright">
+    <summary class="post-copyright-title"><i class="lucide-icon" data-lucide="copyright" aria-hidden="true"></i>转载与许可<i class="ph-fill ph-caret-down disclosure-icon post-copyright-chevron" aria-hidden="true"></i></summary>
+    <div class="post-copyright-author">
+        <strong class="post-copyright-meta">作者</strong>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <strong class="post-copyright-meta">链接</strong>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2022/15969090">https://hgnulb.github.io/blog/2022/15969090</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <strong class="post-copyright-meta">许可</strong>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</details>
+
+  </div>
+</article>
+
+    </div>
+    
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="lucide-icon" data-lucide="chevron-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="lucide-icon" data-lucide="list"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="ph-fill ph-caret-down disclosure-icon toc-chevron"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#一相邻最值">一、相邻最值</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#496-下一个更大元素-i">496. 下一个更大元素 I</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#503-下一个更大元素-ii">503. 下一个更大元素 II</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#739-每日温度">739. 每日温度</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#1019-链表中的下一个更大节点">1019. 链表中的下一个更大节点</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#1475-商品折扣后的最终价格">1475. 商品折扣后的最终价格</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#二价格跨度">二、价格跨度</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#901-股票价格跨度">901. 股票价格跨度</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#三矩形与雨水">三、矩形与雨水</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#84-柱状图中最大的矩形">84. 柱状图中最大的矩形</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#85-最大矩形">85. 最大矩形</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#42-接雨水">42. 接雨水</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#四最小字典序">四、最小字典序</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#316-去除重复字母">316. 去除重复字母</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#402-移掉-k-位数字">402. 移掉 K 位数字</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#1673-找出最具竞争力的子序列">1673. 找出最具竞争力的子序列</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#五最大字典序">五、最大字典序</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#321-拼接最大数">321. 拼接最大数</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#六区间贡献">六、区间贡献</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#907-子数组的最小值之和">907. 子数组的最小值之和</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#七排序边界">七、排序边界</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#581-最短无序连续子数组">581. 最短无序连续子数组</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#八模式检测">八、模式检测</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#456-132-模式">456. 132 模式</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#九最大宽度坡">九、最大宽度坡</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#962-最大宽度坡">962. 最大宽度坡</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#十树的构造">十、树的构造</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#654-最大二叉树">654. 最大二叉树</a></li>
+</ol>
+</li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+<script type="module" src="/blog/assets/js/blog.bundle.min.js?v=b73299c75a7f"></script>
+
+
+  </body>
+</html>
