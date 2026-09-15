@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>设计模式-单例模式 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,单例模式" name="keywords" />
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="设计模式-单例模式" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="饿汉式" />
+<meta name="twitter:description" property="og:description" content="饿汉式" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2020/50659901" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2020/50659901" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-05T15:22:21+08:00" />
+<meta property="article:modified_time" content="2020-10-05T15:22:21+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="设计模式-单例模式" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2020-10-05T15:22:21+08:00","datePublished":"2020-10-05T15:22:21+08:00","description":"饿汉式","headline":"设计模式-单例模式","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2020/50659901"},"url":"https://hgnulb.github.io/blog/2020/50659901"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="/blog/assets/images/theme/profile.jpg?v=04ad95c24d11" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Regular.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Medium.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Semibold.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicSerif-Display-Semibold.woff2" as="font" type="font/woff2" crossorigin />
+<link href="/blog/assets/libs/modern-normalize.css" rel="stylesheet" />
+<link href="/blog/assets/js/phosphor/Phosphor-Bold.woff2?v=2153b52cea9e" rel="preload" as="font" type="font/woff2" crossorigin />
+<link href="/blog/assets/js/phosphor/style.css?v=9a4b47adc89e" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=ee243c4a875e" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    companies: ["腾讯","字节跳动","阿里巴巴","华为","微软","亚马逊","美团","拼多多","京东","小米","百度","网易","小红书","快手","蚂蚁集团","滴滴","携程","哔哩哔哩","虾皮","米哈游","联想","中兴","OPPO","vivo","科大讯飞","海康威视","顺丰","招商银行","金山","BOSS直聘","贝壳","360","MiniMax","智谱","寒武纪","地平线","小马智行","文远知行","禾赛科技","商汤","旷视","深信服","奇安信","大华","CVTE","TP-LINK","远景能源","涂鸦智能","用友","同花顺","爱奇艺","知乎","新浪","搜狐","欢聚集团","陌陌","唯品会","满帮","富途","度小满","好未来","猿辅导","作业帮","高途","Keep","微盟","迅雷","图森"],
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","腾讯": "腾讯","字节跳动": "字节","阿里巴巴": "阿里","华为": "华为","微软": "微软","亚马逊": "亚马逊","美团": "美团","拼多多": "拼多多","京东": "京东","小米": "小米","百度": "百度","网易": "网易","小红书": "小红书","快手": "快手","蚂蚁集团": "蚂蚁","滴滴": "滴滴","携程": "携程","哔哩哔哩": "B站","虾皮": "虾皮","米哈游": "米哈游","联想": "联想","中兴": "中兴","OPPO": "OPPO","vivo": "vivo","科大讯飞": "讯飞","海康威视": "海康","顺丰": "顺丰","招商银行": "招行","金山": "金山","BOSS直聘": "BOSS直聘","贝壳": "贝壳","360": "360","MiniMax": "MiniMax","智谱": "智谱","寒武纪": "寒武纪","地平线": "地平线","小马智行": "小马智行","文远知行": "文远知行","禾赛科技": "禾赛","商汤": "商汤","旷视": "旷视","深信服": "深信服","奇安信": "奇安信","大华": "大华","CVTE": "CVTE","TP-LINK": "TP-LINK","远景能源": "远景","涂鸦智能": "涂鸦","用友": "用友","同花顺": "同花顺","爱奇艺": "爱奇艺","知乎": "知乎","新浪": "新浪","搜狐": "搜狐","欢聚集团": "欢聚","陌陌": "陌陌","唯品会": "唯品会","满帮": "满帮","富途": "富途","度小满": "度小满","好未来": "好未来","猿辅导": "猿辅导","作业帮": "作业帮","高途": "高途","Keep": "Keep","微盟": "微盟","迅雷": "迅雷","图森": "图森","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","腾讯","字节跳动","阿里巴巴","华为","微软","亚马逊","美团","拼多多","京东","小米","百度","网易","小红书","快手","蚂蚁集团","滴滴","携程","哔哩哔哩","虾皮","米哈游","联想","中兴","OPPO","vivo","科大讯飞","海康威视","顺丰","招商银行","金山","BOSS直聘","贝壳","360","MiniMax","智谱","寒武纪","地平线","小马智行","文远知行","禾赛科技","商汤","旷视","深信服","奇安信","大华","CVTE","TP-LINK","远景能源","涂鸦智能","用友","同花顺","爱奇艺","知乎","新浪","搜狐","欢聚集团","陌陌","唯品会","满帮","富途","度小满","好未来","猿辅导","作业帮","高途","Keep","微盟","迅雷","图森","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: []
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索标题、标签、分类…</label>
+            <i class="ui-icon ph-bold ph-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索标题、标签、分类…" role="searchbox" spellcheck="false" tabindex="-1" type="search" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="ui-icon ph-bold ph-x" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+<div id="page">
+  
+
+
+
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="ui-icon ph-bold ph-list" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="题库共 1500 篇题解">
+                <img class="site-avatar" src="/blog/assets/images/theme/profile.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="ui-icon ph-bold ph-magnifying-glass" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/notes/" aria-current="page" title="笔记共 9 篇"><i class="ui-icon books-outline-icon" aria-hidden="true"></i><span>笔记</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/" title="题库共 1500 篇题解"><i class="ui-icon ph-bold ph-code" aria-hidden="true"></i><span>题库</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 102"><i class="ui-icon ph-bold ph-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 108"><i class="ui-icon ph-bold ph-bookmark-simple" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="ui-icon ph-bold ph-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="ui-icon ph-bold ph-magnifying-glass" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+            <li><a class="nav-link nav-icon-link" href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub（新窗口打开）" title="GitHub"><i class="github-brand-icon" aria-hidden="true"></i></a></li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/profile.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>笔记</dt><dd><a href="/blog/notes/" aria-label="查看 9 篇笔记">9</a></dd></div>
+                    <div><dt>题库</dt><dd><a href="/blog/" aria-label="查看题库 1500 篇题解">1500</a></dd></div>
+                    <div><dt>分类</dt><dd><a href="/blog/categories/" aria-label="查看 102 个分类">102</a></dd></div>
+                    <div><dt>标签</dt><dd><a href="/blog/tags/" aria-label="查看 108 个标签">108</a></dd></div>
+                    <div><dt>归档</dt><dd><a href="/blog/archives/" aria-label="查看 78 个月的归档">78</a></dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/notes/" aria-current="page"><i class="ui-icon books-outline-icon" aria-hidden="true"></i><span class="mobile-menu-link-label">笔记</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/"><i class="ui-icon ph-bold ph-code" aria-hidden="true"></i><span class="mobile-menu-link-label">题库</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="ui-icon ph-bold ph-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="ui-icon ph-bold ph-bookmark-simple" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="ui-icon ph-bold ph-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+                <li><a class="nav-link" href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub（新窗口打开）"><i class="github-brand-icon" aria-hidden="true"></i><span class="mobile-menu-link-label">GitHub</span></a></li>
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="设计模式-单例模式">设计模式-单例模式</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="ui-icon ph-bold ph-calendar-blank article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2020-10-05 15:22:21"
+                    datetime="2020-10-05T15:22:21+08:00"
+            >
+                2020-10-05
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="ui-icon ph-bold ph-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 410 字 · 英文 25 词 · 代码 73 行"
+            aria-label="预计阅读时间约 4 分钟，正文 410 字 · 英文 25 词 · 代码 73 行"
+        >
+            <i class="ui-icon ph-bold ph-clock-countdown article-icon" aria-hidden="true"></i>
+            <span>约 4 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="ui-icon ph-bold ph-file-text" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    1 个分类
+                    <span aria-hidden="true"> · </span>
+                    1 个标签
+                </span>
+                <i class="ui-icon ph-bold ph-caret-down disclosure-icon post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="ui-icon ph-bold ph-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5459034622/" title="设计模式">
+        <i class="ui-icon ph-bold ph-squares-four" aria-hidden="true"></i>
+        设计模式
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="ui-icon ph-bold ph-bookmark-simple article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1784466390/" title="单例模式">
+        <i class="ui-icon ph-bold ph-hash" aria-hidden="true"></i>
+        单例模式
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="ui-icon ph-bold ph-list"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="ui-icon ph-bold ph-caret-down disclosure-icon toc-chevron" aria-hidden="true"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#饿汉式">饿汉式</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#同步懒汉式">同步懒汉式</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#双重检查锁dcl">双重检查锁（DCL）</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#静态内部类">静态内部类</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#枚举">枚举</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="饿汉式">
+<a class="anchor" href="#%E9%A5%BF%E6%B1%89%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>饿汉式</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Singleton</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Singleton</span> <span class="no">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Singleton</span><span class="o">();</span>
+
+    <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Singleton</span> <span class="nf">getInstance</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="no">INSTANCE</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">singleton</span>
+
+<span class="k">type</span> <span class="n">singleton</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">name</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="k">var</span> <span class="n">instance</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">singleton</span><span class="p">{</span><span class="n">name</span><span class="o">:</span> <span class="s">"myblog"</span><span class="p">}</span>
+
+<span class="k">func</span> <span class="n">GetInstance</span><span class="p">()</span> <span class="o">*</span><span class="n">singleton</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">instance</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="同步懒汉式">
+<a class="anchor" href="#%E5%90%8C%E6%AD%A5%E6%87%92%E6%B1%89%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>同步懒汉式</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Singleton</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">Singleton</span> <span class="n">instance</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">synchronized</span> <span class="nc">Singleton</span> <span class="nf">getInstance</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">instance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Singleton</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">singleton</span>
+
+<span class="k">import</span> <span class="s">"sync"</span>
+
+<span class="k">type</span> <span class="n">singleton</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">name</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="k">var</span> <span class="p">(</span>
+	<span class="n">once</span>     <span class="n">sync</span><span class="o">.</span><span class="n">Once</span>
+	<span class="n">instance</span> <span class="o">*</span><span class="n">singleton</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">GetInstance</span><span class="p">()</span> <span class="o">*</span><span class="n">singleton</span> <span class="p">{</span>
+	<span class="n">once</span><span class="o">.</span><span class="n">Do</span><span class="p">(</span><span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">instance</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">singleton</span><span class="p">{</span><span class="n">name</span><span class="o">:</span> <span class="s">"myblog"</span><span class="p">}</span>
+	<span class="p">})</span>
+	<span class="k">return</span> <span class="n">instance</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[!blue]</p>
+
+  <ul>
+    <li>
+<strong>Java：同步创建。</strong> <code class="language-plaintext highlighter-rouge">synchronized</code> 让判空和创建过程一次只由一个线程执行，避免重复创建实例；实例创建后，每次获取仍会进入同步方法。</li>
+    <li>
+<strong>Go：只初始化一次。</strong> <code class="language-plaintext highlighter-rouge">sync.Once</code> 只执行一次初始化函数，其他并发调用会等待它完成，再返回实例。</li>
+    <li>
+<strong>Go 的注意点：不会自动重试。</strong> 初始化函数即使发生 panic，后续 <code class="language-plaintext highlighter-rouge">Do</code> 调用也不会重新执行它。</li>
+  </ul>
+</blockquote>
+
+<h2 id="双重检查锁dcl">
+<a class="anchor" href="#%E5%8F%8C%E9%87%8D%E6%A3%80%E6%9F%A5%E9%94%81dcl" aria-hidden="true"><span class="octicon octicon-link"></span></a>双重检查锁（DCL）</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Singleton</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">volatile</span> <span class="nc">Singleton</span> <span class="n">instance</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Singleton</span> <span class="nf">getInstance</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">instance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">synchronized</span> <span class="o">(</span><span class="nc">Singleton</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">instance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Singleton</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[!blue]</p>
+
+  <ol>
+    <li>
+<strong>锁外判空：减少加锁。</strong> 实例已经存在时，直接返回，不再进入同步块。</li>
+    <li>
+<strong>锁内判空：避免重复创建。</strong> 当前线程等待锁期间，其他线程可能已经创建实例，所以获得锁后必须再检查一次。</li>
+    <li>
+<strong><code class="language-plaintext highlighter-rouge">volatile</code>：安全发布实例。</strong> 让锁外读取的线程也能看到实例及其已完成的初始化结果，不能省略。此写法适用于 Java 5 及之后的内存模型。</li>
+  </ol>
+</blockquote>
+
+<h2 id="静态内部类">
+<a class="anchor" href="#%E9%9D%99%E6%80%81%E5%86%85%E9%83%A8%E7%B1%BB" aria-hidden="true"><span class="octicon octicon-link"></span></a>静态内部类</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Singleton</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Holder</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Singleton</span> <span class="no">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Singleton</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Singleton</span> <span class="nf">getInstance</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nc">Holder</span><span class="o">.</span><span class="na">INSTANCE</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[!blue]</p>
+
+  <ul>
+    <li>
+<strong>延迟创建。</strong> 初始化外部类 <code class="language-plaintext highlighter-rouge">Singleton</code> 不会初始化 <code class="language-plaintext highlighter-rouge">Holder</code>；第一次访问 <code class="language-plaintext highlighter-rouge">Holder.INSTANCE</code> 时才创建实例。</li>
+    <li>
+<strong>并发安全。</strong> JVM 负责协调 <code class="language-plaintext highlighter-rouge">Holder</code> 的类初始化，保证初始化完成后其他线程再使用实例，无需手写 <code class="language-plaintext highlighter-rouge">synchronized</code> 或 <code class="language-plaintext highlighter-rouge">volatile</code>。</li>
+  </ul>
+</blockquote>
+
+<h2 id="枚举">
+<a class="anchor" href="#%E6%9E%9A%E4%B8%BE" aria-hidden="true"><span class="octicon octicon-link"></span></a>枚举</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="nc">Singleton</span> <span class="o">{</span>
+    <span class="no">INSTANCE</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">execute</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"执行任务"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[!blue]</p>
+
+  <ul>
+    <li>
+<strong>调用方式。</strong> 使用 <code class="language-plaintext highlighter-rouge">Singleton.INSTANCE.execute()</code>，无需提供 <code class="language-plaintext highlighter-rouge">getInstance()</code>。</li>
+    <li>
+<strong>实例身份。</strong> Java 禁止通过反射调用枚举构造方法；反序列化时也会返回对应的枚举常量，不会创建另一份实例。</li>
+    <li>
+<strong>并发边界。</strong> 枚举保证实例身份，但不会自动保护实例中的可变数据；业务方法修改共享状态时，仍需处理并发访问。</li>
+  </ul>
+</blockquote>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2020/69294617" rel="prev">
+            <span class="post-navigation-label"><i class="ui-icon ph-bold ph-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 929. 独特的电子邮件地址</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2020/48890162" rel="next">
+            <span class="post-navigation-label">下一页<i class="ui-icon ph-bold ph-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">开发者网址导航</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <details class="post-copyright">
+    <summary class="post-copyright-title"><i class="ui-icon ph-bold ph-copyright" aria-hidden="true"></i>转载与许可<i class="ui-icon ph-bold ph-caret-down disclosure-icon post-copyright-chevron" aria-hidden="true"></i></summary>
+    <div class="post-copyright-author">
+        <strong class="post-copyright-meta">作者</strong>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <strong class="post-copyright-meta">链接</strong>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2020/50659901">https://hgnulb.github.io/blog/2020/50659901</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <strong class="post-copyright-meta">许可</strong>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</details>
+
+  </div>
+</article>
+
+    </div>
+    
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="ui-icon ph-bold ph-caret-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="ui-icon ph-bold ph-list"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="ui-icon ph-bold ph-caret-down disclosure-icon toc-chevron" aria-hidden="true"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#饿汉式">饿汉式</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#同步懒汉式">同步懒汉式</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#双重检查锁dcl">双重检查锁（DCL）</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#静态内部类">静态内部类</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#枚举">枚举</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="ui-icon ph-bold ph-arrow-up" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+<script type="module" src="/blog/assets/js/blog.bundle.min.js?v=fde9827d6700"></script>
+
+
+  </body>
+</html>

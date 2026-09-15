@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 面试题 10.03. 搜索旋转数组 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,二分查找,数组" name="keywords" />
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 面试题 10.03. 搜索旋转数组" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2025/53346308" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2025/53346308" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-08-28T08:00:00+08:00" />
+<meta property="article:modified_time" content="2025-08-28T08:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 面试题 10.03. 搜索旋转数组" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2025-08-28T08:00:00+08:00","datePublished":"2025-08-28T08:00:00+08:00","description":"题目描述","headline":"LeetCode 面试题 10.03. 搜索旋转数组","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2025/53346308"},"url":"https://hgnulb.github.io/blog/2025/53346308"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="/blog/assets/images/theme/profile.jpg?v=04ad95c24d11" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Regular.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Medium.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Semibold.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicSerif-Display-Semibold.woff2" as="font" type="font/woff2" crossorigin />
+<link href="/blog/assets/libs/modern-normalize.css" rel="stylesheet" />
+<link href="/blog/assets/js/phosphor/Phosphor-Bold.woff2?v=2153b52cea9e" rel="preload" as="font" type="font/woff2" crossorigin />
+<link href="/blog/assets/js/phosphor/style.css?v=9a4b47adc89e" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=ee243c4a875e" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    companies: ["腾讯","字节跳动","阿里巴巴","华为","微软","亚马逊","美团","拼多多","京东","小米","百度","网易","小红书","快手","蚂蚁集团","滴滴","携程","哔哩哔哩","虾皮","米哈游","联想","中兴","OPPO","vivo","科大讯飞","海康威视","顺丰","招商银行","金山","BOSS直聘","贝壳","360","MiniMax","智谱","寒武纪","地平线","小马智行","文远知行","禾赛科技","商汤","旷视","深信服","奇安信","大华","CVTE","TP-LINK","远景能源","涂鸦智能","用友","同花顺","爱奇艺","知乎","新浪","搜狐","欢聚集团","陌陌","唯品会","满帮","富途","度小满","好未来","猿辅导","作业帮","高途","Keep","微盟","迅雷","图森"],
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","腾讯": "腾讯","字节跳动": "字节","阿里巴巴": "阿里","华为": "华为","微软": "微软","亚马逊": "亚马逊","美团": "美团","拼多多": "拼多多","京东": "京东","小米": "小米","百度": "百度","网易": "网易","小红书": "小红书","快手": "快手","蚂蚁集团": "蚂蚁","滴滴": "滴滴","携程": "携程","哔哩哔哩": "B站","虾皮": "虾皮","米哈游": "米哈游","联想": "联想","中兴": "中兴","OPPO": "OPPO","vivo": "vivo","科大讯飞": "讯飞","海康威视": "海康","顺丰": "顺丰","招商银行": "招行","金山": "金山","BOSS直聘": "BOSS直聘","贝壳": "贝壳","360": "360","MiniMax": "MiniMax","智谱": "智谱","寒武纪": "寒武纪","地平线": "地平线","小马智行": "小马智行","文远知行": "文远知行","禾赛科技": "禾赛","商汤": "商汤","旷视": "旷视","深信服": "深信服","奇安信": "奇安信","大华": "大华","CVTE": "CVTE","TP-LINK": "TP-LINK","远景能源": "远景","涂鸦智能": "涂鸦","用友": "用友","同花顺": "同花顺","爱奇艺": "爱奇艺","知乎": "知乎","新浪": "新浪","搜狐": "搜狐","欢聚集团": "欢聚","陌陌": "陌陌","唯品会": "唯品会","满帮": "满帮","富途": "富途","度小满": "度小满","好未来": "好未来","猿辅导": "猿辅导","作业帮": "作业帮","高途": "高途","Keep": "Keep","微盟": "微盟","迅雷": "迅雷","图森": "图森","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）","高频面试题": "高频面试题"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","腾讯","字节跳动","阿里巴巴","华为","微软","亚马逊","美团","拼多多","京东","小米","百度","网易","小红书","快手","蚂蚁集团","滴滴","携程","哔哩哔哩","虾皮","米哈游","联想","中兴","OPPO","vivo","科大讯飞","海康威视","顺丰","招商银行","金山","BOSS直聘","贝壳","360","MiniMax","智谱","寒武纪","地平线","小马智行","文远知行","禾赛科技","商汤","旷视","深信服","奇安信","大华","CVTE","TP-LINK","远景能源","涂鸦智能","用友","同花顺","爱奇艺","知乎","新浪","搜狐","欢聚集团","陌陌","唯品会","满帮","富途","度小满","好未来","猿辅导","作业帮","高途","Keep","微盟","迅雷","图森","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）","高频面试题"],
+      tag: []
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索标题、标签、分类…</label>
+            <i class="ui-icon ph-bold ph-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索标题、标签、分类…" role="searchbox" spellcheck="false" tabindex="-1" type="search" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="ui-icon ph-bold ph-x" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+<div id="page">
+  
+
+
+
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="ui-icon ph-bold ph-list" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="题库共 1500 篇题解">
+                <img class="site-avatar" src="/blog/assets/images/theme/profile.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="ui-icon ph-bold ph-magnifying-glass" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/notes/" title="笔记共 9 篇"><i class="ui-icon books-outline-icon" aria-hidden="true"></i><span>笔记</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/" aria-current="page" title="题库共 1500 篇题解"><i class="ui-icon ph-bold ph-code" aria-hidden="true"></i><span>题库</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 102"><i class="ui-icon ph-bold ph-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/tags/" title="标签数 108"><i class="ui-icon ph-bold ph-bookmark-simple" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="ui-icon ph-bold ph-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="ui-icon ph-bold ph-magnifying-glass" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+            <li><a class="nav-link nav-icon-link" href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub（新窗口打开）" title="GitHub"><i class="github-brand-icon" aria-hidden="true"></i></a></li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/profile.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>笔记</dt><dd><a href="/blog/notes/" aria-label="查看 9 篇笔记">9</a></dd></div>
+                    <div><dt>题库</dt><dd><a href="/blog/" aria-label="查看题库 1500 篇题解">1500</a></dd></div>
+                    <div><dt>分类</dt><dd><a href="/blog/categories/" aria-label="查看 102 个分类">102</a></dd></div>
+                    <div><dt>标签</dt><dd><a href="/blog/tags/" aria-label="查看 108 个标签">108</a></dd></div>
+                    <div><dt>归档</dt><dd><a href="/blog/archives/" aria-label="查看 78 个月的归档">78</a></dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/notes/"><i class="ui-icon books-outline-icon" aria-hidden="true"></i><span class="mobile-menu-link-label">笔记</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/" aria-current="page"><i class="ui-icon ph-bold ph-code" aria-hidden="true"></i><span class="mobile-menu-link-label">题库</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="ui-icon ph-bold ph-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/tags/"><i class="ui-icon ph-bold ph-bookmark-simple" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="ui-icon ph-bold ph-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+                <li><a class="nav-link" href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub（新窗口打开）"><i class="github-brand-icon" aria-hidden="true"></i><span class="mobile-menu-link-label">GitHub</span></a></li>
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 面试题 10.03. 搜索旋转数组">LeetCode 面试题 10.03. 搜索旋转数组</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="ui-icon ph-bold ph-calendar-blank article-icon" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2025-08-28 08:00:00"
+                    datetime="2025-08-28T08:00:00+08:00"
+            >
+                2025-08-28
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="ui-icon ph-bold ph-user article-icon" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 828 字 · 英文 125 词 · 代码 64 行 · 图片 1 张"
+            aria-label="预计阅读时间约 5 分钟，正文 828 字 · 英文 125 词 · 代码 64 行 · 图片 1 张"
+        >
+            <i class="ui-icon ph-bold ph-clock-countdown article-icon" aria-hidden="true"></i>
+            <span>约 5 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary>
+                <span class="post-meta-details-title">
+                    <i class="ui-icon ph-bold ph-file-text" aria-hidden="true"></i>
+                    文章信息
+                </span>
+                <span class="post-meta-details-count">
+                    12 个分类
+                    <span aria-hidden="true"> · </span>
+                    2 个标签
+                </span>
+                <i class="ui-icon ph-bold ph-caret-down disclosure-icon post-meta-details-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="ui-icon ph-bold ph-folder article-icon" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        <i class="ui-icon ph-bold ph-squares-four" aria-hidden="true"></i>
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        <i class="ui-icon ph-bold ph-squares-four" aria-hidden="true"></i>
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        <i class="ui-icon ph-bold ph-squares-four" aria-hidden="true"></i>
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        <i class="ui-icon ph-bold ph-squares-four" aria-hidden="true"></i>
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/9362659490/" title="10-20">
+        <i class="ui-icon ph-bold ph-squares-four" aria-hidden="true"></i>
+        10-20
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/1091248904/" title="字节">
+        <i class="ui-icon ph-bold ph-squares-four" aria-hidden="true"></i>
+        字节
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0175134788/" title="微软">
+        <i class="ui-icon ph-bold ph-squares-four" aria-hidden="true"></i>
+        微软
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0416977247/" title="美团">
+        <i class="ui-icon ph-bold ph-squares-four" aria-hidden="true"></i>
+        美团
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5590284568/" title="小米">
+        <i class="ui-icon ph-bold ph-squares-four" aria-hidden="true"></i>
+        小米
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/9879723011/" title="百度">
+        <i class="ui-icon ph-bold ph-squares-four" aria-hidden="true"></i>
+        百度
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4945439869/" title="滴滴">
+        <i class="ui-icon ph-bold ph-squares-four" aria-hidden="true"></i>
+        滴滴
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7723837750/" title="程序员面试金典（第 6 版）">
+        <i class="ui-icon ph-bold ph-squares-four" aria-hidden="true"></i>
+        程序员面试金典（第 6 版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="ui-icon ph-bold ph-bookmark-simple article-icon" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        <i class="ui-icon ph-bold ph-hash" aria-hidden="true"></i>
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3447615142/" title="二分查找">
+        <i class="ui-icon ph-bold ph-hash" aria-hidden="true"></i>
+        二分查找
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    
+
+
+    <details id="table-of-contents" class="post-toc post-toc-panel" open>
+        <summary class="post-toc-title">
+            <span class="toc-title-main">
+                <span class="toc-title-icon" aria-hidden="true"><i class="ui-icon ph-bold ph-list"></i></span>
+                <span>目录</span>
+            </span>
+            <span class="toc-title-toggle" aria-hidden="true">
+                <span class="toc-state-expanded">收起</span>
+                <span class="toc-state-collapsed">展开</span>
+                <i class="ui-icon ph-bold ph-caret-down disclosure-icon toc-chevron" aria-hidden="true"></i>
+            </span>
+        </summary>
+        <nav class="post-toc-list" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法含重复元素的旋转二分">解法：含重复元素的旋转二分</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+    </details>
+
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/search-rotate-array-lcci/">面试题 10.03. 搜索旋转数组</a></p>
+</blockquote>
+
+<p><img src="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/post-list/image-20230312175555843.png" alt="image-20230312175555843" decoding="async" loading="lazy" width="1007" height="492"></p>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>在允许重复值的旋转有序数组中查找目标，返回最小下标。命中某个中点不代表找到了最早出现。</p>
+</blockquote>
+
+<h2 id="解法含重复元素的旋转二分">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%90%AB%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%E7%9A%84%E6%97%8B%E8%BD%AC%E4%BA%8C%E5%88%86" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：含重复元素的旋转二分</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>[!blue]</p>
+
+  <p>每轮先检查左端，命中就是候选区间内最小位置；中点命中时保留中点并继续向左。左端不等于目标也为相等歧义时的 <code class="language-plaintext highlighter-rouge">left++</code> 提供安全依据。</p>
+
+  <p>大小不等时判断有序的一侧，用范围排除另一侧；重复值遮蔽方向时只删一个已确认不是目标的左端。左端检查还保证中点命中变成单点时能退出，而不会反复保持同一边界。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ul>
+    <li>初始化闭区间 <code class="language-plaintext highlighter-rouge">[left, right]</code>，循环条件为 <code class="language-plaintext highlighter-rouge">left &lt;= right</code>；空数组会直接返回 <code class="language-plaintext highlighter-rouge">-1</code>。</li>
+    <li>每轮先检查左端点。若 <code class="language-plaintext highlighter-rouge">arr[left] == target</code>，根据不变量它就是全局最小下标。</li>
+    <li>若中点命中，令 <code class="language-plaintext highlighter-rouge">right = mid</code> 继续向左找。此时 <code class="language-plaintext highlighter-rouge">mid &gt; left</code>，所以区间一定缩小。</li>
+    <li>若 <code class="language-plaintext highlighter-rouge">arr[mid] &gt; arr[left]</code>，说明 <code class="language-plaintext highlighter-rouge">[left, mid]</code> 有序：<code class="language-plaintext highlighter-rouge">target</code> 落在 <code class="language-plaintext highlighter-rouge">(arr[left], arr[mid])</code> 之间才可能在左半边，于是 <code class="language-plaintext highlighter-rouge">right = mid - 1</code>；否则 <code class="language-plaintext highlighter-rouge">left = mid + 1</code>。</li>
+    <li>若 <code class="language-plaintext highlighter-rouge">arr[mid] &lt; arr[left]</code>，说明旋转点在 <code class="language-plaintext highlighter-rouge">(left, mid]</code>，<code class="language-plaintext highlighter-rouge">[mid, right]</code> 有序：<code class="language-plaintext highlighter-rouge">target</code> 落在 <code class="language-plaintext highlighter-rouge">(arr[mid], arr[right]]</code> 之间才可能在右半边，于是 <code class="language-plaintext highlighter-rouge">left = mid + 1</code>；否则 <code class="language-plaintext highlighter-rouge">right = mid - 1</code>。注意右端要取闭区间 <code class="language-plaintext highlighter-rouge">&lt;=</code>，否则会漏掉恰好等于 <code class="language-plaintext highlighter-rouge">arr[right]</code> 的目标。</li>
+    <li>若 <code class="language-plaintext highlighter-rouge">arr[left] == arr[mid]</code>，执行 <code class="language-plaintext highlighter-rouge">left++</code> 消除重复值造成的歧义。</li>
+    <li>循环结束仍未命中，返回 <code class="language-plaintext highlighter-rouge">-1</code>。</li>
+  </ul>
+
+  <p>例如 <code class="language-plaintext highlighter-rouge">arr = [3,4,4,5,1,2]</code>、<code class="language-plaintext highlighter-rouge">target = 4</code>：第一次 <code class="language-plaintext highlighter-rouge">mid = 2</code> 命中时不能返回，而应把 <code class="language-plaintext highlighter-rouge">right</code> 收到 2；继续收缩后最终由左端点命中下标 1，得到最小下标。</p>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">search</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 左端点命中即是最小下标，区间左侧已被证明不含 target。</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">left</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="o">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// 左边可能还有更早的出现位置，只收缩右边界。</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">arr</span><span class="o">[</span><span class="n">left</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">target</span> <span class="o">&amp;&amp;</span> <span class="n">target</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">[</span><span class="n">mid</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">[</span><span class="n">left</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">target</span> <span class="o">&amp;&amp;</span> <span class="n">target</span> <span class="o">&lt;=</span> <span class="n">arr</span><span class="o">[</span><span class="n">right</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c1">// 重复值遮蔽有序区间时，只能安全地丢掉一个左端点。</span>
+                <span class="n">left</span><span class="o">++;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">search</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">target</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="n">left</span> <span class="o">:=</span> <span class="m">0</span>
+    <span class="n">right</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span>
+    <span class="k">for</span> <span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="p">{</span>
+        <span class="c">// 左端点命中即是最小下标。</span>
+        <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">left</span>
+        <span class="p">}</span>
+
+        <span class="n">mid</span> <span class="o">:=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+        <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span> <span class="p">{</span>
+            <span class="c">// 继续向左找更小的下标。</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span> <span class="o">&amp;&amp;</span> <span class="n">target</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="p">{</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="m">1</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="m">1</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span> <span class="o">&amp;&amp;</span> <span class="n">target</span> <span class="o">&lt;=</span> <span class="n">arr</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="p">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="m">1</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="m">1</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c">// 无法判断有序侧，只丢掉一个左端点。</span>
+            <span class="n">left</span><span class="o">++</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：能够判断有序侧时为 $O(\log n)$；最坏为 $O(n)$，因为 <code class="language-plaintext highlighter-rouge">arr[left] == arr[mid]</code> 时只能丢掉一个元素，形如 <code class="language-plaintext highlighter-rouge">[1,1,1,...,1,0,1,...,1]</code> 找 <code class="language-plaintext highlighter-rouge">0</code> 会退化成线性扫描。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(1)$，只用了 <code class="language-plaintext highlighter-rouge">left</code>、<code class="language-plaintext highlighter-rouge">right</code>、<code class="language-plaintext highlighter-rouge">mid</code> 三个下标变量，没有递归也没有额外容器。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <p>[!green]</p>
+
+  <ul>
+    <li>本题必须返回最小下标，这是它区别于 33、81 的核心考点；命中 <code class="language-plaintext highlighter-rouge">mid</code> 时收缩右边界而不是直接返回，是解法的关键改动。</li>
+    <li>循环开头的 <code class="language-plaintext highlighter-rouge">arr[left] == target</code> 检查一举两得：既让返回值天然最小，又为「<code class="language-plaintext highlighter-rouge">arr[left] == arr[mid]</code> 时 <code class="language-plaintext highlighter-rouge">left++</code>」提供了安全性依据。</li>
+    <li>重复元素只破坏「判断哪一侧有序」这一步，不破坏二分框架；无法判断时退一步而不是猜一半，是保证正确性的底线。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <p>[!yellow]</p>
+
+  <ul>
+    <li>中点命中就返回：<code class="language-plaintext highlighter-rouge">[3,4,4,5,1,2]</code> 查四会先返回下标二，但最小下标是一。</li>
+    <li>保留 <code class="language-plaintext highlighter-rouge">right=mid</code> 却删掉左端命中检查，收缩到命中单点时可能不再前进。</li>
+    <li>左端与中点相等就跨过半区，会漏掉 <code class="language-plaintext highlighter-rouge">[1,0,1,1,1]</code> 中的零；只能保守移一格。</li>
+    <li>判断右侧有序段时要包含右端值，目标可能恰好等于 <code class="language-plaintext highlighter-rouge">arr[right]</code>。</li>
+    <li>重复值使最坏复杂度线性，不能保证每次都能排除一半。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>关联与区别</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://hgnulb.github.io/blog/2026/05902279">81. 搜索旋转排序数组 II</a></td>
+      <td>中等</td>
+      <td>同样允许旋转数组含重复值，原题只返回是否存在，本题必须返回最小下标，命中后不能直接忽略更左候选。</td>
+    </tr>
+    <tr>
+      <td><a href="https://hgnulb.github.io/blog/2026/77306570">33. 搜索旋转排序数组</a></td>
+      <td>中等</td>
+      <td>无重复值时判断有序半区更直接，本题重复元素会遮蔽边界并影响最早位置的选择。</td>
+    </tr>
+  </tbody>
+</table>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+        <a class="post-navigation-link post-navigation-prev" href="/blog/2025/31743601" rel="prev">
+            <span class="post-navigation-label"><i class="ui-icon ph-bold ph-arrow-left" aria-hidden="true"></i>上一页</span>
+            <span class="post-navigation-title">LeetCode 剑指 Offer 34. 二叉树中和为某一值的路径</span>
+        </a>
+        
+        
+        <a class="post-navigation-link post-navigation-next" href="/blog/2025/99466209" rel="next">
+            <span class="post-navigation-label">下一页<i class="ui-icon ph-bold ph-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-navigation-title">LeetCode 410. 分割数组的最大值</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    <details class="post-copyright">
+    <summary class="post-copyright-title"><i class="ui-icon ph-bold ph-copyright" aria-hidden="true"></i>转载与许可<i class="ui-icon ph-bold ph-caret-down disclosure-icon post-copyright-chevron" aria-hidden="true"></i></summary>
+    <div class="post-copyright-author">
+        <strong class="post-copyright-meta">作者</strong>
+        <span class="post-copyright-content"><a href="/blog/" rel="author">HGNULB</a></span>
+    </div>
+    <div class="post-copyright-type">
+        <strong class="post-copyright-meta">链接</strong>
+        <span class="post-copyright-content"><a href="https://hgnulb.github.io/blog/2025/53346308">https://hgnulb.github.io/blog/2025/53346308</a></span>
+    </div>
+    
+        <div class="post-copyright-notice">
+            <strong class="post-copyright-meta">许可</strong>
+            <span class="post-copyright-content">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="license noopener noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！</span>
+        </div>
+    
+</details>
+
+  </div>
+</article>
+
+    </div>
+    
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button class="sidebar-collapse-toggle" type="button" aria-controls="sidebar-toc-content" aria-expanded="true" data-sidebar-toc-toggle>
+                <i class="ui-icon ph-bold ph-caret-right" aria-hidden="true"></i>
+                <span class="sr-only">切换文章目录侧栏</span>
+            </button>
+            
+    
+    
+    
+        <details class="sidebar-toc" id="sidebar-toc-content" open>
+            <summary class="sidebar-toc-title">
+                <span class="toc-title-main">
+                    <span class="toc-title-icon" aria-hidden="true"><i class="ui-icon ph-bold ph-list"></i></span>
+                    <span>目录</span>
+                </span>
+                <span class="toc-title-toggle" aria-hidden="true">
+                    <i class="ui-icon ph-bold ph-caret-down disclosure-icon toc-chevron" aria-hidden="true"></i>
+                </span>
+            </summary>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法含重复元素的旋转二分">解法：含重复元素的旋转二分</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </details>
+    
+
+        </div>
+    </aside>
+
+
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本文阅读量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="ui-icon ph-bold ph-arrow-up" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+<script type="module" src="/blog/assets/js/blog.bundle.min.js?v=fde9827d6700"></script>
+
+
+  </body>
+</html>
