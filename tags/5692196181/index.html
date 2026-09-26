@@ -1,0 +1,4450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>滑动窗口 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#fdfdf7" name="theme-color" />
+<meta content="HGNULB,程序员,全栈工程师,后端工程师,Java,Golang,Python,编程,软件开发,技术博客,走在修行的大街上,programmer,full stack engineer,backend engineer,blog" name="keywords" />
+
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="滑动窗口" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="HGNULB 的个人技术博客" />
+<meta name="twitter:description" property="og:description" content="HGNULB 的个人技术博客" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/tags/5692196181/" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/tags/5692196181/" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="滑动窗口" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"HGNULB"},"description":"HGNULB 的个人技术博客","headline":"滑动窗口","url":"https://hgnulb.github.io/blog/tags/5692196181/"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="/blog/assets/images/theme/profile.jpg?v=04ad95c24d11" rel="icon" type="image/jpeg" />
+
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Regular.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Medium.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicNumeric-Semibold.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicSerif-Display-Semibold.woff2" as="font" type="font/woff2" crossorigin />
+<link href="/blog/assets/libs/modern-normalize.css" rel="stylesheet" />
+<link href="/blog/assets/js/phosphor/Phosphor-Bold.woff2?v=2153b52cea9e" rel="preload" as="font" type="font/woff2" crossorigin />
+<link href="/blog/assets/js/phosphor/style.css?v=9a4b47adc89e" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=cbfa947862f0" rel="stylesheet" type="text/css" />
+<script>
+  window.SITE_CONFIG = {
+    assetPrefix: "https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages",
+    searchUrl: "/blog/posts.json",
+    postsUrl: "/blog/posts.json",
+    searchNotFound: "抱歉，没有找到相关内容",
+    companies: ["腾讯","字节跳动","阿里巴巴","华为","微软","亚马逊","美团","拼多多","京东","小米","百度","网易","小红书","快手","蚂蚁集团","滴滴","携程","哔哩哔哩","虾皮","米哈游","联想","OPPO","vivo","海康威视","顺丰","招商银行","金山","BOSS直聘","贝壳","360","MiniMax","智谱","商汤","旷视","深信服","TP-LINK","爱奇艺","新浪","陌陌","度小满","猿辅导","作业帮","图森"],
+    filterLabels: {
+      category: {
+        "LeetCode": "LeetCode","CodeTop": "CodeTop","补充题": "补充题","简单": "简单","中等": "中等","困难": "困难","CodeTop-I": "已解决","CodeTop-II": "未解决","已掌握": "已掌握","需复习": "需复习","需加强": "需加强","未掌握": "未掌握","历史考题": "历史考题","L9": "500+","L8": "200-500","L7": "100-200","L6": "50-100","L5": "20-50","L4": "10-20","L3": "5-10","L2": "2-5","L1": "1-2","腾讯": "腾讯","字节跳动": "字节","阿里巴巴": "阿里","华为": "华为","微软": "微软","亚马逊": "亚马逊","美团": "美团","拼多多": "拼多多","京东": "京东","小米": "小米","百度": "百度","网易": "网易","小红书": "小红书","快手": "快手","蚂蚁集团": "蚂蚁","滴滴": "滴滴","携程": "携程","哔哩哔哩": "B站","虾皮": "虾皮","米哈游": "米哈游","联想": "联想","OPPO": "OPPO","vivo": "vivo","海康威视": "海康","顺丰": "顺丰","招商银行": "招行","金山": "金山","BOSS直聘": "BOSS直聘","贝壳": "贝壳","360": "360","MiniMax": "MiniMax","智谱": "智谱","商汤": "商汤","旷视": "旷视","深信服": "深信服","TP-LINK": "TP-LINK","爱奇艺": "爱奇艺","新浪": "新浪","陌陌": "陌陌","度小满": "度小满","猿辅导": "猿辅导","作业帮": "作业帮","图森": "图森","LeetCode 75": "LeetCode 75","LeetCode 热题 100": "LeetCode 热题 100","面试经典 150 题": "面试经典 150 题","119 经典题变种挑战": "119 经典题变种挑战","剑指 Offer": "剑指 Offer","剑指 Offer（专项突击版）": "剑指 Offer（专项突击版）","剑指 Offer（第 2 版）": "剑指 Offer（第 2 版）","程序员面试金典（第 6 版）": "程序员面试金典（第 6 版）"
+      }
+    },
+    filterOrder: {
+      category: ["LeetCode","CodeTop","补充题","简单","中等","困难","CodeTop-I","CodeTop-II","已掌握","需复习","需加强","未掌握","历史考题","L9","L8","L7","L6","L5","L4","L3","L2","L1","腾讯","字节跳动","阿里巴巴","华为","微软","亚马逊","美团","拼多多","京东","小米","百度","网易","小红书","快手","蚂蚁集团","滴滴","携程","哔哩哔哩","虾皮","米哈游","联想","OPPO","vivo","海康威视","顺丰","招商银行","金山","BOSS直聘","贝壳","360","MiniMax","智谱","商汤","旷视","深信服","TP-LINK","爱奇艺","新浪","陌陌","度小满","猿辅导","作业帮","图森","LeetCode 75","LeetCode 热题 100","面试经典 150 题","119 经典题变种挑战","剑指 Offer","剑指 Offer（专项突击版）","剑指 Offer（第 2 版）","程序员面试金典（第 6 版）"],
+      tag: []
+    }
+  }
+</script>
+
+  </head>
+  
+  
+  <body class="">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div class="search-modal" role="dialog" aria-modal="true" aria-label="搜索文章" aria-hidden="true" inert>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索标题、标签、分类…</label>
+            <i class="ui-icon ph-bold ph-magnifying-glass search-leading-icon" aria-hidden="true"></i>
+            <input class="overlay-header" id="search-input" aria-controls="results-container" aria-describedby="search-status" autocomplete="off" autocapitalize="none" data-1p-ignore="true" data-bwignore="true" data-form-type="other" data-lpignore="true" enterkeyhint="search" inputmode="search" name="site-search" placeholder="搜索标题、标签、分类…" role="searchbox" spellcheck="false" tabindex="-1" type="search" />
+            <button class="btn-close" type="button" aria-label="关闭搜索"><i class="ui-icon ph-bold ph-x" aria-hidden="true"></i><span class="search-close-text">取消</span></button>
+        </div>
+        <div class="search-results">
+            <p class="search-status" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+<div id="page">
+  
+
+
+
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button class="btn-menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="ui-icon ph-bold ph-list" aria-hidden="true"></i>
+            </button>
+            <a class="logo-link" href="/blog/" title="题库共 1502 篇题解">
+                <img class="site-avatar" src="/blog/assets/images/theme/profile.jpg" alt="" width="36" height="36" />
+                <span>走在修行的大街上</span>
+            </a>
+            <button class="btn-search" type="button" aria-label="搜索"><i class="ui-icon ph-bold ph-magnifying-glass" aria-hidden="true"></i></button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/notes/" title="笔记共 9 篇"><i class="ui-icon books-outline-icon" aria-hidden="true"></i><span>笔记</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/" title="题库共 1502 篇题解"><i class="ui-icon ph-bold ph-code" aria-hidden="true"></i><span>题库</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/categories/" title="分类数 102"><i class="ui-icon ph-bold ph-folder" aria-hidden="true"></i><span>分类</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link is-active" href="/blog/tags/" aria-current="page" title="标签数 108"><i class="ui-icon ph-bold ph-bookmark-simple" aria-hidden="true"></i><span>标签</span></a></li>
+            
+                
+                
+                
+                
+                <li><a class="nav-link" href="/blog/archives/" title="归档月数 78"><i class="ui-icon ph-bold ph-archive" aria-hidden="true"></i><span>归档</span></a></li>
+            
+            <li class="nav-search-item">
+                <button class="btn-search nav-search nav-link nav-search-trigger" type="button" aria-label="搜索文章" title="搜索文章（⌘K）">
+                    <i class="ui-icon ph-bold ph-magnifying-glass" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut">⌘K</kbd>
+                </button>
+            </li>
+            <li><a class="nav-link nav-icon-link" href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub（新窗口打开）" title="GitHub"><i class="github-brand-icon" aria-hidden="true"></i></a></li>
+        </ul>
+        <button class="mobile-menu-backdrop" type="button" aria-label="关闭菜单" tabindex="-1" data-mobile-menu-backdrop></button>
+        <div class="mobile-menu-panel" id="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" aria-hidden="true" tabindex="-1" inert>
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a class="mobile-menu-profile-home" href="/blog/" aria-label="返回博客首页">
+                    <img class="mobile-menu-profile-avatar" src="/blog/assets/images/theme/profile.jpg" alt="" width="56" height="56" />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div><dt>笔记</dt><dd><a href="/blog/notes/" aria-label="查看 9 篇笔记">9</a></dd></div>
+                    <div><dt>题库</dt><dd><a href="/blog/" aria-label="查看题库 1502 篇题解">1502</a></dd></div>
+                    <div><dt>分类</dt><dd><a href="/blog/categories/" aria-label="查看 102 个分类">102</a></dd></div>
+                    <div><dt>标签</dt><dd><a href="/blog/tags/" aria-label="查看 108 个标签">108</a></dd></div>
+                    <div><dt>归档</dt><dd><a href="/blog/archives/" aria-label="查看 78 个月的归档">78</a></dd></div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航"><ul>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/notes/"><i class="ui-icon books-outline-icon" aria-hidden="true"></i><span class="mobile-menu-link-label">笔记</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/"><i class="ui-icon ph-bold ph-code" aria-hidden="true"></i><span class="mobile-menu-link-label">题库</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/categories/"><i class="ui-icon ph-bold ph-folder" aria-hidden="true"></i><span class="mobile-menu-link-label">分类</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link is-active" href="/blog/tags/" aria-current="page"><i class="ui-icon ph-bold ph-bookmark-simple" aria-hidden="true"></i><span class="mobile-menu-link-label">标签</span></a></li>
+                
+                    
+                    
+                    <li><a class="nav-link" href="/blog/archives/"><i class="ui-icon ph-bold ph-archive" aria-hidden="true"></i><span class="mobile-menu-link-label">归档</span></a></li>
+                
+                <li><a class="nav-link" href="https://github.com/hgnulb" target="_blank" rel="noopener noreferrer" aria-label="GitHub（新窗口打开）"><i class="github-brand-icon" aria-hidden="true"></i><span class="mobile-menu-link-label">GitHub</span></a></li>
+            </ul></nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>关闭导航菜单</button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      <article class="article-body layout-listing">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title">滑动窗口</h1>
+    </header>
+
+    
+    
+    
+    
+
+    <div
+      class="detail-wrap blog-home-wrap tag-detail-wrap"
+      data-blog-section="collection"
+      data-default-sort="frequency"
+      data-list-unit="篇文章"
+    >
+      <section class="blog-home-all-panel" id="blog-home-all-section">
+    <div class="collection-toolbar detail-toolbar">
+        <div class="post-toolbar-state">
+            
+            <i class="ui-icon ph-bold ph-bookmark" aria-hidden="true"></i>
+            <p class="detail-total" aria-label="共 65 篇文章">共 65 篇</p>
+        </div>
+        <div class="post-toolbar-actions">
+            <details class="post-filter-menu" data-filter-menu="category">
+  <summary class="post-filter-summary" aria-haspopup="menu" title="按分类筛选">
+    <span>分类</span>
+    <i class="ui-icon ph-bold ph-caret-down disclosure-icon" aria-hidden="true"></i>
+  </summary>
+  <div class="post-filter-popover">
+    <button class="toolbar-drag-handle" type="button" aria-label="向下拖动或点击关闭分类筛选"><span aria-hidden="true"></span></button>
+    <div class="post-filter-titlebar">
+      <p class="post-filter-title"><span>筛选分类</span></p>
+      <button class="toolbar-panel-close" type="button" data-toolbar-close aria-label="关闭分类筛选" title="关闭"><i class="ui-icon ph-bold ph-x" aria-hidden="true"></i></button>
+    </div>
+    <div class="post-filter-search">
+      <i class="ui-icon ph-bold ph-magnifying-glass" aria-hidden="true"></i>
+      <label class="sr-only" for="post-filter-search-category">搜索分类</label>
+      <input id="post-filter-search-category" name="taxonomy-search-category" type="search" inputmode="search" enterkeyhint="search" role="searchbox" data-filter-search placeholder="搜索分类" autocomplete="off" autocapitalize="none" spellcheck="false" data-1p-ignore="true" data-bwignore="true" data-lpignore="true" data-form-type="other" />
+      <button class="post-filter-search-clear" type="button" aria-label="清空搜索分类" title="清空搜索" data-filter-search-clear hidden>
+        <i class="ui-icon ph-bold ph-x-circle" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="post-filter-options" data-filter-options role="menu" aria-label="分类筛选选项"></div>
+  </div>
+</details>
+
+            <details class="post-filter-menu" data-filter-menu="tag">
+  <summary class="post-filter-summary" aria-haspopup="menu" title="按标签筛选">
+    <span>标签</span>
+    <i class="ui-icon ph-bold ph-caret-down disclosure-icon" aria-hidden="true"></i>
+  </summary>
+  <div class="post-filter-popover">
+    <button class="toolbar-drag-handle" type="button" aria-label="向下拖动或点击关闭标签筛选"><span aria-hidden="true"></span></button>
+    <div class="post-filter-titlebar">
+      <p class="post-filter-title"><span>筛选标签</span></p>
+      <button class="toolbar-panel-close" type="button" data-toolbar-close aria-label="关闭标签筛选" title="关闭"><i class="ui-icon ph-bold ph-x" aria-hidden="true"></i></button>
+    </div>
+    <div class="post-filter-search">
+      <i class="ui-icon ph-bold ph-magnifying-glass" aria-hidden="true"></i>
+      <label class="sr-only" for="post-filter-search-tag">搜索标签</label>
+      <input id="post-filter-search-tag" name="taxonomy-search-tag" type="search" inputmode="search" enterkeyhint="search" role="searchbox" data-filter-search placeholder="搜索标签" autocomplete="off" autocapitalize="none" spellcheck="false" data-1p-ignore="true" data-bwignore="true" data-lpignore="true" data-form-type="other" />
+      <button class="post-filter-search-clear" type="button" aria-label="清空搜索标签" title="清空搜索" data-filter-search-clear hidden>
+        <i class="ui-icon ph-bold ph-x-circle" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="post-filter-options" data-filter-options role="menu" aria-label="标签筛选选项"></div>
+  </div>
+</details>
+
+            
+
+
+
+
+
+
+
+<div class="post-sort">
+  <label class="post-sort-label sr-only" for="blog-home-detail-sort">排序</label>
+  <details class="post-sort-menu">
+    <summary class="post-sort-summary" aria-haspopup="menu" title="调整文章排序">
+      <span aria-hidden="true">排序</span>
+      <span class="post-sort-current-label" aria-hidden="true" hidden>频率：高到低</span>
+      <span class="post-sort-current sr-only">当前排序：频率：高到低</span>
+      <i class="ui-icon ph-bold ph-caret-down disclosure-icon" aria-hidden="true"></i>
+    </summary>
+    <div class="post-sort-options">
+      <button class="toolbar-drag-handle" type="button" aria-label="向下拖动或点击关闭排序"><span aria-hidden="true"></span></button>
+      <div class="post-sort-titlebar">
+        <p class="post-sort-options-title">
+          <span>排序方式</span>
+        </p>
+        <button class="toolbar-panel-close" type="button" data-toolbar-close aria-label="关闭排序" title="关闭"><i class="ui-icon ph-bold ph-x" aria-hidden="true"></i></button>
+      </div>
+      <div class="post-sort-option-list" role="menu" aria-label="文章排序方式">
+        
+        <button type="button" role="menuitemradio" data-sort-value="frequency" aria-checked="true">
+          <i class="ui-icon ph-bold ph-checks post-sort-check" aria-hidden="true"></i>
+          <span>频率：高到低</span>
+        </button>
+        
+        <button type="button" role="menuitemradio" data-sort-value="frequency_asc" aria-checked="false">
+          <i class="ui-icon ph-bold ph-checks post-sort-check" aria-hidden="true"></i>
+          <span>频率：低到高</span>
+        </button>
+        
+        <button type="button" role="menuitemradio" data-sort-value="date" aria-checked="false">
+          <i class="ui-icon ph-bold ph-checks post-sort-check" aria-hidden="true"></i>
+          <span>日期：新到旧</span>
+        </button>
+        
+        <button type="button" role="menuitemradio" data-sort-value="date_asc" aria-checked="false">
+          <i class="ui-icon ph-bold ph-checks post-sort-check" aria-hidden="true"></i>
+          <span>日期：旧到新</span>
+        </button>
+        
+        <button type="button" role="menuitemradio" data-sort-value="name" aria-checked="false">
+          <i class="ui-icon ph-bold ph-checks post-sort-check" aria-hidden="true"></i>
+          <span>题号：小到大</span>
+        </button>
+        
+        <button type="button" role="menuitemradio" data-sort-value="name_desc" aria-checked="false">
+          <i class="ui-icon ph-bold ph-checks post-sort-check" aria-hidden="true"></i>
+          <span>题号：大到小</span>
+        </button>
+        
+      </div>
+    </div>
+  </details>
+  <select
+    class="post-sort-select sr-only"
+    id="blog-home-detail-sort"
+    aria-label="文章排序方式"
+  >
+    
+    <option value="frequency" selected>频率：高到低</option>
+    
+    <option value="frequency_asc">频率：低到高</option>
+    
+    <option value="date">日期：新到旧</option>
+    
+    <option value="date_asc">日期：旧到新</option>
+    
+    <option value="name">题号：小到大</option>
+    
+    <option value="name_desc">题号：大到小</option>
+    
+  </select>
+</div>
+
+        </div>
+    </div>
+    <div class="posts-container">
+        <ul class="post-list" id="blog-home-post-list">
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/11034463"
+        title="3. 无重复字符的最长子串"
+        data-date="1790425170"
+        data-frequency="1206"
+        data-company-frequencies="{&quot;字节跳动&quot;:687,&quot;微软&quot;:26,&quot;美团&quot;:75,&quot;阿里巴巴&quot;:65,&quot;快手&quot;:48,&quot;腾讯&quot;:95,&quot;猿辅导&quot;:4,&quot;百度&quot;:34,&quot;滴滴&quot;:21,&quot;京东&quot;:10,&quot;华为&quot;:45,&quot;拼多多&quot;:21,&quot;网易&quot;:7,&quot;小米&quot;:12,&quot;亚马逊&quot;:3,&quot;虾皮&quot;:25,&quot;图森&quot;:2,&quot;携程&quot;:7,&quot;哔哩哔哩&quot;:10,&quot;小红书&quot;:9}"
+        data-title="leetcode 3. 无重复字符的最长子串"
+        data-question-id="3"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-I&quot;,&quot;L9&quot;,&quot;LeetCode&quot;,&quot;LeetCode 热题 100&quot;,&quot;中等&quot;,&quot;亚马逊&quot;,&quot;京东&quot;,&quot;华为&quot;,&quot;哔哩哔哩&quot;,&quot;图森&quot;,&quot;字节跳动&quot;,&quot;小米&quot;,&quot;小红书&quot;,&quot;已掌握&quot;,&quot;微软&quot;,&quot;快手&quot;,&quot;招商银行&quot;,&quot;拼多多&quot;,&quot;携程&quot;,&quot;滴滴&quot;,&quot;猿辅导&quot;,&quot;百度&quot;,&quot;网易&quot;,&quot;美团&quot;,&quot;腾讯&quot;,&quot;虾皮&quot;,&quot;阿里巴巴&quot;,&quot;陌陌&quot;,&quot;面试经典 150 题&quot;,&quot;高途&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status is-solved"
+              title="已解决">
+      
+          <i class="ui-icon ph-fill ph-check-circle solid-check-icon" aria-hidden="true"></i>
+      
+      <span class="sr-only">已解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        3. 无重复字符的最长子串
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：1206">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>1206</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-09-26T20:19:30+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-09-26</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/01328393"
+        title="239. 滑动窗口最大值"
+        data-date="1790032398"
+        data-frequency="155"
+        data-company-frequencies="{&quot;字节跳动&quot;:47,&quot;微软&quot;:6,&quot;美团&quot;:17,&quot;阿里巴巴&quot;:6,&quot;快手&quot;:11,&quot;腾讯&quot;:25,&quot;猿辅导&quot;:5,&quot;百度&quot;:1,&quot;滴滴&quot;:3,&quot;京东&quot;:2,&quot;华为&quot;:5,&quot;拼多多&quot;:5,&quot;网易&quot;:2,&quot;小米&quot;:2,&quot;商汤&quot;:2,&quot;旷视&quot;:1,&quot;虾皮&quot;:9,&quot;图森&quot;:1,&quot;携程&quot;:1,&quot;哔哩哔哩&quot;:2,&quot;小红书&quot;:2}"
+        data-title="leetcode 239. 滑动窗口最大值"
+        data-question-id="239"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-I&quot;,&quot;L7&quot;,&quot;LeetCode&quot;,&quot;LeetCode 热题 100&quot;,&quot;京东&quot;,&quot;华为&quot;,&quot;哔哩哔哩&quot;,&quot;商汤&quot;,&quot;困难&quot;,&quot;图森&quot;,&quot;字节跳动&quot;,&quot;小米&quot;,&quot;小红书&quot;,&quot;微软&quot;,&quot;快手&quot;,&quot;拼多多&quot;,&quot;携程&quot;,&quot;旷视&quot;,&quot;滴滴&quot;,&quot;猿辅导&quot;,&quot;百度&quot;,&quot;知乎&quot;,&quot;网易&quot;,&quot;美团&quot;,&quot;腾讯&quot;,&quot;虾皮&quot;,&quot;阿里巴巴&quot;,&quot;需加强&quot;]"
+        data-tags="[&quot;单调队列&quot;,&quot;堆（优先队列）&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;,&quot;队列&quot;]"
+>
+    
+        <span class="post-status is-solved"
+              title="已解决">
+      
+          <i class="ui-icon ph-fill ph-check-circle solid-check-icon" aria-hidden="true"></i>
+      
+      <span class="sr-only">已解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        239. 滑动窗口最大值
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：155">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>155</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2026-09-22T07:13:18+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-09-22</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/78922337"
+        title="76. 最小覆盖子串"
+        data-date="1788133060"
+        data-frequency="136"
+        data-company-frequencies="{&quot;字节跳动&quot;:53,&quot;微软&quot;:5,&quot;美团&quot;:18,&quot;阿里巴巴&quot;:8,&quot;快手&quot;:7,&quot;腾讯&quot;:19,&quot;猿辅导&quot;:2,&quot;百度&quot;:6,&quot;滴滴&quot;:1,&quot;华为&quot;:2,&quot;拼多多&quot;:4,&quot;网易&quot;:2,&quot;小米&quot;:1,&quot;旷视&quot;:1,&quot;虾皮&quot;:7}"
+        data-title="leetcode 76. 最小覆盖子串"
+        data-question-id="76"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-I&quot;,&quot;L7&quot;,&quot;LeetCode&quot;,&quot;LeetCode 热题 100&quot;,&quot;OPPO&quot;,&quot;华为&quot;,&quot;困难&quot;,&quot;图森&quot;,&quot;字节跳动&quot;,&quot;小米&quot;,&quot;微软&quot;,&quot;快手&quot;,&quot;拼多多&quot;,&quot;旷视&quot;,&quot;滴滴&quot;,&quot;猿辅导&quot;,&quot;百度&quot;,&quot;网易&quot;,&quot;美团&quot;,&quot;腾讯&quot;,&quot;虾皮&quot;,&quot;阿里巴巴&quot;,&quot;需加强&quot;,&quot;面试经典 150 题&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status is-solved"
+              title="已解决">
+      
+          <i class="ui-icon ph-fill ph-check-circle solid-check-icon" aria-hidden="true"></i>
+      
+      <span class="sr-only">已解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        76. 最小覆盖子串
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：136">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>136</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2026-08-31T07:37:40+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-08-31</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/55813347"
+        title="209. 长度最小的子数组"
+        data-date="1784924397"
+        data-frequency="74"
+        data-company-frequencies="{&quot;字节跳动&quot;:51,&quot;微软&quot;:2,&quot;美团&quot;:1,&quot;快手&quot;:3,&quot;腾讯&quot;:7,&quot;百度&quot;:4,&quot;滴滴&quot;:1,&quot;华为&quot;:3,&quot;哔哩哔哩&quot;:1,&quot;小红书&quot;:1}"
+        data-title="leetcode 209. 长度最小的子数组"
+        data-question-id="209"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-I&quot;,&quot;L6&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;华为&quot;,&quot;哔哩哔哩&quot;,&quot;字节跳动&quot;,&quot;小红书&quot;,&quot;已掌握&quot;,&quot;微软&quot;,&quot;快手&quot;,&quot;滴滴&quot;,&quot;百度&quot;,&quot;美团&quot;,&quot;腾讯&quot;,&quot;面试经典 150 题&quot;]"
+        data-tags="[&quot;二分查找&quot;,&quot;前缀和&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status is-solved"
+              title="已解决">
+      
+          <i class="ui-icon ph-fill ph-check-circle solid-check-icon" aria-hidden="true"></i>
+      
+      <span class="sr-only">已解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        209. 长度最小的子数组
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：74">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>74</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-07-25T04:19:57+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-07-25</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/15544319"
+        title="718. 最长重复子数组"
+        data-date="1789754484"
+        data-frequency="71"
+        data-company-frequencies="{&quot;字节跳动&quot;:26,&quot;微软&quot;:3,&quot;美团&quot;:21,&quot;阿里巴巴&quot;:5,&quot;快手&quot;:4,&quot;腾讯&quot;:8,&quot;百度&quot;:2,&quot;京东&quot;:1,&quot;虾皮&quot;:1}"
+        data-title="leetcode 718. 最长重复子数组"
+        data-question-id="718"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-I&quot;,&quot;L6&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;京东&quot;,&quot;字节跳动&quot;,&quot;微软&quot;,&quot;快手&quot;,&quot;百度&quot;,&quot;美团&quot;,&quot;腾讯&quot;,&quot;虾皮&quot;,&quot;阿里巴巴&quot;,&quot;需复习&quot;]"
+        data-tags="[&quot;二分查找&quot;,&quot;动态规划&quot;,&quot;哈希函数&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;,&quot;滚动哈希&quot;]"
+>
+    
+        <span class="post-status is-solved"
+              title="已解决">
+      
+          <i class="ui-icon ph-fill ph-check-circle solid-check-icon" aria-hidden="true"></i>
+      
+      <span class="sr-only">已解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        718. 最长重复子数组
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：71">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>71</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-09-19T02:01:24+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-09-19</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/75262525"
+        title="1004. 最大连续1的个数 III"
+        data-date="1787011200"
+        data-frequency="29"
+        data-company-frequencies="{&quot;字节跳动&quot;:17,&quot;微软&quot;:1,&quot;快手&quot;:1,&quot;华为&quot;:7,&quot;拼多多&quot;:2,&quot;哔哩哔哩&quot;:1}"
+        data-title="leetcode 1004. 最大连续1的个数 iii"
+        data-question-id="1004"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-I&quot;,&quot;L5&quot;,&quot;LeetCode&quot;,&quot;LeetCode 75&quot;,&quot;中等&quot;,&quot;华为&quot;,&quot;哔哩哔哩&quot;,&quot;字节跳动&quot;,&quot;已掌握&quot;,&quot;微软&quot;,&quot;快手&quot;,&quot;拼多多&quot;]"
+        data-tags="[&quot;二分查找&quot;,&quot;前缀和&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status is-solved"
+              title="已解决">
+      
+          <i class="ui-icon ph-fill ph-check-circle solid-check-icon" aria-hidden="true"></i>
+      
+      <span class="sr-only">已解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1004. 最大连续1的个数 III
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：29">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>29</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-08-18T08:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-08-18</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/04570603"
+        title="395. 至少有 K 个重复字符的最长子串"
+        data-date="1788904326"
+        data-frequency="28"
+        data-company-frequencies="{&quot;字节跳动&quot;:16,&quot;美团&quot;:2,&quot;阿里巴巴&quot;:1,&quot;快手&quot;:1,&quot;腾讯&quot;:3,&quot;猿辅导&quot;:1,&quot;华为&quot;:1,&quot;网易&quot;:1,&quot;携程&quot;:2}"
+        data-title="leetcode 395. 至少有 k 个重复字符的最长子串"
+        data-question-id="395"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-I&quot;,&quot;L5&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;华为&quot;,&quot;字节跳动&quot;,&quot;快手&quot;,&quot;携程&quot;,&quot;猿辅导&quot;,&quot;网易&quot;,&quot;美团&quot;,&quot;腾讯&quot;,&quot;阿里巴巴&quot;,&quot;需加强&quot;]"
+        data-tags="[&quot;分治&quot;,&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status is-solved"
+              title="已解决">
+      
+          <i class="ui-icon ph-fill ph-check-circle solid-check-icon" aria-hidden="true"></i>
+      
+      <span class="sr-only">已解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        395. 至少有 K 个重复字符的最长子串
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：28">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>28</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-09-09T05:52:06+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-09-09</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/15857477"
+        title="1044. 最长重复子串"
+        data-date="1788372516"
+        data-frequency="24"
+        data-company-frequencies="{&quot;字节跳动&quot;:8,&quot;美团&quot;:1,&quot;阿里巴巴&quot;:1,&quot;快手&quot;:2,&quot;腾讯&quot;:11,&quot;亚马逊&quot;:1}"
+        data-title="leetcode 1044. 最长重复子串"
+        data-question-id="1044"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L5&quot;,&quot;LeetCode&quot;,&quot;亚马逊&quot;,&quot;华为&quot;,&quot;困难&quot;,&quot;字节跳动&quot;,&quot;快手&quot;,&quot;美团&quot;,&quot;腾讯&quot;,&quot;阿里巴巴&quot;]"
+        data-tags="[&quot;二分查找&quot;,&quot;后缀数组&quot;,&quot;哈希函数&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;,&quot;滚动哈希&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1044. 最长重复子串
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：24">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>24</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2026-09-03T02:08:36+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-09-03</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2025/61267657"
+        title="567. 字符串的排列"
+        data-date="1741693481"
+        data-frequency="20"
+        data-company-frequencies="{&quot;字节跳动&quot;:11,&quot;微软&quot;:4,&quot;腾讯&quot;:2,&quot;京东&quot;:1,&quot;拼多多&quot;:1,&quot;哔哩哔哩&quot;:1}"
+        data-title="leetcode 567. 字符串的排列"
+        data-question-id="567"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-I&quot;,&quot;L5&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;京东&quot;,&quot;哔哩哔哩&quot;,&quot;字节跳动&quot;,&quot;微软&quot;,&quot;拼多多&quot;,&quot;腾讯&quot;,&quot;需复习&quot;]"
+        data-tags="[&quot;双指针&quot;,&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status is-solved"
+              title="已解决">
+      
+          <i class="ui-icon ph-fill ph-check-circle solid-check-icon" aria-hidden="true"></i>
+      
+      <span class="sr-only">已解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        567. 字符串的排列
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：20">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>20</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2025-03-11T19:44:41+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2025-03-11</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/33647923"
+        title="862. 和至少为 K 的最短子数组"
+        data-date="1788464812"
+        data-frequency="19"
+        data-company-frequencies="{&quot;字节跳动&quot;:15,&quot;微软&quot;:1,&quot;阿里巴巴&quot;:1,&quot;腾讯&quot;:2}"
+        data-title="leetcode 862. 和至少为 k 的最短子数组"
+        data-question-id="862"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L4&quot;,&quot;LeetCode&quot;,&quot;困难&quot;,&quot;字节跳动&quot;,&quot;微软&quot;,&quot;腾讯&quot;,&quot;阿里巴巴&quot;]"
+        data-tags="[&quot;二分查找&quot;,&quot;前缀和&quot;,&quot;单调队列&quot;,&quot;堆（优先队列）&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;,&quot;队列&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        862. 和至少为 K 的最短子数组
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：19">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>19</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2026-09-04T03:46:52+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-09-04</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2025/94004328"
+        title="剑指 Offer 48. 最长不含重复字符的子字符串"
+        data-date="1758750977"
+        data-frequency="18"
+        data-company-frequencies="{&quot;字节跳动&quot;:7,&quot;微软&quot;:1,&quot;美团&quot;:3,&quot;阿里巴巴&quot;:2,&quot;快手&quot;:2,&quot;百度&quot;:1,&quot;华为&quot;:1,&quot;虾皮&quot;:1}"
+        data-title="leetcode 剑指 offer 48. 最长不含重复字符的子字符串"
+        data-question-id="剑指 Offer 48"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L4&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;剑指 Offer&quot;,&quot;剑指 Offer（第 2 版）&quot;,&quot;华为&quot;,&quot;字节跳动&quot;,&quot;微软&quot;,&quot;快手&quot;,&quot;百度&quot;,&quot;美团&quot;,&quot;虾皮&quot;,&quot;阿里巴巴&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;子数组问题&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;,&quot;滑动窗口经典题&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        剑指 Offer 48. 最长不含重复字符的子字符串
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：18">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>18</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2025-09-25T05:56:17+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2025-09-25</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2025/59586946"
+        title="438. 找到字符串中所有字母异位词"
+        data-date="1745366400"
+        data-frequency="15"
+        data-company-frequencies="{&quot;字节跳动&quot;:8,&quot;微软&quot;:2,&quot;百度&quot;:2,&quot;华为&quot;:3}"
+        data-title="leetcode 438. 找到字符串中所有字母异位词"
+        data-question-id="438"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-I&quot;,&quot;L4&quot;,&quot;LeetCode&quot;,&quot;LeetCode 热题 100&quot;,&quot;中等&quot;,&quot;华为&quot;,&quot;字节跳动&quot;,&quot;微软&quot;,&quot;百度&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status is-solved"
+              title="已解决">
+      
+          <i class="ui-icon ph-fill ph-check-circle solid-check-icon" aria-hidden="true"></i>
+      
+      <span class="sr-only">已解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        438. 找到字符串中所有字母异位词
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：15">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>15</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2025-04-23T08:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2025-04-23</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/42200922"
+        title="340. 至多包含 K 个不同字符的最长子串"
+        data-date="1778716800"
+        data-frequency="14"
+        data-company-frequencies="{&quot;字节跳动&quot;:12,&quot;腾讯&quot;:1,&quot;猿辅导&quot;:1}"
+        data-title="leetcode 340. 至多包含 k 个不同字符的最长子串"
+        data-question-id="340"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-I&quot;,&quot;L4&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;字节跳动&quot;,&quot;已掌握&quot;,&quot;猿辅导&quot;,&quot;腾讯&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status is-solved"
+              title="已解决">
+      
+          <i class="ui-icon ph-fill ph-check-circle solid-check-icon" aria-hidden="true"></i>
+      
+      <span class="sr-only">已解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        340. 至多包含 K 个不同字符的最长子串
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：14">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>14</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-05-14T08:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-05-14</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2025/55866602"
+        title="658. 找到 K 个最接近的元素"
+        data-date="1758572971"
+        data-frequency="12"
+        data-company-frequencies="{&quot;字节跳动&quot;:5,&quot;美团&quot;:2,&quot;阿里巴巴&quot;:2,&quot;猿辅导&quot;:1,&quot;华为&quot;:1,&quot;虾皮&quot;:1}"
+        data-title="leetcode 658. 找到 k 个最接近的元素"
+        data-question-id="658"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L4&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;华为&quot;,&quot;字节跳动&quot;,&quot;猿辅导&quot;,&quot;美团&quot;,&quot;虾皮&quot;,&quot;阿里巴巴&quot;]"
+        data-tags="[&quot;二分查找&quot;,&quot;双指针&quot;,&quot;堆（优先队列）&quot;,&quot;排序&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        658. 找到 K 个最接近的元素
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：12">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>12</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2025-09-23T04:29:31+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2025-09-23</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2025/69908263"
+        title="30. 串联所有单词的子串"
+        data-date="1744927570"
+        data-frequency="9"
+        data-company-frequencies="{&quot;字节跳动&quot;:6,&quot;阿里巴巴&quot;:1,&quot;华为&quot;:1,&quot;虾皮&quot;:1}"
+        data-title="leetcode 30. 串联所有单词的子串"
+        data-question-id="30"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L3&quot;,&quot;LeetCode&quot;,&quot;华为&quot;,&quot;困难&quot;,&quot;字节跳动&quot;,&quot;虾皮&quot;,&quot;阿里巴巴&quot;,&quot;面试经典 150 题&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        30. 串联所有单词的子串
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：9">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>9</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2025-04-18T06:06:10+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2025-04-18</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2024/88184672"
+        title="159. 至多包含两个不同字符的最长子串"
+        data-date="1725485649"
+        data-frequency="9"
+        data-company-frequencies="{&quot;字节跳动&quot;:9}"
+        data-title="leetcode 159. 至多包含两个不同字符的最长子串"
+        data-question-id="159"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-I&quot;,&quot;L3&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;字节跳动&quot;,&quot;已掌握&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status is-solved"
+              title="已解决">
+      
+          <i class="ui-icon ph-fill ph-check-circle solid-check-icon" aria-hidden="true"></i>
+      
+      <span class="sr-only">已解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        159. 至多包含两个不同字符的最长子串
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：9">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>9</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2024-09-05T05:34:09+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2024-09-05</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/33372018"
+        title="1658. 将 x 减到 0 的最小操作数"
+        data-date="1778716800"
+        data-frequency="8"
+        data-company-frequencies="{&quot;字节跳动&quot;:6,&quot;小米&quot;:1,&quot;小红书&quot;:1}"
+        data-title="leetcode 1658. 将 x 减到 0 的最小操作数"
+        data-question-id="1658"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-I&quot;,&quot;L3&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;字节跳动&quot;,&quot;小米&quot;,&quot;小红书&quot;,&quot;已掌握&quot;]"
+        data-tags="[&quot;二分查找&quot;,&quot;前缀和&quot;,&quot;哈希表&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status is-solved"
+              title="已解决">
+      
+          <i class="ui-icon ph-fill ph-check-circle solid-check-icon" aria-hidden="true"></i>
+      
+      <span class="sr-only">已解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1658. 将 x 减到 0 的最小操作数
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：8">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>8</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-05-14T08:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-05-14</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/80498442"
+        title="480. 滑动窗口中位数"
+        data-date="1774569600"
+        data-frequency="8"
+        data-company-frequencies="{&quot;字节跳动&quot;:2,&quot;快手&quot;:1,&quot;腾讯&quot;:4,&quot;百度&quot;:1}"
+        data-title="leetcode 480. 滑动窗口中位数"
+        data-question-id="480"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L3&quot;,&quot;LeetCode&quot;,&quot;困难&quot;,&quot;字节跳动&quot;,&quot;快手&quot;,&quot;百度&quot;,&quot;腾讯&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;堆（优先队列）&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        480. 滑动窗口中位数
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：8">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>8</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2026-03-27T08:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-03-27</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2022/44764303"
+        title="剑指 Offer 59 - I. 滑动窗口的最大值"
+        data-date="1667347200"
+        data-frequency="8"
+        data-company-frequencies="{&quot;字节跳动&quot;:3,&quot;阿里巴巴&quot;:1,&quot;快手&quot;:1,&quot;商汤&quot;:1,&quot;虾皮&quot;:2}"
+        data-title="leetcode 剑指 offer 59 - i. 滑动窗口的最大值"
+        data-question-id="剑指 Offer 59 - I"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L3&quot;,&quot;LeetCode&quot;,&quot;剑指 Offer&quot;,&quot;剑指 Offer（第 2 版）&quot;,&quot;商汤&quot;,&quot;困难&quot;,&quot;字节跳动&quot;,&quot;快手&quot;,&quot;虾皮&quot;,&quot;阿里巴巴&quot;]"
+        data-tags="[&quot;单调队列&quot;,&quot;堆（优先队列）&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;,&quot;队列&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        剑指 Offer 59 - I. 滑动窗口的最大值
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：8">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>8</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2022-11-02T08:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2022-11-02</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/96513766"
+        title="424. 替换后的最长重复字符"
+        data-date="1789898941"
+        data-frequency="7"
+        data-company-frequencies="{&quot;字节跳动&quot;:2,&quot;阿里巴巴&quot;:1,&quot;腾讯&quot;:1,&quot;猿辅导&quot;:1,&quot;华为&quot;:2}"
+        data-title="leetcode 424. 替换后的最长重复字符"
+        data-question-id="424"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L3&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;华为&quot;,&quot;字节跳动&quot;,&quot;猿辅导&quot;,&quot;腾讯&quot;,&quot;阿里巴巴&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        424. 替换后的最长重复字符
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：7">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>7</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-09-20T18:09:01+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-09-20</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2023/60256979"
+        title="1438. 绝对差不超过限制的最长连续子数组"
+        data-date="1677142018"
+        data-frequency="7"
+        data-company-frequencies="{&quot;字节跳动&quot;:4,&quot;微软&quot;:2,&quot;阿里巴巴&quot;:1}"
+        data-title="leetcode 1438. 绝对差不超过限制的最长连续子数组"
+        data-question-id="1438"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L3&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;字节跳动&quot;,&quot;小马智行&quot;,&quot;微软&quot;,&quot;阿里巴巴&quot;]"
+        data-tags="[&quot;单调队列&quot;,&quot;堆（优先队列）&quot;,&quot;数组&quot;,&quot;有序集合&quot;,&quot;滑动窗口&quot;,&quot;队列&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1438. 绝对差不超过限制的最长连续子数组
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：7">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>7</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2023-02-23T16:46:58+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2023-02-23</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/42304957"
+        title="1493. 删掉一个元素以后全为 1 的最长子数组"
+        data-date="1774875043"
+        data-frequency="6"
+        data-company-frequencies="{&quot;字节跳动&quot;:3,&quot;微软&quot;:1,&quot;快手&quot;:1,&quot;腾讯&quot;:1}"
+        data-title="leetcode 1493. 删掉一个元素以后全为 1 的最长子数组"
+        data-question-id="1493"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L3&quot;,&quot;LeetCode&quot;,&quot;LeetCode 75&quot;,&quot;中等&quot;,&quot;字节跳动&quot;,&quot;微软&quot;,&quot;快手&quot;,&quot;腾讯&quot;]"
+        data-tags="[&quot;动态规划&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1493. 删掉一个元素以后全为 1 的最长子数组
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：6">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>6</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-03-30T20:50:43+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-03-30</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2025/56017792"
+        title="187. 重复的DNA序列"
+        data-date="1761997480"
+        data-frequency="6"
+        data-company-frequencies="{&quot;字节跳动&quot;:2,&quot;微软&quot;:1,&quot;快手&quot;:1,&quot;华为&quot;:1,&quot;虾皮&quot;:1}"
+        data-title="leetcode 187. 重复的dna序列"
+        data-question-id="187"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L3&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;华为&quot;,&quot;字节跳动&quot;,&quot;微软&quot;,&quot;快手&quot;,&quot;虾皮&quot;]"
+        data-tags="[&quot;位运算&quot;,&quot;哈希函数&quot;,&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;,&quot;滚动哈希&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        187. 重复的DNA序列
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：6">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>6</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2025-11-01T19:44:40+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2025-11-01</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/43421672"
+        title="1423. 可获得的最大点数"
+        data-date="1788370311"
+        data-frequency="5"
+        data-company-frequencies="{&quot;字节跳动&quot;:1,&quot;猿辅导&quot;:1,&quot;百度&quot;:1,&quot;华为&quot;:1,&quot;携程&quot;:1}"
+        data-title="leetcode 1423. 可获得的最大点数"
+        data-question-id="1423"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L3&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;华为&quot;,&quot;字节跳动&quot;,&quot;携程&quot;,&quot;猿辅导&quot;,&quot;百度&quot;]"
+        data-tags="[&quot;前缀和&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1423. 可获得的最大点数
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：5">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>5</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-09-03T01:31:51+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-09-03</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2025/61916172"
+        title="632. 最小区间"
+        data-date="1751467046"
+        data-frequency="5"
+        data-company-frequencies="{&quot;字节跳动&quot;:5}"
+        data-title="leetcode 632. 最小区间"
+        data-question-id="632"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L3&quot;,&quot;LeetCode&quot;,&quot;困难&quot;,&quot;字节跳动&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;堆（优先队列）&quot;,&quot;排序&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;,&quot;贪心&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        632. 最小区间
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：5">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>5</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2025-07-02T22:37:26+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2025-07-02</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2022/75775771"
+        title="1031. 两个无重叠子数组的最大和"
+        data-date="1652047915"
+        data-frequency="5"
+        data-company-frequencies="{&quot;字节跳动&quot;:5}"
+        data-title="leetcode 1031. 两个无重叠子数组的最大和"
+        data-question-id="1031"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L3&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;字节跳动&quot;]"
+        data-tags="[&quot;动态规划&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1031. 两个无重叠子数组的最大和
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：5">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>5</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2022-05-09T06:11:55+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2022-05-09</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/17160017"
+        title="713. 乘积小于 K 的子数组"
+        data-date="1788134400"
+        data-frequency="4"
+        data-company-frequencies="{&quot;微软&quot;:1,&quot;华为&quot;:2,&quot;拼多多&quot;:1}"
+        data-title="leetcode 713. 乘积小于 k 的子数组"
+        data-question-id="713"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;华为&quot;,&quot;微软&quot;,&quot;拼多多&quot;]"
+        data-tags="[&quot;二分查找&quot;,&quot;前缀和&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        713. 乘积小于 K 的子数组
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：4">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>4</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-08-31T08:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-08-31</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/87604932"
+        title="992. K 个不同整数的子数组"
+        data-date="1779408000"
+        data-frequency="4"
+        data-company-frequencies="{&quot;字节跳动&quot;:1,&quot;微软&quot;:1,&quot;美团&quot;:1,&quot;携程&quot;:1}"
+        data-title="leetcode 992. k 个不同整数的子数组"
+        data-question-id="992"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;困难&quot;,&quot;字节跳动&quot;,&quot;微软&quot;,&quot;携程&quot;,&quot;美团&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;,&quot;计数&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        992. K 个不同整数的子数组
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：4">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>4</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2026-05-22T08:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-05-22</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/70567385"
+        title="1151. 最少交换次数来组合所有的 1"
+        data-date="1777152219"
+        data-frequency="4"
+        data-company-frequencies="{&quot;字节跳动&quot;:1,&quot;京东&quot;:1,&quot;华为&quot;:2}"
+        data-title="leetcode 1151. 最少交换次数来组合所有的 1"
+        data-question-id="1151"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;京东&quot;,&quot;华为&quot;,&quot;字节跳动&quot;]"
+        data-tags="[&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1151. 最少交换次数来组合所有的 1
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：4">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>4</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-04-26T05:23:39+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-04-26</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2023/69013885"
+        title="1156. 单字符重复子串的最大长度"
+        data-date="1683666704"
+        data-frequency="4"
+        data-company-frequencies="{&quot;字节跳动&quot;:1,&quot;微软&quot;:1,&quot;快手&quot;:2}"
+        data-title="leetcode 1156. 单字符重复子串的最大长度"
+        data-question-id="1156"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;字节跳动&quot;,&quot;微软&quot;,&quot;快手&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1156. 单字符重复子串的最大长度
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：4">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>4</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2023-05-10T05:11:44+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2023-05-10</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2024/85039853"
+        title="904. 水果成篮"
+        data-date="1729068793"
+        data-frequency="3"
+        data-company-frequencies="{&quot;字节跳动&quot;:1,&quot;微软&quot;:1,&quot;快手&quot;:1}"
+        data-title="leetcode 904. 水果成篮"
+        data-question-id="904"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;字节跳动&quot;,&quot;微软&quot;,&quot;快手&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        904. 水果成篮
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：3">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>3</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2024-10-16T16:53:13+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2024-10-16</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2023/69432121"
+        title="1358. 包含所有三种字符的子字符串数目"
+        data-date="1698105600"
+        data-frequency="3"
+        data-company-frequencies="{&quot;字节跳动&quot;:1,&quot;微软&quot;:1,&quot;华为&quot;:1}"
+        data-title="leetcode 1358. 包含所有三种字符的子字符串数目"
+        data-question-id="1358"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;华为&quot;,&quot;字节跳动&quot;,&quot;微软&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1358. 包含所有三种字符的子字符串数目
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：3">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>3</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2023-10-24T08:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2023-10-24</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2023/49504652"
+        title="594. 最长和谐子序列"
+        data-date="1679443200"
+        data-frequency="3"
+        data-company-frequencies="{&quot;字节跳动&quot;:1,&quot;拼多多&quot;:2}"
+        data-title="leetcode 594. 最长和谐子序列"
+        data-question-id="594"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;字节跳动&quot;,&quot;拼多多&quot;,&quot;简单&quot;,&quot;需复习&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;排序&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;,&quot;计数&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        594. 最长和谐子序列
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：3">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>3</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-easy">简单</span>
+            
+            <time class="post-row-date" datetime="2023-03-22T08:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2023-03-22</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/43310375"
+        title="219. 存在重复元素 II"
+        data-date="1783510657"
+        data-frequency="2"
+        data-company-frequencies="{&quot;字节跳动&quot;:1,&quot;图森&quot;:1}"
+        data-title="leetcode 219. 存在重复元素 ii"
+        data-question-id="219"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;图森&quot;,&quot;字节跳动&quot;,&quot;简单&quot;,&quot;面试经典 150 题&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        219. 存在重复元素 II
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：2">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>2</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-easy">简单</span>
+            
+            <time class="post-row-date" datetime="2026-07-08T19:37:37+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-07-08</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/25029932"
+        title="1343. 大小为 K 且平均值大于等于阈值的子数组数目"
+        data-date="1768867200"
+        data-frequency="2"
+        data-company-frequencies="{&quot;腾讯&quot;:1,&quot;虾皮&quot;:1}"
+        data-title="leetcode 1343. 大小为 k 且平均值大于等于阈值的子数组数目"
+        data-question-id="1343"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;腾讯&quot;,&quot;虾皮&quot;]"
+        data-tags="[&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1343. 大小为 K 且平均值大于等于阈值的子数组数目
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：2">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>2</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-01-20T08:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-01-20</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2024/64589289"
+        title="1248. 统计「优美子数组」"
+        data-date="1713514922"
+        data-frequency="2"
+        data-company-frequencies="{&quot;微软&quot;:1,&quot;携程&quot;:1}"
+        data-title="leetcode 1248. 统计「优美子数组」"
+        data-question-id="1248"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;微软&quot;,&quot;携程&quot;]"
+        data-tags="[&quot;前缀和&quot;,&quot;哈希表&quot;,&quot;数学&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1248. 统计「优美子数组」
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：2">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>2</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2024-04-19T16:22:02+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2024-04-19</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2024/38501628"
+        title="面试题 17.18. 最短超串"
+        data-date="1704745799"
+        data-frequency="2"
+        data-company-frequencies="{&quot;字节跳动&quot;:2}"
+        data-title="leetcode 面试题 17.18. 最短超串"
+        data-question-id="面试题 17.18"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;字节跳动&quot;,&quot;程序员面试金典（第 6 版）&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        面试题 17.18. 最短超串
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：2">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>2</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2024-01-09T04:29:59+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2024-01-09</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2022/73571125"
+        title="1208. 尽可能使字符串相等"
+        data-date="1659714644"
+        data-frequency="2"
+        data-company-frequencies="{&quot;华为&quot;:1,&quot;商汤&quot;:1}"
+        data-title="leetcode 1208. 尽可能使字符串相等"
+        data-question-id="1208"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;华为&quot;,&quot;商汤&quot;]"
+        data-tags="[&quot;二分查找&quot;,&quot;前缀和&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1208. 尽可能使字符串相等
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：2">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>2</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2022-08-05T23:50:44+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2022-08-05</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2022/81248279"
+        title="413. 等差数列划分"
+        data-date="1653670442"
+        data-frequency="2"
+        data-company-frequencies="{&quot;拼多多&quot;:1,&quot;网易&quot;:1}"
+        data-title="leetcode 413. 等差数列划分"
+        data-question-id="413"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;拼多多&quot;,&quot;网易&quot;]"
+        data-tags="[&quot;动态规划&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        413. 等差数列划分
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：2">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>2</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2022-05-28T00:54:02+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2022-05-28</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2022/66376032"
+        title="727. 最小窗口子序列"
+        data-date="1642346396"
+        data-frequency="2"
+        data-company-frequencies="{&quot;虾皮&quot;:2}"
+        data-title="leetcode 727. 最小窗口子序列"
+        data-question-id="727"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;困难&quot;,&quot;虾皮&quot;]"
+        data-tags="[&quot;动态规划&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        727. 最小窗口子序列
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：2">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>2</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2022-01-16T23:19:56+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2022-01-16</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2021/73899351"
+        title="1100. 长度为 K 的无重复字符子串"
+        data-date="1635778288"
+        data-frequency="2"
+        data-company-frequencies="{&quot;腾讯&quot;:1,&quot;华为&quot;:1}"
+        data-title="leetcode 1100. 长度为 k 的无重复字符子串"
+        data-question-id="1100"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;华为&quot;,&quot;字节跳动&quot;,&quot;腾讯&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1100. 长度为 K 的无重复字符子串
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：2">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>2</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2021-11-01T22:51:28+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2021-11-01</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2020/66367910"
+        title="220. 存在重复元素 III"
+        data-date="1602936000"
+        data-frequency="2"
+        data-company-frequencies="{&quot;快手&quot;:1,&quot;猿辅导&quot;:1}"
+        data-title="leetcode 220. 存在重复元素 iii"
+        data-question-id="220"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L2&quot;,&quot;LeetCode&quot;,&quot;困难&quot;,&quot;快手&quot;,&quot;猿辅导&quot;]"
+        data-tags="[&quot;排序&quot;,&quot;数组&quot;,&quot;有序集合&quot;,&quot;桶排序&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        220. 存在重复元素 III
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：2">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>2</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2020-10-17T20:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2020-10-17</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/16728717"
+        title="1477. 找两个和为目标值且不重叠的子数组"
+        data-date="1784134751"
+        data-frequency="1"
+        data-company-frequencies="{&quot;字节跳动&quot;:1}"
+        data-title="leetcode 1477. 找两个和为目标值且不重叠的子数组"
+        data-question-id="1477"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L1&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;字节跳动&quot;]"
+        data-tags="[&quot;二分查找&quot;,&quot;动态规划&quot;,&quot;哈希表&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1477. 找两个和为目标值且不重叠的子数组
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：1">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>1</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-07-16T00:59:11+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-07-16</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2023/61216580"
+        title="1234. 替换子串得到平衡字符串"
+        data-date="1694127146"
+        data-frequency="1"
+        data-company-frequencies="{&quot;阿里巴巴&quot;:1}"
+        data-title="leetcode 1234. 替换子串得到平衡字符串"
+        data-question-id="1234"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L1&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;阿里巴巴&quot;]"
+        data-tags="[&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1234. 替换子串得到平衡字符串
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：1">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>1</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2023-09-08T06:52:26+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2023-09-08</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2023/82630774"
+        title="978. 最长湍流子数组"
+        data-date="1683115022"
+        data-frequency="1"
+        data-company-frequencies="{&quot;阿里巴巴&quot;:1}"
+        data-title="leetcode 978. 最长湍流子数组"
+        data-question-id="978"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L1&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;阿里巴巴&quot;]"
+        data-tags="[&quot;动态规划&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        978. 最长湍流子数组
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：1">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>1</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2023-05-03T19:57:02+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2023-05-03</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2023/54960587"
+        title="995. K 连续位的最小翻转次数"
+        data-date="1682093498"
+        data-frequency="1"
+        data-company-frequencies="{&quot;猿辅导&quot;:1}"
+        data-title="leetcode 995. k 连续位的最小翻转次数"
+        data-question-id="995"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L1&quot;,&quot;LeetCode&quot;,&quot;困难&quot;,&quot;猿辅导&quot;]"
+        data-tags="[&quot;位运算&quot;,&quot;前缀和&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;,&quot;队列&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        995. K 连续位的最小翻转次数
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：1">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>1</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2023-04-22T00:11:38+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2023-04-22</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2023/96846428"
+        title="1610. 可见点的最大数目"
+        data-date="1681740034"
+        data-frequency="1"
+        data-company-frequencies="{&quot;阿里巴巴&quot;:1}"
+        data-title="leetcode 1610. 可见点的最大数目"
+        data-question-id="1610"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L1&quot;,&quot;LeetCode&quot;,&quot;困难&quot;,&quot;阿里巴巴&quot;]"
+        data-tags="[&quot;几何&quot;,&quot;排序&quot;,&quot;数学&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1610. 可见点的最大数目
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：1">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>1</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2023-04-17T22:00:34+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2023-04-17</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2023/83286395"
+        title="1052. 爱生气的书店老板"
+        data-date="1681559305"
+        data-frequency="1"
+        data-company-frequencies="{&quot;阿里巴巴&quot;:1}"
+        data-title="leetcode 1052. 爱生气的书店老板"
+        data-question-id="1052"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L1&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;阿里巴巴&quot;]"
+        data-tags="[&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1052. 爱生气的书店老板
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：1">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>1</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2023-04-15T19:48:25+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2023-04-15</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2021/87881998"
+        title="930. 和相同的二元子数组"
+        data-date="1638892261"
+        data-frequency="1"
+        data-company-frequencies="{&quot;字节跳动&quot;:1}"
+        data-title="leetcode 930. 和相同的二元子数组"
+        data-question-id="930"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L1&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;字节跳动&quot;]"
+        data-tags="[&quot;前缀和&quot;,&quot;哈希表&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        930. 和相同的二元子数组
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：1">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>1</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2021-12-07T23:51:01+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2021-12-07</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2021/11776921"
+        title="689. 三个无重叠子数组的最大和"
+        data-date="1628287759"
+        data-frequency="1"
+        data-company-frequencies="{&quot;字节跳动&quot;:1}"
+        data-title="leetcode 689. 三个无重叠子数组的最大和"
+        data-question-id="689"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L1&quot;,&quot;LeetCode&quot;,&quot;困难&quot;,&quot;字节跳动&quot;]"
+        data-tags="[&quot;前缀和&quot;,&quot;动态规划&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        689. 三个无重叠子数组的最大和
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：1">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>1</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2021-08-07T06:09:19+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2021-08-07</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2021/88154443"
+        title="1456. 定长子串中元音的最大数目"
+        data-date="1628151850"
+        data-frequency="1"
+        data-company-frequencies="{&quot;字节跳动&quot;:1}"
+        data-title="leetcode 1456. 定长子串中元音的最大数目"
+        data-question-id="1456"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L1&quot;,&quot;LeetCode&quot;,&quot;LeetCode 75&quot;,&quot;中等&quot;,&quot;字节跳动&quot;]"
+        data-tags="[&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        1456. 定长子串中元音的最大数目
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：1">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>1</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2021-08-05T16:24:10+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2021-08-05</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2021/27673400"
+        title="643. 子数组最大平均数 I"
+        data-date="1616760000"
+        data-frequency="1"
+        data-company-frequencies="{&quot;微软&quot;:1}"
+        data-title="leetcode 643. 子数组最大平均数 i"
+        data-question-id="643"
+        data-pinned="0"
+        data-categories="[&quot;CodeTop&quot;,&quot;CodeTop-II&quot;,&quot;L1&quot;,&quot;LeetCode&quot;,&quot;LeetCode 75&quot;,&quot;华为&quot;,&quot;微软&quot;,&quot;简单&quot;]"
+        data-tags="[&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        643. 子数组最大平均数 I
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+                <div class="post-row-primary-meta">
+                    
+                    
+                        <span class="post-frequency"
+                              title="总考察频率：1">
+              <i class="post-meta-icon frequency-chart-icon" aria-hidden="true"></i>
+              <span>频率</span>
+              <strong>1</strong>
+            </span>
+                    
+                </div>
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-easy">简单</span>
+            
+            <time class="post-row-date" datetime="2021-03-26T20:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2021-03-26</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/294865232084"
+        title="补充题 212. 窗口大小非法时返回空数组"
+        data-date="1789358400"
+        data-frequency="0"
+        data-company-frequencies="{}"
+        data-title="补充题 212. 窗口大小非法时返回空数组"
+        data-question-id=""
+        data-pinned="0"
+        data-categories="[&quot;补充题&quot;]"
+        data-tags="[&quot;单调队列&quot;,&quot;堆（优先队列）&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;,&quot;队列&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        补充题 212. 窗口大小非法时返回空数组
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+            
+            <time class="post-row-date" datetime="2026-09-14T12:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-09-14</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/24328818216"
+        title="补充题 211. 枚举固定长度无重复窗口"
+        data-date="1789358400"
+        data-frequency="0"
+        data-company-frequencies="{}"
+        data-title="补充题 211. 枚举固定长度无重复窗口"
+        data-question-id=""
+        data-pinned="0"
+        data-categories="[&quot;补充题&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        补充题 211. 枚举固定长度无重复窗口
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+            
+            <time class="post-row-date" datetime="2026-09-14T12:00:00+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-09-14</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/61374851"
+        title="补充题 179. 至少 k 个相同字母的最短子串"
+        data-date="1789266484"
+        data-frequency="0"
+        data-company-frequencies="{}"
+        data-title="补充题 179. 至少 k 个相同字母的最短子串"
+        data-question-id=""
+        data-pinned="0"
+        data-categories="[&quot;补充题&quot;,&quot;困难&quot;]"
+        data-tags="[&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        补充题 179. 至少 k 个相同字母的最短子串
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2026-09-13T10:28:04+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-09-13</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/50735352"
+        title="面试题 17.17. 多次搜索"
+        data-date="1774691946"
+        data-frequency="0"
+        data-company-frequencies="{}"
+        data-title="leetcode 面试题 17.17. 多次搜索"
+        data-question-id="面试题 17.17"
+        data-pinned="0"
+        data-categories="[&quot;LeetCode&quot;,&quot;中等&quot;,&quot;程序员面试金典（第 6 版）&quot;]"
+        data-tags="[&quot;哈希表&quot;,&quot;字典树&quot;,&quot;字符串&quot;,&quot;字符串匹配&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        面试题 17.17. 多次搜索
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-03-28T17:59:06+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-03-28</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/75684937"
+        title="LCR 057. 存在重复元素 III"
+        data-date="1774691946"
+        data-frequency="0"
+        data-company-frequencies="{}"
+        data-title="leetcode lcr 057. 存在重复元素 iii"
+        data-question-id="LCR 057"
+        data-pinned="0"
+        data-categories="[&quot;119 经典题变种挑战&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;剑指 Offer&quot;,&quot;剑指 Offer（专项突击版）&quot;]"
+        data-tags="[&quot;LCR&quot;,&quot;排序&quot;,&quot;数组&quot;,&quot;有序集合&quot;,&quot;桶排序&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        LCR 057. 存在重复元素 III
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-03-28T17:59:06+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-03-28</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/13209588"
+        title="LCR 056. 两数之和 IV - 输入二叉搜索树"
+        data-date="1774691946"
+        data-frequency="0"
+        data-company-frequencies="{}"
+        data-title="leetcode lcr 056. 两数之和 iv - 输入二叉搜索树"
+        data-question-id="LCR 056"
+        data-pinned="0"
+        data-categories="[&quot;119 经典题变种挑战&quot;,&quot;LeetCode&quot;,&quot;剑指 Offer&quot;,&quot;剑指 Offer（专项突击版）&quot;,&quot;简单&quot;]"
+        data-tags="[&quot;LCR&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        LCR 056. 两数之和 IV - 输入二叉搜索树
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-easy">简单</span>
+            
+            <time class="post-row-date" datetime="2026-03-28T17:59:06+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-03-28</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/17896345"
+        title="LCR 017. 最小覆盖子串"
+        data-date="1774691946"
+        data-frequency="0"
+        data-company-frequencies="{}"
+        data-title="leetcode lcr 017. 最小覆盖子串"
+        data-question-id="LCR 017"
+        data-pinned="0"
+        data-categories="[&quot;119 经典题变种挑战&quot;,&quot;LeetCode&quot;,&quot;剑指 Offer&quot;,&quot;剑指 Offer（专项突击版）&quot;,&quot;困难&quot;]"
+        data-tags="[&quot;LCR&quot;,&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        LCR 017. 最小覆盖子串
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-hard">困难</span>
+            
+            <time class="post-row-date" datetime="2026-03-28T17:59:06+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-03-28</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/56156030"
+        title="LCR 016. 无重复字符的最长子串"
+        data-date="1774691946"
+        data-frequency="0"
+        data-company-frequencies="{}"
+        data-title="leetcode lcr 016. 无重复字符的最长子串"
+        data-question-id="LCR 016"
+        data-pinned="0"
+        data-categories="[&quot;119 经典题变种挑战&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;剑指 Offer&quot;,&quot;剑指 Offer（专项突击版）&quot;]"
+        data-tags="[&quot;LCR&quot;,&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        LCR 016. 无重复字符的最长子串
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-03-28T17:59:06+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-03-28</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/29341602"
+        title="LCR 015. 找到字符串中所有字母异位词"
+        data-date="1774691946"
+        data-frequency="0"
+        data-company-frequencies="{}"
+        data-title="leetcode lcr 015. 找到字符串中所有字母异位词"
+        data-question-id="LCR 015"
+        data-pinned="0"
+        data-categories="[&quot;119 经典题变种挑战&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;剑指 Offer&quot;,&quot;剑指 Offer（专项突击版）&quot;]"
+        data-tags="[&quot;LCR&quot;,&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        LCR 015. 找到字符串中所有字母异位词
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-03-28T17:59:06+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-03-28</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/22919476"
+        title="LCR 014. 字符串的排列"
+        data-date="1774691946"
+        data-frequency="0"
+        data-company-frequencies="{}"
+        data-title="leetcode lcr 014. 字符串的排列"
+        data-question-id="LCR 014"
+        data-pinned="0"
+        data-categories="[&quot;119 经典题变种挑战&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;剑指 Offer&quot;,&quot;剑指 Offer（专项突击版）&quot;]"
+        data-tags="[&quot;LCR&quot;,&quot;双指针&quot;,&quot;哈希表&quot;,&quot;字符串&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        LCR 014. 字符串的排列
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-03-28T17:59:06+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-03-28</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/56411440"
+        title="LCR 009. 乘积小于 K 的子数组"
+        data-date="1774691946"
+        data-frequency="0"
+        data-company-frequencies="{}"
+        data-title="leetcode lcr 009. 乘积小于 k 的子数组"
+        data-question-id="LCR 009"
+        data-pinned="0"
+        data-categories="[&quot;119 经典题变种挑战&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;剑指 Offer&quot;,&quot;剑指 Offer（专项突击版）&quot;]"
+        data-tags="[&quot;LCR&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        LCR 009. 乘积小于 K 的子数组
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-03-28T17:59:06+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-03-28</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2026/61934719"
+        title="LCR 008. 长度最小的子数组"
+        data-date="1774691946"
+        data-frequency="0"
+        data-company-frequencies="{}"
+        data-title="leetcode lcr 008. 长度最小的子数组"
+        data-question-id="LCR 008"
+        data-pinned="0"
+        data-categories="[&quot;119 经典题变种挑战&quot;,&quot;LeetCode&quot;,&quot;中等&quot;,&quot;剑指 Offer&quot;,&quot;剑指 Offer（专项突击版）&quot;]"
+        data-tags="[&quot;LCR&quot;,&quot;二分查找&quot;,&quot;前缀和&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        LCR 008. 长度最小的子数组
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2026-03-28T17:59:06+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2026-03-28</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+                
+                    <li class="post-item">
+                        
+
+
+
+
+
+
+
+<a
+        class="post-row"
+        href="/blog/2024/20555284"
+        title="487. 最大连续1的个数 II"
+        data-date="1728425953"
+        data-frequency="0"
+        data-company-frequencies="{}"
+        data-title="leetcode 487. 最大连续1的个数 ii"
+        data-question-id="487"
+        data-pinned="0"
+        data-categories="[&quot;LeetCode&quot;,&quot;中等&quot;]"
+        data-tags="[&quot;动态规划&quot;,&quot;数组&quot;,&quot;滑动窗口&quot;]"
+>
+    
+        <span class="post-status"
+              title="未解决">
+      
+          <i class="ui-icon ph-bold ph-circle" aria-hidden="true"></i>
+      
+      <span class="sr-only">未解决</span>
+    </span>
+    
+    <div class="post-row-content">
+        <div class="post-title-main">
+      <span class="post-title">
+        487. 最大连续1的个数 II
+      </span>
+        </div>
+        <div class="post-row-meta">
+            
+            
+                <span class="post-label post-label--difficulty is-difficulty-medium">中等</span>
+            
+            <time class="post-row-date" datetime="2024-10-09T06:19:13+08:00"><i
+                        class="ui-icon ph-bold ph-calendar-blank post-meta-icon post-date-icon"
+                        aria-hidden="true"></i>2024-10-09</time>
+        </div>
+    </div>
+</a>
+
+                    </li>
+                
+            
+        </ul>
+    </div>
+</section>
+
+    </div>
+  </div>
+</article>
+
+
+<script type="module" src="/blog/assets/js/list.bundle.min.js?v=8fe2918636f5"></script>
+
+
+    </div>
+    
+
+
+
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">Copyright ©2017-2026 <a href="/blog/">走在修行的大街上</a> All rights reserved</p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">本页访问量<span id="busuanzi_value_page_pv"></span>次</p>
+                <p id="busuanzi_container_site_pv">本站访问量<span id="busuanzi_value_site_pv"></span>次</p>
+                <p id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</p>
+            </div>
+        
+    </div>
+    <button class="back-to-top" type="button" aria-label="回到顶部" data-tippy-content="返回顶部"><i class="ui-icon ph-bold ph-arrow-up" aria-hidden="true"></i></button>
+</footer>
+
+</div>
+
+<script type="module" src="/blog/assets/js/blog.bundle.min.js?v=35e77481fa0d"></script>
+
+
+  </body>
+</html>
