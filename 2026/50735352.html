@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 面试题 17.17. 多次搜索 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#faf9f5" name="theme-color" />
+<meta content="HGNULB,哈希表,字典树,字符串,字符串匹配,数组,滑动窗口" name="keywords" />
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 面试题 17.17. 多次搜索" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2026/50735352" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2026/50735352" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-28T17:59:06+08:00" />
+<meta property="article:modified_time" content="2026-03-28T17:59:06+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 面试题 17.17. 多次搜索" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2026-03-28T17:59:06+08:00","datePublished":"2026-03-28T17:59:06+08:00","description":"题目描述","headline":"LeetCode 面试题 17.17. 多次搜索","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2026/50735352"},"url":"https://hgnulb.github.io/blog/2026/50735352"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="/blog/assets/images/theme/profile.jpg?v=04ad95c24d11" rel="icon" type="image/jpeg" />
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link href="/blog/assets/libs/modern-normalize.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=11499f9996a4" rel="stylesheet" type="text/css" />
+<meta
+  name="site-config"
+  content="[{&quot;name&quot;:&quot;LeetCode&quot;},{&quot;name&quot;:&quot;CodeTop&quot;},{&quot;name&quot;:&quot;简单&quot;},{&quot;name&quot;:&quot;中等&quot;},{&quot;name&quot;:&quot;困难&quot;},{&quot;name&quot;:&quot;CodeTop-I&quot;,&quot;display_name&quot;:&quot;已解决&quot;},{&quot;name&quot;:&quot;CodeTop-II&quot;,&quot;display_name&quot;:&quot;未解决&quot;},{&quot;name&quot;:&quot;已掌握&quot;},{&quot;name&quot;:&quot;需复习&quot;},{&quot;name&quot;:&quot;需加强&quot;},{&quot;name&quot;:&quot;未掌握&quot;},{&quot;name&quot;:&quot;历史考题&quot;},{&quot;name&quot;:&quot;补充题&quot;},{&quot;name&quot;:&quot;会员题&quot;},{&quot;name&quot;:&quot;L9&quot;,&quot;display_name&quot;:&quot;500+&quot;},{&quot;name&quot;:&quot;L8&quot;,&quot;display_name&quot;:&quot;200-500&quot;},{&quot;name&quot;:&quot;L7&quot;,&quot;display_name&quot;:&quot;100-200&quot;},{&quot;name&quot;:&quot;L6&quot;,&quot;display_name&quot;:&quot;50-100&quot;},{&quot;name&quot;:&quot;L5&quot;,&quot;display_name&quot;:&quot;20-50&quot;},{&quot;name&quot;:&quot;L4&quot;,&quot;display_name&quot;:&quot;10-20&quot;},{&quot;name&quot;:&quot;L3&quot;,&quot;display_name&quot;:&quot;5-10&quot;},{&quot;name&quot;:&quot;L2&quot;,&quot;display_name&quot;:&quot;2-5&quot;},{&quot;name&quot;:&quot;L1&quot;,&quot;display_name&quot;:&quot;1-2&quot;},{&quot;name&quot;:&quot;LeetCode 75&quot;},{&quot;name&quot;:&quot;LeetCode 热题 100&quot;},{&quot;name&quot;:&quot;面试经典 150 题&quot;},{&quot;name&quot;:&quot;119 经典题变种挑战&quot;},{&quot;name&quot;:&quot;剑指 Offer&quot;},{&quot;name&quot;:&quot;剑指 Offer（专项突击版）&quot;},{&quot;name&quot;:&quot;剑指 Offer（第 2 版）&quot;},{&quot;name&quot;:&quot;程序员面试金典（第 6 版）&quot;},{&quot;name&quot;:&quot;数据结构与算法&quot;},{&quot;name&quot;:&quot;工具&quot;},{&quot;name&quot;:&quot;Java 专题&quot;},{&quot;name&quot;:&quot;设计模式&quot;},{&quot;name&quot;:&quot;腾讯&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;字节跳动&quot;,&quot;display_name&quot;:&quot;字节&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;阿里巴巴&quot;,&quot;display_name&quot;:&quot;阿里&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;华为&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;微软&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;亚马逊&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;美团&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;拼多多&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;京东&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;小米&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;百度&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;网易&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;小红书&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;快手&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;蚂蚁集团&quot;,&quot;display_name&quot;:&quot;蚂蚁&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;滴滴&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;携程&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;哔哩哔哩&quot;,&quot;display_name&quot;:&quot;B站&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;虾皮&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;米哈游&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;联想&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;OPPO&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;vivo&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;海康威视&quot;,&quot;display_name&quot;:&quot;海康&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;顺丰&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;招商银行&quot;,&quot;display_name&quot;:&quot;招行&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;金山&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;BOSS直聘&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;贝壳&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;360&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;MiniMax&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;智谱&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;商汤&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;旷视&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;深信服&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;TP-LINK&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;爱奇艺&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;新浪&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;陌陌&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;度小满&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;猿辅导&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;作业帮&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;图森&quot;,&quot;group&quot;:&quot;company&quot;}]"
+  data-asset-prefix="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages"
+  data-search-url="/blog/posts.json"
+  data-search-not-found="抱歉，没有找到相关内容"
+/>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div
+    class="search-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-label="搜索文章"
+    aria-hidden="true"
+    inert
+>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索标题、标签、分类…</label>
+            <i class="theme-icon theme_magnifying-glass search-leading-icon theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+            <input
+                id="search-input"
+                aria-controls="results-container"
+                aria-describedby="search-status"
+                autocomplete="off"
+                autocapitalize="none"
+                data-1p-ignore="true"
+                data-bwignore="true"
+                data-form-type="other"
+                data-lpignore="true"
+                enterkeyhint="search"
+                inputmode="search"
+                name="site-search"
+                placeholder="搜索标题、标签、分类…"
+                role="searchbox"
+                spellcheck="false"
+                tabindex="-1"
+                type="search"
+            />
+            <button class="btn-close" type="button" aria-label="关闭搜索">
+                <i class="theme-icon theme_x" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="search-results">
+            <p class="search-status sr-only" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+<div id="page">
+  
+
+
+
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button
+                class="btn-menu"
+                type="button"
+                aria-label="打开菜单"
+                aria-expanded="false"
+                aria-controls="mobile-menu-panel"
+            >
+                <i class="theme-icon theme_list" aria-hidden="true"></i>
+            </button>
+            <a
+                class="logo-link"
+                href="/blog/"
+                title="笔记共 9 篇"
+                aria-label="走在修行的大街上 博客首页"
+            >
+                <img
+                    class="site-avatar"
+                    src="/blog/assets/images/theme/profile.jpg"
+                    alt=""
+                    width="36"
+                    height="36"
+                />
+                <span
+                    class="site-greeting"
+                    data-site-greeting
+                    data-blog-name="走在修行的大街上"
+                >
+                    <noscript>走在修行的大街上</noscript>
+                </span>
+                <script>
+  ;(function initSiteGreeting() {
+    const greeting = document.querySelector('[data-site-greeting]')
+    if (!greeting) return
+
+    const hour = new Date().getHours()
+    const salutation =
+      hour >= 5 && hour < 12
+        ? 'Good morning'
+        : hour >= 12 && hour < 18
+          ? 'Good afternoon'
+          : 'Good evening'
+
+    greeting.textContent = `${salutation}, ${greeting.dataset.blogName}`
+  })()
+</script>
+
+            </a>
+            <button
+                class="btn-search"
+                type="button"
+                aria-label="搜索"
+            >
+                <i class="theme-icon theme_magnifying-glass" aria-hidden="true"></i>
+            </button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link"
+                        href="/blog/"
+                        title="笔记共 9 篇"
+                    >
+                        <i class="theme-icon theme_books-outline" aria-hidden="true"></i>
+                        <span>笔记</span>
+                    </a>
+                </li>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link is-active"
+                        href="/blog/problems/" aria-current="page"
+                        title="题库共 1545 篇题解"
+                    >
+                        <i class="theme-icon theme_code" aria-hidden="true"></i>
+                        <span>题库</span>
+                    </a>
+                </li>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link"
+                        href="/blog/categories/"
+                        title="分类数 78"
+                    >
+                        <i class="theme-icon theme_folder-simple" aria-hidden="true"></i>
+                        <span>分类</span>
+                    </a>
+                </li>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link"
+                        href="/blog/tags/"
+                        title="标签数 109"
+                    >
+                        <i class="theme-icon theme_bookmark-simple" aria-hidden="true"></i>
+                        <span>标签</span>
+                    </a>
+                </li>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link"
+                        href="/blog/archives/"
+                        title="归档月数 79"
+                    >
+                        <i class="theme-icon theme_archive" aria-hidden="true"></i>
+                        <span>归档</span>
+                    </a>
+                </li>
+            
+            <li class="nav-search-item">
+                <button
+                    class="btn-search nav-search nav-link nav-search-trigger"
+                    type="button"
+                    aria-label="搜索文章"
+                    title="搜索文章（⌘K）"
+                >
+                    <i class="theme-icon theme_magnifying-glass theme-icon-16" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut" aria-label="Command + K">
+                        <i class="theme-icon theme_command theme-icon-14" aria-hidden="true"></i>
+                        <i class="theme-icon theme_letter-k theme-icon-14" aria-hidden="true"></i>
+                    </kbd>
+                </button>
+            </li>
+            <li>
+                <a
+                    class="nav-link nav-icon-link"
+                    href="https://github.com/hgnulb"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub（新窗口打开）"
+                    title="GitHub"
+                >
+                    <i class="theme-icon theme_github theme-icon-28" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+        <button
+            class="mobile-menu-backdrop"
+            type="button"
+            aria-label="关闭菜单"
+            tabindex="-1"
+            data-mobile-menu-backdrop
+        ></button>
+        <div
+            class="mobile-menu-panel"
+            id="mobile-menu-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="mobile-menu-title"
+            aria-hidden="true"
+            tabindex="-1"
+            inert
+        >
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a
+                    class="mobile-menu-profile-home"
+                    href="/blog/"
+                    aria-label="返回博客首页"
+                >
+                    <img
+                        class="mobile-menu-profile-avatar"
+                        src="/blog/assets/images/theme/profile.jpg"
+                        alt=""
+                        width="56"
+                        height="56"
+                    />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div>
+                        <dt>笔记</dt>
+                        <dd>
+                            <a
+                                href="/blog/"
+                                aria-label="查看 9 篇笔记"
+                            >9</a>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>题库</dt>
+                        <dd>
+                            <a
+                                href="/blog/problems/"
+                                aria-label="查看题库 1545 篇题解"
+                            >1545</a>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>分类</dt>
+                        <dd>
+                            <a
+                                href="/blog/categories/"
+                                aria-label="查看 78 个分类"
+                            >78</a>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>标签</dt>
+                        <dd>
+                            <a
+                                href="/blog/tags/"
+                                aria-label="查看 109 个标签"
+                            >109</a>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>归档</dt>
+                        <dd>
+                            <a
+                                href="/blog/archives/"
+                                aria-label="查看 79 个月的归档"
+                            >79</a>
+                        </dd>
+                    </div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航">
+                <ul>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link"
+                                href="/blog/"
+                            >
+                                
+                                    <i class="theme-icon theme_books-outline" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">笔记</span>
+                            </a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link is-active"
+                                href="/blog/problems/" aria-current="page"
+                            >
+                                
+                                    <i class="theme-icon theme_code" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">题库</span>
+                            </a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link"
+                                href="/blog/categories/"
+                            >
+                                
+                                    <i class="theme-icon theme_folder-simple" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">分类</span>
+                            </a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link"
+                                href="/blog/tags/"
+                            >
+                                
+                                    <i class="theme-icon theme_bookmark-simple" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">标签</span>
+                            </a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link"
+                                href="/blog/archives/"
+                            >
+                                
+                                    <i class="theme-icon theme_archive" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">归档</span>
+                            </a>
+                        </li>
+                    
+                    <li>
+                        <a
+                            class="nav-link"
+                            href="https://github.com/hgnulb"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="GitHub（新窗口打开）"
+                        >
+                            <i class="theme-icon theme_github" aria-hidden="true"></i>
+                            <span class="mobile-menu-link-label">GitHub</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>
+                关闭导航菜单
+            </button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 面试题 17.17. 多次搜索">LeetCode 面试题 17.17. 多次搜索</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="theme-icon theme_calendar-blank theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2026-03-28 17:59:06"
+                    datetime="2026-03-28T17:59:06+08:00"
+            >
+                2026-03-28
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="theme-icon theme_user theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1014 字 · 英文 54 词 · 代码 86 行 · 图片 1 张"
+            aria-label="预计阅读时间约 6 分钟，正文 1014 字 · 英文 54 词 · 代码 86 行 · 图片 1 张"
+        >
+            <i class="theme-icon theme_clock-countdown theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+            <span>约 6 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary class="post-meta-details-summary">
+                <span class="post-meta-details-heading">
+                    <span>文章信息</span>
+                    <span class="post-meta-details-count">
+                        3 个分类
+                        <span aria-hidden="true"> · </span>
+                        6 个标签
+                    </span>
+                </span>
+                <i class="theme-icon theme_caret-down post-meta-details-chevron theme-icon-12 theme-icon-muted" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="theme-icon theme_folder-simple theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7212274093/" title="中等">
+        中等
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7723837750/" title="程序员面试金典（第 6 版）">
+        程序员面试金典（第 6 版）
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="theme-icon theme_bookmark-simple theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/4619169239/" title="数组">
+        数组
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5573589085/" title="字符串">
+        字符串
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5463098734/" title="哈希表">
+        哈希表
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5692196181/" title="滑动窗口">
+        滑动窗口
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/1523889636/" title="字典树">
+        字典树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/8860069244/" title="字符串匹配">
+        字符串匹配
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/multi-search-lcci/">面试题 17.17. 多次搜索</a></p>
+</blockquote>
+
+<p><span class="article-image is-loading" style="--article-image-width: 2322px"><img src="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/post-list/image-20260929010559942.png" alt="image-20260929010559942" width="2322" height="1279" decoding="async" loading="eager"><span class="article-image-spinner theme-icon theme_loading theme-icon-20" role="progressbar" aria-label="图片加载中"></span></span></p>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>对每个短串，找出它在长串 <code>big</code> 中出现的全部起始下标，结果仍按 <code>smalls</code> 的原顺序排列，允许不同出现位置互相重叠。题目保证短串互不重复，所有字符均为小写字母；实现为空短串保留空结果。</p>
+</blockquote>
+
+<h2 id="解法短串-trie--枚举长串起点">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E7%9F%AD%E4%B8%B2-trie--%E6%9E%9A%E4%B8%BE%E9%95%BF%E4%B8%B2%E8%B5%B7%E7%82%B9" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：短串 Trie + 枚举长串起点</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>[!blue]</p>
+
+  <p>多个短串可能共享前缀，逐个独立搜索会重复比较这些前缀。将所有非空短串正序插入同一棵 Trie，就能从长串的一个起点出发，同时判断哪些短串还可能匹配。</p>
+
+  <p>Trie 节点的孩子表示下一字符，终点记录该短串在 <code>smalls</code> 中的原下标，代码用 <code>wordIndexes</code> 列表保存。题目保证模式互不重复，所以每个终点实际对应一个原下标；这个下标用于把匹配结果写回正确的结果槽位，而不是按建树遍历顺序输出。</p>
+
+  <p>枚举长串中的起点 <code>start</code>，每次从根开始向右扫描。走到 <code>end</code> 时，Trie 节点恰好表示区间 <code>big[start..end]</code>。如果当前节点是某个词的终点，这个区间就与那个完整短串相等，应记录 <code>start</code>；若还有孩子，则继续向右，因为一个已匹配短串还可能是更长短串的前缀。</p>
+
+  <p>当前字符没有对应孩子时，就可以结束这个起点的搜索。所有更长匹配都必须先经过当前区间，它已经不对应任何模式前缀，继续增加字符也无法重新匹配。这个剪枝只结束当前 <code>start</code>，随后仍要从下一个起点重新尝试，所以重叠出现不会被跳过。</p>
+
+  <p>每一次真实出现都有唯一的起点和终点，枚举到它的起点时必能沿 Trie 到达对应终点；反过来，只有完整匹配的终点才会记录位置。因此结果不漏也不多。起点按升序处理，单个短串的结果列表自然有序，不需要再排序。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ol>
+    <li>为每个短串预留一个结果槽位，将非空短串插入 Trie，终点记录原下标。</li>
+    <li>按升序枚举 <code>big</code> 的每个起点，从 Trie 根开始向右匹配。</li>
+    <li>路径断开则结束当前起点；到达词终点则把起点加入对应结果，并继续检查更长短串。</li>
+    <li>所有起点完成后，按原下标返回结果；未出现的短串仍保留空结果。</li>
+  </ol>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-shiki"><pre class="shiki light-plus" style="background-color:#FFFFFF;color:#000000" tabindex="0"><code><span class="line"><span style="color:#0000FF">class</span><span style="color:#267F99"> Solution</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#0000FF">    public</span><span style="color:#267F99"> int</span><span style="color:#000000">[][] </span><span style="color:#795E26">multiSearch</span><span style="color:#000000">(</span><span style="color:#267F99">String</span><span style="color:#001080"> big</span><span style="color:#000000">, </span><span style="color:#267F99">String</span><span style="color:#000000">[] </span><span style="color:#001080">smalls</span><span style="color:#000000">) {</span></span>
+<span class="line"><span style="color:#267F99">        TrieNode</span><span style="color:#001080"> root</span><span style="color:#000000"> = </span><span style="color:#AF00DB">new</span><span style="color:#795E26"> TrieNode</span><span style="color:#000000">();</span></span>
+<span class="line"><span style="color:#267F99">        List</span><span style="color:#000000">&lt;</span><span style="color:#267F99">Integer</span><span style="color:#000000">&gt;[] </span><span style="color:#001080">positions</span><span style="color:#000000"> = </span><span style="color:#AF00DB">new</span><span style="color:#267F99"> ArrayList</span><span style="color:#000000">[</span><span style="color:#001080">smalls</span><span style="color:#000000">.</span><span style="color:#001080">length</span><span style="color:#000000">];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">        for</span><span style="color:#000000"> (</span><span style="color:#267F99">int</span><span style="color:#001080"> index</span><span style="color:#000000"> = </span><span style="color:#098658">0</span><span style="color:#000000">; index &lt; </span><span style="color:#001080">smalls</span><span style="color:#000000">.</span><span style="color:#001080">length</span><span style="color:#000000">; index++) {</span></span>
+<span class="line"><span style="color:#000000">            positions[index] = </span><span style="color:#AF00DB">new</span><span style="color:#267F99"> ArrayList</span><span style="color:#000000">&lt;&gt;();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">            if</span><span style="color:#000000"> (!smalls[index].</span><span style="color:#795E26">isEmpty</span><span style="color:#000000">()) {</span></span>
+<span class="line"><span style="color:#795E26">                insert</span><span style="color:#000000">(root, smalls[index], index);</span></span>
+<span class="line"><span style="color:#000000">            }</span></span>
+<span class="line"><span style="color:#000000">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">        for</span><span style="color:#000000"> (</span><span style="color:#267F99">int</span><span style="color:#001080"> start</span><span style="color:#000000"> = </span><span style="color:#098658">0</span><span style="color:#000000">; start &lt; </span><span style="color:#001080">big</span><span style="color:#000000">.</span><span style="color:#795E26">length</span><span style="color:#000000">(); start++) {</span></span>
+<span class="line"><span style="color:#267F99">            TrieNode</span><span style="color:#001080"> node</span><span style="color:#000000"> = root;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">            for</span><span style="color:#000000"> (</span><span style="color:#267F99">int</span><span style="color:#001080"> end</span><span style="color:#000000"> = start; end &lt; </span><span style="color:#001080">big</span><span style="color:#000000">.</span><span style="color:#795E26">length</span><span style="color:#000000">(); end++) {</span></span>
+<span class="line"><span style="color:#267F99">                int</span><span style="color:#001080"> childIndex</span><span style="color:#000000"> = </span><span style="color:#001080">big</span><span style="color:#000000">.</span><span style="color:#795E26">charAt</span><span style="color:#000000">(end) - </span><span style="color:#A31515">'a'</span><span style="color:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">                if</span><span style="color:#000000"> (childIndex &lt; </span><span style="color:#098658">0</span><span style="color:#000000"> || childIndex &gt;= </span><span style="color:#098658">26</span><span style="color:#000000"> || </span><span style="color:#001080">node</span><span style="color:#000000">.</span><span style="color:#001080">children</span><span style="color:#000000">[childIndex] == </span><span style="color:#0000FF">null</span><span style="color:#000000">) {</span></span>
+<span class="line"><span style="color:#AF00DB">                    break</span><span style="color:#000000">;</span></span>
+<span class="line"><span style="color:#000000">                }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#000000">                node = </span><span style="color:#001080">node</span><span style="color:#000000">.</span><span style="color:#001080">children</span><span style="color:#000000">[childIndex];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">                for</span><span style="color:#000000"> (</span><span style="color:#267F99">int</span><span style="color:#001080"> wordIndex</span><span style="color:#AF00DB"> :</span><span style="color:#001080"> node</span><span style="color:#000000">.</span><span style="color:#001080">wordIndexes</span><span style="color:#000000">) {</span></span>
+<span class="line"><span style="color:#000000">                    positions[wordIndex].</span><span style="color:#795E26">add</span><span style="color:#000000">(start);</span></span>
+<span class="line"><span style="color:#000000">                }</span></span>
+<span class="line"><span style="color:#000000">            }</span></span>
+<span class="line"><span style="color:#000000">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#267F99">        int</span><span style="color:#000000">[][] </span><span style="color:#001080">answer</span><span style="color:#000000"> = </span><span style="color:#AF00DB">new</span><span style="color:#267F99"> int</span><span style="color:#000000">[</span><span style="color:#001080">smalls</span><span style="color:#000000">.</span><span style="color:#001080">length</span><span style="color:#000000">][];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">        for</span><span style="color:#000000"> (</span><span style="color:#267F99">int</span><span style="color:#001080"> index</span><span style="color:#000000"> = </span><span style="color:#098658">0</span><span style="color:#000000">; index &lt; </span><span style="color:#001080">smalls</span><span style="color:#000000">.</span><span style="color:#001080">length</span><span style="color:#000000">; index++) {</span></span>
+<span class="line"><span style="color:#000000">            answer[index] = </span><span style="color:#AF00DB">new</span><span style="color:#267F99"> int</span><span style="color:#000000">[positions[index].</span><span style="color:#795E26">size</span><span style="color:#000000">()];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">            for</span><span style="color:#000000"> (</span><span style="color:#267F99">int</span><span style="color:#001080"> pos</span><span style="color:#000000"> = </span><span style="color:#098658">0</span><span style="color:#000000">; pos &lt; positions[index].</span><span style="color:#795E26">size</span><span style="color:#000000">(); pos++) {</span></span>
+<span class="line"><span style="color:#000000">                answer[index][pos] = positions[index].</span><span style="color:#795E26">get</span><span style="color:#000000">(pos);</span></span>
+<span class="line"><span style="color:#000000">            }</span></span>
+<span class="line"><span style="color:#000000">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">        return</span><span style="color:#000000"> answer;</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#0000FF">    private</span><span style="color:#267F99"> void</span><span style="color:#795E26"> insert</span><span style="color:#000000">(</span><span style="color:#267F99">TrieNode</span><span style="color:#001080"> root</span><span style="color:#000000">, </span><span style="color:#267F99">String</span><span style="color:#001080"> word</span><span style="color:#000000">, </span><span style="color:#267F99">int</span><span style="color:#001080"> wordIndex</span><span style="color:#000000">) {</span></span>
+<span class="line"><span style="color:#267F99">        TrieNode</span><span style="color:#001080"> node</span><span style="color:#000000"> = root;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">        for</span><span style="color:#000000"> (</span><span style="color:#267F99">int</span><span style="color:#001080"> pos</span><span style="color:#000000"> = </span><span style="color:#098658">0</span><span style="color:#000000">; pos &lt; </span><span style="color:#001080">word</span><span style="color:#000000">.</span><span style="color:#795E26">length</span><span style="color:#000000">(); pos++) {</span></span>
+<span class="line"><span style="color:#267F99">            int</span><span style="color:#001080"> childIndex</span><span style="color:#000000"> = </span><span style="color:#001080">word</span><span style="color:#000000">.</span><span style="color:#795E26">charAt</span><span style="color:#000000">(pos) - </span><span style="color:#A31515">'a'</span><span style="color:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">            if</span><span style="color:#000000"> (</span><span style="color:#001080">node</span><span style="color:#000000">.</span><span style="color:#001080">children</span><span style="color:#000000">[childIndex] == </span><span style="color:#0000FF">null</span><span style="color:#000000">) {</span></span>
+<span class="line"><span style="color:#001080">                node</span><span style="color:#000000">.</span><span style="color:#001080">children</span><span style="color:#000000">[childIndex] = </span><span style="color:#AF00DB">new</span><span style="color:#795E26"> TrieNode</span><span style="color:#000000">();</span></span>
+<span class="line"><span style="color:#000000">            }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#000000">            node = </span><span style="color:#001080">node</span><span style="color:#000000">.</span><span style="color:#001080">children</span><span style="color:#000000">[childIndex];</span></span>
+<span class="line"><span style="color:#000000">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#001080">        node</span><span style="color:#000000">.</span><span style="color:#001080">wordIndexes</span><span style="color:#000000">.</span><span style="color:#795E26">add</span><span style="color:#000000">(wordIndex);</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#0000FF">    private</span><span style="color:#0000FF"> static</span><span style="color:#0000FF"> class</span><span style="color:#267F99"> TrieNode</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#0000FF">        private</span><span style="color:#267F99"> TrieNode</span><span style="color:#000000">[] </span><span style="color:#001080">children</span><span style="color:#000000"> = </span><span style="color:#AF00DB">new</span><span style="color:#267F99"> TrieNode</span><span style="color:#000000">[</span><span style="color:#098658">26</span><span style="color:#000000">];</span></span>
+<span class="line"><span style="color:#0000FF">        private</span><span style="color:#267F99"> List</span><span style="color:#000000">&lt;</span><span style="color:#267F99">Integer</span><span style="color:#000000">&gt; </span><span style="color:#001080">wordIndexes</span><span style="color:#000000"> = </span><span style="color:#AF00DB">new</span><span style="color:#267F99"> ArrayList</span><span style="color:#000000">&lt;&gt;();</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"></span></code></pre></div>
+
+<div class="language-go highlighter-shiki"><pre class="shiki light-plus" style="background-color:#FFFFFF;color:#000000" tabindex="0"><code><span class="line"><span style="color:#0000FF">type</span><span style="color:#267F99"> TrieNode</span><span style="color:#0000FF"> struct</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#001080">    children</span><span style="color:#000000">    [</span><span style="color:#098658">26</span><span style="color:#000000">]*</span><span style="color:#267F99">TrieNode</span></span>
+<span class="line"><span style="color:#001080">    wordIndexes</span><span style="color:#000000"> []</span><span style="color:#267F99">int</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#0000FF">func</span><span style="color:#795E26"> multiSearch</span><span style="color:#000000">(</span><span style="color:#001080">big</span><span style="color:#267F99"> string</span><span style="color:#000000">, </span><span style="color:#001080">smalls</span><span style="color:#000000"> []</span><span style="color:#267F99">string</span><span style="color:#000000">) [][]</span><span style="color:#267F99">int</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#001080">    root</span><span style="color:#000000"> := &amp;</span><span style="color:#267F99">TrieNode</span><span style="color:#000000">{}</span></span>
+<span class="line"><span style="color:#001080">    positions</span><span style="color:#000000"> := </span><span style="color:#795E26">make</span><span style="color:#000000">([][]</span><span style="color:#267F99">int</span><span style="color:#000000">, </span><span style="color:#795E26">len</span><span style="color:#000000">(</span><span style="color:#001080">smalls</span><span style="color:#000000">))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">    for</span><span style="color:#001080"> index</span><span style="color:#000000">, </span><span style="color:#001080">word</span><span style="color:#000000"> := </span><span style="color:#AF00DB">range</span><span style="color:#001080"> smalls</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#AF00DB">        if</span><span style="color:#795E26"> len</span><span style="color:#000000">(</span><span style="color:#001080">word</span><span style="color:#000000">) &gt; </span><span style="color:#098658">0</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#795E26">            insertWord</span><span style="color:#000000">(</span><span style="color:#001080">root</span><span style="color:#000000">, </span><span style="color:#001080">word</span><span style="color:#000000">, </span><span style="color:#001080">index</span><span style="color:#000000">)</span></span>
+<span class="line"><span style="color:#000000">        }</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">    for</span><span style="color:#001080"> start</span><span style="color:#000000"> := </span><span style="color:#098658">0</span><span style="color:#000000">; </span><span style="color:#001080">start</span><span style="color:#000000"> &lt; </span><span style="color:#795E26">len</span><span style="color:#000000">(</span><span style="color:#001080">big</span><span style="color:#000000">); </span><span style="color:#001080">start</span><span style="color:#000000">++ {</span></span>
+<span class="line"><span style="color:#001080">        node</span><span style="color:#000000"> := </span><span style="color:#001080">root</span></span>
+<span class="line"><span style="color:#AF00DB">        for</span><span style="color:#001080"> end</span><span style="color:#000000"> := </span><span style="color:#001080">start</span><span style="color:#000000">; </span><span style="color:#001080">end</span><span style="color:#000000"> &lt; </span><span style="color:#795E26">len</span><span style="color:#000000">(</span><span style="color:#001080">big</span><span style="color:#000000">); </span><span style="color:#001080">end</span><span style="color:#000000">++ {</span></span>
+<span class="line"><span style="color:#001080">            childIndex</span><span style="color:#000000"> := </span><span style="color:#267F99">int</span><span style="color:#000000">(</span><span style="color:#001080">big</span><span style="color:#000000">[</span><span style="color:#001080">end</span><span style="color:#000000">] - </span><span style="color:#A31515">'a'</span><span style="color:#000000">)</span></span>
+<span class="line"><span style="color:#AF00DB">            if</span><span style="color:#001080"> childIndex</span><span style="color:#000000"> &lt; </span><span style="color:#098658">0</span><span style="color:#000000"> || </span><span style="color:#001080">childIndex</span><span style="color:#000000"> &gt;= </span><span style="color:#098658">26</span><span style="color:#000000"> || </span><span style="color:#001080">node</span><span style="color:#000000">.</span><span style="color:#001080">children</span><span style="color:#000000">[</span><span style="color:#001080">childIndex</span><span style="color:#000000">] == </span><span style="color:#0000FF">nil</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#AF00DB">                break</span></span>
+<span class="line"><span style="color:#000000">            }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#001080">            node</span><span style="color:#000000"> = </span><span style="color:#001080">node</span><span style="color:#000000">.</span><span style="color:#001080">children</span><span style="color:#000000">[</span><span style="color:#001080">childIndex</span><span style="color:#000000">]</span></span>
+<span class="line"><span style="color:#AF00DB">            for</span><span style="color:#001080"> _</span><span style="color:#000000">, </span><span style="color:#001080">wordIndex</span><span style="color:#000000"> := </span><span style="color:#AF00DB">range</span><span style="color:#001080"> node</span><span style="color:#000000">.</span><span style="color:#001080">wordIndexes</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#001080">                positions</span><span style="color:#000000">[</span><span style="color:#001080">wordIndex</span><span style="color:#000000">] = </span><span style="color:#795E26">append</span><span style="color:#000000">(</span><span style="color:#001080">positions</span><span style="color:#000000">[</span><span style="color:#001080">wordIndex</span><span style="color:#000000">], </span><span style="color:#001080">start</span><span style="color:#000000">)</span></span>
+<span class="line"><span style="color:#000000">            }</span></span>
+<span class="line"><span style="color:#000000">        }</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">    return</span><span style="color:#001080"> positions</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#0000FF">func</span><span style="color:#795E26"> insertWord</span><span style="color:#000000">(</span><span style="color:#001080">root</span><span style="color:#000000"> *</span><span style="color:#267F99">TrieNode</span><span style="color:#000000">, </span><span style="color:#001080">word</span><span style="color:#267F99"> string</span><span style="color:#000000">, </span><span style="color:#001080">wordIndex</span><span style="color:#267F99"> int</span><span style="color:#000000">) {</span></span>
+<span class="line"><span style="color:#001080">    node</span><span style="color:#000000"> := </span><span style="color:#001080">root</span></span>
+<span class="line"><span style="color:#AF00DB">    for</span><span style="color:#001080"> pos</span><span style="color:#000000"> := </span><span style="color:#098658">0</span><span style="color:#000000">; </span><span style="color:#001080">pos</span><span style="color:#000000"> &lt; </span><span style="color:#795E26">len</span><span style="color:#000000">(</span><span style="color:#001080">word</span><span style="color:#000000">); </span><span style="color:#001080">pos</span><span style="color:#000000">++ {</span></span>
+<span class="line"><span style="color:#001080">        childIndex</span><span style="color:#000000"> := </span><span style="color:#267F99">int</span><span style="color:#000000">(</span><span style="color:#001080">word</span><span style="color:#000000">[</span><span style="color:#001080">pos</span><span style="color:#000000">] - </span><span style="color:#A31515">'a'</span><span style="color:#000000">)</span></span>
+<span class="line"><span style="color:#AF00DB">        if</span><span style="color:#001080"> node</span><span style="color:#000000">.</span><span style="color:#001080">children</span><span style="color:#000000">[</span><span style="color:#001080">childIndex</span><span style="color:#000000">] == </span><span style="color:#0000FF">nil</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#001080">            node</span><span style="color:#000000">.</span><span style="color:#001080">children</span><span style="color:#000000">[</span><span style="color:#001080">childIndex</span><span style="color:#000000">] = &amp;</span><span style="color:#267F99">TrieNode</span><span style="color:#000000">{}</span></span>
+<span class="line"><span style="color:#000000">        }</span></span>
+<span class="line"><span style="color:#001080">        node</span><span style="color:#000000"> = </span><span style="color:#001080">node</span><span style="color:#000000">.</span><span style="color:#001080">children</span><span style="color:#000000">[</span><span style="color:#001080">childIndex</span><span style="color:#000000">]</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"><span style="color:#001080">    node</span><span style="color:#000000">.</span><span style="color:#001080">wordIndexes</span><span style="color:#000000"> = </span><span style="color:#795E26">append</span><span style="color:#000000">(</span><span style="color:#001080">node</span><span style="color:#000000">.</span><span style="color:#001080">wordIndexes</span><span style="color:#000000">, </span><span style="color:#001080">wordIndex</span><span style="color:#000000">)</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"></span></code></pre></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(Q+S+B(\min(B,L)+1)+Z)$。<code>Q</code> 是短串数，<code>S</code> 是短串总字符数，<code>B</code> 是长串长度，<code>L</code> 是最长短串长度，<code>Z</code> 是输出下标总数。每个起点最多匹配最长模式长度，再做一次失败检查；记录与 Java 结果转换还需处理全部输出。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(Q+S+Z+1)$，用于结果槽位、Trie、根节点和全部匹配位置。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <p>[!green]</p>
+
+  <ul>
+    <li>Trie 共享短串前缀，终点原下标保证返回顺序对应 <code>smalls</code>。</li>
+    <li>命中短词后继续走，路径断开才结束当前起点。</li>
+    <li>枚举所有起点而非跳过已匹配区间，才能保留重叠出现。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <p>[!yellow]</p>
+
+  <ul>
+    <li>仅到达没有词终点标记的节点不能记录答案，路径存在不代表已经匹配完整词。</li>
+    <li>命中一个词就停止，会漏掉以它为前缀的更长词。</li>
+    <li>结果要记录 <code>start</code>，不是最后匹配到的 <code>end</code>。</li>
+    <li>空短串被跳过，不应通过根节点在每个位置重复登记。</li>
+    <li>不要按 Trie 或哈希表的遍历次序重排结果，结果槽位始终使用短串的原下标。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>关联与区别</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://hgnulb.github.io/blog/2026/63927217">208. 实现 Trie (前缀树)</a></td>
+      <td>中等</td>
+      <td>复用Trie的共享前缀，本题终点保存模式原下标并从长串所有起点扫描。</td>
+    </tr>
+    <tr>
+      <td><a href="https://hgnulb.github.io/blog/2026/38756017">212. 单词搜索 II</a></td>
+      <td>困难</td>
+      <td>同样用Trie同时匹配多个词，本题是一维长串连续向右，原题在网格上回溯。</td>
+    </tr>
+  </tbody>
+</table>
+<noscript>
+  <style>
+    .article-image.is-loading { width: var(--article-image-width, 100%); height: auto; }
+    .article-image.is-loading img { position: static; width: auto !important; height: auto !important; opacity: 1; pointer-events: auto; }
+    .article-image-spinner { display: none; }
+  </style>
+</noscript>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+            <a
+                class="post-navigation-link post-navigation-prev"
+                href="/blog/2026/47994041"
+                rel="prev"
+            >
+                <span class="post-navigation-label">
+                    <i class="theme-icon theme_arrow-left" aria-hidden="true"></i>上一页
+                </span>
+                <span class="post-navigation-title">LeetCode 面试题 17.16. 按摩师</span>
+            </a>
+        
+        
+            <a
+                class="post-navigation-link post-navigation-next"
+                href="/blog/2026/92742480"
+                rel="next"
+            >
+                <span class="post-navigation-label">
+                    下一页<i class="theme-icon theme_arrow-right" aria-hidden="true"></i>
+                </span>
+                <span class="post-navigation-title">LeetCode 面试题 17.20. 连续中值</span>
+            </a>
+        
+    </nav>
+</footer>
+
+    <section class="post-copyright" aria-labelledby="post-copyright-title">
+    <div class="post-copyright-title" id="post-copyright-title">转载与许可</div>
+    <div class="post-copyright-details">
+        <div class="post-copyright-author">
+            <strong class="post-copyright-meta">作者</strong>
+            <span class="post-copyright-content">
+                <a href="/blog/" rel="author">HGNULB</a>
+            </span>
+        </div>
+        <div class="post-copyright-type">
+            <strong class="post-copyright-meta">链接</strong>
+            <span class="post-copyright-content">
+                <a href="https://hgnulb.github.io/blog/2026/50735352">
+                    https://hgnulb.github.io/blog/2026/50735352
+                </a>
+            </span>
+        </div>
+        
+            <div class="post-copyright-notice">
+                <strong class="post-copyright-meta">许可</strong>
+                <span class="post-copyright-content">
+                    本博客所有文章除特别声明外，均采用 <a
+                        href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans"
+                        rel="license noopener noreferrer"
+                        target="_blank"
+                    >CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！
+                </span>
+            </div>
+        
+    </div>
+</section>
+
+  </div>
+</article>
+
+    </div>
+    
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button
+                class="sidebar-collapse-toggle"
+                type="button"
+                aria-label="收起文章目录"
+                title="收起文章目录"
+                aria-controls="sidebar-toc-content"
+                aria-expanded="true"
+                data-sidebar-toc-toggle
+            >
+                <i class="emoji xhs_emoji_xhs_38 toc-collapse-icon" aria-hidden="true"></i>
+                <i class="emoji nowcoder_emoji_nowcoder_7 toc-expand-icon" aria-hidden="true"></i>
+            </button>
+            
+    
+    
+    
+        <div class="sidebar-toc" id="sidebar-toc-content">
+            <div class="sidebar-toc-title">
+                <i class="theme-icon theme_book-open theme-icon-16 theme-icon-body" aria-hidden="true"></i>
+                <span>Table of contents</span>
+            </div>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法短串-trie--枚举长串起点">解法：短串 Trie + 枚举长串起点</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </div>
+    
+
+        </div>
+    </aside>
+
+
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">
+            Copyright ©2017-2026 <a
+                href="/blog/"
+            >走在修行的大街上</a> All rights reserved
+        </p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">
+                    本文阅读量<span id="busuanzi_value_page_pv"></span>次
+                </p>
+                <p id="busuanzi_container_site_pv">
+                    本站访问量<span id="busuanzi_value_site_pv"></span>次
+                </p>
+                <p id="busuanzi_container_site_uv">
+                    本站访客数<span id="busuanzi_value_site_uv"></span>人
+                </p>
+            </div>
+        
+    </div>
+    <button
+        class="back-to-top"
+        type="button"
+        aria-label="回到顶部"
+        title="返回顶部"
+    >
+        <i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i>
+    </button>
+</footer>
+
+</div>
+
+<script type="module" src="/blog/assets/js/blog.bundle.min.js?v=fc112b96164a"></script>
+
+
+  </body>
+</html>
