@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>LeetCode 968. 监控二叉树 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#faf9f5" name="theme-color" />
+<meta content="HGNULB,二叉树,动态规划,树,深度优先搜索" name="keywords" />
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="LeetCode 968. 监控二叉树" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="题目描述" />
+<meta name="twitter:description" property="og:description" content="题目描述" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2022/54402868" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2022/54402868" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-07-18T22:55:51+08:00" />
+<meta property="article:modified_time" content="2022-07-18T22:55:51+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="LeetCode 968. 监控二叉树" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2022-07-18T22:55:51+08:00","datePublished":"2022-07-18T22:55:51+08:00","description":"题目描述","headline":"LeetCode 968. 监控二叉树","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2022/54402868"},"url":"https://hgnulb.github.io/blog/2022/54402868"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="/blog/assets/images/theme/profile.jpg?v=04ad95c24d11" rel="icon" type="image/jpeg" />
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link href="/blog/assets/libs/modern-normalize.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=11499f9996a4" rel="stylesheet" type="text/css" />
+<meta
+  name="site-config"
+  content="[{&quot;name&quot;:&quot;LeetCode&quot;},{&quot;name&quot;:&quot;CodeTop&quot;},{&quot;name&quot;:&quot;简单&quot;},{&quot;name&quot;:&quot;中等&quot;},{&quot;name&quot;:&quot;困难&quot;},{&quot;name&quot;:&quot;CodeTop-I&quot;,&quot;display_name&quot;:&quot;已解决&quot;},{&quot;name&quot;:&quot;CodeTop-II&quot;,&quot;display_name&quot;:&quot;未解决&quot;},{&quot;name&quot;:&quot;已掌握&quot;},{&quot;name&quot;:&quot;需复习&quot;},{&quot;name&quot;:&quot;需加强&quot;},{&quot;name&quot;:&quot;未掌握&quot;},{&quot;name&quot;:&quot;历史考题&quot;},{&quot;name&quot;:&quot;补充题&quot;},{&quot;name&quot;:&quot;会员题&quot;},{&quot;name&quot;:&quot;L9&quot;,&quot;display_name&quot;:&quot;500+&quot;},{&quot;name&quot;:&quot;L8&quot;,&quot;display_name&quot;:&quot;200-500&quot;},{&quot;name&quot;:&quot;L7&quot;,&quot;display_name&quot;:&quot;100-200&quot;},{&quot;name&quot;:&quot;L6&quot;,&quot;display_name&quot;:&quot;50-100&quot;},{&quot;name&quot;:&quot;L5&quot;,&quot;display_name&quot;:&quot;20-50&quot;},{&quot;name&quot;:&quot;L4&quot;,&quot;display_name&quot;:&quot;10-20&quot;},{&quot;name&quot;:&quot;L3&quot;,&quot;display_name&quot;:&quot;5-10&quot;},{&quot;name&quot;:&quot;L2&quot;,&quot;display_name&quot;:&quot;2-5&quot;},{&quot;name&quot;:&quot;L1&quot;,&quot;display_name&quot;:&quot;1-2&quot;},{&quot;name&quot;:&quot;LeetCode 75&quot;},{&quot;name&quot;:&quot;LeetCode 热题 100&quot;},{&quot;name&quot;:&quot;面试经典 150 题&quot;},{&quot;name&quot;:&quot;119 经典题变种挑战&quot;},{&quot;name&quot;:&quot;剑指 Offer&quot;},{&quot;name&quot;:&quot;剑指 Offer（专项突击版）&quot;},{&quot;name&quot;:&quot;剑指 Offer（第 2 版）&quot;},{&quot;name&quot;:&quot;程序员面试金典（第 6 版）&quot;},{&quot;name&quot;:&quot;数据结构与算法&quot;},{&quot;name&quot;:&quot;工具&quot;},{&quot;name&quot;:&quot;Java 专题&quot;},{&quot;name&quot;:&quot;设计模式&quot;},{&quot;name&quot;:&quot;腾讯&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;字节跳动&quot;,&quot;display_name&quot;:&quot;字节&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;阿里巴巴&quot;,&quot;display_name&quot;:&quot;阿里&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;华为&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;微软&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;亚马逊&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;美团&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;拼多多&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;京东&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;小米&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;百度&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;网易&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;小红书&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;快手&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;蚂蚁集团&quot;,&quot;display_name&quot;:&quot;蚂蚁&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;滴滴&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;携程&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;哔哩哔哩&quot;,&quot;display_name&quot;:&quot;B站&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;虾皮&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;米哈游&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;联想&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;OPPO&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;vivo&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;海康威视&quot;,&quot;display_name&quot;:&quot;海康&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;顺丰&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;招商银行&quot;,&quot;display_name&quot;:&quot;招行&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;金山&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;BOSS直聘&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;贝壳&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;360&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;MiniMax&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;智谱&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;商汤&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;旷视&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;深信服&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;TP-LINK&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;爱奇艺&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;新浪&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;陌陌&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;度小满&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;猿辅导&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;作业帮&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;图森&quot;,&quot;group&quot;:&quot;company&quot;}]"
+  data-asset-prefix="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages"
+  data-search-url="/blog/posts.json"
+  data-search-not-found="抱歉，没有找到相关内容"
+/>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div
+    class="search-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-label="搜索文章"
+    aria-hidden="true"
+    inert
+>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索标题、标签、分类…</label>
+            <i class="theme-icon theme_magnifying-glass search-leading-icon theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+            <input
+                id="search-input"
+                aria-controls="results-container"
+                aria-describedby="search-status"
+                autocomplete="off"
+                autocapitalize="none"
+                data-1p-ignore="true"
+                data-bwignore="true"
+                data-form-type="other"
+                data-lpignore="true"
+                enterkeyhint="search"
+                inputmode="search"
+                name="site-search"
+                placeholder="搜索标题、标签、分类…"
+                role="searchbox"
+                spellcheck="false"
+                tabindex="-1"
+                type="search"
+            />
+            <button class="btn-close" type="button" aria-label="关闭搜索">
+                <i class="theme-icon theme_x" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="search-results">
+            <p class="search-status sr-only" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+<div id="page">
+  
+
+
+
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button
+                class="btn-menu"
+                type="button"
+                aria-label="打开菜单"
+                aria-expanded="false"
+                aria-controls="mobile-menu-panel"
+            >
+                <i class="theme-icon theme_list" aria-hidden="true"></i>
+            </button>
+            <a
+                class="logo-link"
+                href="/blog/"
+                title="笔记共 9 篇"
+                aria-label="走在修行的大街上 博客首页"
+            >
+                <img
+                    class="site-avatar"
+                    src="/blog/assets/images/theme/profile.jpg"
+                    alt=""
+                    width="36"
+                    height="36"
+                />
+                <span
+                    class="site-greeting"
+                    data-site-greeting
+                    data-blog-name="走在修行的大街上"
+                >
+                    <noscript>走在修行的大街上</noscript>
+                </span>
+                <script>
+  ;(function initSiteGreeting() {
+    const greeting = document.querySelector('[data-site-greeting]')
+    if (!greeting) return
+
+    const hour = new Date().getHours()
+    const salutation =
+      hour >= 5 && hour < 12
+        ? 'Good morning'
+        : hour >= 12 && hour < 18
+          ? 'Good afternoon'
+          : 'Good evening'
+
+    greeting.textContent = `${salutation}, ${greeting.dataset.blogName}`
+  })()
+</script>
+
+            </a>
+            <button
+                class="btn-search"
+                type="button"
+                aria-label="搜索"
+            >
+                <i class="theme-icon theme_magnifying-glass" aria-hidden="true"></i>
+            </button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link"
+                        href="/blog/"
+                        title="笔记共 9 篇"
+                    >
+                        <i class="theme-icon theme_books-outline" aria-hidden="true"></i>
+                        <span>笔记</span>
+                    </a>
+                </li>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link is-active"
+                        href="/blog/problems/" aria-current="page"
+                        title="题库共 1545 篇题解"
+                    >
+                        <i class="theme-icon theme_code" aria-hidden="true"></i>
+                        <span>题库</span>
+                    </a>
+                </li>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link"
+                        href="/blog/categories/"
+                        title="分类数 78"
+                    >
+                        <i class="theme-icon theme_folder-simple" aria-hidden="true"></i>
+                        <span>分类</span>
+                    </a>
+                </li>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link"
+                        href="/blog/tags/"
+                        title="标签数 109"
+                    >
+                        <i class="theme-icon theme_bookmark-simple" aria-hidden="true"></i>
+                        <span>标签</span>
+                    </a>
+                </li>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link"
+                        href="/blog/archives/"
+                        title="归档月数 79"
+                    >
+                        <i class="theme-icon theme_archive" aria-hidden="true"></i>
+                        <span>归档</span>
+                    </a>
+                </li>
+            
+            <li class="nav-search-item">
+                <button
+                    class="btn-search nav-search nav-link nav-search-trigger"
+                    type="button"
+                    aria-label="搜索文章"
+                    title="搜索文章（⌘K）"
+                >
+                    <i class="theme-icon theme_magnifying-glass theme-icon-16" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut" aria-label="Command + K">
+                        <i class="theme-icon theme_command theme-icon-14" aria-hidden="true"></i>
+                        <i class="theme-icon theme_letter-k theme-icon-14" aria-hidden="true"></i>
+                    </kbd>
+                </button>
+            </li>
+            <li>
+                <a
+                    class="nav-link nav-icon-link"
+                    href="https://github.com/hgnulb"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub（新窗口打开）"
+                    title="GitHub"
+                >
+                    <i class="theme-icon theme_github theme-icon-28" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+        <button
+            class="mobile-menu-backdrop"
+            type="button"
+            aria-label="关闭菜单"
+            tabindex="-1"
+            data-mobile-menu-backdrop
+        ></button>
+        <div
+            class="mobile-menu-panel"
+            id="mobile-menu-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="mobile-menu-title"
+            aria-hidden="true"
+            tabindex="-1"
+            inert
+        >
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a
+                    class="mobile-menu-profile-home"
+                    href="/blog/"
+                    aria-label="返回博客首页"
+                >
+                    <img
+                        class="mobile-menu-profile-avatar"
+                        src="/blog/assets/images/theme/profile.jpg"
+                        alt=""
+                        width="56"
+                        height="56"
+                    />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div>
+                        <dt>笔记</dt>
+                        <dd>
+                            <a
+                                href="/blog/"
+                                aria-label="查看 9 篇笔记"
+                            >9</a>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>题库</dt>
+                        <dd>
+                            <a
+                                href="/blog/problems/"
+                                aria-label="查看题库 1545 篇题解"
+                            >1545</a>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>分类</dt>
+                        <dd>
+                            <a
+                                href="/blog/categories/"
+                                aria-label="查看 78 个分类"
+                            >78</a>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>标签</dt>
+                        <dd>
+                            <a
+                                href="/blog/tags/"
+                                aria-label="查看 109 个标签"
+                            >109</a>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>归档</dt>
+                        <dd>
+                            <a
+                                href="/blog/archives/"
+                                aria-label="查看 79 个月的归档"
+                            >79</a>
+                        </dd>
+                    </div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航">
+                <ul>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link"
+                                href="/blog/"
+                            >
+                                
+                                    <i class="theme-icon theme_books-outline" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">笔记</span>
+                            </a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link is-active"
+                                href="/blog/problems/" aria-current="page"
+                            >
+                                
+                                    <i class="theme-icon theme_code" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">题库</span>
+                            </a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link"
+                                href="/blog/categories/"
+                            >
+                                
+                                    <i class="theme-icon theme_folder-simple" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">分类</span>
+                            </a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link"
+                                href="/blog/tags/"
+                            >
+                                
+                                    <i class="theme-icon theme_bookmark-simple" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">标签</span>
+                            </a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link"
+                                href="/blog/archives/"
+                            >
+                                
+                                    <i class="theme-icon theme_archive" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">归档</span>
+                            </a>
+                        </li>
+                    
+                    <li>
+                        <a
+                            class="nav-link"
+                            href="https://github.com/hgnulb"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="GitHub（新窗口打开）"
+                        >
+                            <i class="theme-icon theme_github" aria-hidden="true"></i>
+                            <span class="mobile-menu-link-label">GitHub</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>
+                关闭导航菜单
+            </button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="LeetCode 968. 监控二叉树">LeetCode 968. 监控二叉树</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="theme-icon theme_calendar-blank theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2022-07-18 22:55:51"
+                    datetime="2022-07-18T22:55:51+08:00"
+            >
+                2022-07-18
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="theme-icon theme_user theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1225 字 · 英文 19 词 · 代码 63 行 · 图片 2 张"
+            aria-label="预计阅读时间约 6 分钟，正文 1225 字 · 英文 19 词 · 代码 63 行 · 图片 2 张"
+        >
+            <i class="theme-icon theme_clock-countdown theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+            <span>约 6 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary class="post-meta-details-summary">
+                <span class="post-meta-details-heading">
+                    <span>文章信息</span>
+                    <span class="post-meta-details-count">
+                        7 个分类
+                        <span aria-hidden="true"> · </span>
+                        4 个标签
+                    </span>
+                </span>
+                <i class="theme-icon theme_caret-down post-meta-details-chevron theme-icon-12 theme-icon-muted" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="theme-icon theme_folder-simple theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/5493192774/" title="LeetCode">
+        LeetCode
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/3041435812/" title="CodeTop">
+        CodeTop
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0406920476/" title="困难">
+        困难
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/4011161834/" title="未解决">
+        未解决
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0238059382/" title="2-5">
+        2-5
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/1091248904/" title="字节">
+        字节
+    </a>
+
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/0175134788/" title="微软">
+        微软
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="theme-icon theme_bookmark-simple theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2065954540/" title="动态规划">
+        动态规划
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3318169077/" title="深度优先搜索">
+        深度优先搜索
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/2805463697/" title="树">
+        树
+    </a>
+
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/3241866243/" title="二叉树">
+        二叉树
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    <h2 id="题目描述">
+<a class="anchor" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>题目描述</h2>
+
+<blockquote>
+  <p>✅ <a href="https://leetcode.cn/problems/binary-tree-cameras/">968. 监控二叉树</a></p>
+</blockquote>
+
+<p><span class="article-image is-loading" style="--article-image-width: 2322px"><img src="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/post-list/image-20260928225419935.png" alt="image-20260928225419935" width="2322" height="1222" decoding="async" loading="eager"><span class="article-image-spinner theme-icon theme_loading theme-icon-20" role="progressbar" aria-label="图片加载中"></span></span></p>
+
+<p><span class="article-image is-loading" style="--article-image-width: 2322px"><img src="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/images/post-list/image-20260928225419939.png" alt="image-20260928225419939" width="2322" height="1397" decoding="async" loading="lazy"><span class="article-image-spinner theme-icon theme_loading theme-icon-20" role="progressbar" aria-label="图片加载中"></span></span></p>
+
+<h2 id="题意分析">
+<a class="anchor" href="#%E9%A2%98%E6%84%8F%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>题意分析</h2>
+
+<blockquote>
+  <p>在二叉树的一些节点上安装摄像头，使所有实际节点都被监控，求最少需要多少个。一个摄像头只能覆盖自己、父节点和直接孩子，不能覆盖兄弟节点或更远的后代。</p>
+
+  <p>被其他摄像头覆盖的节点，并不会因此继续向外提供覆盖。判断父节点是否需要安装时，必须区分孩子“已经被覆盖”和“自己装有摄像头”，只记录一个是否覆盖的布尔值不够。</p>
+</blockquote>
+
+<h2 id="解法后序贪心状态递归">
+<a class="anchor" href="#%E8%A7%A3%E6%B3%95%E5%90%8E%E5%BA%8F%E8%B4%AA%E5%BF%83%E7%8A%B6%E6%80%81%E9%80%92%E5%BD%92" aria-hidden="true"><span class="octicon octicon-link"></span></a>解法：后序贪心状态递归</h2>
+
+<h3 id="核心思路">
+<a class="anchor" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>核心思路</h3>
+
+<blockquote>
+  <p>[!blue]</p>
+
+  <p>从叶子向根处理。定义返回状态时，当前节点的所有严格后代都已经处理并覆盖，只有当前节点自身可能需要父层帮助。三个状态分别是：<code>NEED_COVER</code> 表示当前节点还未覆盖；<code>HAS_CAMERA</code> 表示当前节点已安装摄像头，能够覆盖父节点；<code>COVERED</code> 表示当前节点被孩子覆盖，但自己没有摄像头，不能帮助父节点。</p>
+
+  <p>如果任一孩子返回未覆盖，当前节点就安装摄像头。这个孩子的后代已经覆盖，新增设备是为了解决孩子本身；把这台设备放在当前父节点，可以同样覆盖它，还能覆盖父节点、另一孩子及更上一层。相比为未覆盖孩子单独放一台，并不会增加数量，也不会使已处理的后代失去覆盖，因此优先放在父层是安全的。</p>
+
+  <p>如果没有孩子未覆盖，但有孩子自己带摄像头，当前节点已经被它覆盖，无需再安装，返回 <code>COVERED</code>。如果两侧都已经覆盖却都没有摄像头，当前节点仍未覆盖；此时先不在这里安装，返回 <code>NEED_COVER</code>，把选择留给父节点，以便利用更高位置的一台摄像头同时解决更多尚未处理的节点。</p>
+
+  <p>必须先处理“存在未覆盖孩子”的情况。另一侧孩子上的摄像头只能覆盖它的父节点，无法横跨两条边覆盖兄弟，所以不能因为一侧有摄像头就忽略另一侧的需求。</p>
+
+  <p>空节点没有监控需求，视为 <code>COVERED</code>，也不提供摄像头。于是普通叶子会返回未覆盖，让父节点统一照顾；只有根没有父节点，遍历结束后若根仍未覆盖，就必须在根再补一台。</p>
+
+  <p>后序先解决最深的未覆盖需求，并在不增加设备数的前提下尽量把设备放高；不被迫安装时则等待父层。这个局部选择可以替换对应的更低放置而不损失必要覆盖，因此逐层累计得到最少摄像头数。</p>
+</blockquote>
+
+<h3 id="解题步骤">
+<a class="anchor" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>解题步骤</h3>
+
+<blockquote>
+  <ol>
+    <li>初始化摄像头数量为零，后序递归求左右孩子的状态；空节点返回已覆盖。</li>
+    <li>任一孩子未覆盖时，数量加一，返回当前有摄像头。</li>
+    <li>否则若任一孩子有摄像头，返回当前已覆盖但无摄像头。</li>
+    <li>其余情况返回当前未覆盖，等待父节点处理。</li>
+    <li>最后检查根状态，若仍未覆盖再增加一台；Java 每次公开调用先重置计数。</li>
+  </ol>
+</blockquote>
+
+<h3 id="代码实现">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码实现</h3>
+
+<div class="language-java highlighter-shiki"><pre class="shiki light-plus" style="background-color:#FFFFFF;color:#000000" tabindex="0"><code><span class="line"><span style="color:#0000FF">class</span><span style="color:#267F99"> Solution</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#0000FF">    private</span><span style="color:#0000FF"> static</span><span style="color:#0000FF"> final</span><span style="color:#267F99"> int</span><span style="color:#001080"> HAS_CAMERA</span><span style="color:#000000"> = </span><span style="color:#098658">0</span><span style="color:#000000">;</span></span>
+<span class="line"><span style="color:#0000FF">    private</span><span style="color:#0000FF"> static</span><span style="color:#0000FF"> final</span><span style="color:#267F99"> int</span><span style="color:#001080"> COVERED</span><span style="color:#000000"> = </span><span style="color:#098658">1</span><span style="color:#000000">;</span></span>
+<span class="line"><span style="color:#0000FF">    private</span><span style="color:#0000FF"> static</span><span style="color:#0000FF"> final</span><span style="color:#267F99"> int</span><span style="color:#001080"> NEED_COVER</span><span style="color:#000000"> = </span><span style="color:#098658">2</span><span style="color:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#0000FF">    private</span><span style="color:#267F99"> int</span><span style="color:#001080"> cameras</span><span style="color:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#0000FF">    public</span><span style="color:#267F99"> int</span><span style="color:#795E26"> minCameraCover</span><span style="color:#000000">(</span><span style="color:#267F99">TreeNode</span><span style="color:#001080"> root</span><span style="color:#000000">) {</span></span>
+<span class="line"><span style="color:#008000">        // 每次调用独立统计摄像头，不能沿用上次结果。</span></span>
+<span class="line"><span style="color:#000000">        cameras = </span><span style="color:#098658">0</span><span style="color:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#008000">        // 根没有父节点，必须自行补足覆盖。</span></span>
+<span class="line"><span style="color:#AF00DB">        if</span><span style="color:#000000"> (</span><span style="color:#795E26">dfs</span><span style="color:#000000">(root) == NEED_COVER) {</span></span>
+<span class="line"><span style="color:#000000">            cameras++;</span></span>
+<span class="line"><span style="color:#000000">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">        return</span><span style="color:#000000"> cameras;</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#0000FF">    private</span><span style="color:#267F99"> int</span><span style="color:#795E26"> dfs</span><span style="color:#000000">(</span><span style="color:#267F99">TreeNode</span><span style="color:#001080"> node</span><span style="color:#000000">) {</span></span>
+<span class="line"><span style="color:#AF00DB">        if</span><span style="color:#000000"> (node == </span><span style="color:#0000FF">null</span><span style="color:#000000">) {</span></span>
+<span class="line"><span style="color:#AF00DB">            return</span><span style="color:#000000"> COVERED;</span></span>
+<span class="line"><span style="color:#000000">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#267F99">        int</span><span style="color:#001080"> left</span><span style="color:#000000"> = </span><span style="color:#795E26">dfs</span><span style="color:#000000">(</span><span style="color:#001080">node</span><span style="color:#000000">.</span><span style="color:#001080">left</span><span style="color:#000000">);</span></span>
+<span class="line"><span style="color:#267F99">        int</span><span style="color:#001080"> right</span><span style="color:#000000"> = </span><span style="color:#795E26">dfs</span><span style="color:#000000">(</span><span style="color:#001080">node</span><span style="color:#000000">.</span><span style="color:#001080">right</span><span style="color:#000000">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#008000">        // 先满足未覆盖的孩子，另一侧摄像头不能代替当前节点。</span></span>
+<span class="line"><span style="color:#AF00DB">        if</span><span style="color:#000000"> (left == NEED_COVER || right == NEED_COVER) {</span></span>
+<span class="line"><span style="color:#000000">            cameras++;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">            return</span><span style="color:#000000"> HAS_CAMERA;</span></span>
+<span class="line"><span style="color:#000000">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">        if</span><span style="color:#000000"> (left == HAS_CAMERA || right == HAS_CAMERA) {</span></span>
+<span class="line"><span style="color:#AF00DB">            return</span><span style="color:#000000"> COVERED;</span></span>
+<span class="line"><span style="color:#000000">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#008000">        // 孩子都已覆盖但无摄像头，当前节点留给父层。</span></span>
+<span class="line"><span style="color:#AF00DB">        return</span><span style="color:#000000"> NEED_COVER;</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"></span></code></pre></div>
+
+<div class="language-go highlighter-shiki"><pre class="shiki light-plus" style="background-color:#FFFFFF;color:#000000" tabindex="0"><code><span class="line"><span style="color:#0000FF">func</span><span style="color:#795E26"> minCameraCover</span><span style="color:#000000">(</span><span style="color:#001080">root</span><span style="color:#000000"> *</span><span style="color:#267F99">TreeNode</span><span style="color:#000000">) </span><span style="color:#267F99">int</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#0000FF">    const</span><span style="color:#000000"> (</span></span>
+<span class="line"><span style="color:#0070C1">        hasCamera</span><span style="color:#000000"> = </span><span style="color:#098658">0</span></span>
+<span class="line"><span style="color:#0070C1">        covered</span><span style="color:#000000">   = </span><span style="color:#098658">1</span></span>
+<span class="line"><span style="color:#0070C1">        needCover</span><span style="color:#000000"> = </span><span style="color:#098658">2</span></span>
+<span class="line"><span style="color:#000000">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#001080">    cameras</span><span style="color:#000000"> := </span><span style="color:#098658">0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#0000FF">    var</span><span style="color:#001080"> dfs</span><span style="color:#0000FF"> func</span><span style="color:#000000">(</span><span style="color:#001080">node</span><span style="color:#000000"> *</span><span style="color:#267F99">TreeNode</span><span style="color:#000000">) </span><span style="color:#267F99">int</span></span>
+<span class="line"><span style="color:#001080">    dfs</span><span style="color:#000000"> = </span><span style="color:#0000FF">func</span><span style="color:#000000">(</span><span style="color:#001080">node</span><span style="color:#000000"> *</span><span style="color:#267F99">TreeNode</span><span style="color:#000000">) </span><span style="color:#267F99">int</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#AF00DB">        if</span><span style="color:#001080"> node</span><span style="color:#000000"> == </span><span style="color:#0000FF">nil</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#AF00DB">            return</span><span style="color:#001080"> covered</span></span>
+<span class="line"><span style="color:#000000">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#001080">        left</span><span style="color:#000000"> := </span><span style="color:#795E26">dfs</span><span style="color:#000000">(</span><span style="color:#001080">node</span><span style="color:#000000">.</span><span style="color:#001080">Left</span><span style="color:#000000">)</span></span>
+<span class="line"><span style="color:#001080">        right</span><span style="color:#000000"> := </span><span style="color:#795E26">dfs</span><span style="color:#000000">(</span><span style="color:#001080">node</span><span style="color:#000000">.</span><span style="color:#001080">Right</span><span style="color:#000000">)</span></span>
+<span class="line"><span style="color:#008000">        // 先满足未覆盖的孩子，另一侧摄像头不能代替当前节点。</span></span>
+<span class="line"><span style="color:#AF00DB">        if</span><span style="color:#001080"> left</span><span style="color:#000000"> == </span><span style="color:#001080">needCover</span><span style="color:#000000"> || </span><span style="color:#001080">right</span><span style="color:#000000"> == </span><span style="color:#001080">needCover</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#001080">            cameras</span><span style="color:#000000">++</span></span>
+<span class="line"><span style="color:#AF00DB">            return</span><span style="color:#001080"> hasCamera</span></span>
+<span class="line"><span style="color:#000000">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">        if</span><span style="color:#001080"> left</span><span style="color:#000000"> == </span><span style="color:#001080">hasCamera</span><span style="color:#000000"> || </span><span style="color:#001080">right</span><span style="color:#000000"> == </span><span style="color:#001080">hasCamera</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#AF00DB">            return</span><span style="color:#001080"> covered</span></span>
+<span class="line"><span style="color:#000000">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#008000">        // 孩子都已覆盖但无摄像头，当前节点留给父层。</span></span>
+<span class="line"><span style="color:#AF00DB">        return</span><span style="color:#001080"> needCover</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#008000">    // 根没有父节点，必须自行补足覆盖。</span></span>
+<span class="line"><span style="color:#AF00DB">    if</span><span style="color:#795E26"> dfs</span><span style="color:#000000">(</span><span style="color:#001080">root</span><span style="color:#000000">) == </span><span style="color:#001080">needCover</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#001080">        cameras</span><span style="color:#000000">++</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AF00DB">    return</span><span style="color:#001080"> cameras</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"></span></code></pre></div>
+
+<h3 id="复杂度分析">
+<a class="anchor" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>复杂度分析</h3>
+
+<blockquote>
+  <ul>
+    <li>
+<strong>时间复杂度</strong>：$O(n)$，每个节点后序访问一次，只根据两个孩子的状态做常量判断。</li>
+    <li>
+<strong>空间复杂度</strong>：$O(h)$，保存高度为 <code>h</code> 的递归调用栈，最坏为 $O(n)$。</li>
+  </ul>
+</blockquote>
+
+<h3 id="关键点总结">
+<a class="anchor" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>关键点总结</h3>
+
+<blockquote>
+  <p>[!green]</p>
+
+  <ul>
+    <li>返回状态只描述当前节点，严格后代的监控需求已经处理完毕。</li>
+    <li>未覆盖孩子要求优先响应，一个父节点的摄像头可以同时满足两个孩子的需求。</li>
+    <li>已覆盖不等于拥有摄像头，只有后者能够继续覆盖父节点。</li>
+    <li>根没有父层可等待，必须在递归结束后单独补足。</li>
+  </ul>
+</blockquote>
+
+<h2 id="易错点总结">
+<a class="anchor" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>易错点总结</h2>
+
+<blockquote>
+  <p>[!yellow]</p>
+
+  <ul>
+    <li>先判断有摄像头的孩子，会掩盖另一侧未覆盖孩子的需求，误以为兄弟之间可以互相覆盖。</li>
+    <li>把空节点设为未覆盖，会迫使叶子安装并不需要的摄像头。</li>
+    <li>将已覆盖无摄像头和有摄像头合并成一种状态，父层无法判断自己是否被覆盖。</li>
+    <li>忘记根的最后检查，会让需要父层帮助的根始终漏监控，单节点树尤其明显。</li>
+    <li>Java 复用对象时不重置成员计数，会把前一次调用的结果带入新计算。</li>
+  </ul>
+</blockquote>
+
+<h2 id="相似题目">
+<a class="anchor" href="#%E7%9B%B8%E4%BC%BC%E9%A2%98%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>相似题目</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>题目</th>
+      <th>难度</th>
+      <th>关联与区别</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://hgnulb.github.io/blog/2026/99943604">337. 打家劫舍 III</a></td>
+      <td>中等</td>
+      <td>同样后序决定节点是否放置设备或被选择，本题还必须区分已覆盖与等待父节点覆盖的状态。</td>
+    </tr>
+  </tbody>
+</table>
+<noscript>
+  <style>
+    .article-image.is-loading { width: var(--article-image-width, 100%); height: auto; }
+    .article-image.is-loading img { position: static; width: auto !important; height: auto !important; opacity: 1; pointer-events: auto; }
+    .article-image-spinner { display: none; }
+  </style>
+</noscript>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+            <a
+                class="post-navigation-link post-navigation-prev"
+                href="/blog/2022/68408313"
+                rel="prev"
+            >
+                <span class="post-navigation-label">
+                    <i class="theme-icon theme_arrow-left" aria-hidden="true"></i>上一页
+                </span>
+                <span class="post-navigation-title">LeetCode 面试题 16.16. 部分排序</span>
+            </a>
+        
+        
+            <a
+                class="post-navigation-link post-navigation-next"
+                href="/blog/2022/47978640"
+                rel="next"
+            >
+                <span class="post-navigation-label">
+                    下一页<i class="theme-icon theme_arrow-right" aria-hidden="true"></i>
+                </span>
+                <span class="post-navigation-title">LeetCode 922. 按奇偶排序数组 II</span>
+            </a>
+        
+    </nav>
+</footer>
+
+    <section class="post-copyright" aria-labelledby="post-copyright-title">
+    <div class="post-copyright-title" id="post-copyright-title">转载与许可</div>
+    <div class="post-copyright-details">
+        <div class="post-copyright-author">
+            <strong class="post-copyright-meta">作者</strong>
+            <span class="post-copyright-content">
+                <a href="/blog/" rel="author">HGNULB</a>
+            </span>
+        </div>
+        <div class="post-copyright-type">
+            <strong class="post-copyright-meta">链接</strong>
+            <span class="post-copyright-content">
+                <a href="https://hgnulb.github.io/blog/2022/54402868">
+                    https://hgnulb.github.io/blog/2022/54402868
+                </a>
+            </span>
+        </div>
+        
+            <div class="post-copyright-notice">
+                <strong class="post-copyright-meta">许可</strong>
+                <span class="post-copyright-content">
+                    本博客所有文章除特别声明外，均采用 <a
+                        href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans"
+                        rel="license noopener noreferrer"
+                        target="_blank"
+                    >CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！
+                </span>
+            </div>
+        
+    </div>
+</section>
+
+  </div>
+</article>
+
+    </div>
+    
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button
+                class="sidebar-collapse-toggle"
+                type="button"
+                aria-label="收起文章目录"
+                title="收起文章目录"
+                aria-controls="sidebar-toc-content"
+                aria-expanded="true"
+                data-sidebar-toc-toggle
+            >
+                <i class="emoji xhs_emoji_xhs_38 toc-collapse-icon" aria-hidden="true"></i>
+                <i class="emoji nowcoder_emoji_nowcoder_7 toc-expand-icon" aria-hidden="true"></i>
+            </button>
+            
+    
+    
+    
+        <div class="sidebar-toc" id="sidebar-toc-content">
+            <div class="sidebar-toc-title">
+                <i class="theme-icon theme_book-open theme-icon-16 theme-icon-body" aria-hidden="true"></i>
+                <span>Table of contents</span>
+            </div>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题目描述">题目描述</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#题意分析">题意分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#解法后序贪心状态递归">解法：后序贪心状态递归</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#核心思路">核心思路</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#解题步骤">解题步骤</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#代码实现">代码实现</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#复杂度分析">复杂度分析</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#关键点总结">关键点总结</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#易错点总结">易错点总结</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#相似题目">相似题目</a></li>
+</ol></nav>
+        </div>
+    
+
+        </div>
+    </aside>
+
+
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">
+            Copyright ©2017-2026 <a
+                href="/blog/"
+            >走在修行的大街上</a> All rights reserved
+        </p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">
+                    本文阅读量<span id="busuanzi_value_page_pv"></span>次
+                </p>
+                <p id="busuanzi_container_site_pv">
+                    本站访问量<span id="busuanzi_value_site_pv"></span>次
+                </p>
+                <p id="busuanzi_container_site_uv">
+                    本站访客数<span id="busuanzi_value_site_uv"></span>人
+                </p>
+            </div>
+        
+    </div>
+    <button
+        class="back-to-top"
+        type="button"
+        aria-label="回到顶部"
+        title="返回顶部"
+    >
+        <i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i>
+    </button>
+</footer>
+
+</div>
+
+<script type="module" src="/blog/assets/js/blog.bundle.min.js?v=fc112b96164a"></script>
+
+
+  </body>
+</html>

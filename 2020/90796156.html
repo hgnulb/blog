@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    
+    <title>Java 中方法重写与方法重载的区别 | 走在修行的大街上</title>
+    <meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content="#faf9f5" name="theme-color" />
+<meta content="HGNULB,Java 基础" name="keywords" />
+
+<!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Java 中方法重写与方法重载的区别" />
+<meta name="author" content="HGNULB" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="Java 中方法重写与方法重载的区别" />
+<meta name="twitter:description" property="og:description" content="Java 中方法重写与方法重载的区别" />
+<link rel="canonical" href="https://hgnulb.github.io/blog/2020/90796156" />
+<meta property="og:url" content="https://hgnulb.github.io/blog/2020/90796156" />
+<meta property="og:site_name" content="走在修行的大街上" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-12T16:19:26+08:00" />
+<meta property="article:modified_time" content="2020-05-12T16:19:26+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Java 中方法重写与方法重载的区别" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"HGNULB"},"dateModified":"2020-05-12T16:19:26+08:00","datePublished":"2020-05-12T16:19:26+08:00","description":"Java 中方法重写与方法重载的区别","headline":"Java 中方法重写与方法重载的区别","mainEntityOfPage":{"@type":"WebPage","@id":"https://hgnulb.github.io/blog/2020/90796156"},"url":"https://hgnulb.github.io/blog/2020/90796156"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="/blog/assets/images/theme/profile.jpg?v=04ad95c24d11" rel="icon" type="image/jpeg" />
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages/assets/libs/fonts/anthropic/AnthropicSerifVariable-Text.woff2" as="font" type="font/woff2" crossorigin />
+<link href="/blog/assets/libs/modern-normalize.css" rel="stylesheet" />
+<link href="/blog/assets/css/blog.css?v=11499f9996a4" rel="stylesheet" type="text/css" />
+<meta
+  name="site-config"
+  content="[{&quot;name&quot;:&quot;LeetCode&quot;},{&quot;name&quot;:&quot;CodeTop&quot;},{&quot;name&quot;:&quot;简单&quot;},{&quot;name&quot;:&quot;中等&quot;},{&quot;name&quot;:&quot;困难&quot;},{&quot;name&quot;:&quot;CodeTop-I&quot;,&quot;display_name&quot;:&quot;已解决&quot;},{&quot;name&quot;:&quot;CodeTop-II&quot;,&quot;display_name&quot;:&quot;未解决&quot;},{&quot;name&quot;:&quot;已掌握&quot;},{&quot;name&quot;:&quot;需复习&quot;},{&quot;name&quot;:&quot;需加强&quot;},{&quot;name&quot;:&quot;未掌握&quot;},{&quot;name&quot;:&quot;历史考题&quot;},{&quot;name&quot;:&quot;补充题&quot;},{&quot;name&quot;:&quot;会员题&quot;},{&quot;name&quot;:&quot;L9&quot;,&quot;display_name&quot;:&quot;500+&quot;},{&quot;name&quot;:&quot;L8&quot;,&quot;display_name&quot;:&quot;200-500&quot;},{&quot;name&quot;:&quot;L7&quot;,&quot;display_name&quot;:&quot;100-200&quot;},{&quot;name&quot;:&quot;L6&quot;,&quot;display_name&quot;:&quot;50-100&quot;},{&quot;name&quot;:&quot;L5&quot;,&quot;display_name&quot;:&quot;20-50&quot;},{&quot;name&quot;:&quot;L4&quot;,&quot;display_name&quot;:&quot;10-20&quot;},{&quot;name&quot;:&quot;L3&quot;,&quot;display_name&quot;:&quot;5-10&quot;},{&quot;name&quot;:&quot;L2&quot;,&quot;display_name&quot;:&quot;2-5&quot;},{&quot;name&quot;:&quot;L1&quot;,&quot;display_name&quot;:&quot;1-2&quot;},{&quot;name&quot;:&quot;LeetCode 75&quot;},{&quot;name&quot;:&quot;LeetCode 热题 100&quot;},{&quot;name&quot;:&quot;面试经典 150 题&quot;},{&quot;name&quot;:&quot;119 经典题变种挑战&quot;},{&quot;name&quot;:&quot;剑指 Offer&quot;},{&quot;name&quot;:&quot;剑指 Offer（专项突击版）&quot;},{&quot;name&quot;:&quot;剑指 Offer（第 2 版）&quot;},{&quot;name&quot;:&quot;程序员面试金典（第 6 版）&quot;},{&quot;name&quot;:&quot;数据结构与算法&quot;},{&quot;name&quot;:&quot;工具&quot;},{&quot;name&quot;:&quot;Java 专题&quot;},{&quot;name&quot;:&quot;设计模式&quot;},{&quot;name&quot;:&quot;腾讯&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;字节跳动&quot;,&quot;display_name&quot;:&quot;字节&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;阿里巴巴&quot;,&quot;display_name&quot;:&quot;阿里&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;华为&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;微软&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;亚马逊&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;美团&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;拼多多&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;京东&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;小米&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;百度&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;网易&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;小红书&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;快手&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;蚂蚁集团&quot;,&quot;display_name&quot;:&quot;蚂蚁&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;滴滴&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;携程&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;哔哩哔哩&quot;,&quot;display_name&quot;:&quot;B站&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;虾皮&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;米哈游&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;联想&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;OPPO&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;vivo&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;海康威视&quot;,&quot;display_name&quot;:&quot;海康&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;顺丰&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;招商银行&quot;,&quot;display_name&quot;:&quot;招行&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;金山&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;BOSS直聘&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;贝壳&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;360&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;MiniMax&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;智谱&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;商汤&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;旷视&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;深信服&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;TP-LINK&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;爱奇艺&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;新浪&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;陌陌&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;度小满&quot;,&quot;group&quot;:&quot;company&quot;,&quot;default_sort&quot;:&quot;date&quot;},{&quot;name&quot;:&quot;猿辅导&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;作业帮&quot;,&quot;group&quot;:&quot;company&quot;},{&quot;name&quot;:&quot;图森&quot;,&quot;group&quot;:&quot;company&quot;}]"
+  data-asset-prefix="https://cdn.jsdelivr.net/gh/hgnulb/blog@gh-pages"
+  data-search-url="/blog/posts.json"
+  data-search-not-found="抱歉，没有找到相关内容"
+/>
+
+  </head>
+  
+  
+  <body class="has-sidebar-toc">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<div
+    class="search-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-label="搜索文章"
+    aria-hidden="true"
+    inert
+>
+    <div class="search-modal-content" role="document">
+        <div class="search-control">
+            <label class="sr-only" for="search-input">搜索标题、标签、分类…</label>
+            <i class="theme-icon theme_magnifying-glass search-leading-icon theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+            <input
+                id="search-input"
+                aria-controls="results-container"
+                aria-describedby="search-status"
+                autocomplete="off"
+                autocapitalize="none"
+                data-1p-ignore="true"
+                data-bwignore="true"
+                data-form-type="other"
+                data-lpignore="true"
+                enterkeyhint="search"
+                inputmode="search"
+                name="site-search"
+                placeholder="搜索标题、标签、分类…"
+                role="searchbox"
+                spellcheck="false"
+                tabindex="-1"
+                type="search"
+            />
+            <button class="btn-close" type="button" aria-label="关闭搜索">
+                <i class="theme-icon theme_x" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="search-results">
+            <p class="search-status sr-only" id="search-status" aria-live="polite" aria-atomic="true"></p>
+            <ul id="results-container" aria-label="搜索结果"></ul>
+        </div>
+    </div>
+</div>
+
+<div id="page">
+  
+
+
+
+
+<header class="site-header">
+    <nav class="nav-global">
+        <div class="logo">
+            <button
+                class="btn-menu"
+                type="button"
+                aria-label="打开菜单"
+                aria-expanded="false"
+                aria-controls="mobile-menu-panel"
+            >
+                <i class="theme-icon theme_list" aria-hidden="true"></i>
+            </button>
+            <a
+                class="logo-link"
+                href="/blog/"
+                title="笔记共 9 篇"
+                aria-label="走在修行的大街上 博客首页"
+            >
+                <img
+                    class="site-avatar"
+                    src="/blog/assets/images/theme/profile.jpg"
+                    alt=""
+                    width="36"
+                    height="36"
+                />
+                <span
+                    class="site-greeting"
+                    data-site-greeting
+                    data-blog-name="走在修行的大街上"
+                >
+                    <noscript>走在修行的大街上</noscript>
+                </span>
+                <script>
+  ;(function initSiteGreeting() {
+    const greeting = document.querySelector('[data-site-greeting]')
+    if (!greeting) return
+
+    const hour = new Date().getHours()
+    const salutation =
+      hour >= 5 && hour < 12
+        ? 'Good morning'
+        : hour >= 12 && hour < 18
+          ? 'Good afternoon'
+          : 'Good evening'
+
+    greeting.textContent = `${salutation}, ${greeting.dataset.blogName}`
+  })()
+</script>
+
+            </a>
+            <button
+                class="btn-search"
+                type="button"
+                aria-label="搜索"
+            >
+                <i class="theme-icon theme_magnifying-glass" aria-hidden="true"></i>
+            </button>
+        </div>
+        <ul>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link is-active"
+                        href="/blog/" aria-current="page"
+                        title="笔记共 9 篇"
+                    >
+                        <i class="theme-icon theme_books-outline" aria-hidden="true"></i>
+                        <span>笔记</span>
+                    </a>
+                </li>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link"
+                        href="/blog/problems/"
+                        title="题库共 1545 篇题解"
+                    >
+                        <i class="theme-icon theme_code" aria-hidden="true"></i>
+                        <span>题库</span>
+                    </a>
+                </li>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link"
+                        href="/blog/categories/"
+                        title="分类数 78"
+                    >
+                        <i class="theme-icon theme_folder-simple" aria-hidden="true"></i>
+                        <span>分类</span>
+                    </a>
+                </li>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link"
+                        href="/blog/tags/"
+                        title="标签数 109"
+                    >
+                        <i class="theme-icon theme_bookmark-simple" aria-hidden="true"></i>
+                        <span>标签</span>
+                    </a>
+                </li>
+            
+                
+                
+                
+                
+                <li>
+                    <a
+                        class="nav-link"
+                        href="/blog/archives/"
+                        title="归档月数 79"
+                    >
+                        <i class="theme-icon theme_archive" aria-hidden="true"></i>
+                        <span>归档</span>
+                    </a>
+                </li>
+            
+            <li class="nav-search-item">
+                <button
+                    class="btn-search nav-search nav-link nav-search-trigger"
+                    type="button"
+                    aria-label="搜索文章"
+                    title="搜索文章（⌘K）"
+                >
+                    <i class="theme-icon theme_magnifying-glass theme-icon-16" aria-hidden="true"></i>
+                    <span class="nav-search-label">搜索...</span>
+                    <kbd class="nav-search-shortcut" aria-label="Command + K">
+                        <i class="theme-icon theme_command theme-icon-14" aria-hidden="true"></i>
+                        <i class="theme-icon theme_letter-k theme-icon-14" aria-hidden="true"></i>
+                    </kbd>
+                </button>
+            </li>
+            <li>
+                <a
+                    class="nav-link nav-icon-link"
+                    href="https://github.com/hgnulb"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub（新窗口打开）"
+                    title="GitHub"
+                >
+                    <i class="theme-icon theme_github theme-icon-28" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+        <button
+            class="mobile-menu-backdrop"
+            type="button"
+            aria-label="关闭菜单"
+            tabindex="-1"
+            data-mobile-menu-backdrop
+        ></button>
+        <div
+            class="mobile-menu-panel"
+            id="mobile-menu-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="mobile-menu-title"
+            aria-hidden="true"
+            tabindex="-1"
+            inert
+        >
+            <section class="mobile-menu-profile" aria-labelledby="mobile-menu-title">
+                <a
+                    class="mobile-menu-profile-home"
+                    href="/blog/"
+                    aria-label="返回博客首页"
+                >
+                    <img
+                        class="mobile-menu-profile-avatar"
+                        src="/blog/assets/images/theme/profile.jpg"
+                        alt=""
+                        width="56"
+                        height="56"
+                    />
+                </a>
+                <div class="mobile-menu-identity">
+                    <p class="mobile-menu-title" id="mobile-menu-title">走在修行的大街上</p>
+                    <p class="mobile-menu-handle">@hgnulb</p>
+                    <p class="mobile-menu-signature">选择比努力更重要，观念比选择更重要。</p>
+                </div>
+                <dl class="mobile-menu-stats" aria-label="博客统计">
+                    <div>
+                        <dt>笔记</dt>
+                        <dd>
+                            <a
+                                href="/blog/"
+                                aria-label="查看 9 篇笔记"
+                            >9</a>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>题库</dt>
+                        <dd>
+                            <a
+                                href="/blog/problems/"
+                                aria-label="查看题库 1545 篇题解"
+                            >1545</a>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>分类</dt>
+                        <dd>
+                            <a
+                                href="/blog/categories/"
+                                aria-label="查看 78 个分类"
+                            >78</a>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>标签</dt>
+                        <dd>
+                            <a
+                                href="/blog/tags/"
+                                aria-label="查看 109 个标签"
+                            >109</a>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>归档</dt>
+                        <dd>
+                            <a
+                                href="/blog/archives/"
+                                aria-label="查看 79 个月的归档"
+                            >79</a>
+                        </dd>
+                    </div>
+                </dl>
+            </section>
+            <nav class="mobile-menu-links" aria-label="移动端导航">
+                <ul>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link is-active"
+                                href="/blog/" aria-current="page"
+                            >
+                                
+                                    <i class="theme-icon theme_books-outline" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">笔记</span>
+                            </a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link"
+                                href="/blog/problems/"
+                            >
+                                
+                                    <i class="theme-icon theme_code" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">题库</span>
+                            </a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link"
+                                href="/blog/categories/"
+                            >
+                                
+                                    <i class="theme-icon theme_folder-simple" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">分类</span>
+                            </a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link"
+                                href="/blog/tags/"
+                            >
+                                
+                                    <i class="theme-icon theme_bookmark-simple" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">标签</span>
+                            </a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a
+                                class="nav-link"
+                                href="/blog/archives/"
+                            >
+                                
+                                    <i class="theme-icon theme_archive" aria-hidden="true"></i>
+                                
+                                <span class="mobile-menu-link-label">归档</span>
+                            </a>
+                        </li>
+                    
+                    <li>
+                        <a
+                            class="nav-link"
+                            href="https://github.com/hgnulb"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="GitHub（新窗口打开）"
+                        >
+                            <i class="theme-icon theme_github" aria-hidden="true"></i>
+                            <span class="mobile-menu-link-label">GitHub</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-close sr-only" type="button" data-mobile-menu-close>
+                关闭导航菜单
+            </button>
+        </div>
+    </nav>
+</header>
+
+  <main class="body" id="main-content" tabindex="-1">
+    <div class="main-content">
+      
+<article class="article-body layout-article">
+  <div class="article-inner">
+    <header class="page-header">
+      <h1 class="entry-title" data-title="Java 中方法重写与方法重载的区别">Java 中方法重写与方法重载的区别</h1>
+    </header>
+    <div class="meta">
+    <section class="post-date-publish" aria-label="文章发布信息">
+        <span class="post-meta-pill post-meta-published">
+            <i class="theme-icon theme_calendar-blank theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+            <time
+                    class="date-pub updated"
+                    title="2020-05-12 16:19:26"
+                    datetime="2020-05-12T16:19:26+08:00"
+            >
+                2020-05-12
+            </time>
+        </span>
+        <span class="post-meta-pill post-meta-author">
+            <i class="theme-icon theme_user theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+            <a class="author" href="/blog/" rel="author">
+                HGNULB
+            </a>
+        </span>
+        
+    
+    
+    
+    
+        <span
+            class="post-meta-pill post-meta-reading-time"
+            title="正文 1631 字 · 英文 73 词 · 代码 85 行"
+            aria-label="预计阅读时间约 7 分钟，正文 1631 字 · 英文 73 词 · 代码 85 行"
+        >
+            <i class="theme-icon theme_clock-countdown theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+            <span>约 7 分钟</span>
+        </span>
+    
+
+
+    </section>
+    
+        <details class="post-meta-details">
+            <summary class="post-meta-details-summary">
+                <span class="post-meta-details-heading">
+                    <span>文章信息</span>
+                    <span class="post-meta-details-count">
+                        1 个分类
+                        <span aria-hidden="true"> · </span>
+                        1 个标签
+                    </span>
+                </span>
+                <i class="theme-icon theme_caret-down post-meta-details-chevron theme-icon-12 theme-icon-muted" aria-hidden="true"></i>
+            </summary>
+            <div class="post-meta-details-content">
+                
+                    
+
+
+
+
+
+
+                    <div class="post-list-category post-list-linear">
+                        <div class="post-list-head">
+                            <i class="theme-icon theme_folder-simple theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+                            分类
+                        </div>
+                        <div class="post-meta-badges" id="categories-main">
+                            
+    
+    
+
+    
+    
+
+    <a class="post-meta-badge" href="/blog/categories/7502060927/" title="Java 专题">
+        Java 专题
+    </a>
+
+
+                        </div>
+                    </div>
+                
+                
+                    
+
+
+
+
+
+                    <div class="post-list-tag post-list-linear">
+                        <div class="post-list-head">
+                            <i class="theme-icon theme_bookmark-simple theme-icon-16 theme-icon-muted" aria-hidden="true"></i>
+                            标签
+                        </div>
+                        <div class="post-meta-badges">
+                            
+    
+    
+    <a class="post-meta-badge" href="/blog/tags/5848467958/" title="Java 基础">
+        Java 基础
+    </a>
+
+
+                        </div>
+                    </div>
+                
+            </div>
+        </details>
+    
+</div>
+
+    <h2 id="java-中方法重写与方法重载的区别">
+<a class="anchor" href="#java-%E4%B8%AD%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99%E4%B8%8E%E6%96%B9%E6%B3%95%E9%87%8D%E8%BD%BD%E7%9A%84%E5%8C%BA%E5%88%AB" aria-hidden="true"><span class="octicon octicon-link"></span></a>Java 中方法重写与方法重载的区别</h2>
+
+<blockquote>
+  <p>[!blue]</p>
+
+  <ul>
+    <li>
+<strong>重载（Overload）</strong>：同一个类中，方法名相同、参数列表不同，编译期确定调用哪个版本（静态绑定）。</li>
+    <li>
+<strong>重写（Override）</strong>：子类重新实现父类方法，方法签名必须完全一致，运行期根据对象实际类型确定执行版本（动态绑定）。</li>
+    <li>一句话记忆：<strong>重载认参数，重写认对象</strong>。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>Java 面向对象体系里，重载和重写是最基础也最容易被问倒的一对概念——很多人能背出定义，但一到"父类引用调用子类方法会输出什么"这种题就露馅。这篇文章从对比表格切入，逐层拆到 JVM 的虚方法表，把两者的区别和背后的原理讲透。</p>
+</blockquote>
+
+<h2 id="一核心区别">
+<a class="anchor" href="#%E4%B8%80%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB" aria-hidden="true"><span class="octicon octicon-link"></span></a>一、核心区别</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>对比维度</th>
+      <th>重载 Overload</th>
+      <th>重写 Override</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>发生范围</td>
+      <td>同一个类内部</td>
+      <td>父子类之间</td>
+    </tr>
+    <tr>
+      <td>方法名</td>
+      <td>相同</td>
+      <td>相同</td>
+    </tr>
+    <tr>
+      <td>参数列表</td>
+      <td>必须不同（类型/个数/顺序）</td>
+      <td>必须完全相同</td>
+    </tr>
+    <tr>
+      <td>返回值类型</td>
+      <td>可任意</td>
+      <td>相同，或父类返回类型的子类（协变返回）</td>
+    </tr>
+    <tr>
+      <td>访问修饰符</td>
+      <td>无限制</td>
+      <td>子类不能比父类更严格</td>
+    </tr>
+    <tr>
+      <td>抛出异常</td>
+      <td>无限制</td>
+      <td>不能抛出比父类更宽泛的受检异常</td>
+    </tr>
+    <tr>
+      <td>绑定时机</td>
+      <td>编译时绑定</td>
+      <td>运行时绑定</td>
+    </tr>
+    <tr>
+      <td>多态类型</td>
+      <td>静态多态</td>
+      <td>动态多态</td>
+    </tr>
+    <tr>
+      <td>能否用于 static/private/final 方法</td>
+      <td>可以</td>
+      <td>不可以（这三类方法不能被重写）</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>[!blue]<br>
+一句话总结：重载靠"参数列表"在<strong>编译期</strong>分流，重写靠"对象的实际类型"在<strong>运行期</strong>分流。</p>
+</blockquote>
+
+<h2 id="二方法重载overload详解">
+<a class="anchor" href="#%E4%BA%8C%E6%96%B9%E6%B3%95%E9%87%8D%E8%BD%BDoverload%E8%AF%A6%E8%A7%A3" aria-hidden="true"><span class="octicon octicon-link"></span></a>二、方法重载（Overload）详解</h2>
+
+<h3 id="21-定义与示例">
+<a class="anchor" href="#21-%E5%AE%9A%E4%B9%89%E4%B8%8E%E7%A4%BA%E4%BE%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.1 定义与示例</h3>
+
+<p>重载指的是同一个类中，允许存在多个方法名相同、但参数列表不同的方法：</p>
+
+<div class="language-java highlighter-shiki"><pre class="shiki light-plus" style="background-color:#FFFFFF;color:#000000" tabindex="0"><code><span class="line"><span style="color:#0000FF">public</span><span style="color:#0000FF"> class</span><span style="color:#267F99"> Calculator</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#0000FF">    public</span><span style="color:#267F99"> int</span><span style="color:#795E26"> add</span><span style="color:#000000">(</span><span style="color:#267F99">int</span><span style="color:#001080"> a</span><span style="color:#000000">, </span><span style="color:#267F99">int</span><span style="color:#001080"> b</span><span style="color:#000000">) {</span></span>
+<span class="line"><span style="color:#AF00DB">        return</span><span style="color:#000000"> a + b;</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#008000">    // 参数个数不同。</span></span>
+<span class="line"><span style="color:#0000FF">    public</span><span style="color:#267F99"> int</span><span style="color:#795E26"> add</span><span style="color:#000000">(</span><span style="color:#267F99">int</span><span style="color:#001080"> a</span><span style="color:#000000">, </span><span style="color:#267F99">int</span><span style="color:#001080"> b</span><span style="color:#000000">, </span><span style="color:#267F99">int</span><span style="color:#001080"> c</span><span style="color:#000000">) {</span></span>
+<span class="line"><span style="color:#AF00DB">        return</span><span style="color:#000000"> a + b + c;</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#008000">    // 参数类型不同。</span></span>
+<span class="line"><span style="color:#0000FF">    public</span><span style="color:#267F99"> double</span><span style="color:#795E26"> add</span><span style="color:#000000">(</span><span style="color:#267F99">double</span><span style="color:#001080"> a</span><span style="color:#000000">, </span><span style="color:#267F99">double</span><span style="color:#001080"> b</span><span style="color:#000000">) {</span></span>
+<span class="line"><span style="color:#AF00DB">        return</span><span style="color:#000000"> a + b;</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"></span></code></pre></div>
+
+<p>编译器在编译阶段就能根据实参的类型和个数，精确匹配到对应的方法版本——这也是重载被称为"静态多态"的原因，整个决策过程不依赖任何运行时信息。</p>
+
+<h3 id="22-三个必须记住的规则">
+<a class="anchor" href="#22-%E4%B8%89%E4%B8%AA%E5%BF%85%E9%A1%BB%E8%AE%B0%E4%BD%8F%E7%9A%84%E8%A7%84%E5%88%99" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.2 三个必须记住的规则</h3>
+
+<blockquote>
+  <p>[!yellow]</p>
+
+  <ol>
+    <li>参数列表必须不同（个数、类型、顺序三选一即可，返回值不算数）；</li>
+    <li>
+<strong>仅返回值不同不构成重载</strong>，会直接编译报错；</li>
+    <li>可变参数（<code>...</code>）方法在重载匹配中<strong>优先级最低</strong>，编译器会优先匹配固定参数版本。</li>
+  </ol>
+</blockquote>
+
+<p>:::fold-red 查看反例：仅返回值不同</p>
+
+<div class="language-java highlighter-shiki"><pre class="shiki light-plus" style="background-color:#FFFFFF;color:#000000" tabindex="0"><code><span class="line"><span style="color:#008000">// 反例：编译报错，因为参数列表完全相同</span></span>
+<span class="line"><span style="color:#0000FF">public</span><span style="color:#267F99"> int</span><span style="color:#795E26"> add</span><span style="color:#000000">(</span><span style="color:#267F99">int</span><span style="color:#000000"> a, </span><span style="color:#267F99">int</span><span style="color:#000000"> b) {</span></span>
+<span class="line"><span style="color:#AF00DB">    return</span><span style="color:#000000"> a + b;</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"><span style="color:#0000FF">public</span><span style="color:#267F99"> double</span><span style="color:#795E26"> add</span><span style="color:#000000">(</span><span style="color:#267F99">int</span><span style="color:#000000"> a, </span><span style="color:#267F99">int</span><span style="color:#000000"> b) {</span></span>
+<span class="line"><span style="color:#AF00DB">    return</span><span style="color:#000000"> a + b;</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"></span></code></pre></div>
+
+<p>:::</p>
+
+<h3 id="23-重载匹配优先级容易被忽略的细节">
+<a class="anchor" href="#23-%E9%87%8D%E8%BD%BD%E5%8C%B9%E9%85%8D%E4%BC%98%E5%85%88%E7%BA%A7%E5%AE%B9%E6%98%93%E8%A2%AB%E5%BF%BD%E7%95%A5%E7%9A%84%E7%BB%86%E8%8A%82" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.3 重载匹配优先级（容易被忽略的细节）</h3>
+
+<p>当调用 <code>test(1)</code> 且存在以下几个重载版本时，编译器实际上是按固定顺序去尝试匹配的：</p>
+
+<div class="language-java highlighter-shiki"><pre class="shiki light-plus" style="background-color:#FFFFFF;color:#000000" tabindex="0"><code><span class="line"><span style="color:#008000">// 优先级 1：精确匹配。</span></span>
+<span class="line"><span style="color:#267F99">void</span><span style="color:#795E26"> test</span><span style="color:#000000">(</span><span style="color:#267F99">int</span><span style="color:#000000"> a) {}</span></span>
+<span class="line"><span style="color:#008000">// 优先级 2：自动类型提升（int → long）。</span></span>
+<span class="line"><span style="color:#267F99">void</span><span style="color:#795E26"> test</span><span style="color:#000000">(</span><span style="color:#267F99">long</span><span style="color:#000000"> a) {}</span></span>
+<span class="line"><span style="color:#008000">// 优先级 3：自动装箱（int → Integer）。</span></span>
+<span class="line"><span style="color:#267F99">void</span><span style="color:#795E26"> test</span><span style="color:#000000">(</span><span style="color:#267F99">Integer</span><span style="color:#000000"> a) {}</span></span>
+<span class="line"><span style="color:#008000">// 优先级 4：可变参数。</span></span>
+<span class="line"><span style="color:#267F99">void</span><span style="color:#795E26"> test</span><span style="color:#000000">(</span><span style="color:#267F99">int</span><span style="color:#000000">... </span><span style="color:#001080">a</span><span style="color:#000000">) {}</span></span>
+<span class="line"></span></code></pre></div>
+
+<p>这个优先级顺序在日常开发里经常被忽略，但它正是"为什么调用的不是我以为的那个方法"这类诡异 bug 的根源——尤其是同时存在装箱类型和可变参数重载的时候。</p>
+
+<h2 id="三方法重写override详解">
+<a class="anchor" href="#%E4%B8%89%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99override%E8%AF%A6%E8%A7%A3" aria-hidden="true"><span class="octicon octicon-link"></span></a>三、方法重写（Override）详解</h2>
+
+<h3 id="31-定义与示例">
+<a class="anchor" href="#31-%E5%AE%9A%E4%B9%89%E4%B8%8E%E7%A4%BA%E4%BE%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.1 定义与示例</h3>
+
+<p>重写指的是子类对父类中已有方法的重新实现，方法名、参数列表必须与父类完全一致：</p>
+
+<div class="language-java highlighter-shiki"><pre class="shiki light-plus" style="background-color:#FFFFFF;color:#000000" tabindex="0"><code><span class="line"><span style="color:#0000FF">class</span><span style="color:#267F99"> Animal</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#0000FF">    public</span><span style="color:#267F99"> String</span><span style="color:#795E26"> makeSound</span><span style="color:#000000">() {</span></span>
+<span class="line"><span style="color:#AF00DB">        return</span><span style="color:#A31515"> "一些声音"</span><span style="color:#000000">;</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#0000FF">class</span><span style="color:#267F99"> Dog</span><span style="color:#0000FF"> extends</span><span style="color:#267F99"> Animal</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#000000">    @</span><span style="color:#267F99">Override</span></span>
+<span class="line"><span style="color:#0000FF">    public</span><span style="color:#267F99"> String</span><span style="color:#795E26"> makeSound</span><span style="color:#000000">() {</span></span>
+<span class="line"><span style="color:#AF00DB">        return</span><span style="color:#A31515"> "汪汪汪"</span><span style="color:#000000">;</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#0000FF">public</span><span style="color:#0000FF"> class</span><span style="color:#267F99"> Test</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#0000FF">    public</span><span style="color:#0000FF"> static</span><span style="color:#267F99"> void</span><span style="color:#795E26"> main</span><span style="color:#000000">(</span><span style="color:#267F99">String</span><span style="color:#000000">[] </span><span style="color:#001080">args</span><span style="color:#000000">) {</span></span>
+<span class="line"><span style="color:#267F99">        Animal</span><span style="color:#001080"> a</span><span style="color:#000000"> = </span><span style="color:#AF00DB">new</span><span style="color:#795E26"> Dog</span><span style="color:#000000">();</span></span>
+<span class="line"><span style="color:#001080">        System</span><span style="color:#000000">.</span><span style="color:#001080">out</span><span style="color:#000000">.</span><span style="color:#795E26">println</span><span style="color:#000000">(</span><span style="color:#001080">a</span><span style="color:#000000">.</span><span style="color:#795E26">makeSound</span><span style="color:#000000">());</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"></span></code></pre></div>
+
+<p>这里 <code>a</code> 的声明类型是 <code>Animal</code>，但实际输出的是子类重写后的内容——JVM 是在程序运行时，根据 <code>a</code> 指向的对象的<strong>实际类型</strong>去决定调用哪个版本，这正是重写被称为"动态多态"的原因。</p>
+
+<h3 id="32-重写必须遵守的五条规则">
+<a class="anchor" href="#32-%E9%87%8D%E5%86%99%E5%BF%85%E9%A1%BB%E9%81%B5%E5%AE%88%E7%9A%84%E4%BA%94%E6%9D%A1%E8%A7%84%E5%88%99" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.2 重写必须遵守的五条规则</h3>
+
+<blockquote>
+  <p>[!yellow]</p>
+
+  <ol>
+    <li>方法名、参数列表与父类<strong>完全一致</strong>；</li>
+    <li>返回值类型相同，或是父类返回类型的<strong>子类</strong>（协变返回类型）；</li>
+    <li>访问权限<strong>不能缩小</strong>（<code>public ≥ protected ≥ default ≥ private</code>）；</li>
+    <li>不能抛出比父类<strong>更宽泛</strong>的受检异常；</li>
+    <li>
+<code>static</code>、<code>private</code>、<code>final</code> 方法<strong>不能被重写</strong>。</li>
+  </ol>
+</blockquote>
+
+<p>:::fold-green 查看合法示例：协变返回类型与受检异常</p>
+
+<div class="language-java highlighter-shiki"><pre class="shiki light-plus" style="background-color:#FFFFFF;color:#000000" tabindex="0"><code><span class="line"><span style="color:#0000FF">class</span><span style="color:#267F99"> Parent</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#0000FF">    protected</span><span style="color:#267F99"> Object</span><span style="color:#795E26"> getData</span><span style="color:#000000">() </span><span style="color:#0000FF">throws</span><span style="color:#267F99"> IOException</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#AF00DB">        return</span><span style="color:#0000FF"> null</span><span style="color:#000000">;</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#0000FF">class</span><span style="color:#267F99"> Child</span><span style="color:#0000FF"> extends</span><span style="color:#267F99"> Parent</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#000000">    @</span><span style="color:#267F99">Override</span></span>
+<span class="line"><span style="color:#0000FF">    public</span><span style="color:#267F99"> String</span><span style="color:#795E26"> getData</span><span style="color:#000000">() </span><span style="color:#0000FF">throws</span><span style="color:#267F99"> FileNotFoundException</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#AF00DB">        return</span><span style="color:#A31515"> "hello"</span><span style="color:#000000">;</span></span>
+<span class="line"><span style="color:#000000">    }</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"></span></code></pre></div>
+
+<p>:::</p>
+
+<p>这五条规则里，最容易踩的坑其实不是记混哪条规则，而是<strong>签名写错导致重写悄悄退化成重载</strong>——方法能编译通过，但父类引用调用时根本不会触发子类逻辑，排查起来非常隐蔽：</p>
+
+<p>:::fold-red 查看反例：签名写错</p>
+
+<div class="language-java highlighter-shiki"><pre class="shiki light-plus" style="background-color:#FFFFFF;color:#000000" tabindex="0"><code><span class="line"><span style="color:#0000FF">class</span><span style="color:#267F99"> Parent</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#0000FF">    public</span><span style="color:#267F99"> void</span><span style="color:#795E26"> greet</span><span style="color:#000000">(</span><span style="color:#267F99">String</span><span style="color:#001080"> name</span><span style="color:#000000">) {}</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"><span style="color:#0000FF">class</span><span style="color:#267F99"> Child</span><span style="color:#0000FF"> extends</span><span style="color:#267F99"> Parent</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#008000">    // 方法签名不一致，实际成为重载。</span></span>
+<span class="line"><span style="color:#0000FF">    public</span><span style="color:#267F99"> void</span><span style="color:#795E26"> greet</span><span style="color:#000000">() {}</span></span>
+<span class="line"><span style="color:#008000">    // 加上 @Override 会直接编译报错，暴露这个错误</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"></span></code></pre></div>
+
+<p>:::</p>
+
+<blockquote>
+  <p>[!yellow]<br>
+解决办法很简单：<strong>给每一个意图重写的方法都加上 <code>@Override</code></strong>，让编译器替你检查签名是否真的匹配，这是零成本但收益很高的习惯。</p>
+</blockquote>
+
+<h2 id="四底层原理为什么重写能实现多态">
+<a class="anchor" href="#%E5%9B%9B%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E4%B8%BA%E4%BB%80%E4%B9%88%E9%87%8D%E5%86%99%E8%83%BD%E5%AE%9E%E7%8E%B0%E5%A4%9A%E6%80%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>四、底层原理：为什么重写能实现多态</h2>
+
+<p>JVM 为每个类维护一张<strong>虚方法表（vtable）</strong>，子类重写父类方法时，会在自己的虚方法表中用新实现覆盖对应的表项；方法调用发生时，JVM 查的是对象<strong>实际类型</strong>对应的虚方法表，而不是引用变量的声明类型。</p>
+
+<div class="language-text highlighter-shiki"><pre class="shiki light-plus" style="background-color:#FFFFFF;color:#000000" tabindex="0"><code><span class="line"><span>Animal 的 vtable:  makeSound → Animal.makeSound()</span></span>
+<span class="line"><span>Dog 的 vtable:     makeSound → Dog.makeSound()   （覆盖了父类表项）</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Animal a = new Dog();</span></span>
+<span class="line"><span>a.makeSound();</span></span>
+<span class="line"><span>→ JVM 查的是 a 指向对象（Dog 实例）的 vtable，而不是 Animal 的</span></span>
+<span class="line"><span>→ 所以执行 Dog.makeSound()</span></span>
+<span class="line"><span></span></span></code></pre></div>
+
+<p>这套机制也解释了为什么 <code>static</code>、<code>private</code>、<code>final</code> 方法不能被重写：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>方法类型</th>
+      <th>原因</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>static</code></td>
+      <td>属于类本身，不属于对象实例，不进入 vtable，调用时按<strong>声明类型</strong>直接绑定</td>
+    </tr>
+    <tr>
+      <td><code>private</code></td>
+      <td>对子类不可见，根本不会被子类"看到"去覆盖</td>
+    </tr>
+    <tr>
+      <td><code>final</code></td>
+      <td>语言层面直接禁止修改 vtable 中的这一项</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>换个角度理解：重载是编译器在做"文字游戏"，比对的是方法签名；重写是 JVM 在运行时做"查表游戏"，靠的是 vtable 动态分派。理解了 vtable，也就理解了 Java 多态的底层实现方式。</p>
+
+<h2 id="五高频面试题">
+<a class="anchor" href="#%E4%BA%94%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98" aria-hidden="true"><span class="octicon octicon-link"></span></a>五、高频面试题</h2>
+
+<p>:::fold-blue Q1：只有返回值类型不同，算重载吗？</p>
+
+<p>不算，编译会直接报错。方法签名只由"方法名 + 参数列表"决定，返回值不参与签名比较。</p>
+
+<p>:::</p>
+
+<p>:::fold-blue Q2：父类引用调用子类独有的重载方法，会怎样？</p>
+
+<div class="language-java highlighter-shiki"><pre class="shiki light-plus" style="background-color:#FFFFFF;color:#000000" tabindex="0"><code><span class="line"><span style="color:#0000FF">class</span><span style="color:#267F99"> Parent</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#0000FF">    public</span><span style="color:#267F99"> void</span><span style="color:#795E26"> test</span><span style="color:#000000">(</span><span style="color:#267F99">int</span><span style="color:#001080"> a</span><span style="color:#000000">) {}</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"><span style="color:#0000FF">class</span><span style="color:#267F99"> Child</span><span style="color:#0000FF"> extends</span><span style="color:#267F99"> Parent</span><span style="color:#000000"> {</span></span>
+<span class="line"><span style="color:#008000">    // 重写父类方法。</span></span>
+<span class="line"><span style="color:#000000">    @</span><span style="color:#267F99">Override</span></span>
+<span class="line"><span style="color:#0000FF">    public</span><span style="color:#267F99"> void</span><span style="color:#795E26"> test</span><span style="color:#000000">(</span><span style="color:#267F99">int</span><span style="color:#001080"> a</span><span style="color:#000000">) {}</span></span>
+<span class="line"><span style="color:#008000">    // 子类新增的重载。</span></span>
+<span class="line"><span style="color:#0000FF">    public</span><span style="color:#267F99"> void</span><span style="color:#795E26"> test</span><span style="color:#000000">(</span><span style="color:#267F99">String</span><span style="color:#001080"> a</span><span style="color:#000000">) {}</span></span>
+<span class="line"><span style="color:#000000">}</span></span>
+<span class="line"><span style="color:#267F99">Parent</span><span style="color:#001080"> p</span><span style="color:#000000"> = </span><span style="color:#AF00DB">new</span><span style="color:#795E26"> Child</span><span style="color:#000000">();</span></span>
+<span class="line"><span style="color:#008000">// 调用子类重写版本。</span></span>
+<span class="line"><span style="color:#001080">p</span><span style="color:#000000">.</span><span style="color:#795E26">test</span><span style="color:#000000">(</span><span style="color:#098658">1</span><span style="color:#000000">);</span></span>
+<span class="line"><span style="color:#008000">// 编译报错：Parent 中没有 test(String)。</span></span>
+<span class="line"><span style="color:#001080">p</span><span style="color:#000000">.</span><span style="color:#795E26">test</span><span style="color:#000000">(</span><span style="color:#A31515">"hi"</span><span style="color:#000000">);</span></span>
+<span class="line"></span></code></pre></div>
+
+<p>关键在于：重载在<strong>编译期</strong>按引用的<strong>声明类型</strong>决定候选方法集合；重写在<strong>运行期</strong>按对象的<strong>实际类型</strong>决定具体执行哪个版本。这道题本质上就是在考这句话。</p>
+
+<p>:::</p>
+
+<p>:::fold-blue Q3：static 方法可以被"重写"吗？</p>
+
+<p>不可以。子类定义同签名的 static 方法叫<strong>方法隐藏（Hiding）</strong>，不是重写，调用时依然按引用的声明类型静态绑定，不具备多态性。</p>
+
+<p>:::</p>
+
+<h2 id="六总结">
+<a class="anchor" href="#%E5%85%AD%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>六、总结</h2>
+
+<blockquote>
+  <p>[!green]</p>
+
+  <ul>
+    <li>
+<strong>重载</strong>：同类、同名、参数不同、编译期绑定，体现的是接口的灵活性；</li>
+    <li>
+<strong>重写</strong>：父子类、同名、参数相同、运行期绑定（基于 vtable），体现的是多态；</li>
+    <li>记忆口诀：<strong>"重载认参数签名，重写认对象类型"</strong>；</li>
+    <li>排查重写相关 bug 的第一步，永远是检查有没有加 <code>@Override</code>。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>理解这两个概念的分水岭，本质上是理解 Java <strong>静态绑定与动态绑定</strong>的区别——这也是后续学习设计模式（策略模式、模板方法模式）、读懂框架源码（Spring AOP、集合框架）绕不开的基础。</p>
+</blockquote>
+
+    <footer class="post-nav-footer">
+    <nav class="post-navigation" aria-label="相邻文章">
+        
+            <a
+                class="post-navigation-link post-navigation-prev"
+                href="/blog/2020/50659901"
+                rel="prev"
+            >
+                <span class="post-navigation-label">
+                    <i class="theme-icon theme_arrow-left" aria-hidden="true"></i>上一页
+                </span>
+                <span class="post-navigation-title">设计模式-单例模式</span>
+            </a>
+        
+        
+            <a
+                class="post-navigation-link post-navigation-next"
+                href="/blog/2026/26491738"
+                rel="next"
+            >
+                <span class="post-navigation-label">
+                    下一页<i class="theme-icon theme_arrow-right" aria-hidden="true"></i>
+                </span>
+                <span class="post-navigation-title">博客引用块与文本颜色使用指南</span>
+            </a>
+        
+    </nav>
+</footer>
+
+    <section class="post-copyright" aria-labelledby="post-copyright-title">
+    <div class="post-copyright-title" id="post-copyright-title">转载与许可</div>
+    <div class="post-copyright-details">
+        <div class="post-copyright-author">
+            <strong class="post-copyright-meta">作者</strong>
+            <span class="post-copyright-content">
+                <a href="/blog/" rel="author">HGNULB</a>
+            </span>
+        </div>
+        <div class="post-copyright-type">
+            <strong class="post-copyright-meta">链接</strong>
+            <span class="post-copyright-content">
+                <a href="https://hgnulb.github.io/blog/2020/90796156">
+                    https://hgnulb.github.io/blog/2020/90796156
+                </a>
+            </span>
+        </div>
+        
+            <div class="post-copyright-notice">
+                <strong class="post-copyright-meta">许可</strong>
+                <span class="post-copyright-content">
+                    本博客所有文章除特别声明外，均采用 <a
+                        href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans"
+                        rel="license noopener noreferrer"
+                        target="_blank"
+                    >CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！
+                </span>
+            </div>
+        
+    </div>
+</section>
+
+  </div>
+</article>
+
+    </div>
+    
+
+
+    <aside class="sidebar sidebar-toc-panel" aria-label="文章目录侧栏">
+        <div class="sidebar-content">
+            <button
+                class="sidebar-collapse-toggle"
+                type="button"
+                aria-label="收起文章目录"
+                title="收起文章目录"
+                aria-controls="sidebar-toc-content"
+                aria-expanded="true"
+                data-sidebar-toc-toggle
+            >
+                <i class="emoji xhs_emoji_xhs_38 toc-collapse-icon" aria-hidden="true"></i>
+                <i class="emoji nowcoder_emoji_nowcoder_7 toc-expand-icon" aria-hidden="true"></i>
+            </button>
+            
+    
+    
+    
+        <div class="sidebar-toc" id="sidebar-toc-content">
+            <div class="sidebar-toc-title">
+                <i class="theme-icon theme_book-open theme-icon-16 theme-icon-body" aria-hidden="true"></i>
+                <span>Table of contents</span>
+            </div>
+            <nav id="sidebar-table-of-contents" aria-label="文章目录"><ol id="markdown-toc" class="markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#java-中方法重写与方法重载的区别">Java 中方法重写与方法重载的区别</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#一核心区别">一、核心区别</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#二方法重载overload详解">二、方法重载（Overload）详解</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#21-定义与示例">2.1 定义与示例</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#22-三个必须记住的规则">2.2 三个必须记住的规则</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#23-重载匹配优先级容易被忽略的细节">2.3 重载匹配优先级（容易被忽略的细节）</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#三方法重写override详解">三、方法重写（Override）详解</a>
+<ol class="sub-markdown-toc">
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#31-定义与示例">3.1 定义与示例</a></li>
+<li class="markdown-toc-entry markdown-toc-h3"><a href="#32-重写必须遵守的五条规则">3.2 重写必须遵守的五条规则</a></li>
+</ol>
+</li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#四底层原理为什么重写能实现多态">四、底层原理：为什么重写能实现多态</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#五高频面试题">五、高频面试题</a></li>
+<li class="markdown-toc-entry markdown-toc-h2"><a href="#六总结">六、总结</a></li>
+</ol></nav>
+        </div>
+    
+
+        </div>
+    </aside>
+
+
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+        <p class="copyright">
+            Copyright ©2017-2026 <a
+                href="/blog/"
+            >走在修行的大街上</a> All rights reserved
+        </p>
+        <p id="sitetime" class="site-time" data-created="2017-12-26"></p>
+        
+            <div class="footer-stats" data-busuanzi>
+                
+                <p id="busuanzi_container_page_pv">
+                    本文阅读量<span id="busuanzi_value_page_pv"></span>次
+                </p>
+                <p id="busuanzi_container_site_pv">
+                    本站访问量<span id="busuanzi_value_site_pv"></span>次
+                </p>
+                <p id="busuanzi_container_site_uv">
+                    本站访客数<span id="busuanzi_value_site_uv"></span>人
+                </p>
+            </div>
+        
+    </div>
+    <button
+        class="back-to-top"
+        type="button"
+        aria-label="回到顶部"
+        title="返回顶部"
+    >
+        <i class="emoji xhs_emoji_xhs_29" aria-hidden="true"></i>
+    </button>
+</footer>
+
+</div>
+
+<script type="module" src="/blog/assets/js/blog.bundle.min.js?v=fc112b96164a"></script>
+
+
+  </body>
+</html>
